@@ -43,5 +43,6 @@ tests:
 	make -C ./tests/python -f Makefile test
 	make -C ./tests/ccl    -f Makefile test
 
-build-all: build tests
+build-all: build
+	make -C ./tests/c      -f Makefile test
 

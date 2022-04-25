@@ -1,6 +1,6 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
-CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && ./tests
+CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && export LD_LIBRARY_PATH=$(LIB) && ./tests
 SRC=tests.c device.c cards.c events.c time_profiles.c
 lib: 
 	cd ../../go && make all
