@@ -42,3 +42,6 @@ tests:
 	make -C ./tests/c#     -f Makefile test
 	make -C ./tests/python -f Makefile test
 	make -C ./tests/ccl    -f Makefile test
+
+build-all: build tests
+
