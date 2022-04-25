@@ -1,6 +1,7 @@
 #include <iomanip>
 #include <iostream>
 #include <map>
+#include <string>
 
 #include "../include/uhppoted.hpp"
 #include "tests.hpp"
