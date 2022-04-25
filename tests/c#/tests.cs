@@ -13,8 +13,9 @@ public class test {
         this.command = command;
         this.fn = fn;
     }
-};
+}
 
+// Sadly, mono is only C#7 compatible. Positional records would make this a whole lot less clunky
 public class Tests {
     const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 8165538;
@@ -113,601 +114,275 @@ public class Tests {
     }
 
     static bool GetDevices(Uhppoted u) {
-        string tag = "get-devices";
-        bool ok = true;
-
         uint[] devices = u.GetDevices();
 
-        if (devices.Length != 3) {
-            WriteLine(Format("get-devices: incorrect device count - expected:{0}, got:{1}", 3, devices.Length));
-            ok = false;
-        } else if (devices[0] != 201020304 || devices[1] != 303986753 || devices[2] != 405419896) {
-            WriteLine(Format("get-devices: incorrect device list - expected:[ {0},{1},{2} ], got:[ {3},{4},{5} ]",
-                             201020304, 303986753, 405419896,
-                             devices[0], devices[1], devices[2]));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint32Result("device count", 3, (uint)devices.Length),
+            new uint32Result("device[0]", 201020304, devices[0]),
+            new uint32Result("device[1]", 303986753, devices[1]),
+            new uint32Result("device[2]", 405419896, devices[2]),
+        };
 
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-devices", resultset);
     }
 
     static bool GetDevice(Uhppoted u) {
-        string tag = "get-device";
-        bool ok = true;
-
         Device device = u.GetDevice(DEVICE_ID);
 
-        if (device.ID != 405419896) {
-            WriteLine(Format("get-device: incorrect device ID - expected:{0}, got:{1}", 405419896, device.ID));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint32Result("device ID", 405419896, device.ID),
+            new stringResult("IP address", "192.168.1.101", device.address),
+            new stringResult("subnet mask", "255.255.255.0", device.subnet),
+            new stringResult("gateway address", "192.168.1.1", device.gateway),
+            new stringResult("MAC address", "00:12:23:34:45:56", device.MAC),
+            new stringResult("version", "v8.92", device.version),
+            new stringResult("date", "2018-11-05", device.date),
+        };
 
-        if (device.address != "192.168.1.101") {
-            WriteLine(Format("get-device: incorrect IP address - expected:{0}, got:{1}", "192.168.1.101", device.address));
-            ok = false;
-        }
-
-        if (device.subnet != "255.255.255.0") {
-            WriteLine(Format("get-device: incorrect subnet mask - expected:{0}, got:{1}", "255.255.255.0", device.subnet));
-            ok = false;
-        }
-
-        if (device.gateway != "192.168.1.1") {
-            WriteLine(Format("get-device: incorrect gateway address - expected:{0}, got:{1}", "192.168.1.1", device.gateway));
-            ok = false;
-        }
-
-        if (device.MAC != "00:12:23:34:45:56") {
-            WriteLine(Format("get-device: incorrect MAC address - expected:{0}, got:{1}", "00:12:23:34:45:56", device.MAC));
-            ok = false;
-        }
-
-        if (device.version != "v8.92") {
-            WriteLine(Format("get-device: incorrect version - expected:{0}, got:{1}", "v8.92", device.version));
-            ok = false;
-        }
-
-        if (device.date != "2018-11-05") {
-            WriteLine(Format("get-device: incorrect date - expected:{0}, got:{1}", "2018-11-05", device.date));
-            ok = false;
-        }
-
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-device", resultset);
     }
 
     static bool SetAddress(Uhppoted u) {
-        string tag = "set-address";
-
         u.SetAddress(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("set-address", resultset);
     }
 
     static bool GetStatus(Uhppoted u) {
-        string tag = "get-status";
-        bool ok = true;
-
         Status status = u.GetStatus(DEVICE_ID);
 
-        if (status.ID != 405419896) {
-            WriteLine(Format("get-status: incorrect device ID - expected:{0}, got:{1}", 405419896, status.ID));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint32Result("device ID", 405419896, status.ID),
+            new stringResult("system date/time", "2022-03-19 15:48:32", status.sysdatetime),
+            new boolResult("doors[1]", true, status.doors[0]),
+            new boolResult("doors[2]", false, status.doors[1]),
+            new boolResult("doors[3]", false, status.doors[2]),
+            new boolResult("doors[4]", true, status.doors[3]),
+            new boolResult("buttons[1]", true, status.buttons[0]),
+            new boolResult("buttons[2]", false, status.buttons[1]),
+            new boolResult("buttons[3]", true, status.buttons[2]),
+            new boolResult("buttons[4]", false, status.buttons[3]),
+            new uint8Result("relays state", 0x12, status.relays),
+            new uint8Result("inputs state", 0x34, status.inputs),
+            new uint8Result("system error", 0x56, status.syserror),
+            new uint8Result("special info", 253, status.info),
+            new uint32Result("sequence number", 9876, status.seqno),
+            new uint32Result("event index", 135, status.evt.index),
+            new stringResult("event timestamp", "2022-01-02 12:34:56", status.evt.timestamp),
+            new uint8Result("event type", 6, status.evt.eventType),
+            new boolResult("event granted", true, status.evt.granted),
+            new uint8Result("event door", 3, status.evt.door),
+            new uint8Result("event direction", 1, status.evt.direction),
+            new uint32Result("event card", 8100023, status.evt.card),
+            new uint8Result("event reason", 21, status.evt.reason),
+        };
 
-        if (status.sysdatetime != "2022-03-19 15:48:32") {
-            WriteLine(Format("get-status: incorrect system date/time - expected:{0}, got:{1}", "2022-03-19 15:48:32", status.sysdatetime));
-            ok = false;
-        }
-
-        if (status.doors[0] != 1 || status.doors[1] != 0 || status.doors[2] != 0 || status.doors[3] != 1) {
-            WriteLine(Format("get-status: incorrect doors state - expected:[{0},{1},{2},{3}], got:[{4},{5},{6},{7}]",
-                             1, 0, 0, 1,
-                             status.doors[0], status.doors[1], status.doors[2], status.doors[3]));
-            ok = false;
-        }
-
-        if (status.buttons[0] != 1 || status.buttons[1] != 0 || status.buttons[2] != 1 || status.buttons[3] != 0) {
-            WriteLine(Format("get-status: incorrect buttons state - expected:[{0},{1},{2},{3}], got:[{4},{5},{6},{7}]",
-                             1, 0, 0, 1,
-                             status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]));
-            ok = false;
-        }
-
-        if (status.relays != 0x12) {
-            WriteLine(Format("get-status: incorrect relay state - expected:{0}, got:{1}", 0x12, status.relays));
-            ok = false;
-        }
-
-        if (status.inputs != 0x34) {
-            WriteLine(Format("get-status: incorrect inputs state - expected:{0}, got:{1}", 0x34, status.inputs));
-            ok = false;
-        }
-
-        if (status.syserror != 0x56) {
-            WriteLine(Format("get-status: incorrect system error - expected:{0}, got:{1}", 0x56, status.syserror));
-            ok = false;
-        }
-
-        if (status.info != 253) {
-            WriteLine(Format("get-status: incorrect special info - expected:{0}, got:{1}", 253, status.info));
-            ok = false;
-        }
-
-        if (status.seqno != 9876) {
-            WriteLine(Format("get-status: incorrect sequence number - expected:{0}, got:{1}", 9876, status.seqno));
-            ok = false;
-        }
-
-        if (status.evt.timestamp != "2022-01-02 12:34:56") {
-            WriteLine(Format("get-status: incorrect event timestamp - expected:{0}, got:{1}", "2022-01-02 12:34:56", status.evt.timestamp));
-            ok = false;
-        }
-
-        if (status.evt.index != 135) {
-            WriteLine(Format("get-status: incorrect event index - expected:{0}, got:{1}", 135, status.evt.index));
-            ok = false;
-        }
-
-        if (status.evt.eventType != 6) {
-            WriteLine(Format("get-status: incorrect event type - expected:{0}, got:{1}", 6, status.evt.eventType));
-            ok = false;
-        }
-
-        if (!status.evt.granted) {
-            WriteLine(Format("get-status: incorrect event granted - expected:{0}, got:{1}", 1, status.evt.granted));
-            ok = false;
-        }
-
-        if (status.evt.door != 3) {
-            WriteLine(Format("get-status: incorrect event door - expected:{0}, got:{1}", 3, status.evt.door));
-            ok = false;
-        }
-
-        if (status.evt.direction != 1) {
-            WriteLine(Format("get-status: incorrect event direction - expected:{0}, got:{1}", 1, status.evt.direction));
-            ok = false;
-        }
-
-        if (status.evt.card != 8100023) {
-            WriteLine(Format("get-status: incorrect event card - expected:{0}, got:{1}", 8100023, status.evt.card));
-            ok = false;
-        }
-
-        if (status.evt.reason != 21) {
-            WriteLine(Format("get-status: incorrect event reason - expected:{0}, got:{1}", 21, status.evt.reason));
-            ok = false;
-        }
-
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-status", resultset);
     }
 
     static bool GetTime(Uhppoted u) {
-        string tag = "get-time";
-        bool ok = true;
-
         string datetime = u.GetTime(DEVICE_ID);
 
-        if (datetime != "2022-01-02 12:34:56") {
-            WriteLine(Format("get-time: incorrect date/time - expected:{0}, got:{1}", "2022-01-02 12:34:56", datetime));
-            ok = false;
-        }
+        result[] resultset = {
+            new stringResult("date/time", "2022-01-02 12:34:56", datetime),
+        };
 
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-time", resultset);
     }
 
     static bool SetTime(Uhppoted u) {
-        string tag = "set-time";
-
         u.SetTime(DEVICE_ID, "2022-03-23 12:24:17");
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("set-time", resultset);
     }
 
     static bool GetListener(Uhppoted u) {
-        string tag = "get-listener";
-        bool ok = true;
-
         string listener = u.GetListener(DEVICE_ID);
 
-        if (listener != "192.168.1.100:60001") {
-            WriteLine(Format("get-listener: incorrect event listener address - expected:{0}, got:{1}", "192.168.1.100:60001", listener));
-            ok = false;
-        }
+        result[] resultset = {
+            new stringResult("event listener address", "192.168.1.100:60001", listener),
+        };
 
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-listener", resultset);
     }
 
     static bool SetListener(Uhppoted u) {
-        string tag = "set-listener";
-
         u.SetListener(DEVICE_ID, "192.168.1.100:60001");
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("set-listener", resultset);
     }
 
     static bool GetDoorControl(Uhppoted u) {
-        string tag = "get-door-control";
-        bool ok = true;
-
         DoorControl control = u.GetDoorControl(DEVICE_ID, DOOR);
 
-        if (control.mode != 3) {
-            WriteLine(Format("get-door-control: incorrect door control mode - expected:{0}, got:{1}", 3, control.mode));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint8Result("door control mode", ControlModes.Controlled, control.mode),
+            new uint8Result("door open delay", 7, control.delay),
+        };
 
-        if (control.delay != 7) {
-            WriteLine(Format("get-door-control: incorrect door open delay - expected:{0}, got:{1}", 7, control.delay));
-            ok = false;
-        }
-
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-door-control", resultset);
     }
 
     static bool SetDoorControl(Uhppoted u) {
-        string tag = "set-door-control";
-
         u.SetDoorControl(DEVICE_ID, DOOR, ControlModes.NormallyClosed, 6);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("set-door-control", resultset);
     }
 
     static bool OpenDoor(Uhppoted u) {
-        string tag = "open-door";
-
         u.OpenDoor(DEVICE_ID, DOOR);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("open-door", resultset);
     }
 
     static bool GetCards(Uhppoted u) {
-        string tag = "get-cards";
-        bool ok = true;
+        uint cards = u.GetCards(DEVICE_ID);
 
-        int cards = u.GetCards(DEVICE_ID);
+        result[] resultset = {
+            new uint32Result("card count", 39, cards),
+        };
 
-        if (cards != 39) {
-            WriteLine(Format("get-cards: incorrect card count - expected:{0}, got:{1}", 39, cards));
-            ok = false;
-        }
-
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-cards", resultset);
     }
 
     static bool GetCard(Uhppoted u) {
-        string tag = "get-card";
-        bool ok = true;
-
         Card card = u.GetCard(DEVICE_ID, CARD_NUMBER);
 
-        if (card.cardNumber != 8165538) {
-            WriteLine(Format("get-card: incorrect card number - expected:{0}, got:{1}", 8165538, card.cardNumber));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint32Result("card number", 8165538, card.cardNumber),
+            new stringResult("'from' date", "2022-01-01", card.from),
+            new stringResult("'to' date", "2022-12-31", card.to),
+            new uint8Result("doors[1]", 0, card.doors[0]),
+            new uint8Result("doors[2]", 1, card.doors[1]),
+            new uint8Result("doors[3]", 31, card.doors[2]),
+            new uint8Result("doors[4]", 75, card.doors[3]),
+        };
 
-        if (card.from != "2022-01-01") {
-            WriteLine(Format("get-card: incorrect 'from' date - expected:{0}, got:{1}", "2022-01-01", card.from));
-            ok = false;
-        }
-
-        if (card.to != "2022-12-31") {
-            WriteLine(Format("get-card: incorrect 'to' date - expected:{0}, got:{1}", "2022-12-31", card.to));
-            ok = false;
-        }
-
-        if (card.doors[0] != 0) {
-            WriteLine(Format("get-card: incorrect doors[1] - expected:{0}, got:{1}", 0, card.doors[0]));
-            ok = false;
-        }
-
-        if (card.doors[1] != 1) {
-            WriteLine(Format("get-card: incorrect doors[2] - expected:{0}, got:{1}", 1, card.doors[1]));
-            ok = false;
-        }
-
-        if (card.doors[2] != 31) {
-            WriteLine(Format("get-card: incorrect doors[3] - expected:{0}, got:{1}", 31, card.doors[2]));
-            ok = false;
-        }
-
-        if (card.doors[3] != 75) {
-            WriteLine(Format("get-card: incorrect doors[4] - expected:{0}, got:{1}", 75, card.doors[3]));
-            ok = false;
-        }
-
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-card", resultset);
     }
 
     static bool GetCardByIndex(Uhppoted u) {
-        string tag = "get-card-by-index";
-        bool ok = true;
-
         Card card = u.GetCardByIndex(DEVICE_ID, CARD_INDEX);
 
-        if (card.cardNumber != 8165538) {
-            WriteLine(Format("{0}: incorrect card number - expected:{1}, got:{2}", tag, 8165538, card.cardNumber));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint32Result("card number", 8165538, card.cardNumber),
+            new stringResult("'from' date", "2022-01-01", card.from),
+            new stringResult("'to' date", "2022-12-31", card.to),
+            new uint8Result("doors[1]", 0, card.doors[0]),
+            new uint8Result("doors[2]", 1, card.doors[1]),
+            new uint8Result("doors[3]", 31, card.doors[2]),
+            new uint8Result("doors[4]", 75, card.doors[3]),
+        };
 
-        if (card.from != "2022-01-01") {
-            WriteLine(Format("get-card: incorrect 'from' date - expected:{1}, got:{2}", tag, "2022-01-01", card.from));
-            ok = false;
-        }
-
-        if (card.to != "2022-12-31") {
-            WriteLine(Format("{0}: incorrect 'to' date - expected:{1}, got:{2}", tag, "2022-12-31", card.to));
-            ok = false;
-        }
-
-        if (card.doors[0] != 0) {
-            WriteLine(Format("{0}: incorrect doors[1] - expected:{1}, got:{2}", tag, 0, card.doors[0]));
-            ok = false;
-        }
-
-        if (card.doors[1] != 1) {
-            WriteLine(Format("{0}: incorrect doors[2] - expected:{1}, got:{2}", tag, 1, card.doors[1]));
-            ok = false;
-        }
-
-        if (card.doors[2] != 31) {
-            WriteLine(Format("{0}: incorrect doors[3] - expected:{1}, got:{2}", tag, 31, card.doors[2]));
-            ok = false;
-        }
-
-        if (card.doors[3] != 75) {
-            WriteLine(Format("{0}: incorrect doors[4] - expected:{1}, got:{2}", tag, 75, card.doors[3]));
-            ok = false;
-        }
-
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-card-by-index", resultset);
     }
 
     static bool PutCard(Uhppoted u) {
-        string tag = "put-card";
         byte[] doors = { 0, 1, 31, 75 };
 
         u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("put-card", resultset);
     }
 
     static bool DeleteCard(Uhppoted u) {
-        string tag = "delete-card";
-
         u.DeleteCard(DEVICE_ID, CARD_NUMBER);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("delete-card", resultset);
     }
 
     static bool DeleteCards(Uhppoted u) {
-        string tag = "delete-cards";
-
         u.DeleteCards(DEVICE_ID);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("delete-cards", resultset);
     }
 
     static bool GetEventIndex(Uhppoted u) {
-        string tag = "get-event-index";
         uint index = u.GetEventIndex(DEVICE_ID);
-        uint expected = 47;
-        bool ok = true;
 
-        if (index != expected) {
-            WriteLine(Format("{0}: incorrect index - expected:{1}, got:{2}", tag, expected, index));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint32Result("index", 47, index),
+        };
 
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-event-index", resultset);
     }
 
     static bool SetEventIndex(Uhppoted u) {
-        string tag = "set-event-index";
-
         u.SetEventIndex(DEVICE_ID, EVENT_INDEX);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("set-event-index", resultset);
     }
 
     static bool GetEvent(Uhppoted u) {
-        string tag = "get-event";
-        bool ok = true;
-
         Event evt = u.GetEvent(DEVICE_ID, EVENT_INDEX);
 
-        if (evt.index != 51) {
-            WriteLine(Format("{0}: incorrect event index - expected:{1}, got:{2}", tag, 51, evt.index));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint32Result("event index", 51, evt.index),
+            new stringResult("event timestamp", "2022-04-15 12:29:15", evt.timestamp),
+            new uint8Result("event type", 6, evt.eventType),
+            new boolResult("event granted", true, evt.granted),
+            new uint8Result("event door", 3, evt.door),
+            new uint8Result("event direction", 1, evt.direction),
+            new uint32Result("event card", 8165538, evt.card),
+            new uint8Result("event reason", 21, evt.reason),
+        };
 
-        if (evt.timestamp != "2022-04-15 12:29:15") {
-            WriteLine(Format("{0}: incorrect event timestamp - expected:{1}, got:{2}", tag, "2022-04-15 12:29:15", evt.timestamp));
-            ok = false;
-        }
-
-        if (evt.eventType != 6) {
-            WriteLine(Format("{0}: incorrect event type - expected:{1}, got:{2}", tag, 6, evt.eventType));
-            ok = false;
-        }
-
-        if (!evt.granted) {
-            WriteLine(Format("{0}: incorrect event granted - expected:{1}, got:{2}", tag, true, evt.granted));
-            ok = false;
-        }
-
-        if (evt.door != 3) {
-            WriteLine(Format("{0}: incorrect event door - expected:{1}, got:{2}", tag, 3, evt.door));
-            ok = false;
-        }
-
-        if (evt.direction != 1) {
-            WriteLine(Format("{0}: incorrect event direction - expected:{1}, got:{2}", tag, 1, evt.direction));
-            ok = false;
-        }
-
-        if (evt.card != 8165538) {
-            WriteLine(Format("{0}: incorrect event card - expected:{1}, got:{2}", tag, 8165538, evt.card));
-            ok = false;
-        }
-
-        if (evt.reason != 21) {
-            WriteLine(Format("{0}: incorrect event reason - expected:{1}, got:{2}", tag, 21, evt.reason));
-            ok = false;
-        }
-
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-event", resultset);
     }
 
     static bool RecordSpecialEvents(Uhppoted u) {
-        string tag = "record-special-events";
-
         u.RecordSpecialEvents(DEVICE_ID, true);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("record-special-events", resultset);
     }
 
     static bool GetTimeProfile(Uhppoted u) {
-        string tag = "get-time-profile";
         TimeProfile profile = u.GetTimeProfile(DEVICE_ID, PROFILE_ID);
-        bool ok = true;
 
-        if (profile.ID != 49) {
-            WriteLine(Format("{0}: incorrect profile ID - expected:{1}, got:{2}", tag, 49, profile.ID));
-            ok = false;
-        }
+        result[] resultset = {
+            new uint8Result("profile ID", 49, profile.ID),
+            new uint8Result("linked profile ID", 71, profile.linked),
+            new stringResult("profile 'from' date", "2022-02-01", profile.from),
+            new stringResult("profile 'to' date", "2022-06-30", profile.to),
+            new boolResult("profile 'monday'", true, profile.monday),
+            new boolResult("profile 'tuesday'", false, profile.tuesday),
+            new boolResult("profile 'wednesday'", true, profile.wednesday),
+            new boolResult("profile 'thursday'", true, profile.thursday),
+            new boolResult("profile 'friday'", false, profile.friday),
+            new boolResult("profile 'saturday'", false, profile.saturday),
+            new boolResult("profile 'sunday'", true, profile.sunday),
+            new stringResult("profile segment 1 start", "08:30", profile.segment1start),
+            new stringResult("profile segment 1 end", "11:30", profile.segment1end),
+            new stringResult("profile segment 2 start", "00:00", profile.segment2start),
+            new stringResult("profile segment 2 end", "00:00", profile.segment2end),
+            new stringResult("profile segment 3 start", "00:00", profile.segment3start),
+            new stringResult("profile segment 3 end", "18:00", profile.segment3end),
+        };
 
-        if (profile.linked != 71) {
-            WriteLine(Format("{0}: incorrect linked profile - expected:{1}, got:{2}", tag, 71, profile.linked));
-            ok = false;
-        }
-
-        if (profile.from != "2022-02-01") {
-            WriteLine(Format("{0}: incorrect profile 'from' date - expected:{1}, got:{2}", tag, "2022-02-01", profile.from));
-            ok = false;
-        }
-
-        if (profile.to != "2022-06-30") {
-            WriteLine(Format("{0}: incorrect profile 'to' date - expected:{1}, got:{2}", tag, "2022-06-30", profile.to));
-            ok = false;
-        }
-
-        if (!profile.monday) {
-            WriteLine(Format("{0}: incorrect profile 'monday' - expected:{1}, got:{2}", tag, true, profile.monday));
-            ok = false;
-        }
-
-        if (profile.tuesday) {
-            WriteLine(Format("{0}: incorrect profile 'tuesday' - expected:{1}, got:{2}", tag, false, profile.tuesday));
-            ok = false;
-        }
-
-        if (!profile.wednesday) {
-            WriteLine(Format("{0}: incorrect profile 'wednesday' - expected:{1}, got:{2}", tag, true, profile.wednesday));
-            ok = false;
-        }
-
-        if (!profile.thursday) {
-            WriteLine(Format("{0}: incorrect profile 'thursday' - expected:{1}, got:{2}", tag, true, profile.thursday));
-            ok = false;
-        }
-
-        if (profile.friday) {
-            WriteLine(Format("{0}: incorrect profile 'friday' - expected:{1}, got:{2}", tag, false, profile.friday));
-            ok = false;
-        }
-
-        if (profile.saturday) {
-            WriteLine(Format("{0}: incorrect profile 'saturday' - expected:{1}, got:{2}", tag, false, profile.saturday));
-            ok = false;
-        }
-
-        if (!profile.sunday) {
-            WriteLine(Format("{0}: incorrect profile 'sunday' - expected:{1}, got:{2}", tag, true, profile.sunday));
-            ok = false;
-        }
-
-        if (profile.segment1start != "08:30") {
-            WriteLine(Format("{0}: incorrect profile segment 1 start - expected:{1}, got:{2}", tag, "08:30", profile.segment1start));
-            ok = false;
-        }
-
-        if (profile.segment1end != "11:30") {
-            WriteLine(Format("{0}: incorrect profile segment 1 end - expected:{1}, got:{2}", tag, "11:30", profile.segment1end));
-            ok = false;
-        }
-
-        if (profile.segment2start != "00:00") {
-            WriteLine(Format("{0}: incorrect profile segment 2 start - expected:{1}, got:{2}", tag, "", profile.segment2start));
-            ok = false;
-        }
-
-        if (profile.segment2end != "00:00") {
-            WriteLine(Format("{0}: incorrect profile segment 2 end - expected:{1}, got:{2}", tag, "", profile.segment2end));
-            ok = false;
-        }
-
-        if (profile.segment3start != "00:00") {
-            WriteLine(Format("{0}: incorrect profile segment 3 start - expected:{1}, got:{2}", tag, "", profile.segment3start));
-            ok = false;
-        }
-
-        if (profile.segment3end != "18:00") {
-            WriteLine(Format("{0}: incorrect profile segment 3 end - expected:{1}, got:{2}", tag, "", profile.segment3end));
-            ok = false;
-        }
-        if (!ok) {
-            return failed(tag);
-        }
-
-        return passed(tag);
+        return evaluate("get-time-profile", resultset);
     }
 
     static bool SetTimeProfile(Uhppoted u) {
-        string tag = "set-time-profile";
         TimeProfile profile = new TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30",
                                               true, false, true, true, false, false, true,
                                               "08:30", "11:30",
@@ -716,25 +391,72 @@ public class Tests {
 
         u.SetTimeProfile(DEVICE_ID, profile);
 
-        return passed(tag);
+        result[] resultset = {};
+
+        return evaluate("set-time-profile", resultset);
     }
 
     static bool ClearTimeProfiles(Uhppoted u) {
-        string tag = "clear-time-profiles";
-
         u.ClearTimeProfiles(DEVICE_ID);
+
+        result[] resultset = {};
+
+        return evaluate("clear-time-profiles", resultset);
+    }
+
+    static bool evaluate(string tag, result[] resultset) {
+        bool ok = true;
+
+        foreach (var r in resultset) {
+            switch (r) {
+            case uint32Result v:
+                if (v.expected != v.value) {
+                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    ok = false;
+                }
+                break;
+
+            case uint8Result v:
+                if (v.expected != v.value) {
+                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    ok = false;
+                }
+                break;
+
+            case boolResult v:
+                if (v.expected != v.value) {
+                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    ok = false;
+                }
+                break;
+
+            case stringResult v:
+                if (v.expected != v.value) {
+                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    ok = false;
+                }
+                break;
+
+            default:
+                throw new Exception(Format("unsupported type {0}", r));
+            }
+        }
+
+        if (!ok) {
+            return failed(tag);
+        }
 
         return passed(tag);
     }
 
     static bool passed(string tag) {
-        WriteLine(String.Format("{0, -21} {1}", tag, "ok"));
+        WriteLine(Format("{0, -21} {1}", tag, "ok"));
 
         return true;
     }
 
     static bool failed(string tag) {
-        WriteLine(String.Format("{0, -21} {1}", tag, "failed"));
+        WriteLine(Format("{0, -21} {1}", tag, "failed"));
 
         return false;
     }
@@ -751,5 +473,57 @@ public class Tests {
         WriteLine();
         WriteLine("   Defaults to 'all'");
         WriteLine();
+    }
+}
+
+// *** Utility classes for test evaluation ***
+
+public class result {}
+
+public class uint32Result : result {
+    public string field { get; }
+    public uint expected { get; }
+    public uint value { get; }
+
+    public uint32Result(string field, uint expected, uint value) {
+        this.field = field;
+        this.expected = expected;
+        this.value = value;
+    }
+}
+
+public class uint8Result : result {
+    public string field { get; }
+    public byte expected { get; }
+    public byte value { get; }
+
+    public uint8Result(string field, byte expected, byte value) {
+        this.field = field;
+        this.expected = expected;
+        this.value = value;
+    }
+}
+
+public class boolResult : result {
+    public string field { get; }
+    public bool expected { get; }
+    public bool value { get; }
+
+    public boolResult(string field, bool expected, bool value) {
+        this.field = field;
+        this.expected = expected;
+        this.value = value;
+    }
+}
+
+public class stringResult : result {
+    public string field { get; }
+    public string expected { get; }
+    public string value { get; }
+
+    public stringResult(string field, string expected, string value) {
+        this.field = field;
+        this.expected = expected;
+        this.value = value;
     }
 }

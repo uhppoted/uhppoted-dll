@@ -65,8 +65,8 @@ public class Event {
 public class Status {
     public uint ID;
     public string sysdatetime;
-    public byte[] doors;
-    public byte[] buttons;
+    public bool[] doors;
+    public bool[] buttons;
     public byte relays;
     public byte inputs;
     public byte syserror;
@@ -74,7 +74,7 @@ public class Status {
     public uint seqno;
     public Event evt;
 
-    public Status(uint ID, string sysdatetime, byte[] doors, byte[] buttons,
+    public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons,
                   byte relays, byte inputs, byte syserror, byte info, uint seqno,
                   Event evt) {
         this.ID = ID;
@@ -310,8 +310,18 @@ public class Uhppoted : IDisposable {
 
         return new Status(status.ID,
                           status.sysdatetime,
-                          doors,
-                          buttons,
+                          new bool[] {
+                              doors[0] == 1,
+                              doors[1] == 1,
+                              doors[2] == 1,
+                              doors[3] == 1,
+                          },
+                          new bool[] {
+                              buttons[0] == 1,
+                              buttons[1] == 1,
+                              buttons[2] == 1,
+                              buttons[3] == 1,
+                          },
                           status.relays,
                           status.inputs,
                           status.syserror,
@@ -381,8 +391,8 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public int GetCards(uint deviceID) {
-        int N = 0;
+    public uint GetCards(uint deviceID) {
+        uint N = 0;
 
         string err = GetCards(ref this.u, ref N, deviceID);
         if (err != null && err != "") {
@@ -590,7 +600,7 @@ public class Uhppoted : IDisposable {
     private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);
 
     [DllImport("libuhppoted.so")]
-    private static extern string GetCards(ref UHPPOTE u, ref int N, uint deviceID);
+    private static extern string GetCards(ref UHPPOTE u, ref uint N, uint deviceID);
 
     [DllImport("libuhppoted.so")]
     private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);

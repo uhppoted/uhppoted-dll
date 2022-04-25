@@ -357,7 +357,7 @@ public class examples {
     static void GetCards(Uhppoted u, string[] args) {
         uint deviceID = DEVICE_ID;
 
-        int cards = u.GetCards(deviceID);
+        uint cards = u.GetCards(deviceID);
 
         WriteLine(Format("get-cards"));
         WriteLine(Format("  ID:    {0}", deviceID));

@@ -18,7 +18,7 @@
   - [ ] Commonalise test failure handling
         - [x] C
         - [x] C++
-        - [ ] C#
+        - [x] C#
         - [x] Python
         - [ ] CCL
 
