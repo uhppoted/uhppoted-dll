@@ -1,8 +1,10 @@
 #pragma once
 
-#include "libuhppoted.h"
+#include <memory>
 #include <string>
 #include <vector>
+
+#include "libuhppoted.h"
 
 #define NORMALLY_OPEN 1
 #define NORMALLY_CLOSED 2
