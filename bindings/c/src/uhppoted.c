@@ -552,3 +552,13 @@ int set_time_profile(uint32_t id, time_profile *p) {
 
     return 0;
 }
+
+int clear_time_profiles(uint32_t id) {
+    char *err = ClearTimeProfiles(u, id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

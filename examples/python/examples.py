@@ -115,6 +115,10 @@ def commands():
             'help': "Adds or updates a time profile on a controller.",
             'fn': set_time_profile,
         },
+        'clear-time-profiles': {
+            'help': "Deletes all time profiles from a controller.",
+            'fn': clear_time_profiles,
+        },
     }
 
 
@@ -478,16 +482,17 @@ def delete_card(u, args):
 
 def delete_cards(u, args):
     try:
+        tag = 'delete-cards'
         deviceID = DEVICE_ID
 
         u.delete_cards(deviceID)
 
-        print('delete-cards')
+        print(f'{tag}')
         print(f'  ID: {deviceID}')
         print()
 
     except Exception as e:
-        print(f' *** ERROR delete_cards ({e})')
+        print(f' *** ERROR {tag} ({e})')
         print()
 
 
@@ -627,6 +632,22 @@ def set_time_profile(u, args):
         print(f'  segment 1:            {profile.segment1start}-{profile.segment1end}')
         print(f'  segment 2:            {profile.segment2start}-{profile.segment2end}')
         print(f'  segment 3:            {profile.segment3start}-{profile.segment3end}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
+        print()
+
+
+def clear_time_profiles(u, args):
+    try:
+        tag = 'clear-time-profiles'
+        deviceID = DEVICE_ID
+
+        u.clear_time_profiles(deviceID)
+
+        print(f'{tag}')
+        print(f'  ID: {deviceID}')
         print()
 
     except Exception as e:

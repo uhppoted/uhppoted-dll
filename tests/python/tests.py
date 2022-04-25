@@ -46,6 +46,7 @@ def tests():
         'record-special-events': record_special_events,
         'get-time-profile': get_time_profile,
         'set-time-profile': set_time_profile,
+        'clear-time-profiles': clear_time_profiles,
     }
 
 
@@ -272,6 +273,12 @@ def record_special_events(u):
     u.record_special_events(DEVICE_ID, True)
 
     return evaluate(tag, [])
+
+
+def clear_time_profiles(u):
+    u.clear_time_profiles(DEVICE_ID)
+
+    return evaluate('clear-time-profiles', [])
 
 
 def evaluate(tag, resultset):

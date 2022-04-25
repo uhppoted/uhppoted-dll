@@ -2,7 +2,18 @@
 
 ### IN PROGRESS
   - [x] README
-  - [x] Github workflow
+        - [ ] Usage and notes
+              - [ ] C
+              - [ ] C++
+              - [ ] C#
+              - [ ] Python
+              - [ ] CCL
+              - [ ] LIB_PATH/DYLIB_PATH
+
+  - [ ] Github workflow
+        - [x] build
+        - [ ] examples
+        - [ ] tests
 
   - [ ] Commonalise test failure handling
         - [x] C
@@ -12,15 +23,15 @@
         - [ ] CCL
 
 - Shared-lib/DLL
-  - [ ] `clear-time-profiles`
-        - [ ] C
-        - [ ] C++
-        - [ ] C#
-        - [ ] Python
-        - [ ] CCL
+  - [x] `clear-time-profiles`
+        - [x] C
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
 
   - [ ] Fix CLI set-time-profile
-  - [x] Figure out why can't put get/set/clearTimeProfile in a seperate file
+  - [ ] Figure out why can't put get/set/clearTimeProfile in a seperate file
         - [x] Workaround
         - [ ] Create basic example and log issue
 

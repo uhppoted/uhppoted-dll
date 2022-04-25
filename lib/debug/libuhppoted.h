@@ -190,7 +190,9 @@ extern char* GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUi
 // NTS: for some utterly bizarre reason cgo will not compile if getTimeProfile or setTimeProfile is in
 //      a different file unless the C.struct_TimeProfile is packed/unpacked in main.go. It compiles
 //      just fine if those functions are in e.g. cards.go.
+//
 extern char* SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile);
+extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);
 
 #ifdef __cplusplus
 }

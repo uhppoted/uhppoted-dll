@@ -44,6 +44,18 @@ mkdir lib
 go build -trimpath -buildmode=c-shared -o ./lib/libuhppoted.so ./...
 ```
 
+### `debug` lib
+
+The `debug` shared-lib/DLL displays the parameters with which the function was invoked. It _fakes_ the call
+to the real controller, returning a plausible response instead.
+
+### `test` lib
+
+The `test` shared-lib/DLL is included for integration testing and validates the parameters with which a function
+is invoked match expected values. As with the `debug` lib, it does not access a real controller and returns a 
+fixed response.
+
+
 #### Dependencies
 
 | *Dependency*                                             | *Description*                                          |

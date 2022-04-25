@@ -417,7 +417,7 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
 
 
-(defun uhppoted-delete-cards (uhppote device-id) "Deletes all cards from on a controller"
+(defun uhppoted-delete-cards (uhppote device-id) "Deletes all cards from a controller"
   (with-macptrs ((err (external-call "DeleteCards" :address uhppote 
                                                    :unsigned-long device-id 
                                                    :address)))
@@ -528,6 +528,13 @@
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
       t)))
     )
+
+
+(defun uhppoted-clear-time-profiles (uhppote device-id) "Deletes all time profiles from a controller"
+  (with-macptrs ((err (external-call "ClearTimeProfiles" :address uhppote 
+                                                         :unsigned-long device-id 
+                                                         :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
 
 
 (defun debug () "" 

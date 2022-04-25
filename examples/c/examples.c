@@ -140,6 +140,11 @@ const command commands[] = {
         .help = "Adds or updates a time profile on a controller.",
         .fn = setTimeProfile,
     },
+    {
+        .cmd = "clear-time-profiles",
+        .help = "Deletes all time profiles from a controller.",
+        .fn = clearTimeProfiles,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

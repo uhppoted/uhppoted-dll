@@ -91,6 +91,9 @@ get-time-profile: build
 set-time-profile: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-time-profile
 
+clear-time-profiles: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) clear-time-profiles
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) set-time-profile
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) clear-time-profiles
 

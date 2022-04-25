@@ -114,6 +114,7 @@ class uhppoted {
 
     time_profile get_time_profile(uint32_t id, uint8_t profile_id);
     void set_time_profile(uint32_t id, const time_profile &profile);
+    void clear_time_profiles(uint32_t id);
 
   private:
     UHPPOTE *u;

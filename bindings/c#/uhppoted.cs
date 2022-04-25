@@ -229,75 +229,6 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    [DllImport("libuhppoted.so")]
-    private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string SetTime(ref UHPPOTE u, uint deviceID, string datetime);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetListener(ref UHPPOTE u, ref string listener, uint deviceID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetCards(ref UHPPOTE u, ref int N, uint deviceID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string DeleteCards(ref UHPPOTE u, uint deviceID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string SetEventIndex(ref UHPPOTE u, uint deviceID, uint index);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID);
-
-    [DllImport("libuhppoted.so")]
-    private static extern string SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile);
-
     public uint[] GetDevices() {
         int N = 0;
         int count = N;
@@ -616,7 +547,86 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    // INTERNAL structs for DLL
+    public void ClearTimeProfiles(uint deviceID) {
+        string err = ClearTimeProfiles(ref this.u, deviceID);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
+    // Go DLL FFI
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetTime(ref UHPPOTE u, uint deviceID, string datetime);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetListener(ref UHPPOTE u, ref string listener, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetCards(ref UHPPOTE u, ref int N, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string DeleteCards(ref UHPPOTE u, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetEventIndex(ref UHPPOTE u, uint deviceID, uint index);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string ClearTimeProfiles(ref UHPPOTE u, uint deviceID);
 
     struct udevice {
         public uint ID;

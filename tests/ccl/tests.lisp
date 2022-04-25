@@ -568,6 +568,15 @@
           (failed tag))))
 
 
+(defun clear-time-profiles () "" 
+  (let ((tag      "clear-time-profiles")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-clear-time-profiles u TEST-DEVICE-ID)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
+
 (defun passed (tag) ""
   (format t "~21a ok~%" tag))
 

@@ -242,3 +242,12 @@
             "  ~a:~%    ~:w~%~%" 
             tag
             (exec #'(lambda (u) (uhppoted-set-time-profile u device-id profile))))))
+
+
+(defun clear-time-profiles () "" 
+  (let ((tag       "clear-time-profiles")
+        (device-id 405419896))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-clear-time-profiles u device-id))))))

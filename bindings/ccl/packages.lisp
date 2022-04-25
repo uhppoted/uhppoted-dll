@@ -27,6 +27,7 @@
            uhppoted-record-special-events
            uhppoted-get-time-profile
            uhppoted-set-time-profile
+           uhppoted-clear-time-profiles
            uhppoted-error
            with-warning
            message

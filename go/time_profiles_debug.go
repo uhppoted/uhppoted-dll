@@ -79,3 +79,13 @@ func setTimeProfile(uu uhppote.IUHPPOTE, deviceID uint32, profile types.TimeProf
 
 	return nil
 }
+
+func clearTimeProfiles(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	if DEBUG {
+		fmt.Printf(">>> clear-time-profiles\n")
+		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Println()
+	}
+
+	return nil
+}

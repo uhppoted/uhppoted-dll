@@ -380,6 +380,7 @@ func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID
 // NTS: for some utterly bizarre reason cgo will not compile if getTimeProfile or setTimeProfile is in
 //      a different file unless the C.struct_TimeProfile is packed/unpacked in main.go. It compiles
 //      just fine if those functions are in e.g. cards.go.
+//
 //export SetTimeProfile
 func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) *C.char {
 	uu, err := makeUHPPOTE(u)
@@ -392,6 +393,17 @@ func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_Time
 	} else if p == nil {
 		return C.CString(fmt.Sprintf("invalid time profile (%v)", p))
 	} else if err := setTimeProfile(uu, deviceID, *p); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export ClearTimeProfiles
+func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := clearTimeProfiles(uu, deviceID); err != nil {
 		return C.CString(err.Error())
 	}
 

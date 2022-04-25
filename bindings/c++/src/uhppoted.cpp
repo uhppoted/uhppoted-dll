@@ -466,3 +466,11 @@ void uhppoted::set_time_profile(uint32_t id, const time_profile &p) {
         throw uhppoted_exception(err);
     }
 }
+
+void uhppoted::clear_time_profiles(uint32_t id) {
+    char *err = ClearTimeProfiles(u, id);
+
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

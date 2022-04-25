@@ -99,6 +99,9 @@ public class examples {
         new command("set-time-profile",
                     "Adds or updates a time profile on a controller.",
                     GetTimeProfile),
+        new command("clear-time-profiles",
+                    "Deletes all time profiles from a controller.",
+                    ClearTimeProfiles),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -552,6 +555,16 @@ public class examples {
         WriteLine(Format("  segment 1:            {0}-{1}", profile.segment1start, profile.segment1end));
         WriteLine(Format("  segment 2:            {0}-{1}", profile.segment2start, profile.segment2end));
         WriteLine(Format("  segment 3:            {0}-{1}", profile.segment3start, profile.segment3end));
+        WriteLine();
+    }
+
+    static void ClearTimeProfiles(Uhppoted u, string[] args) {
+        uint deviceID = DEVICE_ID;
+
+        u.ClearTimeProfiles(deviceID);
+
+        WriteLine(Format("clear-time-profiles"));
+        WriteLine(Format("  ID: {0}", deviceID));
         WriteLine();
     }
 }

@@ -319,6 +319,9 @@ class Uhppote:
 
         self.ffi.SetTimeProfile(self._uhppote, deviceID, byref(profile))
 
+    def clear_time_profiles(self, deviceID):
+        self.ffi.ClearTimeProfiles(self._uhppote, deviceID)
+
 
 # Go FFI types
 
@@ -348,6 +351,7 @@ class FFI:
         self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
         self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
         self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
+        self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -387,6 +391,7 @@ def libfunctions():
         'RecordSpecialEvents': (lib.RecordSpecialEvents, [POINTER(GoUHPPOTE), c_ulong, c_bool]),
         'GetTimeProfile':      (lib.GetTimeProfile,      [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte]),
         'SetTimeProfile':      (lib.SetTimeProfile,      [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile)]),
+        'ClearTimeProfiles':   (lib.ClearTimeProfiles,   [POINTER(GoUHPPOTE), c_ulong]),
     }
 # yapf: enable
 

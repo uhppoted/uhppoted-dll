@@ -84,3 +84,18 @@ int setTimeProfile(int argc, char **argv) {
 
     return 0;
 }
+
+int clearTimeProfiles(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
+    if (clear_time_profiles(deviceID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nclear-time-profiles\n");
+    printf("  ID: %u\n", deviceID);
+    printf("\n");
+
+    return 0;
+}

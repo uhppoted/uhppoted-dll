@@ -133,3 +133,11 @@ func setTimeProfile(uu uhppote.IUHPPOTE, deviceID uint32, profile types.TimeProf
 
 	return nil
 }
+
+func clearTimeProfiles(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	return nil
+}

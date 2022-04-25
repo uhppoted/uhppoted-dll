@@ -96,3 +96,24 @@ int setTimeProfile(uhppoted &u, int argc, char **argv) {
 
     return -1;
 }
+
+int clearTimeProfiles(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
+    try {
+        u.clear_time_profiles(deviceID);
+
+        cout << endl
+             << "clear-time-profiles" << endl;
+        cout << "  ID: " << deviceID << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

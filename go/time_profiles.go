@@ -31,3 +31,14 @@ func setTimeProfile(uu uhppote.IUHPPOTE, deviceID uint32, profile types.TimeProf
 
 	return nil
 }
+
+func clearTimeProfiles(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	cleared, err := uu.ClearTimeProfiles(deviceID)
+	if err != nil {
+		return err
+	} else if !cleared {
+		return fmt.Errorf("%v: clear-time-profiles failed", deviceID)
+	}
+
+	return nil
+}

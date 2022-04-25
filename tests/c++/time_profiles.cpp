@@ -59,3 +59,11 @@ bool setTimeProfile(uhppoted &u) {
 
     return evaluate("set-time-profile", rs);
 }
+
+bool clearTimeProfiles(uhppoted &u) {
+    u.clear_time_profiles(DEVICE_ID);
+
+    vector<result> rs = {};
+
+    return evaluate("clear-time-profiles", rs);
+}

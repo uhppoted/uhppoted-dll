@@ -61,6 +61,7 @@ extern bool recordSpecialEvents();
 
 extern bool getTimeProfile();
 extern bool setTimeProfile();
+extern bool clearTimeProfiles();
 
 extern const uint32_t DEVICE_ID;
 extern const uint32_t CARD_NUMBER;

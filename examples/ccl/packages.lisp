@@ -26,5 +26,6 @@
            get-event
            record-special-events
            get-time-profile
-           set-time-profile))
+           set-time-profile
+           clear-time-profiles))
 

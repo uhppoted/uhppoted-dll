@@ -50,6 +50,7 @@ public class Tests {
         new test("record-special-events", RecordSpecialEvents),
         new test("get-time-profile", GetTimeProfile),
         new test("set-time-profile", SetTimeProfile),
+        new test("clear-time-profiles", ClearTimeProfiles),
     };
 
     public static void Main(string[] args) {
@@ -714,6 +715,14 @@ public class Tests {
                                               "", "18:00");
 
         u.SetTimeProfile(DEVICE_ID, profile);
+
+        return passed(tag);
+    }
+
+    static bool ClearTimeProfiles(Uhppoted u) {
+        string tag = "clear-time-profiles";
+
+        u.ClearTimeProfiles(DEVICE_ID);
 
         return passed(tag);
     }

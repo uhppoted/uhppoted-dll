@@ -68,3 +68,14 @@ bool setTimeProfile() {
 
     return evaluate("set-time-profile", sizeof(resultset) / sizeof(result), resultset);
 }
+
+bool clearTimeProfiles() {
+    if (clear_time_profiles(DEVICE_ID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate("clear-time-profiles", sizeof(resultset) / sizeof(result), resultset);
+}
