@@ -2,7 +2,7 @@
 
 ### IN PROGRESS
   - [x] README
-  - [ ] Github workflow
+  - [x] Github workflow
 
   - [ ] Commonalise test failure handling
         - [x] C
@@ -39,9 +39,10 @@
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
   - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
   - [ ] Constants for event types, reason, etc
-  - (?) lint
-  - (?) Cross-compile
-        - https://github.com/elastic/golang-crossbuild
 
 ## TODO
+
+- (?) lint
+- (?) Cross-compile
+      - https://github.com/elastic/golang-crossbuild
 
