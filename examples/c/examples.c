@@ -145,6 +145,11 @@ const command commands[] = {
         .help = "Deletes all time profiles from a controller.",
         .fn = clearTimeProfiles,
     },
+    {
+        .cmd = "add-task",
+        .help = "Adds a scheduled task to the controller.",
+        .fn = addTask,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

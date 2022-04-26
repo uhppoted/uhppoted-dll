@@ -102,6 +102,9 @@ public class examples {
         new command("clear-time-profiles",
                     "Deletes all time profiles from a controller.",
                     ClearTimeProfiles),
+        new command("add-task",
+                    "Adds a scheduled task to a controller.",
+                    AddTask),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -565,6 +568,33 @@ public class examples {
 
         WriteLine(Format("clear-time-profiles"));
         WriteLine(Format("  ID: {0}", deviceID));
+        WriteLine();
+    }
+
+    static void AddTask(Uhppoted u, string[] args) {
+        string tag = "add-task";
+        uint deviceID = DEVICE_ID;
+        Task task = new Task(6, 4, "2022-02-01", "2022-06-30",
+                             true, false, true, true, false, false, true,
+                             "08:30", 11);
+
+        u.AddTask(deviceID, task);
+
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID:                   {0}", deviceID));
+        WriteLine(Format("  task:                 {0}", task.task));
+        WriteLine(Format("  door:                 {0}", task.door));
+        WriteLine(Format("  enabled from:         {0}", task.from));
+        WriteLine(Format("          to:           {0}", task.to));
+        WriteLine(Format("  enabled on Monday:    {0}", task.monday));
+        WriteLine(Format("             Tuesday:   {0}", task.tuesday));
+        WriteLine(Format("             Wednesday: {0}", task.wednesday));
+        WriteLine(Format("             Thursday:  {0}", task.thursday));
+        WriteLine(Format("             Friday:    {0}", task.friday));
+        WriteLine(Format("             Saturday:  {0}", task.saturday));
+        WriteLine(Format("             Sunday:    {0}", task.sunday));
+        WriteLine(Format("  at:                   {0}", task.at));
+        WriteLine(Format("  cards:                {0}", task.cards));
         WriteLine();
     }
 }

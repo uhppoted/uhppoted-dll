@@ -29,3 +29,5 @@ int recordSpecialEvents(uhppoted &u, int argc, char **argv);
 int getTimeProfile(uhppoted &u, int argc, char **argv);
 int setTimeProfile(uhppoted &u, int argc, char **argv);
 int clearTimeProfiles(uhppoted &u, int argc, char **argv);
+
+int addTask(uhppoted &u, int argc, char **argv);

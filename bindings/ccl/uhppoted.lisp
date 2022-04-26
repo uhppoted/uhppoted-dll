@@ -64,6 +64,20 @@
                         segment3start
                         segment3end)
 
+(defstruct task task
+                door
+                from
+                to
+                monday
+                tuesday
+                wednesday
+                thursday
+                friday
+                saturday
+                sunday
+                at
+                cards)
+
 
 (def-foreign-type nil
   (:struct :UDEVICE (:id      :int)
@@ -139,8 +153,22 @@
                           (:segment2start :address)
                           (:segment2end   :address)
                           (:segment3start :address)
-                          (:segment3end   :address)
-                          ))
+                          (:segment3end   :address)))
+
+(def-foreign-type nil
+  (:struct :GoTask (:task      :unsigned-byte)
+                   (:door      :unsigned-byte)
+                   (:from      :address)
+                   (:to        :address)
+                   (:monday    :unsigned-byte)
+                   (:tuesday   :unsigned-byte)
+                   (:wednesday :unsigned-byte)
+                   (:thursday  :unsigned-byte)
+                   (:friday    :unsigned-byte)
+                   (:saturday  :unsigned-byte)
+                   (:sunday    :unsigned-byte)
+                   (:at        :address)
+                   (:cards     :unsigned-byte)))
 
 
 (define-condition uhppoted-error (error)
@@ -521,13 +549,12 @@
                                        :segment2end   segment2end
                                        :segment3start segment3start
                                        :segment3end   segment3end))
-    (with-macptrs ((err (external-call "SetTimeProfile" :address uhppote 
+    (with-macptrs ((err (external-call "SetTimeProfile" :address       uhppote 
                                                         :unsigned-long device-id 
-                                                        :address p
+                                                        :address       p
                                                         :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      t)))
-    )
+      t))))
 
 
 (defun uhppoted-clear-time-profiles (uhppote device-id) "Deletes all time profiles from a controller"
@@ -535,6 +562,31 @@
                                                          :unsigned-long device-id 
                                                          :address)))
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
+
+(defun uhppoted-add-task (uhppote device-id task) "Adds a scheduled task to a controller"
+  (with-cstrs ((from (task-from task))
+               (to   (task-to   task))
+               (at   (task-at   task)))
+    (rletz ((tt (:struct :GoTask) :task      (task-task task)
+                                  :door      (task-door task)
+                                  :from      from
+                                  :to        to
+                                  :monday    (if (task-monday    task) 1 0)
+                                  :tuesday   (if (task-tuesday   task) 1 0)
+                                  :wednesday (if (task-wednesday task) 1 0)
+                                  :thursday  (if (task-thursday  task) 1 0)
+                                  :friday    (if (task-friday    task) 1 0)
+                                  :saturday  (if (task-saturday  task) 1 0)
+                                  :sunday    (if (task-sunday    task) 1 0)
+                                  :at at
+                                  :cards     (task-cards task)))
+     (with-macptrs ((err (external-call "AddTask" :address       uhppote 
+                                                  :unsigned-long device-id 
+                                                  :address       tt
+                                                  :address)))
+       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+        t))))
 
 
 (defun debug () "" 

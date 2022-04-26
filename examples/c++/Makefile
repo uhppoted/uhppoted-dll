@@ -1,7 +1,7 @@
 LIB=../../lib
 BINDINGS=../../bindings/c++
 CMD=./examples
-SRC=examples.cpp device.cpp cards.cpp events.cpp time_profiles.cpp
+SRC=examples.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp
 
 lib: 
 	cd ../../go && make all
@@ -95,6 +95,9 @@ set-time-profile: build
 clear-time-profiles: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) clear-time-profiles
 
+add-task: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) add-task
+
 debug: format
 	clang -std=c++11  -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) clear-time-profiles
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) add-task

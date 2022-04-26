@@ -89,6 +89,22 @@ typedef struct TimeProfile {
     char * segment3end;
 } TimeProfile;
 
+typedef struct Task {
+	uint8_t task;
+	uint8_t door;
+	const char *from;
+	const char *to;
+    uint8_t monday;
+    uint8_t tuesday;
+    uint8_t wednesday;
+    uint8_t thursday;
+    uint8_t friday;
+    uint8_t saturday;
+    uint8_t sunday;
+	const char *at;
+	uint8_t cards;
+} Task;
+
 */
 import "C"
 
@@ -383,6 +399,10 @@ func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID
 //
 //export SetTimeProfile
 func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) *C.char {
+	if profile == nil {
+		return C.CString("invalid argument (profile) - expected valid pointer")
+	}
+
 	uu, err := makeUHPPOTE(u)
 	if err != nil {
 		return C.CString(err.Error())
@@ -404,6 +424,28 @@ func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else if err := clearTimeProfiles(uu, deviceID); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export AddTask
+func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task) *C.char {
+	if task == nil {
+		return C.CString("invalid argument (task) - expected valid pointer")
+	}
+
+	uu, err := makeUHPPOTE(u)
+	if err != nil {
+		return C.CString(err.Error())
+	}
+
+	if t, err := makeTask(task); err != nil {
+		return C.CString(err.Error())
+	} else if t == nil {
+		return C.CString(fmt.Sprintf("invalid task (%v)", t))
+	} else if err := addTask(uu, deviceID, *t); err != nil {
 		return C.CString(err.Error())
 	}
 
@@ -540,6 +582,44 @@ func makeTimeProfile(profile *C.struct_TimeProfile) (*types.TimeProfile, error) 
 	}
 
 	return &p, nil
+}
+
+func makeTask(task *C.struct_Task) (*types.Task, error) {
+	from, err := types.DateFromString(C.GoString(task.from))
+	if err != nil {
+		return nil, fmt.Errorf("invalid 'from' date (%v)", err)
+	}
+
+	to, err := types.DateFromString(C.GoString(task.to))
+	if err != nil {
+		return nil, fmt.Errorf("invalid 'to' date (%v)", err)
+	}
+
+	at, err := types.HHmmFromString(C.GoString(task.at))
+	if err != nil {
+		return nil, fmt.Errorf("invalid 'start' time (%v)", err)
+	}
+
+	t := types.Task{
+		Task: types.TaskType(task.task),
+		Door: uint8(task.door),
+		From: *from,
+		To:   *to,
+		Weekdays: map[time.Weekday]bool{
+			time.Monday:    task.monday != 0,
+			time.Tuesday:   task.tuesday != 0,
+			time.Wednesday: task.wednesday != 0,
+			time.Thursday:  task.thursday != 0,
+			time.Friday:    task.friday != 0,
+			time.Saturday:  task.saturday != 0,
+			time.Sunday:    task.sunday != 0,
+		},
+
+		Start: *at,
+		Cards: uint8(task.cards),
+	}
+
+	return &t, nil
 }
 
 func cbool(b bool) C.uchar {

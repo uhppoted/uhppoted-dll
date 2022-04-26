@@ -149,6 +149,11 @@ const vector<command> commands = {
         .help = "Deletes all time profiles from a controller.",
         .fn = clearTimeProfiles,
     },
+    {
+        .cmd = "add-task",
+        .help = "Adds a scheduled task to a controller.",
+        .fn = addTask,
+    },
 };
 
 int main(int argc, char **argv) {

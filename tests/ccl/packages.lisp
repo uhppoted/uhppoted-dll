@@ -28,6 +28,7 @@
            get-time-profile
            set-time-profile
            clear-time-profiles
+           add-task
            failed
            message))
 

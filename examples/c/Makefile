@@ -1,7 +1,7 @@
 LIB=../../lib
 BINDINGS=../../bindings/c
 CMD=./examples
-SRC=examples.c device.c cards.c events.c time_profiles.c
+SRC=examples.c device.c cards.c events.c time_profiles.c tasks.c
 
 lib: 
 	cd ../../go && make all
@@ -95,7 +95,10 @@ set-time-profile: build
 clear-time-profiles: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) clear-time-profiles
 
+add-task: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) add-task
+
 debug: format
 	clang -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) clear-time-profiles
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) add-task
 

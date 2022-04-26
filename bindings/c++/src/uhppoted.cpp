@@ -474,3 +474,26 @@ void uhppoted::clear_time_profiles(uint32_t id) {
         throw uhppoted_exception(err);
     }
 }
+
+void uhppoted::add_task(uint32_t id, const task &t) {
+    Task task;
+
+    task.task = t.task;
+    task.door = t.door;
+    task.from = (char *)t.from.c_str();
+    task.to = (char *)t.to.c_str();
+    task.monday = t.monday;
+    task.tuesday = t.tuesday;
+    task.wednesday = t.wednesday;
+    task.thursday = t.thursday;
+    task.friday = t.friday;
+    task.saturday = t.saturday;
+    task.sunday = t.sunday;
+    task.at = (char *)t.at.c_str();
+    task.cards = t.cards;
+
+    char *err = AddTask(u, id, &task);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

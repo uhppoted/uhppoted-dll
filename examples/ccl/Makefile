@@ -92,6 +92,9 @@ set-time-profile: build
 clear-time-profiles: build
 	$(CMD) clear-time-profiles
 
+add-task: build
+	$(CMD) add-task
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

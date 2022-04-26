@@ -28,6 +28,7 @@
            uhppoted-get-time-profile
            uhppoted-set-time-profile
            uhppoted-clear-time-profiles
+           uhppoted-add-task
            uhppoted-error
            with-warning
            message
@@ -86,6 +87,21 @@
            time-profile-segment2end
            time-profile-segment3start
            time-profile-segment3end
+
+           make-task
+           task-task
+           task-door
+           task-from
+           task-to
+           task-monday
+           task-tuesday
+           task-wednesday
+           task-thursday
+           task-friday
+           task-saturday
+           task-sunday
+           task-at
+           task-cards
 
            normally-open
            normally-closed

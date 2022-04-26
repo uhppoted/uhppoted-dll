@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c++
 CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && export LD_LIBRARY_PATH=$(LIB) && ./tests
-SRC=tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp
+SRC=tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp
 
 lib: 
 	cd ../../go && make all
@@ -92,6 +92,9 @@ set-time-profile: build
 
 clear-time-profiles: build
 	$(CMD) clear-time-profiles
+
+add-task: build
+	$(CMD) add-task
 
 all: build
 	$(CMD) all

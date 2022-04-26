@@ -117,6 +117,23 @@ class TimeProfile:
     segment3end: str
 
 
+@dataclass
+class Task:
+    task: int
+    door: int
+    start: str
+    end: str
+    monday: bool
+    tuesday: bool
+    wednesday: bool
+    thursday: bool
+    friday: bool
+    saturday: bool
+    sunday: bool
+    at: str
+    cards: int
+
+
 class Uhppote:
     def __init__(self, uhppote=None):
         self.ffi = FFI(self.errcheck)
@@ -322,6 +339,15 @@ class Uhppote:
     def clear_time_profiles(self, deviceID):
         self.ffi.ClearTimeProfiles(self._uhppote, deviceID)
 
+    def add_task(self, deviceID, t):
+        task = GoTask(t.task, t.door, c_char_p(bytes(t.start, 'utf-8')),
+                      c_char_p(bytes(t.end, 'utf-8')), 1 if t.monday else 0, 1 if t.tuesday else 0,
+                      1 if t.wednesday else 0, 1 if t.thursday else 0,
+                      1 if t.friday else 0, 1 if t.saturday else 0, 1 if t.sunday else 0,
+                      c_char_p(bytes(t.at, 'utf-8')), t.cards)
+
+        self.ffi.AddTask(self._uhppote, deviceID, byref(task))
+
 
 # Go FFI types
 
@@ -352,6 +378,7 @@ class FFI:
         self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
         self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
         self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
+        self.AddTask = ffi('AddTask', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -392,6 +419,7 @@ def libfunctions():
         'GetTimeProfile':      (lib.GetTimeProfile,      [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte]),
         'SetTimeProfile':      (lib.SetTimeProfile,      [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile)]),
         'ClearTimeProfiles':   (lib.ClearTimeProfiles,   [POINTER(GoUHPPOTE), c_ulong]),
+        'AddTask':             (lib.AddTask,             [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask)]),
     }
 # yapf: enable
 
@@ -503,4 +531,22 @@ class GoTimeProfile(Structure):
         ('segment2end', c_char_p),
         ('segment3start', c_char_p),
         ('segment3end', c_char_p),
+    ]
+
+
+class GoTask(Structure):
+    _fields_ = [
+        ('task', c_ubyte),
+        ('door', c_ubyte),
+        ('start', c_char_p),
+        ('end', c_char_p),
+        ('monday', c_ubyte),
+        ('tuesday', c_ubyte),
+        ('wednesday', c_ubyte),
+        ('thursday', c_ubyte),
+        ('friday', c_ubyte),
+        ('saturday', c_ubyte),
+        ('sunday', c_ubyte),
+        ('at', c_char_p),
+        ('cards', c_ubyte),
     ]

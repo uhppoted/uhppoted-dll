@@ -166,6 +166,43 @@ public class TimeProfile {
     }
 };
 
+public class Task {
+    public byte task;
+    public byte door;
+    public string from;
+    public string to;
+    public bool monday;
+    public bool tuesday;
+    public bool wednesday;
+    public bool thursday;
+    public bool friday;
+    public bool saturday;
+    public bool sunday;
+    public string at;
+    public byte cards;
+
+    public Task(byte task, byte door, string from, string to,
+                bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
+                string at,
+                byte cards) {
+        this.task = task;
+        this.door = door;
+        this.from = from;
+        this.to = to;
+
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
+
+        this.at = at;
+        this.cards = cards;
+    }
+};
+
 public class Uhppoted : IDisposable {
     private UHPPOTE u = new UHPPOTE();
 
@@ -564,6 +601,29 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void AddTask(uint deviceID, Task t) {
+        GoTask task = new GoTask();
+
+        task.task = t.task;
+        task.door = t.door;
+        task.from = t.from;
+        task.to = t.to;
+        task.monday = t.monday ? (byte)1 : (byte)0;
+        task.tuesday = t.tuesday ? (byte)1 : (byte)0;
+        task.wednesday = t.wednesday ? (byte)1 : (byte)0;
+        task.thursday = t.thursday ? (byte)1 : (byte)0;
+        task.friday = t.friday ? (byte)1 : (byte)0;
+        task.saturday = t.saturday ? (byte)1 : (byte)0;
+        task.sunday = t.sunday ? (byte)1 : (byte)0;
+        task.at = t.at;
+        task.cards = t.cards;
+
+        string err = AddTask(ref this.u, deviceID, ref task);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
     // Go DLL FFI
 
     [DllImport("libuhppoted.so")]
@@ -637,6 +697,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("libuhppoted.so")]
     private static extern string ClearTimeProfiles(ref UHPPOTE u, uint deviceID);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task);
 
     struct udevice {
         public uint ID;
@@ -722,6 +785,22 @@ public class Uhppoted : IDisposable {
         public string segment2end;
         public string segment3start;
         public string segment3end;
+    };
+
+    struct GoTask {
+        public byte task;
+        public byte door;
+        public string from;
+        public string to;
+        public byte monday;
+        public byte tuesday;
+        public byte wednesday;
+        public byte thursday;
+        public byte friday;
+        public byte saturday;
+        public byte sunday;
+        public string at;
+        public byte cards;
     };
 };
 }

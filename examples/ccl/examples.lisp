@@ -209,6 +209,7 @@
             tag
             (exec #'(lambda (u) (uhppoted-record-special-events u device-id enabled))))))
 
+
 (defun get-time-profile () "" 
   (let ((tag        "get-time-profile")
         (device-id  405419896)
@@ -217,6 +218,7 @@
             "  ~a:~%    ~:w~%~%" 
             tag
             (exec #'(lambda (u) (uhppoted-get-time-profile u device-id profile-id))))))
+
 
 (defun set-time-profile () "" 
   (let ((tag        "set-time-profile")
@@ -251,3 +253,26 @@
             "  ~a:~%    ~:w~%~%" 
             tag
             (exec #'(lambda (u) (uhppoted-clear-time-profiles u device-id))))))
+
+
+(defun add-task () "" 
+  (let ((tag        "add-task")
+        (device-id  405419896)
+        (task       (make-task :task      6
+                               :door      4
+                               :from      "2022-02-01"
+                               :to        "2022-06-30"
+                               :monday    t
+                               :tuesday   nil
+                               :wednesday t
+                               :thursday  t
+                               :friday    nil
+                               :saturday  nil
+                               :sunday    t
+                               :at        "08:30"
+                               :cards     11)))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-add-task u device-id task))))))
+

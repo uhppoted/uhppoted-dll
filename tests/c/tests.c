@@ -50,6 +50,7 @@ const test tests[] = {
     {.name = "get-time-profile", .fn = getTimeProfile},
     {.name = "set-time-profile", .fn = setTimeProfile},
     {.name = "clear-time-profiles", .fn = clearTimeProfiles},
+    {.name = "add-task", .fn = addTask},
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

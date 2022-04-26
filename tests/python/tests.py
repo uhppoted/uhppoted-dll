@@ -47,6 +47,7 @@ def tests():
         'get-time-profile': get_time_profile,
         'set-time-profile': set_time_profile,
         'clear-time-profiles': clear_time_profiles,
+        'add-task': add_task,
     }
 
 
@@ -235,6 +236,13 @@ def get_event(u):
     ])
 
 
+def record_special_events(u):
+    tag = 'record-special-events'
+    u.record_special_events(DEVICE_ID, True)
+
+    return evaluate(tag, [])
+
+
 def get_time_profile(u):
     profile = u.get_time_profile(DEVICE_ID, PROFILE_ID)
 
@@ -268,17 +276,18 @@ def set_time_profile(u):
     return evaluate('set-time-profile', [])
 
 
-def record_special_events(u):
-    tag = 'record-special-events'
-    u.record_special_events(DEVICE_ID, True)
-
-    return evaluate(tag, [])
-
-
 def clear_time_profiles(u):
     u.clear_time_profiles(DEVICE_ID)
 
     return evaluate('clear-time-profiles', [])
+
+
+def add_task(u):
+    task = uhppoted.Task(4, 3, "2022-02-01", "2022-06-30", True, False, True, True, False, False, True, "09:45", 11)
+
+    u.add_task(DEVICE_ID, task)
+
+    return evaluate('set-time-profile', [])
 
 
 def evaluate(tag, resultset):

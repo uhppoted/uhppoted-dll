@@ -119,6 +119,10 @@ def commands():
             'help': "Deletes all time profiles from a controller.",
             'fn': clear_time_profiles,
         },
+        'add-task': {
+            'help': "Adds a scheduled task to  a controller.",
+            'fn': add_task,
+        },
     }
 
 
@@ -632,6 +636,38 @@ def set_time_profile(u, args):
         print(f'  segment 1:            {profile.segment1start}-{profile.segment1end}')
         print(f'  segment 2:            {profile.segment2start}-{profile.segment2end}')
         print(f'  segment 3:            {profile.segment3start}-{profile.segment3end}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
+        print()
+
+
+def add_task(u, args):
+    tag = 'add-task'
+    deviceID = DEVICE_ID
+
+    try:
+        task = uhppoted.Task(6, 4, "2022-02-01", "2022-06-30", True, False, True, True, False,
+                             False, True, "08:30", 11)
+
+        u.add_task(deviceID, task)
+
+        print(f'{tag}')
+        print(f'  ID:                   {deviceID}')
+        print(f'  task:                 {task.task}')
+        print(f'  door:                 {task.door}')
+        print(f'  enabled from:         {task.start}')
+        print(f'          to:           {task.end}')
+        print(f'  enabled on Monday:    {task.monday}')
+        print(f'             Tuesday:   {task.tuesday}')
+        print(f'             Wednesday: {task.wednesday}')
+        print(f'             Thursday:  {task.thursday}')
+        print(f'             Friday:    {task.friday}')
+        print(f'             Saturday:  {task.saturday}')
+        print(f'             Sunday:    {task.sunday}')
+        print(f'  run at:               {task.at}')
+        print(f'  cards:                {task.cards}')
         print()
 
     except Exception as e:

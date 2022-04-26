@@ -81,6 +81,22 @@ typedef struct time_profile {
     std::string segment3end;
 } time_profile;
 
+typedef struct task {
+    uint8_t task;
+    uint8_t door;
+    std::string from;
+    std::string to;
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+    std::string at;
+    uint8_t cards;
+} task;
+
 class uhppoted {
   public:
     uhppoted();
@@ -117,6 +133,8 @@ class uhppoted {
     time_profile get_time_profile(uint32_t id, uint8_t profile_id);
     void set_time_profile(uint32_t id, const time_profile &profile);
     void clear_time_profiles(uint32_t id);
+
+    void add_task(uint32_t id, const task &task);
 
   private:
     UHPPOTE *u;

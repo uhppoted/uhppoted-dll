@@ -2,6 +2,8 @@
 
 # uhppoted-dll
 
+** IN DEVELOPMENT ***
+
 Shared library (DLL) for `uhppote-core` with bindings and examples for:
 
 - C
@@ -51,9 +53,9 @@ to the real controller, returning a plausible response instead.
 
 ### `test` lib
 
-The `test` shared-lib/DLL is included for integration testing and validates the parameters with which a function
-is invoked match expected values. As with the `debug` lib, it does not access a real controller and returns a 
-fixed response.
+The `test` shared-lib/DLL is included for integration testing and validates that the parameters with which a 
+function is invoked match expected values. As with the `debug` lib, it does not access a real controller and
+returns a fixed response.
 
 
 #### Dependencies
@@ -77,7 +79,7 @@ fixed response.
 - [`OpenDoor`](#opendoor)
 - [`GetStatus`](#getstatus)
 - [`GetCards`](#getcards)
-- [`GetCardById`](#getcardbyid)
+- [`GetCard`](#getcard)
 - [`GetCardByIndex`](#getcardbyindex)
 - [`PutCard`](#putcard)
 - [`DeleteCard`](#deletecard)
@@ -141,7 +143,7 @@ Retrieves the controller current status.
 
 Retrieves the number of cards stored on a controller.
 
-#### `GetCardByID`
+#### `GetCard`
 
 Retrieves a stored card's information using the card number.
 

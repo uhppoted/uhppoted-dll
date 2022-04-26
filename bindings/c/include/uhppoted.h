@@ -78,6 +78,22 @@ typedef struct time_profile {
     char segment3end[6];
 } time_profile;
 
+typedef struct task {
+    uint8_t task;
+    uint8_t door;
+    char from[11];
+    char to[11];
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+    char at[6];
+    uint8_t cards;
+} task;
+
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 const char *errmsg();
@@ -110,3 +126,5 @@ int record_special_events(uint32_t id, bool enabled);
 int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *profile);
 int set_time_profile(uint32_t id, time_profile *profile);
 int clear_time_profiles(uint32_t id);
+
+int add_task(uint32_t id, task *task);

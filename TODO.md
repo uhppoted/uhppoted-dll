@@ -1,6 +1,8 @@
 ## v0.7.x
 
 ### IN PROGRESS
+  - [ ] Fix CLI set-time-profile
+
   - [x] README
         - [ ] Usage and notes
               - [ ] C
@@ -14,6 +16,11 @@
         - [x] build
         - [ ] examples
         - [ ] tests
+              - [x] C
+              - [ ] C++
+              - [ ] C#
+              - [ ] Python
+              - [ ] CCL
 
   - [ ] Commonalise test failure handling
         - [x] C
@@ -23,19 +30,17 @@
         - [ ] CCL
 
 - Shared-lib/DLL
-  - [x] `clear-time-profiles`
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
+  - [ ] `add-task`
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
+        - [ ] task constants
 
-  - [ ] Fix CLI set-time-profile
   - [ ] Figure out why can't put get/set/clearTimeProfile in a seperate file
-        - [x] Workaround
         - [ ] Create basic example and log issue
 
-  - [ ] `add-task`
   - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
 

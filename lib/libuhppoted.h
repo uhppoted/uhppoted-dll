@@ -109,6 +109,22 @@ typedef struct TimeProfile {
     char * segment3end;
 } TimeProfile;
 
+typedef struct Task {
+	uint8_t task;
+	uint8_t door;
+	const char *from;
+	const char *to;
+    uint8_t monday;
+    uint8_t tuesday;
+    uint8_t wednesday;
+    uint8_t thursday;
+    uint8_t friday;
+    uint8_t saturday;
+    uint8_t sunday;
+	const char *at;
+	uint8_t cards;
+} Task;
+
 
 #line 1 "cgo-generated-wrapper"
 
@@ -193,6 +209,7 @@ extern char* GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUi
 //
 extern char* SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile);
 extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);
+extern char* AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task);
 
 #ifdef __cplusplus
 }

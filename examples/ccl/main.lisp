@@ -28,6 +28,7 @@
         '("get-time-profile"      examples:get-time-profile      "Retrieves a time profile from a controller.")
         '("set-time-profile"      examples:set-time-profile      "Adds or updates a time profile on a controller.")
         '("clear-time-profiles"   examples:clear-time-profiles   "Deletes all time profiles from a controller.")
+        '("add-task"              examples:add-task              "Adds a scheduled task to a controller.")
 ))
 
 

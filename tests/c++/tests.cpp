@@ -40,6 +40,7 @@ vector<test> tests = {
     {"get-time-profile", getTimeProfile},
     {"set-time-profile", setTimeProfile},
     {"clear-time-profiles", clearTimeProfiles},
+    {"add-task", addTask},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

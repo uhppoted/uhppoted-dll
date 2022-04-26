@@ -577,6 +577,28 @@
           (failed tag))))
 
 
+(defun add-task () "" 
+  (let ((tag     "add-task")
+        (task (make-task :task      4
+                         :door      3
+                         :from      "2022-02-01"
+                         :to        "2022-06-30"
+                         :monday    t
+                         :tuesday   nil
+                         :wednesday t
+                         :thursday  t
+                         :friday    nil
+                         :saturday  nil
+                         :sunday    t
+                         :at        "09:45"
+                         :cards     11))
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-add-task u TEST-DEVICE-ID task)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
+
 (defun passed (tag) ""
   (format t "~21a ok~%" tag))
 

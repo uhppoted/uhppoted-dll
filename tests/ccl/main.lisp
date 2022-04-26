@@ -29,6 +29,7 @@
         '("get-time-profile"      tests:get-time-profile)
         '("set-time-profile"      tests:set-time-profile)
         '("clear-time-profiles"   tests:clear-time-profiles)
+        '("add-task"              tests:add-task)
 ))
 
 

@@ -562,3 +562,29 @@ int clear_time_profiles(uint32_t id) {
 
     return 0;
 }
+
+int add_task(uint32_t id, task *t) {
+    struct Task task;
+
+    task.task = t->task;
+    task.door = t->door;
+    task.from = t->from;
+    task.to = t->to;
+    task.monday = t->monday;
+    task.tuesday = t->tuesday;
+    task.wednesday = t->wednesday;
+    task.thursday = t->thursday;
+    task.friday = t->friday;
+    task.saturday = t->saturday;
+    task.sunday = t->sunday;
+    task.at = t->at;
+    task.cards = t->cards;
+
+    char *err = AddTask(u, id, &task);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
