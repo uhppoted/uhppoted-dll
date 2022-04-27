@@ -23,20 +23,20 @@
               - [ ] Python
               - [ ] CCL
 
-  - [ ] Commonalise test failure handling
+  - [x] Commonalise test failure handling
         - [x] C
         - [x] C++
         - [x] C#
         - [x] Python
-        - [ ] CCL
+        - [x] CCL
 
-  - [ ] `refresh-tasklist`
-        - [ ] C
-        - [ ] C++
-        - [ ] C#
-        - [ ] Python
-        - [ ] CCL
-        - [ ] task constants
+  - [x] `refresh-tasklist`
+        - [x] C
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
+        - [x] task constants
 
   - [ ] Figure out why can't put get/set/clearTimeProfile in a seperate file
         - [ ] Create basic example and log issue
