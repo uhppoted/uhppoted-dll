@@ -599,6 +599,15 @@
           (failed tag))))
 
 
+(defun refresh-tasklist () "" 
+  (let ((tag      "refresh-tasklist")
+        (ok       T))
+       (exec #'(lambda (u) (uhppoted-refresh-tasklist u TEST-DEVICE-ID)))
+       (if ok 
+          (passed tag )
+          (failed tag))))
+
+
 (defun passed (tag) ""
   (format t "~21a ok~%" tag))
 

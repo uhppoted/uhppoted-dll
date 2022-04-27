@@ -18,6 +18,7 @@
         - [ ] tests
               - [x] C
               - [ ] C++
+                    - revert to C++11 (seems github's VPSs don't have glib suppport for C++17)
               - [ ] C#
               - [ ] Python
               - [ ] CCL
@@ -29,8 +30,7 @@
         - [x] Python
         - [ ] CCL
 
-- Shared-lib/DLL
-  - [ ] `add-task`
+  - [ ] `refresh-tasklist`
         - [ ] C
         - [ ] C++
         - [ ] C#
@@ -41,9 +41,7 @@
   - [ ] Figure out why can't put get/set/clearTimeProfile in a seperate file
         - [ ] Create basic example and log issue
 
-  - [ ] `refresh-tasklist`
   - [ ] `clear-task-list`
-
   - [ ] Extend examples to use command line args
   - [ ] C++ 
         - make doors/inputs in status bool

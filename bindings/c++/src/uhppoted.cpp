@@ -497,3 +497,10 @@ void uhppoted::add_task(uint32_t id, const task &t) {
         throw uhppoted_exception(err);
     }
 }
+
+void uhppoted::refresh_tasklist(uint32_t id) {
+    char *err = RefreshTaskList(u, id);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

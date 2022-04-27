@@ -105,6 +105,9 @@ public class examples {
         new command("add-task",
                     "Adds a scheduled task to a controller.",
                     AddTask),
+        new command("refresh-tasklist",
+                    "Refreshes a controller task list to activate added tasks.",
+                    RefreshTaskList),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -595,6 +598,17 @@ public class examples {
         WriteLine(Format("             Sunday:    {0}", task.sunday));
         WriteLine(Format("  at:                   {0}", task.at));
         WriteLine(Format("  cards:                {0}", task.cards));
+        WriteLine();
+    }
+
+    static void RefreshTaskList(Uhppoted u, string[] args) {
+        string tag = "refresh-tasklist";
+        uint deviceID = DEVICE_ID;
+
+        u.RefreshTaskList(deviceID);
+
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID: {0}", deviceID));
         WriteLine();
     }
 }

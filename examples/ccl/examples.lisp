@@ -276,3 +276,11 @@
             tag
             (exec #'(lambda (u) (uhppoted-add-task u device-id task))))))
 
+
+(defun refresh-tasklist () "" 
+  (let ((tag       "refresh-tasklist")
+        (device-id 405419896))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-refresh-tasklist u device-id))))))

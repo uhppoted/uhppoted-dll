@@ -48,3 +48,18 @@ int addTask(int argc, char **argv) {
 
     return 0;
 }
+
+int refreshTaskList(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
+    if (refresh_tasklist(deviceID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nrefresh-tasklist\n");
+    printf("  ID: %u\n", deviceID);
+    printf("\n");
+
+    return 0;
+}

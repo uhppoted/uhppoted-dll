@@ -48,6 +48,7 @@ def tests():
         'set-time-profile': set_time_profile,
         'clear-time-profiles': clear_time_profiles,
         'add-task': add_task,
+        'refresh-tasklist': refresh_tasklist,
     }
 
 
@@ -288,6 +289,12 @@ def add_task(u):
     u.add_task(DEVICE_ID, task)
 
     return evaluate('set-time-profile', [])
+
+
+def refresh_tasklist(u):
+    u.refresh_tasklist(DEVICE_ID)
+
+    return evaluate('refresh-tasklist', [])
 
 
 def evaluate(tag, resultset):

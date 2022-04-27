@@ -128,3 +128,4 @@ int set_time_profile(uint32_t id, time_profile *profile);
 int clear_time_profiles(uint32_t id);
 
 int add_task(uint32_t id, task *task);
+int refresh_tasklist(uint32_t id);

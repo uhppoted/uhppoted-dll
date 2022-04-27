@@ -20,3 +20,14 @@ func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task types.Task) error {
 
 	return nil
 }
+
+func refreshTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	ok, err := uu.RefreshTaskList(deviceID)
+	if err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: refresh-tasklist failed", deviceID)
+	}
+
+	return nil
+}

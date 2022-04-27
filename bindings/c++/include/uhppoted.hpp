@@ -135,6 +135,7 @@ class uhppoted {
     void clear_time_profiles(uint32_t id);
 
     void add_task(uint32_t id, const task &task);
+    void refresh_tasklist(uint32_t id);
 
   private:
     UHPPOTE *u;

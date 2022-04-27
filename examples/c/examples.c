@@ -150,6 +150,11 @@ const command commands[] = {
         .help = "Adds a scheduled task to the controller.",
         .fn = addTask,
     },
+    {
+        .cmd = "refresh-tasklist",
+        .help = "Refreshes a controller task list to activate added tasks.",
+        .fn = refreshTaskList,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

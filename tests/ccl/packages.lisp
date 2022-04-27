@@ -29,6 +29,7 @@
            set-time-profile
            clear-time-profiles
            add-task
+           refresh-tasklist
            failed
            message))
 

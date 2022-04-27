@@ -588,3 +588,13 @@ int add_task(uint32_t id, task *t) {
 
     return 0;
 }
+
+int refresh_tasklist(uint32_t id) {
+    char *err = RefreshTaskList(u, id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

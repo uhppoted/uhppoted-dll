@@ -29,3 +29,11 @@ bool addTask(uhppoted &u) {
 
     return evaluate("add-task", rs);
 }
+
+bool refreshTaskList(uhppoted &u) {
+    u.refresh_tasklist(DEVICE_ID);
+
+    vector<result> rs = {};
+
+    return evaluate("refresh-tasklist", rs);
+}

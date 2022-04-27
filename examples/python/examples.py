@@ -123,6 +123,10 @@ def commands():
             'help': "Adds a scheduled task to  a controller.",
             'fn': add_task,
         },
+        'refresh-tasklist': {
+            'help': "Refreshes a controller task list to activate added tasks.",
+            'fn': refresh_tasklist,
+        },
     }
 
 
@@ -643,6 +647,22 @@ def set_time_profile(u, args):
         print()
 
 
+def clear_time_profiles(u, args):
+    try:
+        tag = 'clear-time-profiles'
+        deviceID = DEVICE_ID
+
+        u.clear_time_profiles(deviceID)
+
+        print(f'{tag}')
+        print(f'  ID: {deviceID}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
+        print()
+
+
 def add_task(u, args):
     tag = 'add-task'
     deviceID = DEVICE_ID
@@ -675,12 +695,12 @@ def add_task(u, args):
         print()
 
 
-def clear_time_profiles(u, args):
-    try:
-        tag = 'clear-time-profiles'
-        deviceID = DEVICE_ID
+def refresh_tasklist(u, args):
+    tag = 'refresh-tasklist'
+    deviceID = DEVICE_ID
 
-        u.clear_time_profiles(deviceID)
+    try:
+        u.refresh_tasklist(deviceID)
 
         print(f'{tag}')
         print(f'  ID: {deviceID}')

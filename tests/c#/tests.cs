@@ -53,6 +53,7 @@ public class Tests {
         new test("set-time-profile", SetTimeProfile),
         new test("clear-time-profiles", ClearTimeProfiles),
         new test("add-task", AddTask),
+        new test("refresh-tasklist", RefreshTaskList),
     };
 
     public static void Main(string[] args) {
@@ -407,8 +408,8 @@ public class Tests {
 
     static bool AddTask(Uhppoted u) {
         Task task = new Task(4, 3, "2022-02-01", "2022-06-30",
-                                              true, false, true, true, false, false, true,
-                                              "09:45", 11);
+                             true, false, true, true, false, false, true,
+                             "09:45", 11);
 
         u.AddTask(DEVICE_ID, task);
 
@@ -417,6 +418,13 @@ public class Tests {
         return evaluate("add-task", resultset);
     }
 
+    static bool RefreshTaskList(Uhppoted u) {
+        u.RefreshTaskList(DEVICE_ID);
+
+        result[] resultset = {};
+
+        return evaluate("refresh-tasklist", resultset);
+    }
 
     static bool evaluate(string tag, result[] resultset) {
         bool ok = true;

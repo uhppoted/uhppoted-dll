@@ -70,3 +70,11 @@ func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task types.Task) error {
 
 	return nil
 }
+
+func refreshTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	return nil
+}

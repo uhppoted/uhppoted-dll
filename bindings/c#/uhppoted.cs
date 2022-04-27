@@ -624,6 +624,13 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void RefreshTaskList(uint deviceID) {
+        string err = RefreshTaskList(ref this.u, deviceID);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
     // Go DLL FFI
 
     [DllImport("libuhppoted.so")]
@@ -700,6 +707,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("libuhppoted.so")]
     private static extern string AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task);
+
+    [DllImport("libuhppoted.so")]
+    private static extern string RefreshTaskList(ref UHPPOTE u, uint deviceID);
 
     struct udevice {
         public uint ID;

@@ -97,6 +97,9 @@ clear-time-profiles: build
 add-task: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) add-task
 
+refresh-tasklist: build
+	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) refresh-tasklist
+
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) add-task
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) refresh-tasklist
 

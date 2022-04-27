@@ -31,3 +31,14 @@ bool addTask() {
 
     return evaluate("add-task", sizeof(resultset) / sizeof(result), resultset);
 }
+
+bool refreshTaskList() {
+    if (refresh_tasklist(DEVICE_ID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate("refresh-tasklist", sizeof(resultset) / sizeof(result), resultset);
+}

@@ -96,6 +96,9 @@ clear-time-profiles: build
 add-task: build
 	$(CMD) add-task
 
+refresh-tasklist: build
+	$(CMD) refresh-tasklist
+
 all: build
 	$(CMD) all
 

@@ -154,6 +154,11 @@ const vector<command> commands = {
         .help = "Adds a scheduled task to a controller.",
         .fn = addTask,
     },
+    {
+        .cmd = "refresh-tasklist",
+        .help = "Refreshes a controller task list to activate added tasks.",
+        .fn = refreshTaskList,
+    },
 };
 
 int main(int argc, char **argv) {

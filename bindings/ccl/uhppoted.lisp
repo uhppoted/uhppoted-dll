@@ -589,6 +589,13 @@
         t))))
 
 
+(defun uhppoted-refresh-tasklist (uhppote device-id) "Refreshes a controller task list to activate added tasks"
+  (with-macptrs ((err (external-call "RefreshTaskList" :address uhppote 
+                                                       :unsigned-long device-id 
+                                                       :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
+
 (defun debug () "" 
   (handler-bind
 	((uhppoted-error

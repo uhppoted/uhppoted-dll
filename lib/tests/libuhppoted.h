@@ -210,6 +210,7 @@ extern char* GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUi
 extern char* SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile);
 extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);
 extern char* AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task);
+extern char* RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID);
 
 #ifdef __cplusplus
 }

@@ -30,6 +30,7 @@
         '("set-time-profile"      tests:set-time-profile)
         '("clear-time-profiles"   tests:clear-time-profiles)
         '("add-task"              tests:add-task)
+        '("refresh-tasklist"      tests:refresh-tasklist)
 ))
 
 
