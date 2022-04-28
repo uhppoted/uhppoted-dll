@@ -108,6 +108,9 @@ public class examples {
         new command("refresh-tasklist",
                     "Refreshes a controller task list to activate added tasks.",
                     RefreshTaskList),
+        new command("clear-tasklist",
+                    "Clears a controller task list.",
+                    ClearTaskList),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -606,6 +609,17 @@ public class examples {
         uint deviceID = DEVICE_ID;
 
         u.RefreshTaskList(deviceID);
+
+        WriteLine(Format("{0}", tag));
+        WriteLine(Format("  ID: {0}", deviceID));
+        WriteLine();
+    }
+
+    static void ClearTaskList(Uhppoted u, string[] args) {
+        string tag = "cleear-tasklist";
+        uint deviceID = DEVICE_ID;
+
+        u.ClearTaskList(deviceID);
 
         WriteLine(Format("{0}", tag));
         WriteLine(Format("  ID: {0}", deviceID));

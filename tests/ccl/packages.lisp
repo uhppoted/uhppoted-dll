@@ -30,6 +30,7 @@
            clear-time-profiles
            add-task
            refresh-tasklist
+           clear-tasklist
            failed
            message))
 

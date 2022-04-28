@@ -75,3 +75,24 @@ int refreshTaskList(uhppoted &u, int argc, char **argv) {
 
     return -1;
 }
+
+int clearTaskList(uhppoted &u, int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
+    try {
+        u.clear_tasklist(deviceID);
+
+        cout << endl
+             << "clear-tasklist" << endl;
+        cout << "  ID: " << deviceID << endl;
+        cout << endl;
+
+        return 0;
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+    }
+
+    return -1;
+}

@@ -351,6 +351,9 @@ class Uhppote:
     def refresh_tasklist(self, deviceID):
         self.ffi.RefreshTaskList(self._uhppote, deviceID)
 
+    def clear_tasklist(self, deviceID):
+        self.ffi.ClearTaskList(self._uhppote, deviceID)
+
 
 # Go FFI types
 
@@ -383,6 +386,7 @@ class FFI:
         self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
         self.AddTask = ffi('AddTask', errcheck)
         self.RefreshTaskList = ffi('RefreshTaskList', errcheck)
+        self.ClearTaskList = ffi('ClearTaskList', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -425,6 +429,7 @@ def libfunctions():
         'ClearTimeProfiles':   (lib.ClearTimeProfiles,   [POINTER(GoUHPPOTE), c_ulong]),
         'AddTask':             (lib.AddTask,             [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask)]),
         'RefreshTaskList':     (lib.RefreshTaskList,     [POINTER(GoUHPPOTE), c_ulong]),
+        'ClearTaskList':       (lib.ClearTaskList,       [POINTER(GoUHPPOTE), c_ulong]),
     }
 # yapf: enable
 

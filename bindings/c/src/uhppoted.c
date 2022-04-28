@@ -598,3 +598,13 @@ int refresh_tasklist(uint32_t id) {
 
     return 0;
 }
+
+int clear_tasklist(uint32_t id) {
+    char *err = ClearTaskList(u, id);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}

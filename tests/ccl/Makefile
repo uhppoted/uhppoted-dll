@@ -95,6 +95,9 @@ add-task: build
 refresh-tasklist: build
 	$(CMD) refresh-tasklist
 
+clear-tasklist: build
+	$(CMD) clear-tasklist
+
 all: build
 	$(CMD) all
 

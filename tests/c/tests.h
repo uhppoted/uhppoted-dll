@@ -65,6 +65,7 @@ extern bool clearTimeProfiles();
 
 extern bool addTask();
 extern bool refreshTaskList();
+extern bool clearTaskList();
 
 extern const uint32_t DEVICE_ID;
 extern const uint32_t CARD_NUMBER;

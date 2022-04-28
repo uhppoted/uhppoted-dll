@@ -284,3 +284,12 @@
             "  ~a:~%    ~:w~%~%" 
             tag
             (exec #'(lambda (u) (uhppoted-refresh-tasklist u device-id))))))
+
+
+(defun clear-tasklist () "" 
+  (let ((tag       "clear-tasklist")
+        (device-id 405419896))
+    (format t 
+            "  ~a:~%    ~:w~%~%" 
+            tag
+            (exec #'(lambda (u) (uhppoted-clear-tasklist u device-id))))))

@@ -466,6 +466,20 @@ func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
 	return nil
 }
 
+//export ClearTaskList
+func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
+	uu, err := makeUHPPOTE(u)
+	if err != nil {
+		return C.CString(err.Error())
+	}
+
+	if err := clearTaskList(uu, deviceID); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

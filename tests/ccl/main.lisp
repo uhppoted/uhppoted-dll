@@ -31,6 +31,7 @@
         '("clear-time-profiles"   tests:clear-time-profiles)
         '("add-task"              tests:add-task)
         '("refresh-tasklist"      tests:refresh-tasklist)
+        '("clear-tasklist"        tests:clear-tasklist)
 ))
 
 

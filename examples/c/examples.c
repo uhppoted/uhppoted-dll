@@ -155,6 +155,11 @@ const command commands[] = {
         .help = "Refreshes a controller task list to activate added tasks.",
         .fn = refreshTaskList,
     },
+    {
+        .cmd = "clear-tasklist",
+        .help = "Clears a controller task list.",
+        .fn = clearTaskList,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

@@ -42,3 +42,14 @@ bool refreshTaskList() {
 
     return evaluate("refresh-tasklist", sizeof(resultset) / sizeof(result), resultset);
 }
+
+bool clearTaskList() {
+    if (clear_tasklist(DEVICE_ID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate("clear-tasklist", sizeof(resultset) / sizeof(result), resultset);
+}

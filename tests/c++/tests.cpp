@@ -42,6 +42,7 @@ vector<test> tests = {
     {"clear-time-profiles", clearTimeProfiles},
     {"add-task", addTask},
     {"refresh-tasklist", refreshTaskList},
+    {"clear-tasklist", clearTaskList},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

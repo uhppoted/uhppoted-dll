@@ -54,6 +54,7 @@ public class Tests {
         new test("clear-time-profiles", ClearTimeProfiles),
         new test("add-task", AddTask),
         new test("refresh-tasklist", RefreshTaskList),
+        new test("clear-tasklist", ClearTaskList),
     };
 
     public static void Main(string[] args) {
@@ -424,6 +425,14 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("refresh-tasklist", resultset);
+    }
+
+    static bool ClearTaskList(Uhppoted u) {
+        u.ClearTaskList(DEVICE_ID);
+
+        result[] resultset = {};
+
+        return evaluate("clear-tasklist", resultset);
     }
 
     static bool evaluate(string tag, result[] resultset) {

@@ -596,13 +596,10 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
 
 
-(defun debug () "" 
-  (handler-bind
-	((uhppoted-error
-	   #'(lambda (c) 
-		   (format t "~%   *** ERROR: ~a~%~%" (message c))
-		   (invoke-restart 'with-warning "oh noes i can has problems"))))
-	(list "debug" (uhppoted #'(lambda (u) (uhppoted-get-time u 405419896))
-                                        :controllers (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
-							                          :debug T))))
+(defun uhppoted-clear-tasklist (uhppote device-id) "Clears a controller task list"
+  (with-macptrs ((err (external-call "ClearTaskList" :address uhppote 
+                                                     :unsigned-long device-id 
+                                                     :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+
 

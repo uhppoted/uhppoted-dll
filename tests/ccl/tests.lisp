@@ -254,6 +254,11 @@
   (evaluate "refresh-tasklist" '()))
 
 
+(defun clear-tasklist () "" 
+  (exec #'(lambda (u) (uhppoted-clear-tasklist u TEST-DEVICE-ID)))
+  (evaluate "clear-tasklist" '()))
+
+
 (defun evaluate (tag results)
   (let ((ok t))
     (loop for v in results

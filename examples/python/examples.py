@@ -127,6 +127,10 @@ def commands():
             'help': "Refreshes a controller task list to activate added tasks.",
             'fn': refresh_tasklist,
         },
+        'clear-tasklist': {
+            'help': "Clears a controller task list.",
+            'fn': clear_tasklist,
+        },
     }
 
 
@@ -701,6 +705,22 @@ def refresh_tasklist(u, args):
 
     try:
         u.refresh_tasklist(deviceID)
+
+        print(f'{tag}')
+        print(f'  ID: {deviceID}')
+        print()
+
+    except Exception as e:
+        print(f' *** ERROR {tag} ({e})')
+        print()
+
+
+def clear_tasklist(u, args):
+    tag = 'clear-tasklist'
+    deviceID = DEVICE_ID
+
+    try:
+        u.clear_tasklist(deviceID)
 
         print(f'{tag}')
         print(f'  ID: {deviceID}')

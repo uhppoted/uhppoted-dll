@@ -30,6 +30,7 @@
            uhppoted-clear-time-profiles
            uhppoted-add-task
            uhppoted-refresh-tasklist
+           uhppoted-clear-tasklist
            uhppoted-error
            with-warning
            message

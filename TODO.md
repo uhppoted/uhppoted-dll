@@ -1,19 +1,32 @@
 ## v0.7.x
 
 ### IN PROGRESS
+  - [x] `clear-task-list`
+        - [x] C
+        - [x] C++
+        - [x] C#
+        - [x] Python
+        - [x] CCL
+        - [x] task constants
+
+  - [ ] Remove doubled up exception handling in examples
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
+
   - [ ] Fix CLI set-time-profile
 
-  - [x] README
-        - [ ] Usage and notes
-              - [ ] C
-              - [ ] C++
-              - [ ] C#
-              - [ ] Python
-              - [ ] CCL
-              - [ ] LIB_PATH/DYLIB_PATH
+  - [ ] Usage and notes
+        - [ ] C
+        - [ ] C++
+        - [ ] C#
+        - [ ] Python
+        - [ ] CCL
+        - [ ] LIB_PATH/DYLIB_PATH
 
   - [ ] Github workflow
-        - [x] build
         - [ ] examples
         - [ ] tests
               - [x] C
@@ -23,36 +36,18 @@
               - [ ] Python
               - [ ] CCL
 
-  - [x] Commonalise test failure handling
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
-
-  - [x] `refresh-tasklist`
-        - [x] C
-        - [x] C++
-        - [x] C#
-        - [x] Python
-        - [x] CCL
-        - [x] task constants
-
+  - [ ] Constants for event types, reason, etc
   - [ ] Figure out why can't put get/set/clearTimeProfile in a seperate file
         - [ ] Create basic example and log issue
-
-  - [ ] `clear-task-list`
   - [ ] Extend examples to use command line args
   - [ ] C++ 
         - make doors/inputs in status bool
   - [ ] python: 
         - https://martinheinz.dev/blog/70
-  - [ ] Remove doubled up exception handling in examples
   - [ ] CCL
         - DOLIST
         - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
   - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
-  - [ ] Constants for event types, reason, etc
 
 ## TODO
 

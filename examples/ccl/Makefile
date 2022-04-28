@@ -98,6 +98,9 @@ add-task: build
 refresh-tasklist: build
 	$(CMD) refresh-tasklist
 
+clear-tasklist: build
+	$(CMD) clear-tasklist
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
 

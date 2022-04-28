@@ -63,3 +63,18 @@ int refreshTaskList(int argc, char **argv) {
 
     return 0;
 }
+
+int clearTaskList(int argc, char **argv) {
+    uint32_t deviceID = DEVICE_ID;
+
+    if (clear_tasklist(deviceID) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf("\nclear-tasklist\n");
+    printf("  ID: %u\n", deviceID);
+    printf("\n");
+
+    return 0;
+}

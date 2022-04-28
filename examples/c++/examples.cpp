@@ -159,6 +159,11 @@ const vector<command> commands = {
         .help = "Refreshes a controller task list to activate added tasks.",
         .fn = refreshTaskList,
     },
+    {
+        .cmd = "clear-tasklist",
+        .help = "Clear a controller task list.",
+        .fn = clearTaskList,
+    },
 };
 
 int main(int argc, char **argv) {

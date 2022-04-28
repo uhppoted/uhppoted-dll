@@ -136,6 +136,7 @@ class uhppoted {
 
     void add_task(uint32_t id, const task &task);
     void refresh_tasklist(uint32_t id);
+    void clear_tasklist(uint32_t id);
 
   private:
     UHPPOTE *u;

@@ -31,3 +31,14 @@ func refreshTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
 
 	return nil
 }
+
+func clearTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	ok, err := uu.ClearTaskList(deviceID)
+	if err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: clear-tasklist failed", deviceID)
+	}
+
+	return nil
+}

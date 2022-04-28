@@ -37,7 +37,17 @@ func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task types.Task) error {
 func refreshTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
 	if DEBUG {
 		fmt.Printf(">>> refresh-tasklist\n")
-		fmt.Printf("    ID:                   %v\n", deviceID)
+		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Println()
+	}
+
+	return nil
+}
+
+func clearTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	if DEBUG {
+		fmt.Printf(">>> clear-tasklist\n")
+		fmt.Printf("    ID: %v\n", deviceID)
 		fmt.Println()
 	}
 

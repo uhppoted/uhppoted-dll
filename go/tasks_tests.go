@@ -78,3 +78,11 @@ func refreshTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
 
 	return nil
 }
+
+func clearTaskList(uu uhppote.IUHPPOTE, deviceID uint32) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	return nil
+}

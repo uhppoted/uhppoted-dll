@@ -504,3 +504,10 @@ void uhppoted::refresh_tasklist(uint32_t id) {
         throw uhppoted_exception(err);
     }
 }
+
+void uhppoted::clear_tasklist(uint32_t id) {
+    char *err = ClearTaskList(u, id);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}

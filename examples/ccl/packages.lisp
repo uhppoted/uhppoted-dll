@@ -29,5 +29,6 @@
            set-time-profile
            clear-time-profiles
            add-task
-           refresh-tasklist))
+           refresh-tasklist
+           clear-tasklist))
 

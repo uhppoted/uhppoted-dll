@@ -32,3 +32,4 @@ int clearTimeProfiles(uhppoted &u, int argc, char **argv);
 
 int addTask(uhppoted &u, int argc, char **argv);
 int refreshTaskList(uhppoted &u, int argc, char **argv);
+int clearTaskList(uhppoted &u, int argc, char **argv);

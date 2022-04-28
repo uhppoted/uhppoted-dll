@@ -30,3 +30,4 @@ extern int clearTimeProfiles(int argc, char **argv);
 
 extern int addTask(int argc, char **argv);
 extern int refreshTaskList(int argc, char **argv);
+extern int clearTaskList(int argc, char **argv);

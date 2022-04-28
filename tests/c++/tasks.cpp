@@ -37,3 +37,11 @@ bool refreshTaskList(uhppoted &u) {
 
     return evaluate("refresh-tasklist", rs);
 }
+
+bool clearTaskList(uhppoted &u) {
+    u.clear_tasklist(DEVICE_ID);
+
+    vector<result> rs = {};
+
+    return evaluate("clear-tasklist", rs);
+}
