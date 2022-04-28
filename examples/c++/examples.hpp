@@ -2,34 +2,34 @@
 
 #include "../include/uhppoted.hpp"
 
-extern int getDevices(uhppoted &, int argc, char **argv);
-extern int getDevice(uhppoted &u, int argc, char **argv);
-extern int setAddress(uhppoted &, int argc, char **argv);
-extern int getStatus(uhppoted &, int argc, char **argv);
-extern int getTime(uhppoted &, int argc, char **argv);
-extern int setTime(uhppoted &u, int argc, char **argv);
-extern int getListener(uhppoted &, int argc, char **argv);
-extern int setListener(uhppoted &, int argc, char **argv);
-extern int getDoorControl(uhppoted &, int argc, char **argv);
-extern int setDoorControl(uhppoted &, int argc, char **argv);
-extern int openDoor(uhppoted &, int argc, char **argv);
+void getDevices(uhppoted &, int argc, char **argv);
+void getDevice(uhppoted &u, int argc, char **argv);
+void setAddress(uhppoted &, int argc, char **argv);
+void getStatus(uhppoted &, int argc, char **argv);
+void getTime(uhppoted &, int argc, char **argv);
+void setTime(uhppoted &u, int argc, char **argv);
+void getListener(uhppoted &, int argc, char **argv);
+void setListener(uhppoted &, int argc, char **argv);
+void getDoorControl(uhppoted &, int argc, char **argv);
+void setDoorControl(uhppoted &, int argc, char **argv);
+void openDoor(uhppoted &, int argc, char **argv);
 
-int getCards(uhppoted &u, int argc, char **argv);
-int getCard(uhppoted &u, int argc, char **argv);
-int getCardByIndex(uhppoted &u, int argc, char **argv);
-int putCard(uhppoted &u, int argc, char **argv);
-int deleteCard(uhppoted &u, int argc, char **argv);
-int deleteCards(uhppoted &u, int argc, char **argv);
+void getCards(uhppoted &u, int argc, char **argv);
+void getCard(uhppoted &u, int argc, char **argv);
+void getCardByIndex(uhppoted &u, int argc, char **argv);
+void putCard(uhppoted &u, int argc, char **argv);
+void deleteCard(uhppoted &u, int argc, char **argv);
+void deleteCards(uhppoted &u, int argc, char **argv);
 
-int getEventIndex(uhppoted &u, int argc, char **argv);
-int setEventIndex(uhppoted &u, int argc, char **argv);
-int getEvent(uhppoted &u, int argc, char **argv);
-int recordSpecialEvents(uhppoted &u, int argc, char **argv);
+void getEventIndex(uhppoted &u, int argc, char **argv);
+void setEventIndex(uhppoted &u, int argc, char **argv);
+void getEvent(uhppoted &u, int argc, char **argv);
+void recordSpecialEvents(uhppoted &u, int argc, char **argv);
 
-int getTimeProfile(uhppoted &u, int argc, char **argv);
-int setTimeProfile(uhppoted &u, int argc, char **argv);
-int clearTimeProfiles(uhppoted &u, int argc, char **argv);
+void getTimeProfile(uhppoted &u, int argc, char **argv);
+void setTimeProfile(uhppoted &u, int argc, char **argv);
+void clearTimeProfiles(uhppoted &u, int argc, char **argv);
 
-int addTask(uhppoted &u, int argc, char **argv);
-int refreshTaskList(uhppoted &u, int argc, char **argv);
-int clearTaskList(uhppoted &u, int argc, char **argv);
+void addTask(uhppoted &u, int argc, char **argv);
+void refreshTaskList(uhppoted &u, int argc, char **argv);
+void clearTaskList(uhppoted &u, int argc, char **argv);

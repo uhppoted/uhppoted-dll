@@ -10,9 +10,9 @@
         - [x] task constants
 
   - [ ] Remove doubled up exception handling in examples
-        - [ ] C
-        - [ ] C++
-        - [ ] C#
+        - [x] C
+        - [x] C++
+        - [x] C#
         - [ ] Python
         - [ ] CCL
 

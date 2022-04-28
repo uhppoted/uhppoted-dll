@@ -20,7 +20,7 @@ extern const uint8_t PROFILE_ID = 29;
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
-typedef int(f)(uhppoted &, int, char **);
+typedef void(f)(uhppoted &, int, char **);
 
 typedef struct command {
     string cmd;
@@ -178,20 +178,25 @@ int main(int argc, char **argv) {
         return 0;
     }
 
-    for (auto it = commands.begin(); it != commands.end(); it++) {
-        if (it->cmd == cmd) {
-            uhppoted u("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, {ALPHA, BETA}, true);
-
-            return it->fn(u, argc, argv);
-        }
+    auto it = find_if(commands.begin(), commands.end(), [=](const command &v) { return v.cmd == cmd; });
+    if (it == commands.end()) {
+        cerr << endl
+             << "   *** ERROR invalid command '" << cmd << "'" << endl;
+        usage();
+        return -1;
     }
 
-    cerr << endl
-         << "   *** ERROR invalid command '" << cmd << "'" << endl;
+    try {
+        uhppoted u("192.168.1.100", "192.168.1.255:60000", "192.168.1.100:60001", 2500, {ALPHA, BETA}, true);
+        it->fn(u, argc, argv);
+    } catch (const exception &e) {
+        cerr << endl
+             << " *** ERROR " << e.what() << endl
+             << endl;
+        return -1;
+    }
 
-    usage();
-
-    return -1;
+    return 0;
 }
 
 void usage() {
