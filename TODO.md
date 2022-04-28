@@ -9,12 +9,12 @@
         - [x] CCL
         - [x] task constants
 
-  - [ ] Remove doubled up exception handling in examples
+  - [x] Remove doubled up exception handling in examples
         - [x] C
         - [x] C++
         - [x] C#
-        - [ ] Python
-        - [ ] CCL
+        - [x] Python
+        - [x] CCL
 
   - [ ] Fix CLI set-time-profile
 
