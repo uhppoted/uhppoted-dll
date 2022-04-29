@@ -23,6 +23,9 @@
         - [ ] tests
               - [x] C
               - [ ] C++
+```
+tests.cpp:(.text+0x1e): undefined reference to `std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string()'
+```
               - [ ] C#
               - [ ] Python
               - [ ] CCL

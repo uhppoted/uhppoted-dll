@@ -3,6 +3,10 @@ name: debug
 on:
   workflow_dispatch:
 
+strategy:
+  matrix:
+    compiler: [clang]
+
 jobs:
 
   build:
@@ -24,5 +28,4 @@ jobs:
 
     - name: Build
       run: |
-        make build
-        make tests
+        make cpp
