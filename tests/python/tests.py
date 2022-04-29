@@ -52,6 +52,51 @@ def tests():
         'clear-tasklist': clear_tasklist,
     }
 
+def main():
+    cmd = ''
+
+    if len(sys.argv) > 1:
+        cmd = sys.argv[1]
+
+    bind = '192.168.1.100'
+    broadcast = '192.168.1.255'
+    listen = '192.168.1.100:60001'
+    timeout = 2500
+    debug = True
+
+    controllers = [
+        uhppoted.Controller(405419896, '192.168.1.100'),
+        uhppoted.Controller(303986753, '192.168.1.100'),
+    ]
+
+    u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
+
+    try:
+        if cmd in tests():
+            if not tests()[cmd](u):
+                sys.exit(-1)
+
+        elif cmd == '' or cmd == 'all':
+            if not reduce(lambda ok, f: f(u) and ok, tests().values(), True):
+                sys.exit(-1)
+
+        elif cmd == 'help':
+            print()
+            usage()
+
+        else:
+            print()
+            print(f'   *** ERROR invalid command ({cmd})')
+            print()
+            usage()
+
+    except BaseException as x:
+        print()
+        print(f'*** ERROR  {cmd} failed: {x}')
+        print()
+
+        sys.exit(1)
+
 
 def get_devices(u):
     devices = u.get_devices()
@@ -333,52 +378,6 @@ def usage():
     for k in tests():
         print(f'      {k}')
     print()
-
-
-def main():
-    cmd = ''
-
-    if len(sys.argv) > 1:
-        cmd = sys.argv[1]
-
-    bind = '192.168.1.100'
-    broadcast = '192.168.1.255'
-    listen = '192.168.1.100:60001'
-    timeout = 2500
-    debug = True
-
-    controllers = [
-        uhppoted.Controller(405419896, '192.168.1.100'),
-        uhppoted.Controller(303986753, '192.168.1.100'),
-    ]
-
-    u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
-
-    try:
-        if cmd in tests():
-            if not tests()[cmd](u):
-                sys.exit(-1)
-
-        elif cmd == '' or cmd == 'all':
-            if not reduce(lambda ok, f: f(u) and ok, tests().values(), True):
-                sys.exit(-1)
-
-        elif cmd == 'help':
-            print()
-            usage()
-
-        else:
-            print()
-            print(f'   *** ERROR invalid command ({cmd})')
-            print()
-            usage()
-
-    except BaseException as x:
-        print()
-        print(f'*** ERROR  {cmd} failed: {x}')
-        print()
-
-        sys.exit(1)
 
 
 if __name__ == '__main__':

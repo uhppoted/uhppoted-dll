@@ -104,5 +104,5 @@ clear-tasklist: build
 	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) clear-tasklist
 
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) clear-tasklist
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-status
 

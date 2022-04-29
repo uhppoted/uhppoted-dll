@@ -24,114 +24,153 @@ PROFILE_ID = 29
 def commands():
     return {
         'get-devices': {
-            'help': "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
+            'help': "Retrieves a list of UHPPOTE controller IDs findable on the local LAN",
             'fn': get_devices,
         },
         'get-device': {
-            'help': "Retrieves the basic device information for a single UHPPOTE controller.",
+            'help': "Retrieves the basic device information for a single UHPPOTE controller",
             'fn': get_device,
         },
         'set-address': {
-            'help': "Sets the controller IPv4 address, subnet mask and gateway address.",
+            'help': "Sets the controller IPv4 address, subnet mask and gateway address",
             'fn': set_address,
         },
         'get-status': {
-            'help': "Retrieves a controller status.",
+            'help': "Retrieves a controller status",
             'fn': get_status,
         },
         'get-time': {
-            'help': "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+            'help': "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss)",
             'fn': get_time,
         },
         'set-time': {
-            'help': "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss).",
+            'help': "Sets a controller current date/time (YYYY-MM-DD HH:mm:ss)",
             'fn': set_time,
         },
         'get-listener': {
-            'help': "Retrieves a controller's configured event listener address.",
+            'help': "Retrieves a controller's configured event listener address",
             'fn': get_listener,
         },
         'set-listener': {
-            'help': "Configures a controller's event listener address and port.",
+            'help': "Configures a controller's event listener address and port",
             'fn': set_listener,
         },
         'get-door-control': {
-            'help': "Retrieves the control state and open delay for a controller door.",
+            'help': "Retrieves the control state and open delay for a controller door",
             'fn': get_door_control,
         },
         'set-door-control': {
-            'help': "Sets the control mode and delay for a controller door.",
+            'help': "Sets the control mode and delay for a controller door",
             'fn': set_door_control,
         },
         'open-door': {
-            'help': "Remotely opens a controller door.",
+            'help': "Remotely opens a controller door",
             'fn': open_door,
         },
         'get-cards': {
-            'help': "Retrieves the number of cards stored on a controller.",
+            'help': "Retrieves the number of cards stored on a controller",
             'fn': get_cards,
         },
         'get-card': {
-            'help': "Retrieves the card detail for card number from a controller.",
+            'help': "Retrieves the card detail for card number from a controller",
             'fn': get_card,
         },
         'get-card-by-index': {
-            'help': "Retrieves the card detail for the card stored at an index on a controller.",
+            'help': "Retrieves the card detail for the card stored at an index on a controller",
             'fn': get_card_by_index,
         },
         'put-card': {
-            'help': "Adds or updates the card detail for card number stored on a controller.",
+            'help': "Adds or updates the card detail for card number stored on a controller",
             'fn': put_card,
         },
         'delete-card': {
-            'help': "Deletes a card from a controller.",
+            'help': "Deletes a card from a controller",
             'fn': delete_card,
         },
         'delete-cards': {
-            'help': "Deletes all cards from a controller.",
+            'help': "Deletes all cards from a controller",
             'fn': delete_cards,
         },
         'get-event-index': {
-            'help': "Retrieves the current event index from a controller.",
+            'help': "Retrieves the current event index from a controller",
             'fn': get_event_index,
         },
         'set-event-index': {
-            'help': "Sets the current event index on a controller.",
+            'help': "Sets the current event index on a controller",
             'fn': set_event_index,
         },
         'get-event': {
-            'help': "Retrieves the event at the index from a controller.",
+            'help': "Retrieves the event at the index from a controller",
             'fn': get_event,
         },
         'record-special-events': {
-            'help': "Enables/disables recording additional events for a controller.",
+            'help': "Enables/disables recording additional events for a controller",
             'fn': record_special_events,
         },
         'get-time-profile': {
-            'help': "Retrieves a time profile from a controller.",
+            'help': "Retrieves a time profile from a controller",
             'fn': get_time_profile,
         },
         'set-time-profile': {
-            'help': "Adds or updates a time profile on a controller.",
+            'help': "Adds or updates a time profile on a controller",
             'fn': set_time_profile,
         },
         'clear-time-profiles': {
-            'help': "Deletes all time profiles from a controller.",
+            'help': "Deletes all time profiles from a controller",
             'fn': clear_time_profiles,
         },
         'add-task': {
-            'help': "Adds a scheduled task to  a controller.",
+            'help': "Adds a scheduled task to  a controller",
             'fn': add_task,
         },
         'refresh-tasklist': {
-            'help': "Refreshes a controller task list to activate added tasks.",
+            'help': "Refreshes a controller task list to activate added tasks",
             'fn': refresh_tasklist,
         },
         'clear-tasklist': {
-            'help': "Clears a controller task list.",
+            'help': "Clears a controller task list",
             'fn': clear_tasklist,
         },
     }
+
+
+def main():
+    if len(sys.argv) < 2:
+        usage()
+        return -1
+
+    cmd = sys.argv[1]
+
+    if cmd == 'help':
+        help()
+    else:
+        bind = '0.0.0.0'
+        broadcast = '255.255.255.255'
+        listen = '0.0.0.0:60001'
+        timeout = 2500
+        debug = True
+        controllers = [
+            uhppoted.Controller(405419896, '192.168.1.100'),
+            uhppoted.Controller(303986753, '192.168.1.100'),
+        ]
+
+        u = uhppoted.Uhppote(
+            uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
+
+        try:
+            if cmd in commands():
+                commands()[cmd]['fn'](u, None)
+            else:
+                print()
+                print(f'  ERROR: invalid command ({cmd})')
+                usage()
+
+        except BaseException as x:
+            print()
+            print(f'*** ERROR  {cmd}: {x}')
+            print()
+
+            sys.exit(1)
 
 
 def usage():
@@ -148,12 +187,12 @@ def usage():
 
 def help():
     print()
-    print('Usage: python example.py <command>')
+    print('  Usage: python example.py <command>')
     print()
     print('  Commands')
 
     for cmd, v in commands().items():
-        print(f"    {cmd:<17}  {v['help']}")
+        print(f"    {cmd:<21}  {v['help']}")
 
     print()
 
@@ -161,10 +200,11 @@ def help():
 def get_devices(u, args):
     list = u.get_devices()
 
-    print(f'get-devices ({len(list)})')
+    fields = []
     for id in list:
-        print(f'  {id}')
-    print()
+        fields.append(('', id))
+
+    display(f'get-devices ({len(list)})', fields)
 
 
 def get_device(u, args):
@@ -172,13 +212,15 @@ def get_device(u, args):
 
     info = u.get_device(deviceID)
 
-    print('get-device')
-    print(f'  ID:       {info.ID}')
-    print(f'  IP:       {info.address}  {info.subnet}  {info.gateway}')
-    print(f'  MAC:      {info.MAC}')
-    print(f'  version:  {info.version}')
-    print(f'  released: {info.date}')
-    print()
+    display('get-device', [
+        ('ID', deviceID),
+        ('IP address', info.address),
+        ('subnet mask', info.subnet),
+        ('gateway address', info.gateway),
+        ('MAC', info.MAC),
+        ('version', info.version),
+        ('released', info.date),
+    ])
 
 
 def set_address(u, args):
@@ -189,12 +231,12 @@ def set_address(u, args):
 
     u.set_address(deviceID, address, subnet, gateway)
 
-    print('set-address')
-    print(f'  ID:      {deviceID}')
-    print(f'  address: {address}')
-    print(f'  subnet:  {subnet}')
-    print(f'  gateway: {gateway}')
-    print()
+    display('set-address', [
+        ('ID', deviceID),
+        ('address', address),
+        ('subnet', subnet),
+        ('gateway', gateway),
+    ])
 
 
 def get_status(u, args):
@@ -202,37 +244,42 @@ def get_status(u, args):
 
     status = u.get_status(deviceID)
 
-    print('get-status')
-    print(f'  ID:        {status.ID}')
-    print(f'  date/time: {status.sysdatetime}')
-    print(f'  doors:     {status.doors[0]} {status.doors[1]} {status.doors[2]} {status.doors[3]}')
-    print(
-        f'  buttons:   {status.buttons[0]} {status.buttons[1]} {status.buttons[2]} {status.buttons[3]}'
-    )
-    print(f'  relays   : ' + '{0:#0{1}x}'.format(status.relays, 4))
-    print(f'  inputs   : ' + '{0:#0{1}x}'.format(status.inputs, 4))
-    print(f'  error    : ' + '{0:#0{1}x}'.format(status.syserror, 4))
-    print(f'  info     : ' + '{0:#0{1}x}'.format(status.info, 4))
-    print(f'  seq no.  : {status.seqno}')
-    print(f'  event timestamp: {status.event.timestamp}')
-    print(f'        index:     {status.event.index}')
-    print(f'        type:      {status.event.eventType}')
-    print(f'        granted:   {status.event.granted}')
-    print(f'        door:      {status.event.door}')
-    print(f'        direction: {status.event.direction}')
-    print(f'        card:      {status.event.card}')
-    print(f'        reason:    {status.event.reason}')
-    print()
+    display('get-status', [
+        ('ID', deviceID),
+        ('date/time', status.sysdatetime),
+        ('doors[1]', status.doors[0]),
+        ('doors[2]', status.doors[1]),
+        ('doors[3]', status.doors[2]),
+        ('doors[4]', status.doors[3]),
+        ('buttons[1]', status.buttons[0]),
+        ('buttons[2]', status.buttons[1]),
+        ('buttons[3]', status.buttons[2]),
+        ('buttons[4]', status.buttons[3]),
+        ('relays   ', '{0:#0x}'.format(status.relays)),
+        ('inputs   ', '{0:#0x}'.format(status.inputs)),
+        ('error    ', '{0:#0x}'.format(status.syserror)),
+        ('info     ', status.info),
+        ('seq no.  ', status.seqno),
+        ('event timestamp', status.event.timestamp),
+        ('      index', status.event.index),
+        ('      type', status.event.eventType),
+        ('      granted', status.event.granted),
+        ('      door', status.event.door),
+        ('      direction', status.event.direction),
+        ('      card', status.event.card),
+        ('      reason', status.event.reason),
+    ])
 
 
 def get_time(u, args):
     deviceID = DEVICE_ID
 
-    datetime = u.get_time(deviceID)
+    dt = u.get_time(deviceID)
 
-    print('get-time')
-    print(f'  date/time: {datetime}')
-    print()
+    display('set-time', [
+        ('ID', deviceID),
+        ('date/time', dt),
+    ])
 
 
 def set_time(u, args):
@@ -241,10 +288,10 @@ def set_time(u, args):
 
     u.set_time(deviceID, dt)
 
-    print('set-time')
-    print(f'  ID:        {deviceID}')
-    print(f'  date/time: {dt}')
-    print()
+    display('set-time', [
+        ('ID', deviceID),
+        ('date/time', dt),
+    ])
 
 
 def get_listener(u, args):
@@ -252,9 +299,10 @@ def get_listener(u, args):
 
     listener = u.get_listener(deviceID)
 
-    print('get-listener')
-    print(f'  listener: {listener}')
-    print()
+    display('get-listener', [
+        ('ID', deviceID),
+        ('event listener', listener),
+    ])
 
 
 def set_listener(u, args):
@@ -263,10 +311,10 @@ def set_listener(u, args):
 
     u.set_listener(deviceID, listener)
 
-    print('set-listener')
-    print(f'  ID:             {deviceID}')
-    print(f'  event listener: {listener}')
-    print()
+    display('set-listener', [
+        ('ID', deviceID),
+        ('event listener', listener),
+    ])
 
 
 def get_door_control(u, args):
@@ -275,21 +323,18 @@ def get_door_control(u, args):
 
     control = u.get_door_control(deviceID, door)
 
-    print('get-door-control')
-    print(f'  ID:    {deviceID}')
-    print(f'  door:  {door}')
+    modes = {
+        NORMALLY_OPEN: 'normally open',
+        NORMALLY_CLOSED: 'normally closed',
+        CONTROLLED: 'controlled',
+    }
 
-    if control.mode == NORMALLY_OPEN:
-        print(f'  mode:  normally open')
-    elif control.mode == NORMALLY_CLOSED:
-        print(f'  mode:  normally closed')
-    elif control.mode == CONTROLLED:
-        print(f'  mode:  controlled')
-    else:
-        print(f'  mode:  ???')
-
-    print(f'  delay: {control.delay}')
-    print()
+    display('get-door-control', [
+        ('ID', deviceID),
+        ('door', door),
+        ('mode', modes[control.mode]),
+        ('delay', control.delay),
+    ])
 
 
 def set_door_control(u, args):
@@ -300,34 +345,30 @@ def set_door_control(u, args):
 
     u.set_door_control(deviceID, door, mode, delay)
 
-    print('set-door-control')
-    print(f'  ID:    {deviceID}')
-    print(f'  door:  {door}')
+    modes = {
+        NORMALLY_OPEN: 'normally open',
+        NORMALLY_CLOSED: 'normally closed',
+        CONTROLLED: 'controlled',
+    }
 
-    if mode == NORMALLY_OPEN:
-        print(f'  mode:  normally open')
-    elif mode == NORMALLY_CLOSED:
-        print(f'  mode:  normally closed')
-    elif mode == CONTROLLED:
-        print(f'  mode:  controlled')
-    else:
-        print(f'  mode:  ???')
-
-    print(f'  delay: {delay}')
-    print()
+    display('set-door-control', [
+        ('ID', deviceID),
+        ('door', door),
+        ('mode', modes[mode]),
+        ('delay', delay),
+    ])
 
 
 def open_door(u, args):
-    tag = 'open-door'
     deviceID = DEVICE_ID
     door = DOOR
 
     u.open_door(deviceID, door)
 
-    print(f'{tag}')
-    print(f'  ID:    {deviceID}')
-    print(f'  door:  {door}')
-    print()
+    display('open-door', [
+        ('ID', deviceID),
+        ('door', door),
+    ])
 
 
 def get_cards(u, args):
@@ -335,10 +376,10 @@ def get_cards(u, args):
 
     cards = u.get_cards(deviceID)
 
-    print('get-cards')
-    print(f'  ID:    {deviceID}')
-    print(f'  cards: {cards}')
-    print()
+    display('get-cards', [
+        ('ID', deviceID),
+        ('cards', cards),
+    ])
 
 
 def get_card(u, args):
@@ -347,16 +388,16 @@ def get_card(u, args):
 
     card = u.get_card(deviceID, cardNumber)
 
-    print('get-card')
-    print(f'  ID:           {deviceID}')
-    print(f'  card-number:  {card.cardNumber}')
-    print(f'       from:    {card.start}')
-    print(f'       to:      {card.end}')
-    print(f'       door[1]: {card.doors[0]}')
-    print(f'       door[2]: {card.doors[1]}')
-    print(f'       door[3]: {card.doors[2]}')
-    print(f'       door[4]: {card.doors[3]}')
-    print()
+    display('get-card', [
+        ('ID', deviceID),
+        ('card number', card.cardNumber),
+        ('     from', card.start),
+        ('     to', card.end),
+        ('     door[1]', card.doors[0]),
+        ('     door[2]', card.doors[1]),
+        ('     door[3]', card.doors[2]),
+        ('     door[4]', card.doors[3]),
+    ])
 
 
 def get_card_by_index(u, args):
@@ -365,17 +406,17 @@ def get_card_by_index(u, args):
 
     card = u.get_card_by_index(deviceID, index)
 
-    print('get-card-by-index')
-    print(f'  ID:           {deviceID}')
-    print(f'  index:        {index}')
-    print(f'  card-number:  {card.cardNumber}')
-    print(f'       from:    {card.start}')
-    print(f'       to:      {card.end}')
-    print(f'       door[1]: {card.doors[0]}')
-    print(f'       door[2]: {card.doors[1]}')
-    print(f'       door[3]: {card.doors[2]}')
-    print(f'       door[4]: {card.doors[3]}')
-    print()
+    display('get-card-by-index', [
+        ('ID', deviceID),
+        ('index', index),
+        ('card number', card.cardNumber),
+        ('     from', card.start),
+        ('     to', card.end),
+        ('     door[1]', card.doors[0]),
+        ('     door[2]', card.doors[1]),
+        ('     door[3]', card.doors[2]),
+        ('     door[4]', card.doors[3]),
+    ])
 
 
 def put_card(u, args):
@@ -387,16 +428,16 @@ def put_card(u, args):
 
     card = u.put_card(deviceID, cardNumber, start, end, doors)
 
-    print('put-card')
-    print(f'  ID:           {deviceID}')
-    print(f'  card-number:  {cardNumber}')
-    print(f'       from:    {start}')
-    print(f'       to:      {end}')
-    print(f'       door[1]: {doors[0]}')
-    print(f'       door[2]: {doors[1]}')
-    print(f'       door[3]: {doors[2]}')
-    print(f'       door[4]: {doors[3]}')
-    print()
+    display('put-card', [
+        ('ID', deviceID),
+        ('card-number', cardNumber),
+        ('     from', start),
+        ('     to', end),
+        ('     door[1]', doors[0]),
+        ('     door[2]', doors[1]),
+        ('     door[3]', doors[2]),
+        ('     door[4]', doors[3]),
+    ])
 
 
 def delete_card(u, args):
@@ -405,237 +446,197 @@ def delete_card(u, args):
 
     u.delete_card(deviceID, cardNumber)
 
-    print('delete-card')
-    print(f'  ID:           {deviceID}')
-    print(f'  card-number:  {cardNumber}')
-    print()
-
-    print(f' *** ERROR delete_card ({e})')
-    print()
+    display('delete-card', [
+        ('ID', deviceID),
+        ('card number', cardNumber),
+    ])
 
 
 def delete_cards(u, args):
-    tag = 'delete-cards'
     deviceID = DEVICE_ID
 
     u.delete_cards(deviceID)
 
-    print(f'{tag}')
-    print(f'  ID: {deviceID}')
-    print()
+    display('delete-cards', [
+        ('ID', deviceID),
+    ])
 
 
 def get_event_index(u, args):
-    tag = 'get-event-index'
     deviceID = DEVICE_ID
 
     index = u.get_event_index(deviceID)
 
-    print(f'{tag}')
-    print(f'  ID:    {deviceID}')
-    print(f'  index: {index}')
-    print()
+    display('get-event-index', [
+        ('ID', deviceID),
+        ('index', index),
+    ])
 
 
 def set_event_index(u, args):
-    tag = 'set-event-index'
     deviceID = DEVICE_ID
     index = EVENT_INDEX
 
     u.set_event_index(deviceID, index)
 
-    print(f'{tag}')
-    print(f'  ID:    {deviceID}')
-    print(f'  index: {index}')
-    print()
+    display('set-event-index', [
+        ('ID', deviceID),
+        ('index', index),
+    ])
 
 
 def get_event(u, args):
-    tag = 'get-event'
     deviceID = DEVICE_ID
     index = EVENT_INDEX
 
     event = u.get_event(deviceID, index)
 
-    print(f'{tag}')
-    print(f'  ID:                {deviceID}')
-    print(f'  event index:       {event.index}')
-    print(f'        timestamp:   {event.timestamp}')
-    print(f'        type:        {event.eventType}')
-    print(f'        granted:     {event.granted}')
-    print(f'        door:        {event.door}')
-    print(f'        direction:   {event.direction}')
-    print(f'        card number: {event.card}')
-    print(f'        reason:      {event.reason}')
-    print()
+    display('get-event', [
+        ('ID', deviceID),
+        ('event index', event.index),
+        ('      timestamp', event.timestamp),
+        ('      type', event.eventType),
+        ('      granted', event.granted),
+        ('      door', event.door),
+        ('      direction', event.direction),
+        ('      card number', event.card),
+        ('      reason', event.reason),
+    ])
 
 
 def record_special_events(u, args):
-    tag = 'record-special-events'
     deviceID = DEVICE_ID
     enabled = True
 
     u.record_special_events(deviceID, enabled)
 
-    print(f'{tag}')
-    print(f'  ID:      {deviceID}')
-    print(f'  enabled: {enabled}')
-    print()
+    display('record-special-events', [
+        ('ID', deviceID),
+        ('enabled', enabled),
+    ])
 
 
 def get_time_profile(u, args):
-    tag = 'get-time-profile'
     deviceID = DEVICE_ID
     profileID = PROFILE_ID
 
     profile = u.get_time_profile(deviceID, profileID)
 
-    print(f'{tag}')
-    print(f'  ID:                   {deviceID}')
-    print(f'  profile ID:           {profile.ID}')
-    print(f'  linked profile:       {profile.linked}')
-    print(f'  enabled from:         {profile.start}')
-    print(f'          to:           {profile.end}')
-    print(f'  enabled on Monday:    {profile.monday}')
-    print(f'             Tuesday:   {profile.tuesday}')
-    print(f'             Wednesday: {profile.wednesday}')
-    print(f'             Thursday:  {profile.thursday}')
-    print(f'             Friday:    {profile.friday}')
-    print(f'             Saturday:  {profile.saturday}')
-    print(f'             Sunday:    {profile.sunday}')
-    print(f'  segment 1:            {profile.segment1start}-{profile.segment1end}')
-    print(f'  segment 2:            {profile.segment2start}-{profile.segment2end}')
-    print(f'  segment 3:            {profile.segment3start}-{profile.segment3end}')
-    print()
+    display('get-time-profile', [
+        ('ID', deviceID),
+        ('profile ID', profile.ID),
+        ('linked profile', profile.linked),
+        ('enabled    from', profile.start),
+        ('           to', profile.end),
+        ('enabled on Monday', profile.monday),
+        ('           Tuesday', profile.tuesday),
+        ('           Wednesday', profile.wednesday),
+        ('           Thursday', profile.thursday),
+        ('           Friday', profile.friday),
+        ('           Saturday', profile.saturday),
+        ('           Sunday', profile.sunday),
+        ('segment 1  start', profile.segment1start),
+        ('           end', profile.segment1end),
+        ('segment 2  start', profile.segment2start),
+        ('           end', profile.segment2end),
+        ('segment 3  start', profile.segment3start),
+        ('           end', profile.segment3end),
+    ])
 
 
 def set_time_profile(u, args):
-    tag = 'set-time-profile'
     deviceID = DEVICE_ID
-
     profile = uhppoted.TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30", True, False, True,
                                    True, False, False, True, "08:30", "11:30", "", "", "", "18:00")
 
     u.set_time_profile(deviceID, profile)
 
-    print(f'{tag}')
-    print(f'  ID:                   {deviceID}')
-    print(f'  profile ID:           {profile.ID}')
-    print(f'  linked profile:       {profile.linked}')
-    print(f'  enabled from:         {profile.start}')
-    print(f'          to:           {profile.end}')
-    print(f'  enabled on Monday:    {profile.monday}')
-    print(f'             Tuesday:   {profile.tuesday}')
-    print(f'             Wednesday: {profile.wednesday}')
-    print(f'             Thursday:  {profile.thursday}')
-    print(f'             Friday:    {profile.friday}')
-    print(f'             Saturday:  {profile.saturday}')
-    print(f'             Sunday:    {profile.sunday}')
-    print(f'  segment 1:            {profile.segment1start}-{profile.segment1end}')
-    print(f'  segment 2:            {profile.segment2start}-{profile.segment2end}')
-    print(f'  segment 3:            {profile.segment3start}-{profile.segment3end}')
-    print()
+    display('set-time-profile', [
+        ('ID', deviceID),
+        ('profile ID', profile.ID),
+        ('linked profile', profile.linked),
+        ('enabled    from', profile.start),
+        ('           to', profile.end),
+        ('enabled on Monday', profile.monday),
+        ('           Tuesday', profile.tuesday),
+        ('           Wednesday', profile.wednesday),
+        ('           Thursday', profile.thursday),
+        ('           Friday', profile.friday),
+        ('           Saturday', profile.saturday),
+        ('           Sunday', profile.sunday),
+        ('segment 1  start', profile.segment1start),
+        ('           end', profile.segment1end),
+        ('segment 2  start', profile.segment2start),
+        ('           end', profile.segment2end),
+        ('segment 3  start', profile.segment3start),
+        ('           end', profile.segment3end),
+    ])
 
 
 def clear_time_profiles(u, args):
-    tag = 'clear-time-profiles'
     deviceID = DEVICE_ID
 
     u.clear_time_profiles(deviceID)
 
-    print(f'{tag}')
-    print(f'  ID: {deviceID}')
-    print()
+    display('clear-time-profiles', [
+        ('ID', deviceID),
+    ])
 
 
 def add_task(u, args):
-    tag = 'add-task'
     deviceID = DEVICE_ID
-
     task = uhppoted.Task(6, 4, "2022-02-01", "2022-06-30", True, False, True, True, False, False,
                          True, "08:30", 11)
 
     u.add_task(deviceID, task)
 
-    print(f'{tag}')
-    print(f'  ID:                   {deviceID}')
-    print(f'  task:                 {task.task}')
-    print(f'  door:                 {task.door}')
-    print(f'  enabled from:         {task.start}')
-    print(f'          to:           {task.end}')
-    print(f'  enabled on Monday:    {task.monday}')
-    print(f'             Tuesday:   {task.tuesday}')
-    print(f'             Wednesday: {task.wednesday}')
-    print(f'             Thursday:  {task.thursday}')
-    print(f'             Friday:    {task.friday}')
-    print(f'             Saturday:  {task.saturday}')
-    print(f'             Sunday:    {task.sunday}')
-    print(f'  run at:               {task.at}')
-    print(f'  cards:                {task.cards}')
-    print()
+    display('add-task', [
+        ('ID', deviceID),
+        ('task', task.task),
+        ('door', task.door),
+        ('enabled from', task.start),
+        ('        to', task.end),
+        ('enabled on Monday', task.monday),
+        ('           Tuesday', task.tuesday),
+        ('           Wednesday', task.wednesday),
+        ('           Thursday', task.thursday),
+        ('           Friday', task.friday),
+        ('           Saturday', task.saturday),
+        ('           Sunday', task.sunday),
+        ('run at', task.at),
+        ('cards', task.cards),
+    ])
 
 
 def refresh_tasklist(u, args):
-    tag = 'refresh-tasklist'
     deviceID = DEVICE_ID
 
     u.refresh_tasklist(deviceID)
 
-    print(f'{tag}')
-    print(f'  ID: {deviceID}')
-    print()
+    display('refresh-tasklist', [
+        ('ID', deviceID),
+    ])
 
 
 def clear_tasklist(u, args):
-    tag = 'clear-tasklist'
     deviceID = DEVICE_ID
 
     u.clear_tasklist(deviceID)
 
+    display('clear-tasklist', [
+        ('ID', deviceID),
+    ])
+
+
+def display(tag, fields):
+    w = 0
+    for (f, _) in fields:
+        w = len(f) if len(f) > w else w
+
     print(f'{tag}')
-    print(f'  ID: {deviceID}')
+    for (f, v) in fields:
+        print(f'  {f:<{w}}  {v}')
     print()
-
-
-def main():
-    if len(sys.argv) < 2:
-        usage()
-        return -1
-
-    cmd = sys.argv[1]
-
-    if cmd == 'help':
-        help()
-    else:
-        bind = '192.168.1.100'
-        broadcast = '192.168.1.255'
-        listen = '192.168.1.100:60001'
-        timeout = 2500
-        debug = True
-        controllers = [
-            uhppoted.Controller(405419896, '192.168.1.100'),
-            uhppoted.Controller(303986753, '192.168.1.100'),
-        ]
-
-        u = uhppoted.Uhppote(
-            uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
-
-        try:
-            for c, v in commands().items():
-                if cmd == c:
-                    v['fn'](u, None)
-                    return
-
-            print()
-            print(f'  ERROR: invalid command ({cmd})')
-            usage()
-
-        except BaseException as x:
-            print()
-            print(f'*** ERROR  {cmd}: {x}')
-            print()
-
-            sys.exit(1)
 
 
 if __name__ == '__main__':
