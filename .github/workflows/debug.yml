@@ -28,7 +28,9 @@ jobs:
 
     - name: Build
       run: |
+        set CGO_ENABLED=1
+        set CC=clang
         gcc --version
-        g++ --version
         clang --version
-        clang++ --version
+        go env
+        make build
