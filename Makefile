@@ -46,5 +46,8 @@ tests:
 
 build-all: build
 	make -C ./tests/c      -f Makefile test
-	# make -C ./tests/c++    -f Makefile test
+
+build-cpp: build
+	make -C ./tests/c++    -f Makefile build-gcc
+
 

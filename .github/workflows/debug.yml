@@ -33,4 +33,4 @@ jobs:
         gcc --version
         clang --version
         go env
-        make build
+        make build-cpp

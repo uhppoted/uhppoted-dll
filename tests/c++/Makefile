@@ -3,6 +3,8 @@ BINDINGS=../../bindings/c++
 CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && export LD_LIBRARY_PATH=$(LIB) && ./tests
 SRC=tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp
 
+.PHONY: build-gcc
+	
 lib: 
 	cd ../../go && make all
 
@@ -14,6 +16,9 @@ format: $(SRC)
 
 build: format
 	clang -std=c++17 $(SRC) -D_GLIBCXX_USE_CXX11_ABI=0 -o tests  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
+
+build-gcc: 
+	g++ -std=c++17 $(SRC) -D_GLIBCXX_USE_CXX11_ABI=0 -o tests  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
 
 usage: build
 	$(CMD) help
