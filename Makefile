@@ -1,6 +1,7 @@
 LIB=./lib
 
 .PHONY: python
+.PHONY: cpp
 .PHONY: ccl
 .PHONY: examples
 .PHONY: tests
@@ -15,7 +16,7 @@ c: ./examples/c/example ./tests/c/test
 	make -C ./examples/c -f Makefile build
 	make -C ./tests/c    -f Makefile build
 
-cpp: ./examples/c++/example ./tests/c++/test
+cpp: 
 	make -C ./examples/c++ -f Makefile build
 	make -C ./tests/c++    -f Makefile build
 
