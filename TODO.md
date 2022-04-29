@@ -1,7 +1,7 @@
 ## v0.7.x
 
 ### IN PROGRESS
-  - [ ] revert to C++11 (among other things it seems github's VPSs don't have glib suppport for C++17)
+  - [x] revert to C++11 (among other things it seems github's VPSs don't have glib suppport for C++17)
 
   - [ ] Commonalize examples output
         - [ ] C

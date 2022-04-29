@@ -10,7 +10,7 @@ bool getCards(uhppoted &u) {
     uint32_t N = u.get_cards(DEVICE_ID);
 
     vector<result> rs = {
-        result("cards count", uint32_t(39), N),
+        result("cards count", "uint32", {.uint32 = 39}, {.uint32 = N}),
     };
 
     return evaluate("get-cards", rs);
@@ -20,13 +20,13 @@ bool getCard(uhppoted &u) {
     auto card = u.get_card(DEVICE_ID, CARD_ID);
 
     vector<result> rs = {
-        result("card number", uint32_t(8165538), card.card_number),
-        result("card 'from' date", string("2022-01-01"), card.from),
-        result("card 'to' date", string("2022-12-31"), card.to),
-        result("card doors[1]", uint8_t(0), card.doors[0]),
-        result("card doors[2]", uint8_t(1), card.doors[1]),
-        result("card doors[3]", uint8_t(31), card.doors[2]),
-        result("card doors[4]", uint8_t(75), card.doors[3]),
+        result("card number", "uint32", {.uint32 = 8165538}, {.uint32 = card.card_number}),
+        result("card 'from' date", "string", {.string = "2022-01-01"}, {.string = card.from.c_str()}),
+        result("card 'to' date", "string", {.string = "2022-12-31"}, {.string = card.to.c_str()}),
+        result("card doors[1]", "uint8", {.uint8 = 0}, {.uint8 = card.doors[0]}),
+        result("card doors[2]", "uint8", {.uint8 = 1}, {.uint8 = card.doors[1]}),
+        result("card doors[3]", "uint8", {.uint8 = 31}, {.uint8 = card.doors[2]}),
+        result("card doors[4]", "uint8", {.uint8 = 75}, {.uint8 = card.doors[3]}),
     };
 
     return evaluate("get-card", rs);
@@ -36,13 +36,13 @@ bool getCardByIndex(uhppoted &u) {
     auto card = u.get_card_by_index(DEVICE_ID, CARD_INDEX);
 
     vector<result> rs = {
-        result("card number", uint32_t(8165538), card.card_number),
-        result("card 'from' date", string("2022-01-01"), card.from),
-        result("card 'to' date", string("2022-12-31"), card.to),
-        result("card doors[1]", uint8_t(0), card.doors[0]),
-        result("card doors[2]", uint8_t(1), card.doors[1]),
-        result("card doors[3]", uint8_t(31), card.doors[2]),
-        result("card doors[4]", uint8_t(75), card.doors[3]),
+        result("card number", "uint32", {.uint32 = 8165538}, {.uint32 = card.card_number}),
+        result("card 'from' date", "string", {.string = "2022-01-01"}, {.string = card.from.c_str()}),
+        result("card 'to' date", "string", {.string = "2022-12-31"}, {.string = card.to.c_str()}),
+        result("card doors[1]", "uint8", {.uint8 = 0}, {.uint8 = card.doors[0]}),
+        result("card doors[2]", "uint8", {.uint8 = 1}, {.uint8 = card.doors[1]}),
+        result("card doors[3]", "uint8", {.uint8 = 31}, {.uint8 = card.doors[2]}),
+        result("card doors[4]", "uint8", {.uint8 = 75}, {.uint8 = card.doors[3]}),
     };
 
     return evaluate("get-card-by-index", rs);

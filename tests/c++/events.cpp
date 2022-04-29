@@ -10,7 +10,7 @@ bool getEventIndex(uhppoted &u) {
     auto index = u.get_event_index(DEVICE_ID);
 
     vector<result> rs = {
-        result("event index", uint32_t(47), index),
+        result("event index", "uint32", {.uint32 = 47}, {.uint32 = index}),
     };
 
     return evaluate("get-event-index", rs);
@@ -28,14 +28,14 @@ bool getEvent(uhppoted &u) {
     auto event = u.get_event(DEVICE_ID, EVENT_INDEX);
 
     vector<result> rs = {
-        result("event index", uint32_t(51), event.index),
-        result("event timestamp", string("2022-04-15 12:29:15"), event.timestamp),
-        result("event granted", uint8_t(6), event.eventType),
-        result("event granted", true, event.granted),
-        result("event door", uint8_t(3), event.door),
-        result("event direction", uint8_t(1), event.direction),
-        result("event card", uint32_t(8165538), event.card),
-        result("event reason", uint8_t(21), event.reason),
+        result("event index", "uint32", {.uint32 = 51}, {.uint32 = event.index}),
+        result("event timestamp", "string", {.string = "2022-04-15 12:29:15"}, {.string = event.timestamp.c_str()}),
+        result("event granted", "uint8", {.uint8 = 6}, {.uint8 = event.eventType}),
+        result("event granted", "boolean", {.boolean = true}, {.boolean = event.granted}),
+        result("event door", "uint8", {.uint8 = 3}, {.uint8 = event.door}),
+        result("event direction", "uint8", {.uint8 = 1}, {.uint8 = event.direction}),
+        result("event card", "uint32", {.uint32 = 8165538}, {.uint32 = event.card}),
+        result("event reason", "uint8", {.uint8 = 21}, {.uint8 = event.reason}),
     };
 
     return evaluate("get-event-index", rs);
