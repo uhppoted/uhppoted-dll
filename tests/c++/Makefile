@@ -13,7 +13,7 @@ format: $(SRC)
 	clang-format -i $(BINDINGS)/include/*.hpp
 
 build: format
-	clang -std=c++11 $(SRC) -D_GLIBCXX_USE_CXX11_ABI=0 -o tests  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
+	clang -std=c++17 $(SRC) -D_GLIBCXX_USE_CXX11_ABI=0 -o tests  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
 
 usage: build
 	$(CMD) help
