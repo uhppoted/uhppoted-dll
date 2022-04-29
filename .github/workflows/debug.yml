@@ -3,13 +3,13 @@ name: debug
 on:
   workflow_dispatch:
 
-strategy:
-  matrix:
-    compiler: [clang]
-
 jobs:
 
   build:
+    strategy:
+      matrix:
+        compiler: [clang]
+
     name: Build
     runs-on: ubuntu-latest
     steps:
@@ -28,4 +28,5 @@ jobs:
 
     - name: Build
       run: |
+        make build
         make cpp
