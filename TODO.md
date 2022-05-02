@@ -44,9 +44,9 @@
    49 |     event event;
       |           ^~~~~
 ```
-              - [ ] C#
-              - [ ] Python
-              - [ ] CCL
+            - [ ] C#
+            - [ ] Python
+            - [ ] CCL
 
   - [ ] Change all bind/broadcast/listen addresses to generic system IPs
   - [ ] Constants for event types, reason, etc

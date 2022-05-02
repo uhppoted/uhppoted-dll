@@ -62,9 +62,9 @@ def tests():
 def main():
     cmd = '' if len(sys.argv) < 1 else sys.argv[1]
 
-    bind = '192.168.1.100'
-    broadcast = '192.168.1.255'
-    listen = '192.168.1.100:60001'
+    bind = '0.0.0.0'
+    broadcast = '255.255.255.255'
+    listen = '0.0.0.0:60001'
     timeout = 2500
     debug = True
 
