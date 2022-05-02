@@ -24,7 +24,7 @@ CARD_NUMBER = 8000001
 CARD_INDEX = 7
 EVENT_INDEX = 43
 DOOR = 4
-PROFILE_ID = 29
+TIME_PROFILE_ID = 29
 
 
 def commands():
@@ -145,7 +145,45 @@ def main():
         usage()
         return -1
 
-    cmd = sys.argv[1]
+    parser = argparse.ArgumentParser(description='uhppoted-dll examples')
+
+    parser.add_argument('command', type=str, help='command')
+
+    parser.add_argument('--controller',
+                        type=int,
+                        default=DEVICE_ID,
+                        help='controller serial number')
+
+    parser.add_argument('--ip-address',
+                        type=str,
+                        default='192.168.1.100',
+                        help='controller IP address')
+
+    parser.add_argument('--subnet-mask',
+                        type=str,
+                        default='255.255.255.0',
+                        help='controller subnet mask')
+
+    parser.add_argument('--gateway-address',
+                        type=str,
+                        default='192.168.1.5',
+                        help='controller gateway address')
+
+    parser.add_argument('--listener-address',
+                        type=str,
+                        default='192.168.1.100:60001',
+                        help='controller event listener address')
+
+    parser.add_argument('--card', type=int, default=CARD_NUMBER, help='card number')
+    parser.add_argument('--card-index', type=int, default=CARD_INDEX, help='card index')
+    parser.add_argument('--door', type=int, default=DOOR, help='controller door ID [1..4]')
+    parser.add_argument('--event-index', type=int, default=EVENT_INDEX, help='event index')
+    parser.add_argument('--time-profile', type=int, default=TIME_PROFILE_ID, help='time profile ID')
+
+    args = parser.parse_args()
+    cmd = args.command
+
+    print(args)
 
     if cmd == 'help':
         help()
@@ -165,7 +203,7 @@ def main():
 
         try:
             if cmd in commands():
-                commands()[cmd]['fn'](u, None)
+                commands()[cmd]['fn'](u, args)
             else:
                 print()
                 print(f'  ERROR: invalid command ({cmd})')
@@ -214,12 +252,12 @@ def get_devices(u, args):
 
 
 def get_device(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    info = u.get_device(deviceID)
+    info = u.get_device(device_id)
 
     display('get-device', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('IP address', info.address),
         ('subnet mask', info.subnet),
         ('gateway address', info.gateway),
@@ -230,15 +268,15 @@ def get_device(u, args):
 
 
 def set_address(u, args):
-    deviceID = DEVICE_ID
-    address = '192.168.1.125'
-    subnet = '255.255.255.253'
-    gateway = '192.168.1.5'
+    device_id = args.controller
+    address = args.ip_address
+    subnet = args.subnet_mask
+    gateway = args.gateway_address
 
-    u.set_address(deviceID, address, subnet, gateway)
+    u.set_address(device_id, address, subnet, gateway)
 
     display('set-address', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('address', address),
         ('subnet', subnet),
         ('gateway', gateway),
@@ -246,12 +284,12 @@ def set_address(u, args):
 
 
 def get_status(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    status = u.get_status(deviceID)
+    status = u.get_status(device_id)
 
     display('get-status', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('date/time', status.sysdatetime),
         ('doors[1]', status.doors[0]),
         ('doors[2]', status.doors[1]),
@@ -278,56 +316,56 @@ def get_status(u, args):
 
 
 def get_time(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    dt = u.get_time(deviceID)
+    dt = u.get_time(device_id)
 
     display('set-time', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('date/time', dt),
     ])
 
 
 def set_time(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
     dt = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    u.set_time(deviceID, dt)
+    u.set_time(device_id, dt)
 
     display('set-time', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('date/time', dt),
     ])
 
 
 def get_listener(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    listener = u.get_listener(deviceID)
+    listener = u.get_listener(device_id)
 
     display('get-listener', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('event listener', listener),
     ])
 
 
 def set_listener(u, args):
-    deviceID = DEVICE_ID
-    listener = '192.168.1.100:60001'
+    device_id = args.controller
+    listener = args.listener_address
 
-    u.set_listener(deviceID, listener)
+    u.set_listener(device_id, listener)
 
     display('set-listener', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('event listener', listener),
     ])
 
 
 def get_door_control(u, args):
-    deviceID = DEVICE_ID
-    door = DOOR
+    device_id = args.controller
+    door = args.door
 
-    control = u.get_door_control(deviceID, door)
+    control = u.get_door_control(device_id, door)
 
     modes = {
         NORMALLY_OPEN: 'normally open',
@@ -336,7 +374,7 @@ def get_door_control(u, args):
     }
 
     display('get-door-control', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('door', door),
         ('mode', modes[control.mode]),
         ('delay', control.delay),
@@ -344,12 +382,12 @@ def get_door_control(u, args):
 
 
 def set_door_control(u, args):
-    deviceID = DEVICE_ID
-    door = DOOR
+    device_id = args.controller
+    door = args.door
     mode = NORMALLY_OPEN
     delay = 9
 
-    u.set_door_control(deviceID, door, mode, delay)
+    u.set_door_control(device_id, door, mode, delay)
 
     modes = {
         NORMALLY_OPEN: 'normally open',
@@ -358,7 +396,7 @@ def set_door_control(u, args):
     }
 
     display('set-door-control', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('door', door),
         ('mode', modes[mode]),
         ('delay', delay),
@@ -366,36 +404,36 @@ def set_door_control(u, args):
 
 
 def open_door(u, args):
-    deviceID = DEVICE_ID
-    door = DOOR
+    device_id = args.controller
+    door = args.door
 
-    u.open_door(deviceID, door)
+    u.open_door(device_id, door)
 
     display('open-door', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('door', door),
     ])
 
 
 def get_cards(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    cards = u.get_cards(deviceID)
+    cards = u.get_cards(device_id)
 
     display('get-cards', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('cards', cards),
     ])
 
 
 def get_card(u, args):
-    deviceID = DEVICE_ID
-    cardNumber = CARD_NUMBER
+    device_id = args.controller
+    card_number = args.card
 
-    card = u.get_card(deviceID, cardNumber)
+    card = u.get_card(device_id, card_number)
 
     display('get-card', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('card number', card.cardNumber),
         ('     from', card.start),
         ('     to', card.end),
@@ -407,13 +445,13 @@ def get_card(u, args):
 
 
 def get_card_by_index(u, args):
-    deviceID = DEVICE_ID
-    index = CARD_INDEX
+    device_id = args.controller
+    index = args.card_index
 
-    card = u.get_card_by_index(deviceID, index)
+    card = u.get_card_by_index(device_id, index)
 
     display('get-card-by-index', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('index', index),
         ('card number', card.cardNumber),
         ('     from', card.start),
@@ -426,17 +464,17 @@ def get_card_by_index(u, args):
 
 
 def put_card(u, args):
-    deviceID = DEVICE_ID
-    cardNumber = CARD_NUMBER
+    device_id = args.controller
+    card_number = args.card
     start = '2022-01-01'
     end = '2022-12-31'
     doors = [0, 1, 31, 75]
 
-    card = u.put_card(deviceID, cardNumber, start, end, doors)
+    card = u.put_card(device_id, card_number, start, end, doors)
 
     display('put-card', [
-        ('ID', deviceID),
-        ('card-number', cardNumber),
+        ('ID', device_id),
+        ('card-number', card_number),
         ('     from', start),
         ('     to', end),
         ('     door[1]', doors[0]),
@@ -447,58 +485,58 @@ def put_card(u, args):
 
 
 def delete_card(u, args):
-    deviceID = DEVICE_ID
-    cardNumber = CARD_NUMBER
+    device_id = args.controller
+    card_number = args.card
 
-    u.delete_card(deviceID, cardNumber)
+    u.delete_card(device_id, card_number)
 
     display('delete-card', [
-        ('ID', deviceID),
-        ('card number', cardNumber),
+        ('ID', device_id),
+        ('card number', card_number),
     ])
 
 
 def delete_cards(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    u.delete_cards(deviceID)
+    u.delete_cards(device_id)
 
     display('delete-cards', [
-        ('ID', deviceID),
+        ('ID', device_id),
     ])
 
 
 def get_event_index(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    index = u.get_event_index(deviceID)
+    index = u.get_event_index(device_id)
 
     display('get-event-index', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('index', index),
     ])
 
 
 def set_event_index(u, args):
-    deviceID = DEVICE_ID
-    index = EVENT_INDEX
+    device_id = args.controller
+    index = args.event_index
 
-    u.set_event_index(deviceID, index)
+    u.set_event_index(device_id, index)
 
     display('set-event-index', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('index', index),
     ])
 
 
 def get_event(u, args):
-    deviceID = DEVICE_ID
-    index = EVENT_INDEX
+    device_id = args.controller
+    index = args.event_index
 
-    event = u.get_event(deviceID, index)
+    event = u.get_event(device_id, index)
 
     display('get-event', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('event index', event.index),
         ('      timestamp', event.timestamp),
         ('      type', event.eventType),
@@ -511,25 +549,25 @@ def get_event(u, args):
 
 
 def record_special_events(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
     enabled = True
 
-    u.record_special_events(deviceID, enabled)
+    u.record_special_events(device_id, enabled)
 
     display('record-special-events', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('enabled', enabled),
     ])
 
 
 def get_time_profile(u, args):
-    deviceID = DEVICE_ID
-    profileID = PROFILE_ID
+    device_id = args.controller
+    profile_id = args.time_profile_id
 
-    profile = u.get_time_profile(deviceID, profileID)
+    profile = u.get_time_profile(device_id, profile_id)
 
     display('get-time-profile', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('profile ID', profile.ID),
         ('linked profile', profile.linked),
         ('enabled    from', profile.start),
@@ -551,14 +589,15 @@ def get_time_profile(u, args):
 
 
 def set_time_profile(u, args):
-    deviceID = DEVICE_ID
-    profile = uhppoted.TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30", True, False, True,
+    device_id = args.controller
+    profile_id = args.time_profile_id
+    profile = uhppoted.TimeProfile(profile_id, 71, "2022-02-01", "2022-06-30", True, False, True,
                                    True, False, False, True, "08:30", "11:30", "", "", "", "18:00")
 
-    u.set_time_profile(deviceID, profile)
+    u.set_time_profile(device_id, profile)
 
     display('set-time-profile', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('profile ID', profile.ID),
         ('linked profile', profile.linked),
         ('enabled    from', profile.start),
@@ -580,24 +619,24 @@ def set_time_profile(u, args):
 
 
 def clear_time_profiles(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    u.clear_time_profiles(deviceID)
+    u.clear_time_profiles(device_id)
 
     display('clear-time-profiles', [
-        ('ID', deviceID),
+        ('ID', device_id),
     ])
 
 
 def add_task(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
     task = uhppoted.Task(6, 4, "2022-02-01", "2022-06-30", True, False, True, True, False, False,
                          True, "08:30", 11)
 
-    u.add_task(deviceID, task)
+    u.add_task(device_id, task)
 
     display('add-task', [
-        ('ID', deviceID),
+        ('ID', device_id),
         ('task', task.task),
         ('door', task.door),
         ('enabled from', task.start),
@@ -615,22 +654,22 @@ def add_task(u, args):
 
 
 def refresh_tasklist(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    u.refresh_tasklist(deviceID)
+    u.refresh_tasklist(device_id)
 
     display('refresh-tasklist', [
-        ('ID', deviceID),
+        ('ID', device_id),
     ])
 
 
 def clear_tasklist(u, args):
-    deviceID = DEVICE_ID
+    device_id = args.controller
 
-    u.clear_tasklist(deviceID)
+    u.clear_tasklist(device_id)
 
     display('clear-tasklist', [
-        ('ID', deviceID),
+        ('ID', device_id),
     ])
 
 

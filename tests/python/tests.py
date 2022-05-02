@@ -60,10 +60,7 @@ def tests():
 
 
 def main():
-    cmd = ''
-
-    if len(sys.argv) > 1:
-        cmd = sys.argv[1]
+    cmd = '' if len(sys.argv) < 1 else sys.argv[1]
 
     bind = '192.168.1.100'
     broadcast = '192.168.1.255'
