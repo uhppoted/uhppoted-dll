@@ -103,5 +103,5 @@ clear-tasklist: build
 all: build
 	$(CMD) all
 
-test: build
+tests: build
 	$(CMD) 

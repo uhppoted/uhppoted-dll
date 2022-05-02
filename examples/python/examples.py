@@ -4,8 +4,14 @@ import argparse
 import ctypes
 import sys
 import datetime
+import platform
+import os
 
 sys.path.append('../../bindings/python')
+
+if 'Windows' in platform.system():
+    dlldir = os.path.abspath('../../lib/debug')
+    os.add_dll_directory(dlldir)
 
 import uhppoted
 

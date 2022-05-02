@@ -1,5 +1,16 @@
 LIB=./lib
 
+ifeq ($(OS),Windows_NT)
+    DLL = uhppoted.dll
+else
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        DLL = libuhppoted.dylib
+    else 
+        DLL = libuhppoted.so
+    endif
+endif
+
 .PHONY: python
 .PHONY: cpp
 .PHONY: ccl
@@ -8,9 +19,9 @@ LIB=./lib
 
 build: 
 	go fmt ./go/...
-	go build -trimpath -buildmode=c-shared             -o $(LIB)/libuhppoted.so       ./...
-	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/libuhppoted.so ./...
-	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/libuhppoted.so ./...
+	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL)       ./...
+	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./...
+	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./...
 
 c: ./examples/c/example ./tests/c/test
 	make -C ./examples/c -f Makefile build
@@ -38,11 +49,11 @@ examples:
 	make -C ./examples/ccl    -f Makefile build
 
 tests: 
-	make -C ./tests/c      -f Makefile test
-	make -C ./tests/c++    -f Makefile test
-	make -C ./tests/c#     -f Makefile test
-	make -C ./tests/python -f Makefile test
-	make -C ./tests/ccl    -f Makefile test
+	make -C ./tests/c      -f Makefile tests
+	make -C ./tests/c++    -f Makefile tests
+	make -C ./tests/c#     -f Makefile tests
+	make -C ./tests/python -f Makefile tests
+	make -C ./tests/ccl    -f Makefile tests
 
 build-all: build
 	make -C ./tests/c      -f Makefile test

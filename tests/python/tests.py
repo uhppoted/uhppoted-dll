@@ -2,10 +2,16 @@
 
 import ctypes
 import sys
+import platform
+import os
 
 from functools import reduce
 
 sys.path.append('../../bindings/python')
+
+if 'Windows' in platform.system():
+    dlldir = os.path.abspath('../../lib/tests')
+    os.add_dll_directory(dlldir)
 
 import uhppoted
 
@@ -51,6 +57,7 @@ def tests():
         'refresh-tasklist': refresh_tasklist,
         'clear-tasklist': clear_tasklist,
     }
+
 
 def main():
     cmd = ''

@@ -1,7 +1,13 @@
 ## v0.7.x
 
 ### IN PROGRESS
-  - [x] revert to C++11 (among other things it seems github's VPSs don't have glib suppport for C++17)
+  - [ ] And now revert back to C++17 again
+  - [ ] Replace slice'ing code with standard cgo functions
+        - https://pkg.go.dev/cmd/cgo
+        - func C.CBytes([]byte) unsafe.Pointer
+        - func C.GoStringN(*C.char, C.int) string
+        - func C.GoBytes(unsafe.Pointer, C.int) []byte
+  - [ ] Pass string arguments rather than const char *
 
   - [ ] Commonalize examples output
         - [ ] C
@@ -24,27 +30,9 @@
               - [x] C
               - [ ] C++
 ```
-tests.cpp:(.text+0x1e): undefined reference to `std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::basic_string()'
-```
-```
-gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-Copyright (C) 2019 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-g++ (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
-Copyright (C) 2019 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-Ubuntu clang version 11.0.0-2~ubuntu20.04.1
-Target: x86_64-pc-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Ubuntu clang version 11.0.0-2~ubuntu20.04.1
-Target: x86_64-pc-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bi
+../../bindings/c++/include/../include/uhppoted.hpp:49:11: error: declaration of ‘event status::event’ changes meaning of ‘event’ [-fpermissive]
+   49 |     event event;
+      |           ^~~~~
 ```
               - [ ] C#
               - [ ] Python
@@ -65,4 +53,5 @@ InstalledDir: /usr/bi
 - (?) lint
 - (?) Cross-compile
       - https://github.com/elastic/golang-crossbuild
+      - https://dh1tw.de/2019/12/cross-compiling-golang-cgo-projects/
 

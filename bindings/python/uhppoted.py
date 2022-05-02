@@ -21,6 +21,8 @@ from typing import Final
 
 if 'Windows' in platform.system():
     lib = ctypes.windll.LoadLibrary("uhppoted")
+elif 'Darwin' in platform.system():
+    lib = ctypes.cdll.LoadLibrary("libuhppoted.dylib")
 else:
     lib = ctypes.cdll.LoadLibrary("libuhppoted.so")
 
