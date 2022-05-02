@@ -121,36 +121,36 @@ extern bool evaluate(const std::string &tag, const std::vector<result> &resultse
 
     for (auto ix = resultset.begin(); ix != resultset.end(); ix++) {
         auto field = get<0>(*ix);
-        auto type = get<1>(*ix);
-        auto expected = get<2>(*ix);
-        auto val = get<3>(*ix);
+        auto expected = get<1>(*ix);
+        auto value = get<2>(*ix);
+        auto type = expected.type().name();
 
-        if (type == "uint8") {
-            auto p = value(expected).uint8;
-            auto q = value(val).uint8;
+        if (type == typeid(uint8_t).name()) {
+            auto p = any_cast<uint8_t>(expected);
+            auto q = any_cast<uint8_t>(value);
             if (p != q) {
                 cout << setw(21) << tag << " incorrect " << field << " (expected:" << static_cast<int>(p) << ", got:" << static_cast<int>(q) << ")" << endl;
                 ok = false;
             }
-        } else if (type == "uint32") {
-            auto p = value(expected).uint32;
-            auto q = value(val).uint32;
+        } else if (type == typeid(uint32_t).name()) {
+            auto p = any_cast<uint32_t>(expected);
+            auto q = any_cast<uint32_t>(value);
 
             if (p != q) {
                 cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
                 ok = false;
             }
-        } else if (type == "boolean") {
-            auto p = value(expected).boolean;
-            auto q = value(val).boolean;
+        } else if (type == typeid(bool).name()) {
+            auto p = any_cast<bool>(expected);
+            auto q = any_cast<bool>(value);
 
             if (p != q) {
                 cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
                 ok = false;
             }
-        } else if (type == "string") {
-            auto p = string(value(expected).string);
-            auto q = string(value(val).string);
+        } else if (type == typeid(string).name()) {
+            auto p = any_cast<string>(expected);
+            auto q = any_cast<string>(value);
 
             if (p != q) {
                 cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;

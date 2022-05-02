@@ -7,14 +7,7 @@
 
 #include "../include/uhppoted.hpp"
 
-typedef union value {
-    uint8_t uint8;
-    uint32_t uint32;
-    bool boolean;
-    const char *string;
-} value;
-
-typedef std::tuple<std::string, std::string, value, value> result;
+typedef std::tuple<std::string, std::any, std::any> result;
 
 extern const uint32_t DEVICE_ID;
 extern const uint32_t CARD_ID;

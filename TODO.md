@@ -2,7 +2,7 @@
 
 ### IN PROGRESS
 
-- [ ] And now revert back to C++17 again
+- [x] And now revert back to C++17 again
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo

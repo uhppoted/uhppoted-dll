@@ -10,10 +10,10 @@ bool getDevices(uhppoted &u) {
     auto devices = u.get_devices();
 
     vector<result> rs = {
-        result("device count", "uint32", {.uint32 = 3}, {.uint32 = static_cast<uint32_t>(devices.size())}),
-        result("device[0] ID", "uint32", {.uint32 = 201020304}, {.uint32 = devices[0]}),
-        result("device[1] ID", "uint32", {.uint32 = 303986753}, {.uint32 = devices[1]}),
-        result("device[2] ID", "uint32", {.uint32 = 405419896}, {.uint32 = devices[2]}),
+        result("device count", uint32_t(3), uint32_t(devices.size())),
+        result("device[0] ID", uint32_t(201020304), devices[0]),
+        result("device[1] ID", uint32_t(303986753), devices[1]),
+        result("device[2] ID", uint32_t(405419896), devices[2]),
     };
 
     return evaluate("get-devices", rs);
@@ -23,13 +23,13 @@ bool getDevice(uhppoted &u) {
     auto d = u.get_device(DEVICE_ID);
 
     vector<result> rs = {
-        result("device ID", "uint32", {.uint32 = 405419896}, {.uint32 = d.ID}),
-        result("IP address", "string", {.string = "192.168.1.101"}, {.string = d.address.c_str()}),
-        result("subnet mask", "string", {.string = "255.255.255.0"}, {.string = d.subnet.c_str()}),
-        result("gateway address", "string", {.string = "192.168.1.1"}, {.string = d.gateway.c_str()}),
-        result("MAC address", "string", {.string = "00:12:23:34:45:56"}, {.string = d.MAC.c_str()}),
-        result("version", "string", {.string = "v8.92"}, {.string = d.version.c_str()}),
-        result("date", "string", {.string = "2018-11-05"}, {.string = d.date.c_str()}),
+        result("device ID", uint32_t(405419896), d.ID),
+        result("IP address", string("192.168.1.101"), d.address),
+        result("subnet mask", string("255.255.255.0"), d.subnet),
+        result("gateway address", string("192.168.1.1"), d.gateway),
+        result("MAC address", string("00:12:23:34:45:56"), d.MAC),
+        result("version", string("v8.92"), d.version),
+        result("date", string("2018-11-05"), d.date),
     };
 
     return evaluate("get-device", rs);
@@ -51,29 +51,29 @@ bool getStatus(uhppoted &u) {
     auto s = u.get_status(DEVICE_ID);
 
     vector<result> rs = {
-        result("device ID", "uint32", {.uint32 = 405419896}, {.uint32 = s.ID}),
-        result("system date/time", "string", {.string = "2022-03-19 15:48:32"}, {.string = s.sysdatetime.c_str()}),
-        result("doors[1]", "boolean", {.boolean = true}, {.boolean = s.doors[0] != 0}),
-        result("doors[2]", "boolean", {.boolean = false}, {.boolean = s.doors[1] != 0}),
-        result("doors[3]", "boolean", {.boolean = false}, {.boolean = s.doors[2] != 0}),
-        result("doors[4]", "boolean", {.boolean = true}, {.boolean = s.doors[3] != 0}),
-        result("buttons[1]", "boolean", {.boolean = true}, {.boolean = s.buttons[0] != 0}),
-        result("buttons[2]", "boolean", {.boolean = false}, {.boolean = s.buttons[1] != 0}),
-        result("buttons[3]", "boolean", {.boolean = true}, {.boolean = s.buttons[2] != 0}),
-        result("buttons[4]", "boolean", {.boolean = false}, {.boolean = s.buttons[3] != 0}),
-        result("relays", "uint8", {.uint8 = 0x12}, {.uint8 = s.relays}),
-        result("inputs", "uint8", {.uint8 = 0x34}, {.uint8 = s.inputs}),
-        result("system error", "uint8", {.uint8 = 0x56}, {.uint8 = s.syserror}),
-        result("special info", "uint8", {.uint8 = 253}, {.uint8 = s.info}),
-        result("sequence number", "uint32", {.uint32 = 9876}, {.uint32 = s.seqno}),
-        result("event timestamp", "string", {.string = "2022-01-02 12:34:56"}, {.string = s.event.timestamp.c_str()}),
-        result("event index", "uint32", {.uint32 = 135}, {.uint32 = s.event.index}),
-        result("event type", "uint8", {.uint8 = 6}, {.uint8 = s.event.eventType}),
-        result("event granted", "boolean", {.boolean = true}, {.boolean = s.event.granted}),
-        result("event door", "uint8", {.uint8 = 3}, {.uint8 = s.event.door}),
-        result("event direction", "uint8", {.uint8 = 1}, {.uint8 = s.event.direction}),
-        result("event card", "uint32", {.uint32 = 8100023}, {.uint32 = s.event.card}),
-        result("event reason", "uint8", {.uint8 = 21}, {.uint8 = s.event.reason}),
+        result("device ID", uint32_t(405419896), s.ID),
+        result("system date/time", string("2022-03-19 15:48:32"), s.sysdatetime),
+        result("doors[1]", true, s.doors[0] != 0),
+        result("doors[2]", false, s.doors[1] != 0),
+        result("doors[3]", false, s.doors[2] != 0),
+        result("doors[4]", true, s.doors[3] != 0),
+        result("buttons[1]", true, s.buttons[0] != 0),
+        result("buttons[2]", false, s.buttons[1] != 0),
+        result("buttons[3]", true, s.buttons[2] != 0),
+        result("buttons[4]", false, s.buttons[3] != 0),
+        result("relays", uint8_t(0x12), s.relays),
+        result("inputs", uint8_t(0x34), s.inputs),
+        result("system error", uint8_t(0x56), s.syserror),
+        result("special info", uint8_t(253), s.info),
+        result("sequence number", uint32_t(9876), s.seqno),
+        result("event timestamp", string("2022-01-02 12:34:56"), s.event.timestamp),
+        result("event index", uint32_t(135), s.event.index),
+        result("event type", uint8_t(6), s.event.eventType),
+        result("event granted", true, s.event.granted),
+        result("event door", uint8_t(3), s.event.door),
+        result("event direction", uint8_t(1), s.event.direction),
+        result("event card", uint32_t(8100023), s.event.card),
+        result("event reason", uint8_t(21), s.event.reason),
     };
 
     return evaluate("get-status", rs);
@@ -83,7 +83,7 @@ bool getTime(uhppoted &u) {
     string datetime = u.get_time(DEVICE_ID);
 
     vector<result> rs = {
-        result("date/time", "string", {.string = "2022-01-02 12:34:56"}, {.string = datetime.c_str()}),
+        result("date/time", string("2022-01-02 12:34:56"), datetime),
     };
 
     return evaluate("get-time", rs);
@@ -103,7 +103,7 @@ bool getListener(uhppoted &u) {
     string listener = u.get_listener(DEVICE_ID);
 
     vector<result> rs = {
-        result("listener address", "string", {.string = "192.168.1.100:60001"}, {.string = listener.c_str()}),
+        result("listener address", string("192.168.1.100:60001"), listener),
     };
 
     return evaluate("get-listener", rs);
@@ -123,8 +123,8 @@ bool getDoorControl(uhppoted &u) {
     auto d = u.get_door_control(DEVICE_ID, DOOR);
 
     vector<result> rs = {
-        result("door control mode", "uint8", {.uint8 = CONTROLLED}, {.uint8 = d.mode}),
-        result("door delay", "uint8", {.uint8 = 7}, {.uint8 = d.delay}),
+        result("door control mode", uint8_t(CONTROLLED), d.mode),
+        result("door delay", uint8_t(7), d.delay),
     };
 
     return evaluate("get-door-control", rs);
