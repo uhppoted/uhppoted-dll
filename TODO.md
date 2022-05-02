@@ -3,6 +3,8 @@
 ### IN PROGRESS
 
 - [x] And now revert back to C++17 again
+- [ ] C#: OS specific DLL naming
+- [ ] Change all bind/broadcast/listen addresses to generic system IPs
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo
@@ -48,7 +50,6 @@
             - [ ] Python
             - [ ] CCL
 
-  - [ ] Change all bind/broadcast/listen addresses to generic system IPs
   - [ ] Constants for event types, reason, etc
   - [ ] C++ 
         - make doors/inputs in status bool

@@ -1,8 +1,17 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
-DLL=export DYLD_LIBRARY_PATH=$(LIB)
-WRAPPER=export PYTHONPATH=$(PYTHONPATH):..
 CMD=python examples.py 
+
+ifeq ($(OS),Windows_NT)
+	DLL=export DYLD_LIBRARY_PATH=$(LIB)
+else
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        DLL=export DYLD_LIBRARY_PATH=$(LIB)
+    else 
+        DLL=export LD_LIBRARY_PATH=$(LIB)
+    endif
+endif
 
 lib: 
 	cd ../../go && make all
@@ -14,95 +23,95 @@ format:
 build: format
 
 usage: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD)
+	$(GO) && $(DLL) && $(CMD)
 
 help: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) help
+	$(GO) && $(DLL) && $(CMD) help
 
 invalid: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) mystery-meat
+	$(GO) && $(DLL) && $(CMD) mystery-meat
 
 get-devices: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-devices
+	$(GO) && $(DLL) && $(CMD) get-devices
 
 get-device: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-device
+	$(GO) && $(DLL) && $(CMD) get-device
 
 set-address: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-address
+	$(GO) && $(DLL) && $(CMD) set-address
 
 get-status: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-status
+	$(GO) && $(DLL) && $(CMD) get-status
 
 get-time: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-time
+	$(GO) && $(DLL) && $(CMD) get-time
 
 set-time: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-time
+	$(GO) && $(DLL) && $(CMD) set-time
 
 get-listener: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-listener
+	$(GO) && $(DLL) && $(CMD) get-listener
 
 set-listener: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-listener
+	$(GO) && $(DLL) && $(CMD) set-listener
 
 get-door-control: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-door-control
+	$(GO) && $(DLL) && $(CMD) get-door-control
 
 set-door-control: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-door-control
+	$(GO) && $(DLL) && $(CMD) set-door-control
 
 open-door: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) open-door
+	$(GO) && $(DLL) && $(CMD) open-door
 
 get-cards: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-cards
+	$(GO) && $(DLL) && $(CMD) get-cards
 
 get-card: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-card
+	$(GO) && $(DLL) && $(CMD) get-card
 
 get-card-by-index: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-card-by-index
+	$(GO) && $(DLL) && $(CMD) get-card-by-index
 
 put-card: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) put-card
+	$(GO) && $(DLL) && $(CMD) put-card
 
 delete-card: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) delete-card
+	$(GO) && $(DLL) && $(CMD) delete-card
 
 delete-cards: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) delete-cards
+	$(GO) && $(DLL) && $(CMD) delete-cards
 
 get-event-index: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-event-index
+	$(GO) && $(DLL) && $(CMD) get-event-index
 
 set-event-index: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-event-index
+	$(GO) && $(DLL) && $(CMD) set-event-index
 
 get-event: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-event
+	$(GO) && $(DLL) && $(CMD) get-event
 
 record-special-events: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) record-special-events
+	$(GO) && $(DLL) && $(CMD) record-special-events
 
 get-time-profile: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) get-time-profile
+	$(GO) && $(DLL) && $(CMD) get-time-profile
 
 set-time-profile: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) set-time-profile
+	$(GO) && $(DLL) && $(CMD) set-time-profile
 
 clear-time-profiles: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) clear-time-profiles
+	$(GO) && $(DLL) && $(CMD) clear-time-profiles
 
 add-task: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) add-task
+	$(GO) && $(DLL) && $(CMD) add-task
 
 refresh-tasklist: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) refresh-tasklist
+	$(GO) && $(DLL) && $(CMD) refresh-tasklist
 
 clear-tasklist: build
-	$(GO) && $(DLL) && $(WRAPPER) && $(CMD) clear-tasklist
+	$(GO) && $(DLL) && $(CMD) clear-tasklist
 
 debug: build
-	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(WRAPPER) && $(CMD) get-status
+	$(GO) && $(DLL)/debug && $(CMD) get-status
 

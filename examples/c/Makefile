@@ -1,7 +1,19 @@
-LIB=../../lib
-BINDINGS=../../bindings/c
-CMD=./examples
 SRC=examples.c device.c cards.c events.c time_profiles.c tasks.c
+BINDINGS=../../bindings/c
+LIB=../../lib
+GO=GODEBUG=cgocheck=2
+CMD=./examples
+
+ifeq ($(OS),Windows_NT)
+	DLL=export DYLD_LIBRARY_PATH=$(LIB)
+else
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        DLL=export DYLD_LIBRARY_PATH=$(LIB)
+    else 
+        DLL=export LD_LIBRARY_PATH=$(LIB)
+    endif
+endif
 
 lib: 
 	cd ../../go && make all
@@ -15,96 +27,96 @@ build: format
 	clang -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 usage: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
+	$(GO) && $(DLL) && $(CMD)
 
 help: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) help
+	$(GO) && $(DLL) && $(CMD) help
 
 invalid: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) mystery-meat
+	$(GO) && $(DLL) && $(CMD) mystery-meat
 
 get-devices: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-devices
+	$(GO) && $(DLL) && $(CMD) get-devices
 
 get-device: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-device
+	$(GO) && $(DLL) && $(CMD) get-device
 
 set-address: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-address
+	$(GO) && $(DLL) && $(CMD) set-address
 
 get-status: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-status
+	$(GO) && $(DLL) && $(CMD) get-status
 
 get-time: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-time
+	$(GO) && $(DLL) && $(CMD) get-time
 
 set-time: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-time
+	$(GO) && $(DLL) && $(CMD) set-time
 
 get-listener: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-listener
+	$(GO) && $(DLL) && $(CMD) get-listener
 
 set-listener: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-listener
+	$(GO) && $(DLL) && $(CMD) set-listener
 
 get-door-control: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-door-control
+	$(GO) && $(DLL) && $(CMD) get-door-control
 
 set-door-control: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-door-control
+	$(GO) && $(DLL) && $(CMD) set-door-control
 
 open-door: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) open-door
+	$(GO) && $(DLL) && $(CMD) open-door
 
 get-cards: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-cards
+	$(GO) && $(DLL) && $(CMD) get-cards
 
 get-card: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-card
+	$(GO) && $(DLL) && $(CMD) get-card
 
 get-card-by-index: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-card-by-index
+	$(GO) && $(DLL) && $(CMD) get-card-by-index
 
 put-card: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) put-card
+	$(GO) && $(DLL) && $(CMD) put-card
 
 delete-card: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) delete-card
+	$(GO) && $(DLL) && $(CMD) delete-card
 
 delete-cards: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) delete-cards
+	$(GO) && $(DLL) && $(CMD) delete-cards
 
 get-event-index: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-event-index
+	$(GO) && $(DLL) && $(CMD) get-event-index
 
 set-event-index: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-event-index
+	$(GO) && $(DLL) && $(CMD) get-event-index
 
 get-event: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-event
+	$(GO) && $(DLL) && $(CMD) get-event
 
 record-special-events: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) record-special-events
+	$(GO) && $(DLL) && $(CMD) record-special-events
 
 get-time-profile: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-time-profile
+	$(GO) && $(DLL) && $(CMD) get-time-profile
 
 set-time-profile: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-time-profile
+	$(GO) && $(DLL) && $(CMD) set-time-profile
 
 clear-time-profiles: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) clear-time-profiles
+	$(GO) && $(DLL) && $(CMD) clear-time-profiles
 
 add-task: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) add-task
+	$(GO) && $(DLL) && $(CMD) add-task
 
 refresh-tasklist: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) refresh-tasklist
+	$(GO) && $(DLL) && $(CMD) refresh-tasklist
 
 clear-tasklist: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) clear-tasklist
+	$(GO) && $(DLL) && $(CMD) clear-tasklist
 
 debug: format
 	clang -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) clear-tasklist
+	$(GO) && $(DLL)/debug && $(CMD) clear-tasklist
 

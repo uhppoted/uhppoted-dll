@@ -1,7 +1,6 @@
 LIB=../../lib/tests
 GO=GODEBUG=cgocheck=2
-DLL=export DYLD_LIBRARY_PATH=$(LIB)
-WRAPPER=export PYTHONPATH=$(PYTHONPATH):..
+DLL=export DYLD_LIBRARY_PATH=$(LIB) && export LD_LIBRARY_PATH=$(LIB)
 CMD=$(GO) && $(DLL) && python tests.py 
 
 lib: 
