@@ -2,8 +2,16 @@
 
 ### IN PROGRESS
 
-- [x] C++/Linux
-      - `../../bindings/c++/include/../include/uhppoted.hpp:49:11: error: declaration of ‘event status::event’ ...`
+
+- [ ] C++/Linux
+      - [x] `../../bindings/c++/include/../include/uhppoted.hpp:49:11: error: declaration of ‘event status::event’ ...`
+      - [ ] ???
+```
+g++ -std=c++17 -Wall tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp -o tests  ../../bindings/c++/src/uhppoted.cpp -I../../bindings/c++/include -I../../lib/tests -lc++ -L../../lib/tests -luhppoted
+GODEBUG=cgocheck=2 &export LD_LIBRARY_PATH=../../lib/tests && ./tests
+
+ *** ERROR ��w~�U is not a valid UDP address:port
+```
 
 - [ ] OS specific DLL naming
       - [x] Go
