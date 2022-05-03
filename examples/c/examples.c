@@ -184,7 +184,7 @@ int main(int argc, char **argv) {
         int rc;
 
         if (strcmp(c.cmd, cmd) == 0) {
-            setup("192.168.1.100:0", "192.168.1.255:60000", "192.168.1.100:60001", 2500, true, &alpha, &beta, NULL);
+            setup("0.0.0.0:0", "255.255.255.255", "0.0.0.0:60001", 2500, true, &alpha, &beta, NULL);
             rc = c.fn(argc, argv);
             teardown();
 

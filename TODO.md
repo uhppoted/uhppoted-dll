@@ -2,12 +2,8 @@
 
 ### IN PROGRESS
 
-- [ ] C++/Linux
-```
-../../bindings/c++/include/../include/uhppoted.hpp:49:11: error: declaration of ‘event status::event’ changes meaning of ‘event’ [-fpermissive]
-   49 |     event event;
-      |           ^~~~~
-```
+- [x] C++/Linux
+      - `../../bindings/c++/include/../include/uhppoted.hpp:49:11: error: declaration of ‘event status::event’ ...`
 
 - [ ] OS specific DLL naming
       - [x] Go
@@ -18,7 +14,7 @@
       - [ ] CCL
 
 - [ ] Change all bind/broadcast/listen addresses to generic system IPs
-      - [ ] C
+      - [x] C
       - [ ] C++
       - [ ] C#
       - [x] Python
