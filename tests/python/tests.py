@@ -10,6 +10,9 @@ from functools import reduce
 sys.path.append('../../bindings/python')
 
 if 'Windows' in platform.system():
+    pwd = os.path.abspath('.')
+    os.add_dll_directory(pwd)
+
     dlldir = os.path.abspath('../../lib/tests')
     os.add_dll_directory(dlldir)
 

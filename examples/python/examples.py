@@ -10,7 +10,10 @@ import os
 sys.path.append('../../bindings/python')
 
 if 'Windows' in platform.system():
-    dlldir = os.path.abspath('../../lib/debug')
+    pwd = os.path.abspath('.')
+    os.add_dll_directory(pwd)
+    
+    dlldir = os.path.abspath('../../lib')
     os.add_dll_directory(dlldir)
 
 import uhppoted
