@@ -60,7 +60,7 @@ controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
 int main(int argc, char **argv) {
     bool ok = true;
-    char *cmd;
+    char *cmd = NULL;
 
     if (argc > 1) {
         cmd = argv[1];

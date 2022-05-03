@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "examples.h"
 #include "uhppoted.h"
 
 extern uint32_t DEVICE_ID;
@@ -29,22 +30,24 @@ int addTask(int argc, char **argv) {
         return -1;
     }
 
-    printf("\nadd-task\n");
-    printf("  ID:                   %u\n", deviceID);
-    printf("  task:                 %u\n", task.task);
-    printf("  door:                 %u\n", task.door);
-    printf("  enabled from:         %s\n", task.from);
-    printf("          to:           %s\n", task.to);
-    printf("  enabled on Monday:    %d\n", task.monday);
-    printf("             Tuesday:   %d\n", task.tuesday);
-    printf("             Wednesday: %d\n", task.wednesday);
-    printf("             Thursday:  %d\n", task.thursday);
-    printf("             Friday:    %d\n", task.friday);
-    printf("             Saturday:  %d\n", task.saturday);
-    printf("             Sunday:    %d\n", task.sunday);
-    printf("  at:                   %s\n", task.at);
-    printf("  cards:                %u\n", task.cards);
-    printf("\n");
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "task", .type = "uint8", .value.uint8 = task.task},
+        {.field = "door", .type = "uint8", .value.uint8 = task.door},
+        {.field = "enabled from", .type = "string", .value.string = task.from},
+        {.field = "        to", .type = "string", .value.string = task.to},
+        {.field = "enabled on Monday", .type = "bool", .value.boolean = task.monday},
+        {.field = "           Tuesday", .type = "bool", .value.boolean = task.tuesday},
+        {.field = "           Wednesday", .type = "bool", .value.boolean = task.wednesday},
+        {.field = "           Thursday", .type = "bool", .value.boolean = task.thursday},
+        {.field = "           Friday", .type = "bool", .value.boolean = task.friday},
+        {.field = "           Saturday", .type = "bool", .value.boolean = task.saturday},
+        {.field = "           Sunday", .type = "bool", .value.boolean = task.sunday},
+        {.field = "at", .type = "string", .value.string = task.at},
+        {.field = "cards", .type = "uint8", .value.uint8 = task.cards},
+    };
+
+    display("add-task", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }
@@ -57,9 +60,11 @@ int refreshTaskList(int argc, char **argv) {
         return -1;
     }
 
-    printf("\nrefresh-tasklist\n");
-    printf("  ID: %u\n", deviceID);
-    printf("\n");
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+    };
+
+    display("refresh_tasklist", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }
@@ -72,9 +77,11 @@ int clearTaskList(int argc, char **argv) {
         return -1;
     }
 
-    printf("\nclear-tasklist\n");
-    printf("  ID: %u\n", deviceID);
-    printf("\n");
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+    };
+
+    display("clear-tasklist", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }

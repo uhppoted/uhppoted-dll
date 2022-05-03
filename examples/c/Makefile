@@ -24,7 +24,7 @@ format: $(SRC)
 	clang-format -i $(BINDINGS)/include/*.h
 
 build: format 
-	clang -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
+	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 usage: build
 	$(GO) && $(DLL) && $(CMD)
@@ -118,5 +118,5 @@ clear-tasklist: build
 
 debug: format
 	clang -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
-	$(GO) && $(DLL)/debug && $(CMD) clear-tasklist
+	$(GO) && $(DLL)/debug && $(CMD) get-card-by-index
 

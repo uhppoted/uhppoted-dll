@@ -226,3 +226,29 @@ void help() {
 
     printf("\n");
 }
+
+void display(const char *tag, int N, field fields[]) {
+    int w = 0;
+    for (int i = 0; i < N; i++) {
+        if (strlen(fields[i].field) > w) {
+            w = strlen(fields[i].field);
+        }
+    }
+
+    printf("\n%s\n", tag);
+    for (int i = 0; i < N; i++) {
+        field f = fields[i];
+        if (strcmp(f.type, "uint8") == 0) {
+            printf("  %-*s  %u\n", w, f.field, f.value.uint8);
+        } else if (strcmp(f.type, "uint32") == 0) {
+            printf("  %-*s  %u\n", w, f.field, f.value.uint32);
+        } else if (strcmp(f.type, "bool") == 0) {
+            printf("  %-*s  %s\n", w, f.field, f.value.boolean ? "Y" : "N");
+        } else if (strcmp(f.type, "string") == 0) {
+            printf("  %-*s  %s\n", w, f.field, f.value.string);
+        } else {
+            printf("  **** ERROR  unhandled field type (%s)\n", f.type);
+        }
+    }
+    printf("\n");
+}

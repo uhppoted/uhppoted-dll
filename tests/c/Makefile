@@ -13,7 +13,7 @@ format: $(SRC)
 	clang-format -i $(BINDINGS)/include/*.h
 
 build: format
-	clang -o tests $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
+	gcc -Wall -o tests $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 usage: build
 	$(CMD) help

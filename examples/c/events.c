@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "examples.h"
 #include "uhppoted.h"
 
 extern uint32_t DEVICE_ID;
@@ -17,10 +18,12 @@ int getEventIndex(int argc, char **argv) {
         return -1;
     }
 
-    printf("\nget-event-index\n");
-    printf("  ID:    %u\n", deviceID);
-    printf("  index: %d\n", index);
-    printf("\n");
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "index", .type = "uint32", .value.uint32 = index},
+    };
+
+    display("get-event=index", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }
@@ -34,10 +37,12 @@ int setEventIndex(int argc, char **argv) {
         return -1;
     }
 
-    printf("\nset-event-index\n");
-    printf("  ID:    %u\n", deviceID);
-    printf("  index: %d\n", index);
-    printf("\n");
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "index", .type = "uint32", .value.uint32 = index},
+    };
+
+    display("set-event-index", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }
@@ -52,16 +57,18 @@ int getEvent(int argc, char **argv) {
         return -1;
     }
 
-    printf("\nget-event\n");
-    printf("  ID:                %u\n", deviceID);
-    printf("  event index:       %u\n", event.index);
-    printf("        timestamp:   %s\n", event.timestamp);
-    printf("        type:        %u\n", event.eventType);
-    printf("        granted:     %d\n", event.granted);
-    printf("        direction:   %u\n", event.direction);
-    printf("        card number: %u\n", event.card);
-    printf("        reason:      %u\n", event.reason);
-    printf("\n");
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "event index", .type = "uint32", .value.uint32 = event.index},
+        {.field = "      timestamp", .type = "string", .value.string = event.timestamp},
+        {.field = "      type", .type = "uint8", .value.uint8 = event.eventType},
+        {.field = "      granted", .type = "bool", .value.boolean = event.granted},
+        {.field = "      direction", .type = "uint8", .value.uint8 = event.direction},
+        {.field = "      card number", .type = "uint32", .value.uint32 = event.card},
+        {.field = "      reason", .type = "uint8", .value.uint8 = event.reason},
+    };
+
+    display("get-event", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }
@@ -75,10 +82,12 @@ int recordSpecialEvents(int argc, char **argv) {
         return -1;
     }
 
-    printf("\nrecord-special-events\n");
-    printf("  ID:      %u\n", deviceID);
-    printf("  enabled: %d\n", enabled);
-    printf("\n");
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "enabled", .type = "bool", .value.boolean = enabled},
+    };
+
+    display("record-special-events", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }

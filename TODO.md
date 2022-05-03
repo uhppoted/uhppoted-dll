@@ -25,11 +25,10 @@
       - func C.CBytes([]byte) unsafe.Pointer
       - func C.GoStringN(*C.char, C.int) string
       - func C.GoBytes(unsafe.Pointer, C.int) []byte
-
-- [ ] Pass string arguments rather than const char *
+      - (?) Pass string arguments rather than const char *
 
 - [ ] Commonalize examples output
-      - [ ] C
+      - [x] C
       - [ ] C++
       - [ ] C#
       - [x] Python
@@ -51,13 +50,13 @@
       - [ ] LIB_PATH/DYLIB_PATH
 
 - [ ] Github workflow
-      - [ ] examples
       - [ ] tests
             - [x] C
             - [x] C++
             - [ ] C#
             - [ ] Python
             - [ ] CCL
+      - [ ] examples
 
   - [ ] Constants for event types, reason, etc
   - [ ] C++ 
