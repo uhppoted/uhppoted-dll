@@ -5,6 +5,8 @@ SRC=tests.c device.c cards.c events.c time_profiles.c tasks.c
 lib: 
 	cd ../../go && make all
 
+.PHONY: tests
+
 format: $(SRC)
 	clang-format -i *.c
 	clang-format -i $(BINDINGS)/src/*.c
@@ -103,6 +105,6 @@ clear-tasklist: build
 all: build
 	$(CMD) all
 
-test: build
+tests: build
 	$(CMD)
 

@@ -56,9 +56,10 @@ tests:
 	make -C ./tests/ccl    -f Makefile tests
 
 build-all: build
-	make -C ./tests/c -f Makefile test
+	make -C ./tests/c   -f Makefile tests
+	make -C ./tests/c++ -f Makefile tests
 
-build-cpp: build
-	make -C ./tests/c++ -f Makefile build
+build-debug: build
+	make -C ./tests/c++ -f Makefile test
 
 

@@ -58,7 +58,7 @@
       - [ ] examples
       - [ ] tests
             - [x] C
-            - [ ] C++
+            - [x] C++
             - [ ] C#
             - [ ] Python
             - [ ] CCL
