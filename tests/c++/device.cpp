@@ -66,14 +66,14 @@ bool getStatus(uhppoted &u) {
         result("system error", uint8_t(0x56), s.syserror),
         result("special info", uint8_t(253), s.info),
         result("sequence number", uint32_t(9876), s.seqno),
-        result("event timestamp", string("2022-01-02 12:34:56"), s.event.timestamp),
-        result("event index", uint32_t(135), s.event.index),
-        result("event type", uint8_t(6), s.event.eventType),
-        result("event granted", true, s.event.granted),
-        result("event door", uint8_t(3), s.event.door),
-        result("event direction", uint8_t(1), s.event.direction),
-        result("event card", uint32_t(8100023), s.event.card),
-        result("event reason", uint8_t(21), s.event.reason),
+        result("event timestamp", string("2022-01-02 12:34:56"), s.evt.timestamp),
+        result("event index", uint32_t(135), s.evt.index),
+        result("event type", uint8_t(6), s.evt.eventType),
+        result("event granted", true, s.evt.granted),
+        result("event door", uint8_t(3), s.evt.door),
+        result("event direction", uint8_t(1), s.evt.direction),
+        result("event card", uint32_t(8100023), s.evt.card),
+        result("event reason", uint8_t(21), s.evt.reason),
     };
 
     return evaluate("get-status", rs);

@@ -1,10 +1,11 @@
 SRC=examples.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp
 BINDINGS=../../bindings/c++
 LIB=../../lib
+GO=GODEBUG=cgocheck=2 
 CMD=./examples
 
 ifeq ($(OS),Windows_NT)
-	DLL=export LD_LIBRARY_PATH=$(LIB)
+	DLL=set PATH=$(LIB)
 else
     UNAME = $(shell uname -s)
     ifeq ($(UNAME),Darwin)
@@ -13,6 +14,7 @@ else
         DLL=export LD_LIBRARY_PATH=$(LIB)
     endif
 endif
+
 
 lib: 
 	cd ../../go && make all
@@ -23,98 +25,98 @@ format: $(SRC)
 	clang-format -i $(BINDINGS)/include/*.hpp
 
 build: format
-	clang -std=c++17 -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
+	g++ -std=c++17 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
 
 usage: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD)
+	$(GO) && $(DLL) && $(CMD)
 
 help: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) help
+	$(GO) && $(DLL) && $(CMD) help
 
 invalid: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) mystery-meat
+	$(GO) && $(DLL) && $(CMD) mystery-meat
 
 get-devices: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-devices
+	$(GO) && $(DLL) && $(CMD) get-devices
 
 get-device: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-device
+	$(GO) && $(DLL) && $(CMD) get-device
 
 set-address: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) set-address
+	$(GO) && $(DLL) && $(CMD) set-address
 
 get-status: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-status
+	$(GO) && $(DLL) && $(CMD) get-status
 
 get-time: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-time
+	$(GO) && $(DLL) && $(CMD) get-time
 
 set-time: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) set-time
+	$(GO) && $(DLL) && $(CMD) set-time
 
 get-listener: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-listener
+	$(GO) && $(DLL) && $(CMD) get-listener
 
 set-listener: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) set-listener
+	$(GO) && $(DLL) && $(CMD) set-listener
 
 get-door-control: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-door-control
+	$(GO) && $(DLL) && $(CMD) get-door-control
 
 set-door-control: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) set-door-control
+	$(GO) && $(DLL) && $(CMD) set-door-control
 
 open-door: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) open-door
+	$(GO) && $(DLL) && $(CMD) open-door
 
 get-cards: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-cards
+	$(GO) && $(DLL) && $(CMD) get-cards
 
 get-card: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-card
+	$(GO) && $(DLL) && $(CMD) get-card
 
 get-card-by-index: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-card-by-index
+	$(GO) && $(DLL) && $(CMD) get-card-by-index
 
 put-card: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) put-card
+	$(GO) && $(DLL) && $(CMD) put-card
 
 delete-card: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) delete-card
+	$(GO) && $(DLL) && $(CMD) delete-card
 
 delete-cards: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) delete-cards
+	$(GO) && $(DLL) && $(CMD) delete-cards
 
 get-event-index: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-event-index
+	$(GO) && $(DLL) && $(CMD) get-event-index
 
 set-event-index: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) set-event-index
+	$(GO) && $(DLL) && $(CMD) set-event-index
 
 get-event: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-event
+	$(GO) && $(DLL) && $(CMD) get-event
 
 record-special-events: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) record-special-events
+	$(GO) && $(DLL) && $(CMD) record-special-events
 
 get-time-profile: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) get-time-profile
+	$(GO) && $(DLL) && $(CMD) get-time-profile
 
 set-time-profile: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) set-time-profile
+	$(GO) && $(DLL) && $(CMD) set-time-profile
 
 clear-time-profiles: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) clear-time-profiles
+	$(GO) && $(DLL) && $(CMD) clear-time-profiles
 
 add-task: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) add-task
+	$(GO) && $(DLL) && $(CMD) add-task
 
 refresh-tasklist: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) refresh-tasklist
+	$(GO) && $(DLL) && $(CMD) refresh-tasklist
 
 clear-tasklist: build
-	GODEBUG=cgocheck=2 && $(DLL) && $(CMD) clear-tasklist
+	$(GO) && $(DLL) && $(CMD) clear-tasklist
 
 debug: format
-	clang -std=c++11  -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
-	GODEBUG=cgocheck=2 && $(DLL)/debug && $(CMD) clear-tasklist
+	clang -std=c++11 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
+	$(GO) && $(DLL)/debug && $(CMD) clear-tasklist

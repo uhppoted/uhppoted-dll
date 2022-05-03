@@ -183,14 +183,14 @@ status uhppoted::get_status(unsigned id) {
     s.info = status.info;
 
     if (status.event) {
-        s.event.timestamp = status.event->timestamp;
-        s.event.index = status.event->index;
-        s.event.eventType = status.event->eventType;
-        s.event.granted = status.event->granted;
-        s.event.door = status.event->door;
-        s.event.direction = status.event->direction;
-        s.event.card = status.event->card;
-        s.event.reason = status.event->reason;
+        s.evt.timestamp = status.event->timestamp;
+        s.evt.index = status.event->index;
+        s.evt.eventType = status.event->eventType;
+        s.evt.granted = status.event->granted;
+        s.evt.door = status.event->door;
+        s.evt.direction = status.event->direction;
+        s.evt.card = status.event->card;
+        s.evt.reason = status.event->reason;
     }
 
     free(status.sysdatetime);

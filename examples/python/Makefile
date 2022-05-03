@@ -3,7 +3,7 @@ GO=GODEBUG=cgocheck=2
 CMD=python examples.py 
 
 ifeq ($(OS),Windows_NT)
-	DLL=export DYLD_LIBRARY_PATH=$(LIB)
+	DLL=set PATH=$(LIB)
 else
     UNAME = $(shell uname -s)
     ifeq ($(UNAME),Darwin)

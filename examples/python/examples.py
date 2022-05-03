@@ -12,7 +12,7 @@ sys.path.append('../../bindings/python')
 if 'Windows' in platform.system():
     pwd = os.path.abspath('.')
     os.add_dll_directory(pwd)
-    
+
     dlldir = os.path.abspath('../../lib')
     os.add_dll_directory(dlldir)
 

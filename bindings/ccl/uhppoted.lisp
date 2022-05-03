@@ -4,7 +4,7 @@
   (native-translated-namestring 
     (make-pathname :directory (getenv "DYLD_LIBRARY_PATH") 
 				   :name "libuhppoted" 
-				   :type "so")))
+				   :type "dylib")))
 
 (defconstant NORMALLY-OPEN   1)
 (defconstant NORMALLY-CLOSED 2)

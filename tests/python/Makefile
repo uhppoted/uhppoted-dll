@@ -1,7 +1,18 @@
 LIB=../../lib/tests
 GO=GODEBUG=cgocheck=2
-DLL=export DYLD_LIBRARY_PATH=$(LIB) && export LD_LIBRARY_PATH=$(LIB)
 CMD=$(GO) && $(DLL) && python tests.py 
+
+ifeq ($(OS),Windows_NT)
+	DLL=set PATH=$(LIB)
+else
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        DLL=export DYLD_LIBRARY_PATH=$(LIB)
+    else 
+        DLL=export LD_LIBRARY_PATH=$(LIB)
+    endif
+endif
+
 
 lib: 
 	cd ../../go && make all

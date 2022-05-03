@@ -46,7 +46,7 @@ typedef struct status {
     uint8_t syserror;
     uint8_t info;
     uint32_t seqno;
-    event event;
+    event evt;
 } status;
 
 typedef struct door_control {

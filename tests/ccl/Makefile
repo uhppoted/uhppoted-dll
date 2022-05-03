@@ -4,6 +4,7 @@ CMD=./tests
 
 .PHONY: build
 .PHONY: debug
+.PHONY: tests
 
 lib: 
 	cd ../../go && make all
@@ -101,7 +102,7 @@ clear-tasklist: build
 all: build
 	$(CMD) all
 
-test: build
+tests: build
 	$(CMD)
 
 debug: 

@@ -2,9 +2,27 @@
 
 ### IN PROGRESS
 
-- [x] And now revert back to C++17 again
-- [ ] C#: OS specific DLL naming
+- [ ] C++/Linux
+```
+../../bindings/c++/include/../include/uhppoted.hpp:49:11: error: declaration of ‘event status::event’ changes meaning of ‘event’ [-fpermissive]
+   49 |     event event;
+      |           ^~~~~
+```
+
+- [ ] OS specific DLL naming
+      - [x] Go
+      - [ ] C
+      - [ ] C++
+      - [ ] C#
+      - [x] Python
+      - [ ] CCL
+
 - [ ] Change all bind/broadcast/listen addresses to generic system IPs
+      - [ ] C
+      - [ ] C++
+      - [ ] C#
+      - [x] Python
+      - [ ] CCL
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo
@@ -41,11 +59,6 @@
       - [ ] tests
             - [x] C
             - [ ] C++
-```
-../../bindings/c++/include/../include/uhppoted.hpp:49:11: error: declaration of ‘event status::event’ changes meaning of ‘event’ [-fpermissive]
-   49 |     event event;
-      |           ^~~~~
-```
             - [ ] C#
             - [ ] Python
             - [ ] CCL
