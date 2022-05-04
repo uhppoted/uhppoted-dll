@@ -353,66 +353,23 @@ func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool) *C.
 	return nil
 }
 
-// NTS: for some utterly bizarre reason cgo will not compile if getTimeProfile or setTimeProfile is in
-//      a different file unless the C.struct_TimeProfile is packed/unpacked in main.go. It compiles
-//      just fine if those functions are in e.g. cards.go.
 //export GetTimeProfile
 func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8) *C.char {
-	if profile == nil {
-		return C.CString("invalid argument (profile) - expected valid pointer")
-	}
-
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if p, err := getTimeProfile(uu, deviceID, profileID); err != nil {
+	} else if err := getTimeProfile(uu, profile, deviceID, profileID); err != nil {
 		return C.CString(err.Error())
-	} else if p == nil {
-		return C.CString(fmt.Sprintf("%v: no response to get-time-profile %v", deviceID, profileID))
-	} else {
-		profile.ID = C.uchar(p.ID)
-		profile.linked = C.uchar(p.LinkedProfileID)
-		profile.from = C.CString(fmt.Sprintf("%v", p.From))
-		profile.to = C.CString(fmt.Sprintf("%v", p.To))
-
-		profile.monday = cbool(p.Weekdays[time.Monday])
-		profile.tuesday = cbool(p.Weekdays[time.Tuesday])
-		profile.wednesday = cbool(p.Weekdays[time.Wednesday])
-		profile.thursday = cbool(p.Weekdays[time.Thursday])
-		profile.friday = cbool(p.Weekdays[time.Friday])
-		profile.saturday = cbool(p.Weekdays[time.Saturday])
-		profile.sunday = cbool(p.Weekdays[time.Sunday])
-
-		profile.segment1start = C.CString(fmt.Sprintf("%v", p.Segments[1].Start))
-		profile.segment1end = C.CString(fmt.Sprintf("%v", p.Segments[1].End))
-		profile.segment2start = C.CString(fmt.Sprintf("%v", p.Segments[2].Start))
-		profile.segment2end = C.CString(fmt.Sprintf("%v", p.Segments[2].End))
-		profile.segment3start = C.CString(fmt.Sprintf("%v", p.Segments[3].Start))
-		profile.segment3end = C.CString(fmt.Sprintf("%v", p.Segments[3].End))
-
-		return nil
 	}
+
+	return nil
 }
 
-// NTS: for some utterly bizarre reason cgo will not compile if getTimeProfile or setTimeProfile is in
-//      a different file unless the C.struct_TimeProfile is packed/unpacked in main.go. It compiles
-//      just fine if those functions are in e.g. cards.go.
-//
 //export SetTimeProfile
 func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) *C.char {
-	if profile == nil {
-		return C.CString("invalid argument (profile) - expected valid pointer")
-	}
-
 	uu, err := makeUHPPOTE(u)
 	if err != nil {
 		return C.CString(err.Error())
-	}
-
-	if p, err := makeTimeProfile(profile); err != nil {
-		return C.CString(err.Error())
-	} else if p == nil {
-		return C.CString(fmt.Sprintf("invalid time profile (%v)", p))
-	} else if err := setTimeProfile(uu, deviceID, *p); err != nil {
+	} else if err := setTimeProfile(uu, deviceID, profile); err != nil {
 		return C.CString(err.Error())
 	}
 

@@ -1,3 +1,6 @@
+SRC=go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
+DEBUG=go/devices_debug.go go/cards_debug.go go/events_debug.go go/time_profiles_debug.go go/tasks_debug.go go/main.go 
+TESTS=go/devices_tests.go go/cards_tests.go go/events_tests.go go/time_profiles_tests.go go/tasks_tests.go go/main.go 
 LIB=./lib
 
 ifeq ($(OS),Windows_NT)
@@ -19,9 +22,9 @@ endif
 
 build: 
 	go fmt ./go/...
-	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL)       ./...
-	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./...
-	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./...
+	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
+	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
+	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
 
 c: ./examples/c/example ./tests/c/test
 	make -C ./examples/c -f Makefile build
@@ -59,6 +62,6 @@ build-all: build
 	make -C ./tests/c   -f Makefile tests
 
 build-debug: build
-	make -C ./tests/c++ -f Makefile test
+	make -C ./tests/c++ -f Makefile tests
 
 

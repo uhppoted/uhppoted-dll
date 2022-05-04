@@ -2,9 +2,6 @@ LIB=../../lib/tests
 BINDINGS=../../bindings/c\#
 CMD=mono tests.exe
 
-lib: 
-	cd ../../go && make all
-
 format:
 	clang-format -i *.cs
 	clang-format -i $(BINDINGS)/*.cs

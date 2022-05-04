@@ -78,16 +78,16 @@ void getStatus(uhppoted &u, int argc, char **argv) {
     cout << "  info:      " << showbase << hex << static_cast<int>(s.info)
          << dec << endl;
     cout << endl;
-    cout << "  event timestamp: " << s.event.timestamp << endl;
-    cout << "        index:     " << s.event.index << endl;
-    cout << "        type:      " << static_cast<int>(s.event.eventType)
+    cout << "  event timestamp: " << s.evt.timestamp << endl;
+    cout << "        index:     " << s.evt.index << endl;
+    cout << "        type:      " << static_cast<int>(s.evt.eventType)
          << endl;
-    cout << "        granted:   " << s.event.granted << endl;
-    cout << "        door:      " << static_cast<int>(s.event.door) << endl;
-    cout << "        direction: " << static_cast<int>(s.event.direction)
+    cout << "        granted:   " << s.evt.granted << endl;
+    cout << "        door:      " << static_cast<int>(s.evt.door) << endl;
+    cout << "        direction: " << static_cast<int>(s.evt.direction)
          << endl;
-    cout << "        card:      " << s.event.card << endl;
-    cout << "        reason:    " << static_cast<int>(s.event.reason) << endl;
+    cout << "        card:      " << s.evt.card << endl;
+    cout << "        reason:    " << static_cast<int>(s.evt.reason) << endl;
     cout << endl;
 }
 

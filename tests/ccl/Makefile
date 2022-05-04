@@ -6,9 +6,6 @@ CMD=./tests
 .PHONY: debug
 .PHONY: tests
 
-lib: 
-	cd ../../go && make all
-
 build: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(make-app)' 
 

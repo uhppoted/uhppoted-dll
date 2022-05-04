@@ -13,9 +13,6 @@ else
     endif
 endif
 
-lib: 
-	cd ../../go && make all
-
 format:
 	yapf -ri .
 	yapf -ri ../../bindings/python

@@ -17,9 +17,6 @@ endif
 
 .PHONY: build-gcc
 	
-lib: 
-	cd ../../go && make all
-
 format: $(SRC)
 	clang-format -i *.cpp
 	clang-format -i *.hpp

@@ -15,9 +15,6 @@ else
     endif
 endif
 
-lib: 
-	cd ../../go && make all
-
 format: $(SRC)
 	clang-format -i *.c
 	clang-format -i $(BINDINGS)/src/*.c

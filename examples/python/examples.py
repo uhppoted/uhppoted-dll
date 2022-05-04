@@ -565,7 +565,7 @@ def record_special_events(u, args):
 
 def get_time_profile(u, args):
     device_id = args.controller
-    profile_id = args.time_profile_id
+    profile_id = args.time_profile
 
     profile = u.get_time_profile(device_id, profile_id)
 
@@ -593,7 +593,7 @@ def get_time_profile(u, args):
 
 def set_time_profile(u, args):
     device_id = args.controller
-    profile_id = args.time_profile_id
+    profile_id = args.time_profile
     profile = uhppoted.TimeProfile(profile_id, 71, "2022-02-01", "2022-06-30", True, False, True,
                                    True, False, False, True, "08:30", "11:30", "", "", "", "18:00")
 
