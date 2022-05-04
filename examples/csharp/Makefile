@@ -1,6 +1,6 @@
-LIB=../../lib/tests
-BINDINGS=../../bindings/c\#
-CMD=mono tests.exe
+LIB=../../lib
+BINDINGS=../../bindings/csharp
+CMD=mono examples.exe
 
 format:
 	clang-format -i *.cs
@@ -11,9 +11,12 @@ format-dotnet:
 	dotnet format --include $(BINDINGS)/*.cs --folder
 
 build: format
-	csc $(BINDINGS)/uhppoted.cs tests.cs
+	csc $(BINDINGS)/uhppoted.cs examples.cs
 
 usage: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
+
+help: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) help
 
 invalid: build
@@ -100,9 +103,5 @@ refresh-tasklist: build
 clear-tasklist: build
 	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) clear-tasklist
 
-all: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) all
-
-tests: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
-
+debug: build
+	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) clear-tasklist

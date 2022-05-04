@@ -16,6 +16,7 @@ endif
 
 .PHONY: python
 .PHONY: cpp
+.PHONY: csharp
 .PHONY: ccl
 .PHONY: examples
 .PHONY: tests
@@ -34,9 +35,9 @@ cpp:
 	make -C ./examples/c++ -f Makefile build
 	make -C ./tests/c++    -f Makefile build
 
-csharp: ./examples/c#/example.exe ./tests/c#/test.exe
-	make -C ./examples/c# -f Makefile build
-	make -C ./tests/c#    -f Makefile build
+csharp: 
+	make -C ./examples/csharp -f Makefile build
+	make -C ./tests/csharp    -f Makefile build
 
 python: 
 	make -C ./examples/python -f Makefile build
@@ -47,14 +48,14 @@ ccl:
 examples:
 	make -C ./examples/c      -f Makefile build
 	make -C ./examples/c++    -f Makefile build
-	make -C ./examples/c#     -f Makefile build
+	make -C ./examples/csharp -f Makefile build
 	make -C ./examples/python -f Makefile build
 	make -C ./examples/ccl    -f Makefile build
 
 tests: 
 	make -C ./tests/c      -f Makefile tests
 	make -C ./tests/c++    -f Makefile tests
-	make -C ./tests/c#     -f Makefile tests
+	make -C ./tests/csharp -f Makefile tests
 	make -C ./tests/python -f Makefile tests
 	make -C ./tests/ccl    -f Makefile tests
 

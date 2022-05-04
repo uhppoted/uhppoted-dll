@@ -16,7 +16,7 @@ tests.h:77:13: note: in a call to function ‘evaluate’
  *** ERROR ��w~�U is not a valid UDP address:port
 ```
 
-- [ ] Rename c# to csharp (confusing with # prompt on Ubuntu)
+- [x] Rename c# to csharp (confusing with # prompt on Ubuntu)
 
 - [ ] OS specific DLL naming
       - [x] Go
