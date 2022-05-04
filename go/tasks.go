@@ -6,16 +6,25 @@ import (
 	"C"
 	"fmt"
 
-	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task types.Task) error {
-	ok, err := uu.AddTask(deviceID, task)
+func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task *C.struct_Task) error {
+	if task == nil {
+		return fmt.Errorf("invalid argument (task) - expected valid pointer")
+	}
+
+	t, err := makeTask(task)
 	if err != nil {
 		return err
+	} else if t == nil {
+		return fmt.Errorf("invalid task (%v)", t)
+	}
+
+	if ok, err := uu.AddTask(deviceID, *t); err != nil {
+		return err
 	} else if !ok {
-		return fmt.Errorf("%v: add-task failed for %v", deviceID, task.Task)
+		return fmt.Errorf("%v: add-task failed for %v", deviceID, t.Task)
 	}
 
 	return nil

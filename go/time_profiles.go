@@ -57,8 +57,7 @@ func setTimeProfile(uu uhppote.IUHPPOTE, deviceID uint32, profile *C.struct_Time
 		return fmt.Errorf("invalid time profile (%v)", p)
 	}
 
-	ok, err := uu.SetTimeProfile(deviceID, *p)
-	if err != nil {
+	if ok, err := uu.SetTimeProfile(deviceID, *p); err != nil {
 		return err
 	} else if !ok {
 		return fmt.Errorf("%v: set-time-profile failed for %v", deviceID, profile.ID)

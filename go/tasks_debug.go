@@ -7,27 +7,37 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task types.Task) error {
+func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task *C.struct_Task) error {
+	if task == nil {
+		return fmt.Errorf("invalid argument (task) - expected valid pointer")
+	}
+
+	t, err := makeTask(task)
+	if err != nil {
+		return err
+	} else if t == nil {
+		return fmt.Errorf("invalid task (%v)", t)
+	}
+
 	if DEBUG {
 		fmt.Printf(">>> add-task\n")
 		fmt.Printf("    ID:                   %v\n", deviceID)
-		fmt.Printf("    task:                 %v\n", task.Task)
-		fmt.Printf("    door:                 %v\n", task.Door)
-		fmt.Printf("    enabled from:         %v\n", task.From)
-		fmt.Printf("            to:           %v\n", task.To)
-		fmt.Printf("    enabled on Monday:    %v\n", task.Weekdays[time.Monday])
-		fmt.Printf("               Tuesday:   %v\n", task.Weekdays[time.Tuesday])
-		fmt.Printf("               Wednesday: %v\n", task.Weekdays[time.Wednesday])
-		fmt.Printf("               Thursday:  %v\n", task.Weekdays[time.Thursday])
-		fmt.Printf("               Friday:    %v\n", task.Weekdays[time.Friday])
-		fmt.Printf("               Saturday:  %v\n", task.Weekdays[time.Saturday])
-		fmt.Printf("               Sunday:    %v\n", task.Weekdays[time.Sunday])
-		fmt.Printf("   run at:                %v\n", task.Start)
-		fmt.Printf("   cards:                 %v\n", task.Cards)
+		fmt.Printf("    task:                 %v\n", t.Task)
+		fmt.Printf("    door:                 %v\n", t.Door)
+		fmt.Printf("    enabled from:         %v\n", t.From)
+		fmt.Printf("            to:           %v\n", t.To)
+		fmt.Printf("    enabled on Monday:    %v\n", t.Weekdays[time.Monday])
+		fmt.Printf("               Tuesday:   %v\n", t.Weekdays[time.Tuesday])
+		fmt.Printf("               Wednesday: %v\n", t.Weekdays[time.Wednesday])
+		fmt.Printf("               Thursday:  %v\n", t.Weekdays[time.Thursday])
+		fmt.Printf("               Friday:    %v\n", t.Weekdays[time.Friday])
+		fmt.Printf("               Saturday:  %v\n", t.Weekdays[time.Saturday])
+		fmt.Printf("               Sunday:    %v\n", t.Weekdays[time.Sunday])
+		fmt.Printf("   run at:                %v\n", t.Start)
+		fmt.Printf("   cards:                 %v\n", t.Cards)
 		fmt.Println()
 	}
 

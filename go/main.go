@@ -366,8 +366,7 @@ func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID
 
 //export SetTimeProfile
 func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) *C.char {
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
+	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else if err := setTimeProfile(uu, deviceID, profile); err != nil {
 		return C.CString(err.Error())
@@ -389,20 +388,9 @@ func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
 
 //export AddTask
 func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task) *C.char {
-	if task == nil {
-		return C.CString("invalid argument (task) - expected valid pointer")
-	}
-
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
+	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	}
-
-	if t, err := makeTask(task); err != nil {
-		return C.CString(err.Error())
-	} else if t == nil {
-		return C.CString(fmt.Sprintf("invalid task (%v)", t))
-	} else if err := addTask(uu, deviceID, *t); err != nil {
+	} else if err := addTask(uu, deviceID, task); err != nil {
 		return C.CString(err.Error())
 	}
 
