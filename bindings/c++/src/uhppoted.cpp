@@ -26,9 +26,9 @@ uhppoted::uhppoted() { u = NULL; }
  * - debug:       false
  *
  */
-uhppoted::uhppoted(const string &bind, const string &broadcast,
-                   const string &listen, int timeout,
-                   const vector<controller> &controllers, bool debug) : uhppoted() {
+uhppoted::uhppoted(const string bind, const string broadcast,
+                   const string listen, int timeout,
+                   const vector<controller> controllers, bool debug) : uhppoted() {
     if ((u = new UHPPOTE) != NULL) {
         u->bind = bind.c_str();
         u->broadcast = broadcast.c_str();

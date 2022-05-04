@@ -187,7 +187,7 @@ int main(int argc, char **argv) {
     }
 
     try {
-        uhppoted u("192.168.1.100", "192.168.1.255:60000", "192.168.1.100:60001", 2500, {ALPHA, BETA}, true);
+        uhppoted u("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, {ALPHA, BETA}, true);
         it->fn(u, argc, argv);
     } catch (const exception &e) {
         cerr << endl

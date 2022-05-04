@@ -68,7 +68,7 @@ int main(int argc, char **argv) {
 
     vector<controller> controllers = {ALPHA, BETA};
 
-    uhppoted u("192.168.1.100", "192.168.1.255:60000", "192.168.1.100:60001", 2500, controllers, true);
+    uhppoted u("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, true);
 
     try {
         if (cmd == "help") {

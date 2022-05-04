@@ -100,9 +100,9 @@ typedef struct task {
 class uhppoted {
   public:
     uhppoted();
-    uhppoted(const std::string &bind, const std::string &broadcast,
-             const std::string &listen, int timeout,
-             const std::vector<controller> &controllers, bool debug);
+    uhppoted(const std::string bind, const std::string broadcast,
+             const std::string listen, int timeout,
+             const std::vector<controller> controllers, bool debug);
     virtual ~uhppoted();
 
   public:

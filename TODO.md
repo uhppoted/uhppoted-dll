@@ -2,15 +2,21 @@
 
 ### IN PROGRESS
 
-
-- [ ] C++/Linux
-      - [ ] ???
+- [ ] C/Ubuntu
 ```
-g++ -std=c++17 -Wall tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp -o tests  ../../bindings/c++/src/uhppoted.cpp -I../../bindings/c++/include -I../../lib/tests -lc++ -L../../lib/tests -luhppoted
-GODEBUG=cgocheck=2 &export LD_LIBRARY_PATH=../../lib/tests && ./tests
+tasks.c:54:12: note: referencing argument 3 of type ‘const result *’
+In file included from tasks.c:5:
+tests.h:77:13: note: in a call to function ‘evaluate’
+   77 | extern bool evaluate(const char *, int, const result[]);
+      |             ^~~~~~~~
+```
 
+- [x] C++/Ubuntu
+```
  *** ERROR ��w~�U is not a valid UDP address:port
 ```
+
+- [ ] Rename c# to csharp (confusing with # prompt on Ubuntu)
 
 - [ ] OS specific DLL naming
       - [x] Go
@@ -22,7 +28,7 @@ GODEBUG=cgocheck=2 &export LD_LIBRARY_PATH=../../lib/tests && ./tests
 
 - [ ] Change all bind/broadcast/listen addresses to generic system IPs
       - [x] C
-      - [ ] C++
+      - [x] C++
       - [ ] C#
       - [x] Python
       - [ ] CCL

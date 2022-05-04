@@ -24,7 +24,7 @@ format: $(SRC)
 	clang-format -i $(BINDINGS)/include/*.hpp
 
 build: format
-	g++ -std=c++17 -Wall $(SRC) -o tests  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -lc++ -L$(LIB) -luhppoted
+	g++ -std=c++17 -Wall $(SRC) -o tests  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 usage: build
 	$(GO) &$(DLL) && $(CMD) help
