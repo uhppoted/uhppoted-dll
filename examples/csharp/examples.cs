@@ -132,7 +132,7 @@ public class examples {
 
             foreach (command c in commands) {
                 if (c.cmd == cmd) {
-                    Uhppoted u = new Uhppoted("192.168.1.100", "192.168.1.100:60000", "192.168.1.100:60001", 2500, controllers, true);
+                    Uhppoted u = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, true);
 
                     c.fn(u, args);
                     return;

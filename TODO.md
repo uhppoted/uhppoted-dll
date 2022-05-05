@@ -11,13 +11,6 @@ tests.h:77:13: note: in a call to function ‘evaluate’
       |             ^~~~~~~~
 ```
 
-- [x] C++/Ubuntu
-```
- *** ERROR ��w~�U is not a valid UDP address:port
-```
-
-- [x] Rename c# to csharp (confusing with # prompt on Ubuntu)
-
 - [ ] OS specific DLL naming
       - [x] Go
       - [ ] C
@@ -26,12 +19,12 @@ tests.h:77:13: note: in a call to function ‘evaluate’
       - [x] Python
       - [ ] CCL
 
-- [ ] Change all bind/broadcast/listen addresses to generic system IPs
+- [x] Change all bind/broadcast/listen addresses to generic system IPs
       - [x] C
       - [x] C++
-      - [ ] C#
+      - [x] C#
       - [x] Python
-      - [ ] CCL
+      - [x] CCL
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo
