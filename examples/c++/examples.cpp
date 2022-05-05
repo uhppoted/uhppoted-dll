@@ -224,3 +224,35 @@ void help() {
 
     cout << endl;
 }
+
+void display(const std::string &tag, const std::vector<field> &fields) {
+    int w = 0;
+    for (auto ix = fields.begin(); ix != fields.end(); ix++) {
+        string field = get<0>(*ix);
+
+        w = field.length() > w ? field.length() : w;
+    }
+
+    cout << endl
+         << tag << endl;
+
+    for (auto ix = fields.begin(); ix != fields.end(); ix++) {
+        auto field = get<0>(*ix);
+        auto value = get<1>(*ix);
+        auto type = value.type().name();
+
+        if (type == typeid(uint8_t).name()) {
+            cout << "  " << setw(w) << left << field << " " << static_cast<int>(any_cast<uint8_t>(value)) << endl;
+        } else if (type == typeid(uint32_t).name()) {
+            cout << "  " << setw(w) << left << field << " " << any_cast<uint32_t>(value) << endl;
+        } else if (type == typeid(bool).name()) {
+            cout << "  " << setw(w) << left << field << " " << (any_cast<bool>(value) == 1 ? "Y" : "N") << endl;
+        } else if (type == typeid(string).name()) {
+            cout << "  " << setw(w) << left << field << " " << any_cast<string>(value) << endl;
+        } else {
+            cout << "invalid field type: field::" << field << ",type:" << type << endl;
+        }
+    }
+
+    cout << endl;
+}

@@ -48,7 +48,7 @@ extern bool addTask(uhppoted &);
 extern bool refreshTaskList(uhppoted &);
 extern bool clearTaskList(uhppoted &);
 
-// extern bool evaluate(const std::string &, const std::vector<result> &);
 extern bool evaluate(const std::string &, const std::vector<result> &);
 extern bool passed(const std::string &);
 extern bool failed(const std::string &);
+

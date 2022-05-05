@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../include/uhppoted.hpp"
+#include "examples.hpp"
 
 using namespace std;
 
@@ -26,23 +27,24 @@ void addTask(uhppoted &u, int argc, char **argv) {
 
     u.add_task(deviceID, task);
 
-    cout << endl
-         << "add-task" << endl;
-    cout << "  ID:                   " << deviceID << endl;
-    cout << "  task:                 " << static_cast<int>(task.task) << endl;
-    cout << "  door:                 " << static_cast<int>(task.door) << endl;
-    cout << "  enabled from:         " << task.from << endl;
-    cout << "          to:           " << task.to << endl;
-    cout << "  enabled on Monday:    " << static_cast<int>(task.monday) << endl;
-    cout << "             Tuesday:   " << static_cast<int>(task.tuesday) << endl;
-    cout << "             Wednesday: " << static_cast<int>(task.wednesday) << endl;
-    cout << "             Thursday:  " << static_cast<int>(task.thursday) << endl;
-    cout << "             Friday:    " << static_cast<int>(task.friday) << endl;
-    cout << "             Saturday:  " << static_cast<int>(task.saturday) << endl;
-    cout << "             Sunday:    " << static_cast<int>(task.sunday) << endl;
-    cout << "  run at:               " << task.at << endl;
-    cout << "  cards:                " << static_cast<int>(task.cards) << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("task", task.task),
+        field("door", task.door),
+        field("enabled from", task.from),
+        field("        to", task.to),
+        field("enabled on Monday", task.monday),
+        field("           Tuesday", task.tuesday),
+        field("           Wednesday", task.wednesday),
+        field("           Thursday", task.thursday),
+        field("           Friday", task.friday),
+        field("           Saturday", task.saturday),
+        field("           Sunday", task.sunday),
+        field("           run at", task.at),
+        field("cards", task.cards),
+    };
+
+    display("add-task", fields);
 }
 
 void refreshTaskList(uhppoted &u, int argc, char **argv) {
@@ -50,10 +52,11 @@ void refreshTaskList(uhppoted &u, int argc, char **argv) {
 
     u.refresh_tasklist(deviceID);
 
-    cout << endl
-         << "refresh-tasklist" << endl;
-    cout << "  ID: " << deviceID << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+    };
+
+    display("refresh-tasklist", fields);
 }
 
 void clearTaskList(uhppoted &u, int argc, char **argv) {
@@ -61,8 +64,9 @@ void clearTaskList(uhppoted &u, int argc, char **argv) {
 
     u.clear_tasklist(deviceID);
 
-    cout << endl
-         << "clear-tasklist" << endl;
-    cout << "  ID: " << deviceID << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+    };
+
+    display("clear-tasklist", fields);
 }

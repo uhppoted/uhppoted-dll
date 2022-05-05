@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "../include/uhppoted.hpp"
+#include "examples.hpp"
 
 using namespace std;
 
@@ -14,11 +15,12 @@ void getCards(uhppoted &u, int argc, char **argv) {
 
     int N = u.get_cards(deviceID);
 
-    cout << endl
-         << "get-cards" << endl;
-    cout << "  ID:    " << deviceID << endl;
-    cout << "  cards: " << N << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("cards", uint32_t(N)),
+    };
+
+    display("get-cards", fields);
 }
 
 void getCard(uhppoted &u, int argc, char **argv) {
@@ -27,37 +29,41 @@ void getCard(uhppoted &u, int argc, char **argv) {
 
     card c = u.get_card(deviceID, cardID);
 
-    cout << endl
-         << "get-card" << endl;
-    cout << "  ID:           " << deviceID << endl;
-    cout << "  card number:  " << c.card_number << endl;
-    cout << "       from:    " << c.from << endl;
-    cout << "       to:      " << c.to << endl;
-    cout << "       door[1]: " << static_cast<int>(c.doors[0]) << endl;
-    cout << "       door[2]: " << static_cast<int>(c.doors[1]) << endl;
-    cout << "       door[3]: " << static_cast<int>(c.doors[2]) << endl;
-    cout << "       door[4]: " << static_cast<int>(c.doors[3]) << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("card number", c.card_number),
+        field("     from", c.from),
+        field("     to", c.to),
+        field("     door[1]", c.doors[0]),
+        field("     door[2]", c.doors[1]),
+        field("     door[3]", c.doors[2]),
+        field("     door[4]", c.doors[3]),
+
+    };
+
+    display("get-card", fields);
 }
 
 void getCardByIndex(uhppoted &u, int argc, char **argv) {
     uint32_t deviceID = DEVICE_ID;
     uint32_t index = CARD_INDEX;
 
-    card c = u.get_card_by_index(deviceID, index);
+    card c = u.get_card_by_index(deviceID, CARD_INDEX);
 
-    cout << endl
-         << "get-card-by-index" << endl;
-    cout << "  ID:           " << deviceID << endl;
-    cout << "  index:        " << index << endl;
-    cout << "  card number:  " << c.card_number << endl;
-    cout << "       from:    " << c.from << endl;
-    cout << "       to:      " << c.to << endl;
-    cout << "       door[1]: " << static_cast<int>(c.doors[0]) << endl;
-    cout << "       door[2]: " << static_cast<int>(c.doors[1]) << endl;
-    cout << "       door[3]: " << static_cast<int>(c.doors[2]) << endl;
-    cout << "       door[4]: " << static_cast<int>(c.doors[3]) << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("index", index),
+        field("card number", c.card_number),
+        field("     from", c.from),
+        field("     to", c.to),
+        field("     door[1]", c.doors[0]),
+        field("     door[2]", c.doors[1]),
+        field("     door[3]", c.doors[2]),
+        field("     door[4]", c.doors[3]),
+
+    };
+
+    display("get-card-by-index", fields);
 }
 
 void putCard(uhppoted &u, int argc, char **argv) {
@@ -69,17 +75,18 @@ void putCard(uhppoted &u, int argc, char **argv) {
 
     u.put_card(deviceID, card_number, from, to, doors);
 
-    cout << endl
-         << "put-card" << endl;
-    cout << "  ID:           " << deviceID << endl;
-    cout << "  card number:  " << card_number << endl;
-    cout << "       from:    " << from << endl;
-    cout << "       to:      " << to << endl;
-    cout << "       door[1]: " << static_cast<int>(doors[0]) << endl;
-    cout << "       door[2]: " << static_cast<int>(doors[1]) << endl;
-    cout << "       door[3]: " << static_cast<int>(doors[2]) << endl;
-    cout << "       door[4]: " << static_cast<int>(doors[3]) << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("card number", card_number),
+        field("     from", from),
+        field("     to", to),
+        field("     door[1]", doors[0]),
+        field("     door[2]", doors[1]),
+        field("     door[3]", doors[2]),
+        field("     door[4]", doors[3]),
+    };
+
+    display("put-card", fields);
 }
 
 void deleteCard(uhppoted &u, int argc, char **argv) {
@@ -88,11 +95,12 @@ void deleteCard(uhppoted &u, int argc, char **argv) {
 
     u.delete_card(deviceID, card_number);
 
-    cout << endl
-         << "delete-card" << endl;
-    cout << "  ID:           " << deviceID << endl;
-    cout << "  card number:  " << card_number << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("card-number", card_number),
+    };
+
+    display("delete-card", fields);
 }
 
 void deleteCards(uhppoted &u, int argc, char **argv) {
@@ -100,8 +108,9 @@ void deleteCards(uhppoted &u, int argc, char **argv) {
 
     u.delete_cards(deviceID);
 
-    cout << endl
-         << "delete-cards" << endl;
-    cout << "  ID: " << deviceID << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+    };
+
+    display("delete-cards", fields);
 }

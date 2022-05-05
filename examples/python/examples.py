@@ -251,7 +251,7 @@ def get_devices(u, args):
     for id in list:
         fields.append(('', id))
 
-    display(f'get-devices ({len(list)})', fields)
+    display(f'get-devices({len(list)})', fields)
 
 
 def get_device(u, args):

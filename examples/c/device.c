@@ -20,7 +20,7 @@ int getDevices(int argc, char **argv) {
     char tag[32];
     field fields[N];
 
-    snprintf(tag, sizeof(tag), "get-devices (%d)", N);
+    snprintf(tag, sizeof(tag), "get-devices(%d)", N);
 
     for (int i = 0; i < N; i++) {
         fields[i].field = "";

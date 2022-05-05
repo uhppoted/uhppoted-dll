@@ -11,10 +11,19 @@ tests.h:77:13: note: in a call to function ‘evaluate’
       |             ^~~~~~~~
 ```
 
+- [ ] Rename status.event throughout (because it's special in C# and GCC)
+
 - [ ] OS specific DLL naming
       - [x] Go
       - [ ] C
-      - [ ] C++
+      - [x] C++
+      - [ ] C#
+      - [x] Python
+      - [ ] CCL
+
+- [ ] Commonalize examples output
+      - [x] C
+      - [x] C++
       - [ ] C#
       - [x] Python
       - [ ] CCL
@@ -32,13 +41,6 @@ tests.h:77:13: note: in a call to function ‘evaluate’
       - func C.GoStringN(*C.char, C.int) string
       - func C.GoBytes(unsafe.Pointer, C.int) []byte
       - (?) Pass string arguments rather than const char *
-
-- [ ] Commonalize examples output
-      - [x] C
-      - [ ] C++
-      - [ ] C#
-      - [x] Python
-      - [ ] CCL
 
 - [ ] Extend examples to use command line args
       - [ ] C
@@ -58,7 +60,7 @@ tests.h:77:13: note: in a call to function ‘evaluate’
 - [ ] Github workflow
       - [ ] tests
             - [x] C
-            - [ ] C++
+            - [x] C++
             - [ ] C#
             - [ ] Python
             - [ ] CCL

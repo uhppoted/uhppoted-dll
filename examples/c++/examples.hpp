@@ -1,6 +1,12 @@
 #pragma once
 
+#include <any>
+#include <tuple>
+#include <vector>
+
 #include "../include/uhppoted.hpp"
+
+typedef std::tuple<std::string, std::any> field;
 
 void getDevices(uhppoted &, int argc, char **argv);
 void getDevice(uhppoted &u, int argc, char **argv);
@@ -33,3 +39,5 @@ void clearTimeProfiles(uhppoted &u, int argc, char **argv);
 void addTask(uhppoted &u, int argc, char **argv);
 void refreshTaskList(uhppoted &u, int argc, char **argv);
 void clearTaskList(uhppoted &u, int argc, char **argv);
+
+void display(const std::string &, const std::vector<field> &);

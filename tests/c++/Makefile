@@ -1,7 +1,6 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c++
 GO=GODEBUG=cgocheck=2
-CMD=./tests
 SRC=tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp
 
 ifeq ($(OS),Windows_NT)
@@ -15,6 +14,8 @@ else
     endif
 endif
 
+CMD=$(GO) && $(DLL) && ./tests
+
 .PHONY: build-gcc
 	
 format: $(SRC)
@@ -27,94 +28,94 @@ build: format
 	g++ -std=c++17 -Wall $(SRC) -o tests  $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 usage: build
-	$(GO) &$(DLL) && $(CMD) help
+	$(CMD) help
 
 invalid: build
-	$(GO) &$(DLL) && $(CMD) mystery-meat
+	$(CMD) mystery-meat
 
 get-devices: build
-	$(GO) &$(DLL) && $(CMD) get-devices
+	$(CMD) get-devices
 
 get-device: build
-	$(GO) &$(DLL) && $(CMD) get-device
+	$(CMD) get-device
 
 set-address: build
-	$(GO) &$(DLL) && $(CMD) set-address
+	$(CMD) set-address
 
 get-status: build
-	$(GO) &$(DLL) && $(CMD) get-status
+	$(CMD) get-status
 
 get-time: build
-	$(GO) &$(DLL) && $(CMD) get-time
+	$(CMD) get-time
 
 set-time: build
-	$(GO) &$(DLL) && $(CMD) set-time
+	$(CMD) set-time
 
 get-listener: build
-	$(GO) &$(DLL) && $(CMD) get-listener
+	$(CMD) get-listener
 
 set-listener: build
-	$(GO) &$(DLL) && $(CMD) set-listener
+	$(CMD) set-listener
 
 get-door-control: build
-	$(GO) &$(DLL) && $(CMD) get-door-control
+	$(CMD) get-door-control
 
 set-door-control: build
-	$(GO) &$(DLL) && $(CMD) set-door-control
+	$(CMD) set-door-control
 
 open-door: build
-	$(GO) &$(DLL) && $(CMD) open-door
+	$(CMD) open-door
 
 get-cards: build
-	$(GO) &$(DLL) && $(CMD) get-cards
+	$(CMD) get-cards
 
 get-card: build
-	$(GO) &$(DLL) && $(CMD) get-card
+	$(CMD) get-card
 
 get-card-by-index: build
-	$(GO) &$(DLL) && $(CMD) get-card-by-index
+	$(CMD) get-card-by-index
 
 put-card: build
-	$(GO) &$(DLL) && $(CMD) put-card
+	$(CMD) put-card
 
 delete-card: build
-	$(GO) &$(DLL) && $(CMD) delete-card
+	$(CMD) delete-card
 
 delete-cards: build
-	$(GO) &$(DLL) && $(CMD) delete-cards
+	$(CMD) delete-cards
 
 get-event-index: build
-	$(GO) &$(DLL) && $(CMD) get-event-index
+	$(CMD) get-event-index
 
 set-event-index: build
-	$(GO) &$(DLL) && $(CMD) set-event-index
+	$(CMD) set-event-index
 
 get-event: build
-	$(GO) &$(DLL) && $(CMD) get-event
+	$(CMD) get-event
 
 record-special-events: build
-	$(GO) &$(DLL) && $(CMD) record-special-events
+	$(CMD) record-special-events
 
 get-time-profile: build
-	$(GO) &$(DLL) && $(CMD) get-time-profile
+	$(CMD) get-time-profile
 
 set-time-profile: build
-	$(GO) &$(DLL) && $(CMD) set-time-profile
+	$(CMD) set-time-profile
 
 clear-time-profiles: build
-	$(GO) &$(DLL) && $(CMD) clear-time-profiles
+	$(CMD) clear-time-profiles
 
 add-task: build
-	$(GO) &$(DLL) && $(CMD) add-task
+	$(CMD) add-task
 
 refresh-tasklist: build
-	$(GO) &$(DLL) && $(CMD) refresh-tasklist
+	$(CMD) refresh-tasklist
 
 clear-tasklist: build
-	$(GO) &$(DLL) && $(CMD) clear-tasklist
+	$(CMD) clear-tasklist
 
 all: build
-	$(GO) &$(DLL) && $(CMD) all
+	$(CMD) all
 
 tests: build
-	$(GO) &$(DLL) && $(CMD)
+	$(CMD)

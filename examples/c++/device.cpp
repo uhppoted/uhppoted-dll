@@ -1,6 +1,8 @@
 #include <iostream>
+#include <sstream>
 
 #include "../include/uhppoted.hpp"
+#include "examples.hpp"
 
 using namespace std;
 
@@ -10,12 +12,15 @@ extern const uint8_t DOOR;
 void getDevices(uhppoted &u, int argc, char **argv) {
     auto devices = u.get_devices();
 
-    cout << endl
-         << "get-devices (" << devices.size() << ")" << endl;
+    stringstream tag;
+    vector<field> fields;
+
+    tag << "get-devices(" << devices.size() << ")";
     for (auto id : devices) {
-        cout << "   " << id << endl;
+        fields.push_back(field("", id));
     }
-    cout << endl;
+
+    display(tag.str(), fields);
 }
 
 void getDevice(uhppoted &u, int argc, char **argv) {
@@ -23,15 +28,17 @@ void getDevice(uhppoted &u, int argc, char **argv) {
 
     auto d = u.get_device(deviceID);
 
-    cout << endl
-         << "get-device" << endl;
-    cout << "  ID:       " << d.ID << endl;
-    cout << "  IP:       " << d.address << "  " << d.subnet << "  " << d.gateway
-         << endl;
-    cout << "  MAC:      " << d.MAC << endl;
-    cout << "  version:  " << d.version << endl;
-    cout << "  released: " << d.date << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("IP", d.address),
+        field("IP", d.subnet),
+        field("IP", d.gateway),
+        field("MAC", d.MAC),
+        field("version", d.version),
+        field("released", d.date),
+    };
+
+    display("get-device", fields);
 }
 
 void setAddress(uhppoted &u, int argc, char **argv) {
@@ -42,13 +49,14 @@ void setAddress(uhppoted &u, int argc, char **argv) {
 
     u.set_address(deviceID, address, subnet, gateway);
 
-    cout << endl
-         << "set-address" << endl;
-    cout << "  ID:       " << deviceID << endl;
-    cout << "  address:  " << address << endl;
-    cout << "  subnet:   " << subnet << endl;
-    cout << "  gateway:  " << gateway << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("address", address),
+        field("subnet", subnet),
+        field("gateway", gateway),
+    };
+
+    display("set-address", fields);
 }
 
 void getStatus(uhppoted &u, int argc, char **argv) {
@@ -56,39 +64,33 @@ void getStatus(uhppoted &u, int argc, char **argv) {
 
     auto s = u.get_status(deviceID);
 
-    cout << endl
-         << "get-status" << endl;
-    cout << "  ID:        " << s.ID << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("date/time", s.sysdatetime),
+        field("doors[1]", s.doors[0]),
+        field("doors[2]", s.doors[1]),
+        field("doors[3]", s.doors[2]),
+        field("doors[4]", s.doors[3]),
+        field("buttons[1]", s.buttons[0]),
+        field("buttons[2]", s.buttons[1]),
+        field("buttons[3]", s.buttons[2]),
+        field("buttons[4]", s.buttons[3]),
+        field("relays", s.relays),
+        field("inputs", s.inputs),
+        field("error", s.syserror),
+        field("seq no.", s.seqno),
+        field("info", s.info),
+        field("event timestamp", s.evt.timestamp),
+        field("      index", s.evt.index),
+        field("      type", s.evt.eventType),
+        field("      granted", s.evt.granted),
+        field("      door", s.evt.door),
+        field("      direction", s.evt.direction),
+        field("      card", s.evt.card),
+        field("      reason", s.evt.reason),
+    };
 
-    cout << "  date/time: " << s.sysdatetime << endl;
-    cout << "  doors:     " << static_cast<int>(s.doors[0]) << " "
-         << static_cast<int>(s.doors[1]) << " " << static_cast<int>(s.doors[2])
-         << " " << static_cast<int>(s.doors[3]) << endl;
-    cout << "  buttons:   " << static_cast<int>(s.buttons[0]) << " "
-         << static_cast<int>(s.buttons[1]) << " "
-         << static_cast<int>(s.buttons[2]) << " "
-         << static_cast<int>(s.buttons[3]) << endl;
-    cout << "  relays:    " << showbase << hex << static_cast<int>(s.relays)
-         << dec << endl;
-    cout << "  inputs:    " << showbase << hex << static_cast<int>(s.inputs)
-         << dec << endl;
-    cout << "  error:     " << showbase << hex << static_cast<int>(s.syserror)
-         << dec << endl;
-    cout << "  seq no.:   " << s.seqno << endl;
-    cout << "  info:      " << showbase << hex << static_cast<int>(s.info)
-         << dec << endl;
-    cout << endl;
-    cout << "  event timestamp: " << s.evt.timestamp << endl;
-    cout << "        index:     " << s.evt.index << endl;
-    cout << "        type:      " << static_cast<int>(s.evt.eventType)
-         << endl;
-    cout << "        granted:   " << s.evt.granted << endl;
-    cout << "        door:      " << static_cast<int>(s.evt.door) << endl;
-    cout << "        direction: " << static_cast<int>(s.evt.direction)
-         << endl;
-    cout << "        card:      " << s.evt.card << endl;
-    cout << "        reason:    " << static_cast<int>(s.evt.reason) << endl;
-    cout << endl;
+    display("get-status", fields);
 }
 
 void getTime(uhppoted &u, int argc, char **argv) {
@@ -96,10 +98,12 @@ void getTime(uhppoted &u, int argc, char **argv) {
 
     auto datetime = u.get_time(deviceID);
 
-    cout << endl
-         << "get-time" << endl;
-    cout << "  date/time: " << datetime << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("date/time", datetime),
+    };
+
+    display("get-time", fields);
 }
 
 void setTime(uhppoted &u, int argc, char **argv) {
@@ -113,11 +117,12 @@ void setTime(uhppoted &u, int argc, char **argv) {
 
     u.set_time(deviceID, datetime);
 
-    cout << endl
-         << "set-time" << endl;
-    cout << "  ID:       " << deviceID << endl;
-    cout << "  datetime: " << datetime << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("date/time", datetime),
+    };
+
+    display("set-time", fields);
 }
 
 void getListener(uhppoted &u, int argc, char **argv) {
@@ -125,10 +130,12 @@ void getListener(uhppoted &u, int argc, char **argv) {
 
     auto listener = u.get_listener(deviceID);
 
-    cout << endl
-         << "get-listener" << endl;
-    cout << "  listener: " << listener << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("event listener", listener),
+    };
+
+    display("get-listener", fields);
 }
 
 void setListener(uhppoted &u, int argc, char **argv) {
@@ -137,11 +144,12 @@ void setListener(uhppoted &u, int argc, char **argv) {
 
     u.set_listener(deviceID, listener);
 
-    cout << endl
-         << "set-listener" << endl;
-    cout << "  ID:             " << deviceID << endl;
-    cout << "  event listener: " << listener << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("event listener", listener),
+    };
+
+    display("set-listener", fields);
 }
 
 void getDoorControl(uhppoted &u, int argc, char **argv) {
@@ -150,35 +158,30 @@ void getDoorControl(uhppoted &u, int argc, char **argv) {
 
     auto d = u.get_door_control(deviceID, door);
 
-    cout << endl
-         << "get-door-control" << endl;
-    cout << "  ID:      " << deviceID << endl;
-    cout << "  door:    " << static_cast<int>(door) << endl;
+    string control_mode = "???";
 
     switch (d.mode) {
     case NORMALLY_OPEN:
-        cout << "  mode:    "
-             << "normally open" << endl;
+        control_mode = "normally open";
         break;
 
     case NORMALLY_CLOSED:
-        cout << "  mode:    "
-             << "normally closed" << endl;
+        control_mode = "normally closed";
         break;
 
     case CONTROLLED:
-        cout << "  mode:    "
-             << "controlled" << endl;
-        break;
-
-    default:
-        cout << "  mode:    "
-             << "???" << endl;
+        control_mode = "controlled";
         break;
     }
 
-    cout << "  delay:   " << static_cast<int>(d.delay) << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("door", door),
+        field("mode", control_mode),
+        field("delay", d.delay),
+    };
+
+    display("get-door-control", fields);
 }
 
 void setDoorControl(uhppoted &u, int argc, char **argv) {
@@ -189,35 +192,30 @@ void setDoorControl(uhppoted &u, int argc, char **argv) {
 
     u.set_door_control(deviceID, door, mode, delay);
 
-    cout << endl
-         << "set-door-control" << endl;
-    cout << "  ID:      " << deviceID << endl;
-    cout << "  door:    " << static_cast<int>(door) << endl;
+    string control_mode = "???";
 
     switch (mode) {
     case NORMALLY_OPEN:
-        cout << "  mode:    "
-             << "normally open" << endl;
+        control_mode = "normally open";
         break;
 
     case NORMALLY_CLOSED:
-        cout << "  mode:    "
-             << "normally closed" << endl;
+        control_mode = "normally closed";
         break;
 
     case CONTROLLED:
-        cout << "  mode:    "
-             << "controlled" << endl;
-        break;
-
-    default:
-        cout << "  mode:    "
-             << "???" << endl;
+        control_mode = "controlled";
         break;
     }
 
-    cout << "  delay:   " << static_cast<int>(delay) << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("door", door),
+        field("mode", control_mode),
+        field("delay", delay),
+    };
+
+    display("set-door-control", fields);
 }
 
 void openDoor(uhppoted &u, int argc, char **argv) {
@@ -226,9 +224,10 @@ void openDoor(uhppoted &u, int argc, char **argv) {
 
     u.open_door(deviceID, door);
 
-    cout << endl
-         << "open-door" << endl;
-    cout << "  ID:      " << deviceID << endl;
-    cout << "  door:    " << static_cast<int>(door) << endl;
-    cout << endl;
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("door", door),
+    };
+
+    display("open-door", fields);
 }
