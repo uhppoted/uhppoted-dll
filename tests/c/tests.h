@@ -74,6 +74,6 @@ extern const uint32_t EVENT_INDEX;
 extern const uint8_t DOOR;
 extern const uint8_t PROFILE_ID;
 
-extern bool evaluate(const char *, int, const result[]);
+extern bool evaluate(const char *, int, const result *);
 
 

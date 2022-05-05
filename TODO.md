@@ -2,16 +2,9 @@
 
 ### IN PROGRESS
 
-- [ ] C/Ubuntu
-```
-tasks.c:54:12: note: referencing argument 3 of type ‘const result *’
-In file included from tasks.c:5:
-tests.h:77:13: note: in a call to function ‘evaluate’
-   77 | extern bool evaluate(const char *, int, const result[]);
-      |             ^~~~~~~~
-```
+- [x] C/Ubuntu
 
-- [ ] Rename status.event throughout (because it's special in C# and GCC)
+- [ ] Rename status.event throughout (because it's special in C# and g++ doesn't like it much either)
 
 - [ ] OS specific DLL naming
       - [x] Go

@@ -122,7 +122,7 @@ void usage() {
     printf("\n");
 }
 
-bool evaluate(const char *tag, int N, const result resultset[]) {
+bool evaluate(const char *tag, int N, const result *resultset) {
     bool ok = true;
 
     for (int i = 0; i < N; i++) {

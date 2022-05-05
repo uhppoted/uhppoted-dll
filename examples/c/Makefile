@@ -114,6 +114,6 @@ clear-tasklist: build
 	$(GO) && $(DLL) && $(CMD) clear-tasklist
 
 debug: format
-	clang -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
+	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
 	$(GO) && $(DLL)/debug && $(CMD) get-card-by-index
 
