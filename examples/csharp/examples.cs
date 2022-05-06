@@ -98,7 +98,7 @@ public class examples {
                     GetTimeProfile),
         new command("set-time-profile",
                     "Adds or updates a time profile on a controller.",
-                    GetTimeProfile),
+                    SetTimeProfile),
         new command("clear-time-profiles",
                     "Deletes all time profiles from a controller.",
                     ClearTimeProfiles),
@@ -177,11 +177,14 @@ public class examples {
     static void GetDevices(Uhppoted u, string[] args) {
         uint[] list = u.GetDevices();
 
-        WriteLine(Format("get-devices ({0})", list.Length));
+        string tag = Format("get-devices ({0})", list.Length);
+        field[] fields = new field[list.Length];
+
         for (int i = 0; i < list.Length; i++) {
-            WriteLine(Format("  {0}", list[i]));
+            fields[i] = new uint32Field("", list[i]);
         }
-        WriteLine();
+
+        display("get-devices", fields);
     }
 
     static void GetDevice(Uhppoted u, string[] args) {
@@ -189,13 +192,17 @@ public class examples {
 
         Device device = u.GetDevice(deviceID);
 
-        WriteLine(Format("get-device"));
-        WriteLine(Format("  ID:       {0}", device.ID));
-        WriteLine(Format("  IP:       {0}  {1}  {2}", device.address, device.subnet, device.gateway));
-        WriteLine(Format("  MAC:      {0}", device.MAC));
-        WriteLine(Format("  version:  {0}", device.version));
-        WriteLine(Format("  released: {0}", device.date));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new stringField("address", device.address),
+            new stringField("subnet mask", device.subnet),
+            new stringField("gateway address", device.gateway),
+            new stringField("MAC", device.MAC),
+            new stringField("version", device.version),
+            new stringField("released", device.date),
+        };
+
+        display("get-device", fields);
     }
 
     static void SetAddress(Uhppoted u, string[] args) {
@@ -206,12 +213,14 @@ public class examples {
 
         u.SetAddress(deviceID, address, subnet, gateway);
 
-        WriteLine(Format("set-address"));
-        WriteLine(Format("  ID:      {0}", deviceID));
-        WriteLine(Format("  address: {0}", address));
-        WriteLine(Format("  subnet:  {0}", subnet));
-        WriteLine(Format("  gateway: {0}", gateway));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new stringField("address", address),
+            new stringField("subnet", subnet),
+            new stringField("gateway", gateway),
+        };
+
+        display("set-address", fields);
     }
 
     static void GetStatus(Uhppoted u, string[] args) {
@@ -219,26 +228,33 @@ public class examples {
 
         Status status = u.GetStatus(deviceID);
 
-        WriteLine(Format("get-status"));
-        WriteLine(Format("  ID:        {0}", status.ID));
-        WriteLine(Format("  timestamp: {0}", status.sysdatetime));
-        WriteLine(Format("  doors:     {0} {1} {2} {3}", status.doors[0], status.doors[1], status.doors[2], status.doors[3]));
-        WriteLine(Format("  buttons:   {0} {1} {2} {3}", status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]));
-        WriteLine(Format("  relays:    {0:X}", status.relays));
-        WriteLine(Format("  inputs:    {0:X}", status.inputs));
-        WriteLine(Format("  syserror:  {0}", status.syserror));
-        WriteLine(Format("  info:      {0:X}", status.info));
-        WriteLine(Format("  seqno:     {0}", status.seqno));
-        WriteLine(Format("  event timestamp: {0}", status.evt.timestamp));
-        WriteLine(Format("        index:     {0}", status.evt.index));
-        WriteLine(Format("        type:      {0}", status.evt.eventType));
-        WriteLine(Format("        granted:   {0}", status.evt.granted));
-        WriteLine(Format("        door:      {0}", status.evt.door));
-        WriteLine(Format("        direction: {0}", status.evt.direction));
-        WriteLine(Format("        card:      {0}", status.evt.card));
-        WriteLine(Format("        reason:    {0}", status.evt.reason));
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new stringField("timestamp", status.sysdatetime),
+            new boolField("doors[1]", status.doors[0]),
+            new boolField("doors[2]", status.doors[1]),
+            new boolField("doors[3]", status.doors[2]),
+            new boolField("doors[4]", status.doors[3]),
+            new boolField("buttons[1]", status.buttons[0]),
+            new boolField("buttons[2]", status.buttons[1]),
+            new boolField("buttons[3]", status.buttons[2]),
+            new boolField("buttons[4]", status.buttons[3]),
+            new uint8Field("relays", status.relays),
+            new uint8Field("inputs", status.inputs),
+            new uint8Field("syserror", status.syserror),
+            new uint8Field("info", status.info),
+            new uint32Field("seqno", status.seqno),
+            new stringField("event timestamp", status.evt.timestamp),
+            new uint32Field("      index", status.evt.index),
+            new uint8Field("      type", status.evt.eventType),
+            new boolField("      granted", status.evt.granted),
+            new uint8Field("      door", status.evt.door),
+            new uint8Field("      direction", status.evt.direction),
+            new uint32Field("      card", status.evt.card),
+            new uint8Field("      reason", status.evt.reason),
+        };
 
-        WriteLine();
+        display("get-status", fields);
     }
 
     static void GetTime(Uhppoted u, string[] args) {
@@ -246,9 +262,12 @@ public class examples {
 
         string datetime = u.GetTime(deviceID);
 
-        WriteLine(Format("get-time"));
-        WriteLine(Format("  date/time: {0}", datetime));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new stringField("date/time", datetime),
+        };
+
+        display("get-time", fields);
     }
 
     static void SetTime(Uhppoted u, string[] args) {
@@ -257,10 +276,12 @@ public class examples {
 
         u.SetTime(deviceID, datetime);
 
-        WriteLine(Format("set-time"));
-        WriteLine(Format("  ID:        {0}", deviceID));
-        WriteLine(Format("  date/time: {0}", datetime));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new stringField("date/time", datetime),
+        };
+
+        display("set-time", fields);
     }
 
     static void GetListener(Uhppoted u, string[] args) {
@@ -268,9 +289,12 @@ public class examples {
 
         string listener = u.GetListener(deviceID);
 
-        WriteLine(Format("get-listener"));
-        WriteLine(Format("  listener: {0}", listener));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new stringField("event listener", listener),
+        };
+
+        display("get-listener", fields);
     }
 
     static void SetListener(Uhppoted u, string[] args) {
@@ -279,10 +303,12 @@ public class examples {
 
         u.SetListener(deviceID, listener);
 
-        WriteLine(Format("set-listener"));
-        WriteLine(Format("  ID:             {0}", deviceID));
-        WriteLine(Format("  event listener: {0}", listener));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new stringField("event listener", listener),
+        };
+
+        display("set-listener", fields);
     }
 
     static void GetDoorControl(Uhppoted u, string[] args) {
@@ -291,30 +317,29 @@ public class examples {
 
         DoorControl control = u.GetDoorControl(deviceID, door);
 
-        WriteLine(Format("get-door-control"));
-        WriteLine(Format("  ID:      {0}", deviceID));
-        WriteLine(Format("  door:    {0}", door));
-
+        string controlMode = "???";
         switch (control.mode) {
         case ControlModes.NormallyOpen:
-            WriteLine(Format("  mode:    {0}", "normally open"));
+            controlMode = "normally open";
             break;
 
         case ControlModes.NormallyClosed:
-            WriteLine(Format("  mode:    {0}", "normally closed"));
+            controlMode = "normally closed";
             break;
 
         case ControlModes.Controlled:
-            WriteLine(Format("  mode:    {0}", "controlled"));
-            break;
-
-        default:
-            WriteLine(Format("  mode:    {0}", "???"));
+            controlMode = "controlled";
             break;
         }
 
-        WriteLine(Format("  delay:   {0}", control.delay));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("door", door),
+            new stringField("mode", controlMode),
+            new uint8Field("delay", control.delay),
+        };
+
+        display("get-door-control", fields);
     }
 
     static void SetDoorControl(Uhppoted u, string[] args) {
@@ -325,30 +350,29 @@ public class examples {
 
         u.SetDoorControl(deviceID, door, mode, delay);
 
-        WriteLine(Format("set-door-control"));
-        WriteLine(Format("  ID:      {0}", deviceID));
-        WriteLine(Format("  door:    {0}", door));
-
+        string controlMode = "???";
         switch (mode) {
         case ControlModes.NormallyOpen:
-            WriteLine(Format("  mode:    {0}", "normally open"));
+            controlMode = "normally open";
             break;
 
         case ControlModes.NormallyClosed:
-            WriteLine(Format("  mode:    {0}", "normally closed"));
+            controlMode = "normally closed";
             break;
 
         case ControlModes.Controlled:
-            WriteLine(Format("  mode:    {0}", "controlled"));
-            break;
-
-        default:
-            WriteLine(Format("  mode:    {0}", "???"));
+            controlMode = "controlled";
             break;
         }
 
-        WriteLine(Format("  delay:   {0}", delay));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("door", door),
+            new stringField("mode", controlMode),
+            new uint8Field("delay", delay),
+        };
+
+        display("set-door-control", fields);
     }
 
     static void OpenDoor(Uhppoted u, string[] args) {
@@ -357,10 +381,12 @@ public class examples {
 
         u.OpenDoor(deviceID, door);
 
-        WriteLine(Format("open-door"));
-        WriteLine(Format("  ID:      {0}", deviceID));
-        WriteLine(Format("  door:    {0}", door));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("door", door),
+        };
+
+        display("open-door", fields);
     }
 
     static void GetCards(Uhppoted u, string[] args) {
@@ -368,10 +394,12 @@ public class examples {
 
         uint cards = u.GetCards(deviceID);
 
-        WriteLine(Format("get-cards"));
-        WriteLine(Format("  ID:    {0}", deviceID));
-        WriteLine(Format("  cards: {0}", cards));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("cards", cards),
+        };
+
+        display("get-cards", fields);
     }
 
     static void GetCard(Uhppoted u, string[] args) {
@@ -379,16 +407,18 @@ public class examples {
         uint cardNumber = CARD_NUMBER;
         Card card = u.GetCard(deviceID, cardNumber);
 
-        WriteLine(Format("get-card"));
-        WriteLine(Format("  ID:           {0}", deviceID));
-        WriteLine(Format("  card number:  {0}", card.cardNumber));
-        WriteLine(Format("       from:    {0}", card.from));
-        WriteLine(Format("       to:      {0}", card.to));
-        WriteLine(Format("       door[1]: {0}", card.doors[0]));
-        WriteLine(Format("       door[2]: {0}", card.doors[1]));
-        WriteLine(Format("       door[3]: {0}", card.doors[2]));
-        WriteLine(Format("       door[4]: {0}", card.doors[3]));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("card number", card.cardNumber),
+            new stringField("     from", card.from),
+            new stringField("     to", card.to),
+            new uint8Field("     door[1]", card.doors[0]),
+            new uint8Field("     door[2]", card.doors[1]),
+            new uint8Field("     door[3]", card.doors[2]),
+            new uint8Field("     door[4]", card.doors[3]),
+        };
+
+        display("get-card", fields);
     }
 
     static void GetCardByIndex(Uhppoted u, string[] args) {
@@ -397,17 +427,19 @@ public class examples {
 
         Card card = u.GetCardByIndex(deviceID, index);
 
-        WriteLine(Format("get-card-by-index"));
-        WriteLine(Format("  ID:           {0}", deviceID));
-        WriteLine(Format("  index:        {0}", index));
-        WriteLine(Format("  card number:  {0}", card.cardNumber));
-        WriteLine(Format("       from:    {0}", card.from));
-        WriteLine(Format("       to:      {0}", card.to));
-        WriteLine(Format("       door[1]: {0}", card.doors[0]));
-        WriteLine(Format("       door[2]: {0}", card.doors[1]));
-        WriteLine(Format("       door[3]: {0}", card.doors[2]));
-        WriteLine(Format("       door[4]: {0}", card.doors[3]));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("index", index),
+            new uint32Field("card number", card.cardNumber),
+            new stringField("     from", card.from),
+            new stringField("     to", card.to),
+            new uint8Field("     door[1]", card.doors[0]),
+            new uint8Field("     door[2]", card.doors[1]),
+            new uint8Field("     door[3]", card.doors[2]),
+            new uint8Field("     door[4]", card.doors[3]),
+        };
+
+        display("get-card-by-index", fields);
     }
 
     static void PutCard(Uhppoted u, string[] args) {
@@ -419,16 +451,18 @@ public class examples {
 
         u.PutCard(deviceID, cardNumber, from, to, doors);
 
-        WriteLine(Format("put-card"));
-        WriteLine(Format("  ID:           {0}", deviceID));
-        WriteLine(Format("  card number:  {0}", cardNumber));
-        WriteLine(Format("       from:    {0}", from));
-        WriteLine(Format("       to:      {0}", to));
-        WriteLine(Format("       door[1]: {0}", doors[0]));
-        WriteLine(Format("       door[2]: {0}", doors[1]));
-        WriteLine(Format("       door[3]: {0}", doors[2]));
-        WriteLine(Format("       door[4]: {0}", doors[3]));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("card number", cardNumber),
+            new stringField("     from", from),
+            new stringField("     to", to),
+            new uint8Field("     door[1]", doors[0]),
+            new uint8Field("     door[2]", doors[1]),
+            new uint8Field("     door[3]", doors[2]),
+            new uint8Field("     door[4]", doors[3]),
+        };
+
+        display("put-card", fields);
     }
 
     static void DeleteCard(Uhppoted u, string[] args) {
@@ -437,10 +471,12 @@ public class examples {
 
         u.DeleteCard(deviceID, cardNumber);
 
-        WriteLine(Format("delete-card"));
-        WriteLine(Format("  ID:           {0}", deviceID));
-        WriteLine(Format("  card number:  {0}", cardNumber));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("card number", cardNumber),
+        };
+
+        display("delete-card", fields);
     }
 
     static void DeleteCards(Uhppoted u, string[] args) {
@@ -448,97 +484,106 @@ public class examples {
 
         u.DeleteCards(deviceID);
 
-        WriteLine(Format("delete-cards"));
-        WriteLine(Format("  ID: {0}", deviceID));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+        };
+
+        display("delete-cards", fields);
     }
 
     static void GetEventIndex(Uhppoted u, string[] args) {
-        string tag = "get-event-index";
         uint deviceID = DEVICE_ID;
 
         uint index = u.GetEventIndex(deviceID);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID:    {0}", deviceID));
-        WriteLine(Format("  index: {0}", index));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("index", index),
+        };
+
+        display("get-event-index", fields);
     }
 
     static void SetEventIndex(Uhppoted u, string[] args) {
-        string tag = "set-event-index";
         uint deviceID = DEVICE_ID;
         uint index = EVENT_INDEX;
 
         u.SetEventIndex(deviceID, index);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID:    {0}", deviceID));
-        WriteLine(Format("  index: {0}", index));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("index", index),
+        };
+
+        display("set-event-index", fields);
     }
 
     static void GetEvent(Uhppoted u, string[] args) {
-        string tag = "get-event";
         uint deviceID = DEVICE_ID;
         uint index = EVENT_INDEX;
 
         Event evt = u.GetEvent(deviceID, index);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID:                {0}", deviceID));
-        WriteLine(Format("  event index:       {0}", evt.index));
-        WriteLine(Format("        timestamp:   {0}", evt.timestamp));
-        WriteLine(Format("        type:        {0}", evt.eventType));
-        WriteLine(Format("        granted:     {0}", evt.granted));
-        WriteLine(Format("        door:        {0}", evt.door));
-        WriteLine(Format("        direction:   {0}", evt.direction));
-        WriteLine(Format("        card number: {0}", evt.card));
-        WriteLine(Format("        reason:      {0}", evt.reason));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("event index", evt.index),
+            new stringField("      timestamp", evt.timestamp),
+            new uint8Field("      type", evt.eventType),
+            new boolField("      granted", evt.granted),
+            new uint8Field("      door", evt.door),
+            new uint8Field("      direction", evt.direction),
+            new uint32Field("      card number", evt.card),
+            new uint8Field("      reason", evt.reason),
+        };
+
+        display("get-event", fields);
     }
 
     static void RecordSpecialEvents(Uhppoted u, string[] args) {
-        string tag = "record-special-events";
         uint deviceID = DEVICE_ID;
         bool enabled = true;
 
         u.RecordSpecialEvents(deviceID, enabled);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID:      {0}", deviceID));
-        WriteLine(Format("  enabled: {0}", enabled));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new boolField("enabled", enabled),
+        };
+
+        display("record-special-events", fields);
     }
 
     static void GetTimeProfile(Uhppoted u, string[] args) {
-        string tag = "get-time-profile";
         uint deviceID = DEVICE_ID;
         byte profileID = PROFILE_ID;
 
         TimeProfile profile = u.GetTimeProfile(deviceID, profileID);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID:                   {0}", deviceID));
-        WriteLine(Format("  profile ID:           {0}", profile.ID));
-        WriteLine(Format("  linked profile:       {0}", profile.linked));
-        WriteLine(Format("  enabled from:         {0}", profile.from));
-        WriteLine(Format("          to:           {0}", profile.to));
-        WriteLine(Format("  enabled on Monday:    {0}", profile.monday));
-        WriteLine(Format("             Tuesday:   {0}", profile.tuesday));
-        WriteLine(Format("             Wednesday: {0}", profile.wednesday));
-        WriteLine(Format("             Thursday:  {0}", profile.thursday));
-        WriteLine(Format("             Friday:    {0}", profile.friday));
-        WriteLine(Format("             Saturday:  {0}", profile.saturday));
-        WriteLine(Format("             Sunday:    {0}", profile.sunday));
-        WriteLine(Format("  segment 1:            {0}-{1}", profile.segment1start, profile.segment1end));
-        WriteLine(Format("  segment 2:            {0}-{1}", profile.segment2start, profile.segment2end));
-        WriteLine(Format("  segment 3:            {0}-{1}", profile.segment3start, profile.segment3end));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("profile ID", profile.ID),
+            new uint8Field("linked profile", profile.linked),
+            new stringField("enabled from", profile.from),
+            new stringField("        to", profile.to),
+            new boolField("enabled on Monday", profile.monday),
+            new boolField("           Tuesday", profile.tuesday),
+            new boolField("           Wednesday", profile.wednesday),
+            new boolField("           Thursday", profile.thursday),
+            new boolField("           Friday", profile.friday),
+            new boolField("           Saturday", profile.saturday),
+            new boolField("           Sunday", profile.sunday),
+            new stringField("segment 1 start", profile.segment1start),
+            new stringField("          end", profile.segment1end),
+            new stringField("segment 2 start", profile.segment2start),
+            new stringField("          end", profile.segment2end),
+            new stringField("segment 3 start", profile.segment3start),
+            new stringField("          end", profile.segment3end),
+        };
+
+        display("get-time-profile", fields);
     }
 
     static void SetTimeProfile(Uhppoted u, string[] args) {
-        string tag = "set-time-profile";
         uint deviceID = DEVICE_ID;
         TimeProfile profile = new TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30",
                                               true, false, true, true, false, false, true,
@@ -548,23 +593,28 @@ public class examples {
 
         u.SetTimeProfile(deviceID, profile);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID:                   {0}", deviceID));
-        WriteLine(Format("  profile ID:           {0}", profile.ID));
-        WriteLine(Format("  linked profile:       {0}", profile.linked));
-        WriteLine(Format("  enabled from:         {0}", profile.from));
-        WriteLine(Format("          to:           {0}", profile.to));
-        WriteLine(Format("  enabled on Monday:    {0}", profile.monday));
-        WriteLine(Format("             Tuesday:   {0}", profile.tuesday));
-        WriteLine(Format("             Wednesday: {0}", profile.wednesday));
-        WriteLine(Format("             Thursday:  {0}", profile.thursday));
-        WriteLine(Format("             Friday:    {0}", profile.friday));
-        WriteLine(Format("             Saturday:  {0}", profile.saturday));
-        WriteLine(Format("             Sunday:    {0}", profile.sunday));
-        WriteLine(Format("  segment 1:            {0}-{1}", profile.segment1start, profile.segment1end));
-        WriteLine(Format("  segment 2:            {0}-{1}", profile.segment2start, profile.segment2end));
-        WriteLine(Format("  segment 3:            {0}-{1}", profile.segment3start, profile.segment3end));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("profile ID", profile.ID),
+            new uint8Field("linked profile", profile.linked),
+            new stringField("enabled from", profile.from),
+            new stringField("        to", profile.to),
+            new boolField("enabled on Monday", profile.monday),
+            new boolField("           Tuesday", profile.tuesday),
+            new boolField("           Wednesday", profile.wednesday),
+            new boolField("           Thursday", profile.thursday),
+            new boolField("           Friday", profile.friday),
+            new boolField("           Saturday", profile.saturday),
+            new boolField("           Sunday", profile.sunday),
+            new stringField("segment 1 start", profile.segment1start),
+            new stringField("          end", profile.segment1end),
+            new stringField("segment 2 start", profile.segment2start),
+            new stringField("          end", profile.segment2end),
+            new stringField("segment 3 start", profile.segment3start),
+            new stringField("          end", profile.segment3end),
+        };
+
+        display("set-time-profile", fields);
     }
 
     static void ClearTimeProfiles(Uhppoted u, string[] args) {
@@ -572,13 +622,14 @@ public class examples {
 
         u.ClearTimeProfiles(deviceID);
 
-        WriteLine(Format("clear-time-profiles"));
-        WriteLine(Format("  ID: {0}", deviceID));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+        };
+
+        display("clear-time-profiles", fields);
     }
 
     static void AddTask(Uhppoted u, string[] args) {
-        string tag = "add-task";
         uint deviceID = DEVICE_ID;
         Task task = new Task(6, 4, "2022-02-01", "2022-06-30",
                              true, false, true, true, false, false, true,
@@ -586,43 +637,150 @@ public class examples {
 
         u.AddTask(deviceID, task);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID:                   {0}", deviceID));
-        WriteLine(Format("  task:                 {0}", task.task));
-        WriteLine(Format("  door:                 {0}", task.door));
-        WriteLine(Format("  enabled from:         {0}", task.from));
-        WriteLine(Format("          to:           {0}", task.to));
-        WriteLine(Format("  enabled on Monday:    {0}", task.monday));
-        WriteLine(Format("             Tuesday:   {0}", task.tuesday));
-        WriteLine(Format("             Wednesday: {0}", task.wednesday));
-        WriteLine(Format("             Thursday:  {0}", task.thursday));
-        WriteLine(Format("             Friday:    {0}", task.friday));
-        WriteLine(Format("             Saturday:  {0}", task.saturday));
-        WriteLine(Format("             Sunday:    {0}", task.sunday));
-        WriteLine(Format("  at:                   {0}", task.at));
-        WriteLine(Format("  cards:                {0}", task.cards));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("task", task.task),
+            new uint8Field("door", task.door),
+            new stringField("enabled from", task.from),
+            new stringField("        to", task.to),
+            new boolField("enabled on Monday", task.monday),
+            new boolField("           Tuesday", task.tuesday),
+            new boolField("           Wednesday:", task.wednesday),
+            new boolField("           Thursday", task.thursday),
+            new boolField("           Friday", task.friday),
+            new boolField("           Saturday", task.saturday),
+            new boolField("           Sunday", task.sunday),
+            new stringField("at", task.at),
+            new uint32Field("cards", task.cards),
+        };
+
+        display("add-task", fields);
     }
 
     static void RefreshTaskList(Uhppoted u, string[] args) {
-        string tag = "refresh-tasklist";
         uint deviceID = DEVICE_ID;
 
         u.RefreshTaskList(deviceID);
 
-        WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID: {0}", deviceID));
-        WriteLine();
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+        };
+
+        display("refresh-tasklist", fields);
     }
 
     static void ClearTaskList(Uhppoted u, string[] args) {
-        string tag = "cleear-tasklist";
         uint deviceID = DEVICE_ID;
 
         u.ClearTaskList(deviceID);
 
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+        };
+
+        display("clear-tasklist", fields);
+    }
+
+    static void display(string tag, field[] fields) {
+        int w = 0;
+        foreach (var f in fields) {
+            switch (f) {
+            case uint32Field v:
+                w = System.Math.Max(v.field.Length, w);
+                break;
+
+            case uint8Field v:
+                w = System.Math.Max(v.field.Length, w);
+                break;
+
+            case boolField v:
+                w = System.Math.Max(v.field.Length, w);
+                break;
+
+            case stringField v:
+                w = System.Math.Max(v.field.Length, w);
+                break;
+
+            default:
+                throw new Exception(Format("unsupported type {0}", f));
+            }
+        }
+
+        string format = Format("  {{0, {0}}} {{1}}", -w);
+
         WriteLine(Format("{0}", tag));
-        WriteLine(Format("  ID: {0}", deviceID));
+
+        foreach (var f in fields) {
+            switch (f) {
+            case uint32Field v:
+                WriteLine(Format(format, v.field, v.value));
+                break;
+
+            case uint8Field v:
+                WriteLine(Format(format, v.field, v.value));
+                break;
+
+            case boolField v:
+                if (v.value) {
+                    WriteLine(Format(format, v.field, "Y"));
+                } else {
+                    WriteLine(Format(format, v.field, "N"));
+                }
+                break;
+
+            case stringField v:
+                WriteLine(Format(format, v.field, v.value));
+                break;
+
+            default:
+                throw new Exception(Format("unsupported type {0}", f));
+            }
+        }
+
         WriteLine();
+    }
+}
+
+// *** Utility classes for example output ***
+
+public class field {}
+
+public class uint32Field : field {
+    public string field { get; }
+    public uint value { get; }
+
+    public uint32Field(string field, uint value) {
+        this.field = field;
+        this.value = value;
+    }
+}
+
+public class uint8Field : field {
+    public string field { get; }
+    public byte value { get; }
+
+    public uint8Field(string field, byte value) {
+        this.field = field;
+        this.value = value;
+    }
+}
+
+public class boolField : field {
+    public string field { get; }
+    public bool value { get; }
+
+    public boolField(string field, bool value) {
+        this.field = field;
+        this.value = value;
+    }
+}
+
+public class stringField : field {
+    public string field { get; }
+    public string value { get; }
+
+    public stringField(string field, string value) {
+        this.field = field;
+        this.value = value;
     }
 }

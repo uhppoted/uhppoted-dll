@@ -2,8 +2,6 @@
 
 ### IN PROGRESS
 
-- [x] C/Ubuntu
-
 - [ ] Rename status.event throughout (because it's special in C# and g++ doesn't like it much either)
 
 - [x] OS specific DLL naming
@@ -17,16 +15,9 @@
 - [ ] Commonalize examples output
       - [x] C
       - [x] C++
-      - [ ] C#
-      - [x] Python
-      - [ ] CCL
-
-- [x] Change all bind/broadcast/listen addresses to generic system IPs
-      - [x] C
-      - [x] C++
       - [x] C#
       - [x] Python
-      - [x] CCL
+      - [ ] CCL
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo
