@@ -1,7 +1,20 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
-CMD=GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && export LD_LIBRARY_PATH=$(LIB) && ./tests
+GO=GODEBUG=cgocheck=2
 SRC=tests.c device.c cards.c events.c time_profiles.c tasks.c
+
+ifeq ($(OS),Windows_NT)
+	DLL=set PATH=$(LIB)
+else
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        DLL=export DYLD_LIBRARY_PATH=$(LIB)
+    else 
+        DLL=export LD_LIBRARY_PATH=$(LIB)
+    endif
+endif
+
+CMD=$(GO) && $(DLL) && ./tests
 
 .PHONY: tests
 

@@ -2,11 +2,22 @@ LIB=../../lib
 BINDINGS=../../bindings/ccl
 CMD=./examples
 
+ifeq ($(OS),Windows_NT)
+	DLL=(setenv "PATH" "$(LIB)")
+else
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        DLL=(setenv "DYLD_LIBRARY_PATH" "$(LIB)")
+    else 
+        DLL=(setenv "LD_LIBRARY_PATH" "$(LIB)")
+    endif
+endif
+
 .PHONY: run
 .PHONY: debug
 
 build: examples
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp --eval '(make-app)' 
+	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp --eval '(make-app)' 
 
 usage: build
 	$(CMD) 
@@ -99,7 +110,7 @@ clear-tasklist: build
 	$(CMD) clear-tasklist
 
 run: 
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)")' --load main.lisp
+	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp
 
 debug: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load main.lisp

@@ -6,13 +6,13 @@
 
 - [ ] Rename status.event throughout (because it's special in C# and g++ doesn't like it much either)
 
-- [ ] OS specific DLL naming
+- [x] OS specific DLL naming
       - [x] Go
-      - [ ] C
+      - [x] C
       - [x] C++
-      - [ ] C#
+      - [x] C#
       - [x] Python
-      - [ ] CCL
+      - [x] CCL
 
 - [ ] Commonalize examples output
       - [x] C

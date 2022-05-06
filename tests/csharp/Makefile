@@ -1,6 +1,19 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/csharp
-CMD=mono tests.exe
+GO=GODEBUG=cgocheck=2 
+
+ifeq ($(OS),Windows_NT)
+	DLL=set PATH=$(LIB)
+else
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        DLL=export DYLD_LIBRARY_PATH=$(LIB)
+    else 
+        DLL=export LD_LIBRARY_PATH=$(LIB)
+    endif
+endif
+
+CMD=$(GO) && $(DLL) && mono ./tests.exe
 
 format:
 	clang-format -i *.cs
@@ -14,95 +27,95 @@ build: format
 	csc $(BINDINGS)/uhppoted.cs tests.cs
 
 usage: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) help
+	$(CMD) help
 
 invalid: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) mystery-meat
+	$(CMD) mystery-meat
 
 get-devices: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-devices
+	$(CMD) get-devices
 
 get-device: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-device
+	$(CMD) get-device
 
 set-address: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-address
+	$(CMD) set-address
 
 get-status: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-status
+	$(CMD) get-status
 
 get-time: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-time
+	$(CMD) get-time
 
 set-time: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-time
+	$(CMD) set-time
 
 get-listener: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-listener
+	$(CMD) get-listener
 
 set-listener: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-listener
+	$(CMD) set-listener
 
 get-door-control: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-door-control
+	$(CMD) get-door-control
 
 set-door-control: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-door-control
+	$(CMD) set-door-control
 
 open-door: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) open-door
+	$(CMD) open-door
 
 get-cards: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-cards
+	$(CMD) get-cards
 
 get-card: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-card
+	$(CMD) get-card
 
 get-card-by-index: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-card-by-index
+	$(CMD) get-card-by-index
 
 put-card: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) put-card
+	$(CMD) put-card
 
 delete-card: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) delete-card
+	$(CMD) delete-card
 
 delete-cards: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) delete-cards
+	$(CMD) delete-cards
 
 get-event-index: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-event-index
+	$(CMD) get-event-index
 
 set-event-index: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-event-index
+	$(CMD) set-event-index
 
 get-event: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-event
+	$(CMD) get-event
 
 record-special-events: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) record-special-events
+	$(CMD) record-special-events
 
 get-time-profile: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) get-time-profile
+	$(CMD) get-time-profile
 
 set-time-profile: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) set-time-profile
+	$(CMD) set-time-profile
 
 clear-time-profiles: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) clear-time-profiles
+	$(CMD) clear-time-profiles
 
 add-task: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) add-task
+	$(CMD) add-task
 
 refresh-tasklist: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) refresh-tasklist
+	$(CMD) refresh-tasklist
 
 clear-tasklist: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) clear-tasklist
+	$(CMD) clear-tasklist
 
 all: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD) all
+	$(CMD) all
 
 tests: build
-	GODEBUG=cgocheck=2 && export DYLD_LIBRARY_PATH=$(LIB) && $(CMD)
+	$(CMD)
 
