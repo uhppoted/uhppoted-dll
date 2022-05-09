@@ -307,14 +307,14 @@ def get_status(u, args):
         ('error    ', '{0:#0x}'.format(status.syserror)),
         ('info     ', status.info),
         ('seq no.  ', status.seqno),
-        ('event timestamp', status.event.timestamp),
-        ('      index', status.event.index),
-        ('      type', status.event.eventType),
-        ('      granted', status.event.granted),
-        ('      door', status.event.door),
-        ('      direction', status.event.direction),
-        ('      card', status.event.card),
-        ('      reason', status.event.reason),
+        ('event timestamp', status.evt.timestamp),
+        ('      index', status.evt.index),
+        ('      type', status.evt.eventType),
+        ('      granted', status.evt.granted),
+        ('      door', status.evt.door),
+        ('      direction', status.evt.direction),
+        ('      card', status.evt.card),
+        ('      reason', status.evt.reason),
     ])
 
 

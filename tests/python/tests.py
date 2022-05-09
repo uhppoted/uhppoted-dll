@@ -147,14 +147,14 @@ def get_status(u):
         ('system error', 0x56, status.syserror),
         ('special info', 253, status.info),
         ('sequence number', 9876, status.seqno),
-        ('event timestamp', '2022-01-02 12:34:56', status.event.timestamp),
-        ('event index', 135, status.event.index),
-        ('event type', 6, status.event.eventType),
-        ('event granted', 1, status.event.granted),
-        ('event door', 3, status.event.door),
-        ('event direction', 1, status.event.direction),
-        ('event card', 8100023, status.event.card),
-        ('event reason', 21, status.event.reason),
+        ('event timestamp', '2022-01-02 12:34:56', status.evt.timestamp),
+        ('event index', 135, status.evt.index),
+        ('event type', 6, status.evt.eventType),
+        ('event granted', 1, status.evt.granted),
+        ('event door', 3, status.evt.door),
+        ('event direction', 1, status.evt.direction),
+        ('event card', 8100023, status.evt.card),
+        ('event reason', 21, status.evt.reason),
     ])
 
 

@@ -107,14 +107,14 @@ int getStatus(int argc, char **argv) {
         {.field = "error", .type = "uint8", .value.uint8 = s.syserror},
         {.field = "seq no.", .type = "uint32", .value.uint32 = s.seqno},
         {.field = "info", .type = "uint8", .value.uint8 = s.info},
-        {.field = "event timestamp", .type = "string", .value.string = s.event.timestamp},
-        {.field = "      index", .type = "uint32", .value.uint32 = s.event.index},
-        {.field = "      type", .type = "uint8", .value.uint8 = s.event.eventType},
-        {.field = "      granted", .type = "bool", .value.boolean = s.event.granted},
-        {.field = "      door", .type = "uint8", .value.uint8 = s.event.door},
-        {.field = "      direction", .type = "uint8", .value.uint8 = s.event.direction},
-        {.field = "      card", .type = "uint32", .value.uint32 = s.event.card},
-        {.field = "      reason", .type = "uint8", .value.uint8 = s.event.reason},
+        {.field = "event timestamp", .type = "string", .value.string = s.evt.timestamp},
+        {.field = "      index", .type = "uint32", .value.uint32 = s.evt.index},
+        {.field = "      type", .type = "uint8", .value.uint8 = s.evt.eventType},
+        {.field = "      granted", .type = "bool", .value.boolean = s.evt.granted},
+        {.field = "      door", .type = "uint8", .value.uint8 = s.evt.door},
+        {.field = "      direction", .type = "uint8", .value.uint8 = s.evt.direction},
+        {.field = "      card", .type = "uint32", .value.uint32 = s.evt.card},
+        {.field = "      reason", .type = "uint8", .value.uint8 = s.evt.reason},
     };
 
     display("get-status", sizeof(fields) / sizeof(field), fields);

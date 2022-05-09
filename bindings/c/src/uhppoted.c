@@ -221,14 +221,14 @@ int get_status(uint32_t id, struct status *s) {
     s->seqno = status.seqno;
 
     if (status.event) {
-        snprintf(s->event.timestamp, sizeof(s->event.timestamp), "%s", status.event->timestamp);
-        s->event.index = status.event->index;
-        s->event.eventType = status.event->eventType;
-        s->event.granted = status.event->granted;
-        s->event.door = status.event->door;
-        s->event.direction = status.event->direction;
-        s->event.card = status.event->card;
-        s->event.reason = status.event->reason;
+        snprintf(s->evt.timestamp, sizeof(s->evt.timestamp), "%s", status.event->timestamp);
+        s->evt.index = status.event->index;
+        s->evt.eventType = status.event->eventType;
+        s->evt.granted = status.event->granted;
+        s->evt.door = status.event->door;
+        s->evt.direction = status.event->direction;
+        s->evt.card = status.event->card;
+        s->evt.reason = status.event->reason;
     }
 
     free(status.sysdatetime);

@@ -94,14 +94,14 @@ bool getStatus() {
         { .field = "inputs state",     .type = "uint8",   .value.uint8.expected = 0x34,                   .value.uint8.value = s.inputs },
         { .field = "special info",     .type = "uint8",   .value.uint8.expected = 253,                    .value.uint8.value = s.info },
         { .field = "sequence number",  .type = "uint32",  .value.uint32.expected = 9876,                  .value.uint32.value = s.seqno },
-        { .field = "event timestamp",  .type = "string",  .value.string.expected = "2022-01-02 12:34:56", .value.string.value = s.event.timestamp },
-        { .field = "event index",      .type = "uint32",  .value.uint32.expected = 135,                   .value.uint32.value = s.event.index },
-        { .field = "event type",       .type = "uint8",   .value.uint8.expected = 6,                      .value.uint8.value = s.event.eventType },
-        { .field = "event granted",    .type = "boolean", .value.boolean.expected = true,                 .value.boolean.value = s.event.granted },
-        { .field = "event door",       .type = "uint8",   .value.uint8.expected = 3,                      .value.uint8.value = s.event.door },
-        { .field = "event direction",  .type = "uint8",   .value.uint8.expected = 1,                      .value.uint8.value = s.event.direction },
-        { .field = "event card",       .type = "uint32",  .value.uint32.expected = 8100023,               .value.uint32.value = s.event.card },
-        { .field = "event reason",     .type = "uint8",   .value.uint8.expected = 21,                     .value.uint8.value = s.event.reason },
+        { .field = "event timestamp",  .type = "string",  .value.string.expected = "2022-01-02 12:34:56", .value.string.value  = s.evt.timestamp },
+        { .field = "event index",      .type = "uint32",  .value.uint32.expected = 135,                   .value.uint32.value = s.evt.index },
+        { .field = "event type",       .type = "uint8",   .value.uint8.expected = 6,                      .value.uint8.value = s.evt.eventType },
+        { .field = "event granted",    .type = "boolean", .value.boolean.expected = true,                 .value.boolean.value = s.evt.granted },
+        { .field = "event door",       .type = "uint8",   .value.uint8.expected = 3,                      .value.uint8.value = s.evt.door },
+        { .field = "event direction",  .type = "uint8",   .value.uint8.expected = 1,                      .value.uint8.value = s.evt.direction },
+        { .field = "event card",       .type = "uint32",  .value.uint32.expected = 8100023,               .value.uint32.value = s.evt.card },
+        { .field = "event reason",     .type = "uint8",   .value.uint8.expected = 21,                     .value.uint8.value = s.evt.reason },
     };
     // clang-format on
 

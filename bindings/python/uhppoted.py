@@ -81,7 +81,7 @@ class Status:
     syserror: int
     seqno: int
     info: int
-    event: Event
+    evt: Event
 
 
 @dataclass
