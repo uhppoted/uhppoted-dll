@@ -19,7 +19,7 @@
 			  :debug          T)))
 
 (defun get-devices () "" 
-  (display "get-devices" (coerce (exec #'(lambda (u) (uhppoted-get-devices u))) 'list)))
+  (format t "  ~a:~%    ~:w~%~%" "get-devices" (coerce (exec #'(lambda (u) (uhppoted-get-devices u))) 'list)))
 
 
 (defun get-device () "" 
@@ -203,5 +203,19 @@
     (display "clear-tasklist" (exec #'(lambda (u) (uhppoted-clear-tasklist u device-id))))))
 
 
-(defun display (tag fields) "" 
-  (format t "  ~a:~%    ~:w~%~%" tag fields))
+(defun display (tag object) "" 
+; (print (type-of object))
+  (let ((fields (mapcar #'slot-definition-name (class-direct-slots (class-of object)))))
+    (format t "~%~a~%" tag)
+    (let* ((w (loop for f in fields maximize (length (string-downcase (string f)))))
+           (fmt (format nil "  ~~~da  ~~a~~%"  w))
+          )
+      (loop for f in fields
+        do (progn
+             (format t fmt (string-downcase (string f)) (slot-value object f))
+           )
+      )
+      (format t "~%")
+    )
+  ))
+

@@ -56,7 +56,7 @@
 
            event-timestamp
            event-index
-           event-type
+           event-eventtype
            event-granted
            event-door
            event-direction

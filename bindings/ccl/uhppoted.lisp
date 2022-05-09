@@ -31,7 +31,7 @@
 
 (defstruct event timestamp
                  index
-                 type
+                 eventtype
                  granted
                  door
                  direction
@@ -107,7 +107,7 @@
 (def-foreign-type nil
   (:struct :GoEvent (:timestamp :address)
                     (:index     :unsigned-fullword)
-                    (:type      :unsigned-byte)
+                    (:eventtype :unsigned-byte)
                     (:granted   :unsigned-byte)
                     (:door      :unsigned-byte)
                     (:direction :unsigned-byte)
@@ -295,7 +295,7 @@
 					           :seqno     (pref status :GoStatus.seqno)
 					           :event     (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
 										 :index     (pref event :GoEvent.index)
-										 :type      (pref event :GoEvent.type)
+										 :eventtype (pref event :GoEvent.eventtype)
 										 :granted   (pref event :GoEvent.granted)
 										 :door      (pref event :GoEvent.door)
 									   :direction (pref event :GoEvent.direction)
@@ -488,7 +488,7 @@
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
       (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
                   :index     (pref event :GoEvent.index)
-                  :type      (pref event :GoEvent.type)
+                  :eventtype (pref event :GoEvent.eventtype)
                   :granted   (pref event :GoEvent.granted)
                   :door      (pref event :GoEvent.door)
                   :direction (pref event :GoEvent.direction)

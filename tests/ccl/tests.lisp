@@ -67,7 +67,7 @@
                     (make-result :field "sequence number"   :expected 9876                  :value (status-seqno     status))
                     (make-result :field "event index"       :expected 135                   :value (event-index      event))
                     (make-result :field "event timestamp"   :expected "2022-01-02 12:34:56" :value (event-timestamp  event))
-                    (make-result :field "event type"        :expected 6                     :value (event-type       event))
+                    (make-result :field "event type"        :expected 6                     :value (event-eventtype  event))
                     (make-result :field "event granted"     :expected 1                     :value (event-granted    event))
                     (make-result :field "event door"        :expected 3                     :value (event-door       event))
                     (make-result :field "event direction"   :expected 1                     :value (event-direction  event))
@@ -169,7 +169,7 @@
     (evaluate "get-event" 
               (list (make-result :field "event index"       :expected 51                    :value (event-index     event))
                     (make-result :field "event timestamp"   :expected "2022-04-15 12:29:15" :value (event-timestamp event))
-                    (make-result :field "event type"        :expected 6                     :value (event-type      event))
+                    (make-result :field "event type"        :expected 6                     :value (event-eventtype event))
                     (make-result :field "event granted"     :expected 1                     :value (event-granted   event))
                     (make-result :field "event door"        :expected 3                     :value (event-door      event))
                     (make-result :field "event direction"   :expected 1                     :value (event-direction event))
