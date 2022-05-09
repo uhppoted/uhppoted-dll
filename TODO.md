@@ -14,6 +14,7 @@
       - [x] C#
       - [x] Python
       - [ ] CCL
+            - put-card
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo

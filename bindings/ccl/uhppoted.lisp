@@ -262,7 +262,8 @@
                                                     :address subnet
                                                     :address gateway
                                                     :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      t)))
 
 
 (defun uhppoted-get-status (uhppote device-id) "Retrieves a controller status information"
@@ -318,7 +319,8 @@
                                                  :unsigned-long device-id 
                                                  :address dt
                                                  :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      t)))
 
 
 (defun uhppoted-get-listener (uhppote device-id) "Retrieves the controller event listener address"
@@ -337,7 +339,8 @@
                                                      :unsigned-long device-id 
                                                      :address addr
                                                      :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      t)))
 
 
 (defun uhppoted-get-door-control (uhppote device-id door) "Retrieves the door control state and open delay for a controller"
@@ -367,7 +370,8 @@
                                                   :unsigned-long device-id 
                                                   :unsigned-byte door
                                                   :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      t))
 
 
 (defun uhppoted-get-cards (uhppote device-id) "Retrieves the number of cards stored on a controller"
@@ -433,7 +437,8 @@
                                                        :address       to_
                                                        :address       pdoors
                                                        :address)))
-            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err))))))
+            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+            t)))
       (dispose-heap-ivector doors_))))
 
 
@@ -442,14 +447,16 @@
                                                   :unsigned-long device-id 
                                                   :unsigned-long card-number
                                                   :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
 
 
 (defun uhppoted-delete-cards (uhppote device-id) "Deletes all cards from a controller"
   (with-macptrs ((err (external-call "DeleteCards" :address uhppote 
                                                    :unsigned-long device-id 
                                                    :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
 
 
 (defun uhppoted-get-event-index (uhppote device-id) "Retrieves the current event index from a controller"
@@ -467,7 +474,8 @@
                                                      :unsigned-long device-id 
                                                      :unsigned-long index
                                                      :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
 
 
 (defun uhppoted-get-event (uhppote device-id index) "Retrieves the event at the index from on controller"
@@ -493,7 +501,8 @@
                                                            :unsigned-long device-id 
                                                            :unsigned-byte (if enabled 1 0)
                                                            :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
 
 
 (defun uhppoted-get-time-profile (uhppote device-id profile-id) "Retrieves a time profile from a controller"
@@ -561,7 +570,8 @@
   (with-macptrs ((err (external-call "ClearTimeProfiles" :address uhppote 
                                                          :unsigned-long device-id 
                                                          :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
 
 
 (defun uhppoted-add-task (uhppote device-id task) "Adds a scheduled task to a controller"
@@ -586,20 +596,22 @@
                                                   :address       tt
                                                   :address)))
        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-        t))))
+       t))))
 
 
 (defun uhppoted-refresh-tasklist (uhppote device-id) "Refreshes a controller task list to activate added tasks"
   (with-macptrs ((err (external-call "RefreshTaskList" :address uhppote 
                                                        :unsigned-long device-id 
                                                        :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
 
 
 (defun uhppoted-clear-tasklist (uhppote device-id) "Clears a controller task list"
   (with-macptrs ((err (external-call "ClearTaskList" :address uhppote 
                                                      :unsigned-long device-id 
                                                      :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
 
 
