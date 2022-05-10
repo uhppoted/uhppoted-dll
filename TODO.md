@@ -14,7 +14,10 @@
       - [x] C#
       - [x] Python
       - [ ] CCL
-            - put-card
+            - [x] device-id
+            - [ ] get-time
+            - [ ] put-card
+            - [ ] booleans
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo

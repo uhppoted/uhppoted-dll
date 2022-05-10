@@ -64,6 +64,6 @@ build-all: build
 	make -C ./tests/c++ -f Makefile tests
 
 build-debug: build
-	make -C ./tests/python -f Makefile tests
+	make -C ./tests/csharp -f Makefile build
 
 
