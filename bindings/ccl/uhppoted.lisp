@@ -31,7 +31,7 @@
 
 (defstruct event timestamp
                  index
-                 eventtype
+                 event-type
                  granted
                  door
                  direction
@@ -105,14 +105,14 @@
                      (:date    :address)))
 
 (def-foreign-type nil
-  (:struct :GoEvent (:timestamp :address)
-                    (:index     :unsigned-fullword)
-                    (:eventtype :unsigned-byte)
-                    (:granted   :unsigned-byte)
-                    (:door      :unsigned-byte)
-                    (:direction :unsigned-byte)
-                    (:card      :unsigned-fullword)
-                    (:reason    :unsigned-byte)))
+  (:struct :GoEvent (:timestamp  :address)
+                    (:index      :unsigned-fullword)
+                    (:event-type :unsigned-byte)
+                    (:granted    :unsigned-byte)
+                    (:door       :unsigned-byte)
+                    (:direction  :unsigned-byte)
+                    (:card       :unsigned-fullword)
+                    (:reason     :unsigned-byte)))
 
 (def-foreign-type nil
   (:struct :GoStatus (:id        :unsigned-fullword)
@@ -288,19 +288,19 @@
 							                        (%get-unsigned-byte buttons 1)
 									                    (%get-unsigned-byte buttons 2)
 									                    (%get-unsigned-byte buttons 3))
-					           :relays    (pref status :GoStatus.relays)
-					           :inputs    (pref status :GoStatus.inputs)
-					           :syserror  (pref status :GoStatus.syserror)
-					           :info      (pref status :GoStatus.info)
-					           :seqno     (pref status :GoStatus.seqno)
-					           :event     (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
-										 :index     (pref event :GoEvent.index)
-										 :eventtype (pref event :GoEvent.eventtype)
-										 :granted   (pref event :GoEvent.granted)
-										 :door      (pref event :GoEvent.door)
-									   :direction (pref event :GoEvent.direction)
-										 :card      (pref event :GoEvent.card)
-										 :reason    (pref event :GoEvent.reason)))))))
+					           :relays     (pref status :GoStatus.relays)
+					           :inputs     (pref status :GoStatus.inputs)
+					           :syserror   (pref status :GoStatus.syserror)
+					           :info       (pref status :GoStatus.info)
+					           :seqno      (pref status :GoStatus.seqno)
+					           :event      (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
+										 :index      (pref event :GoEvent.index)
+										 :event-type (pref event :GoEvent.event-type)
+										 :granted    (pref event :GoEvent.granted)
+										 :door       (pref event :GoEvent.door)
+									   :direction  (pref event :GoEvent.direction)
+										 :card       (pref event :GoEvent.card)
+										 :reason     (pref event :GoEvent.reason)))))))
 
 
 (defun uhppoted-get-time (uhppote device-id) "Retrieves a controller date/time"
@@ -486,14 +486,14 @@
                                                   :unsigned-long index
                                                   :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
-                  :index     (pref event :GoEvent.index)
-                  :eventtype (pref event :GoEvent.eventtype)
-                  :granted   (pref event :GoEvent.granted)
-                  :door      (pref event :GoEvent.door)
-                  :direction (pref event :GoEvent.direction)
-                  :card      (pref event :GoEvent.card)
-                  :reason    (pref event :GoEvent.reason)))))
+      (make-event :timestamp  (go-string (pref event :GoEvent.timestamp))
+                  :index      (pref event :GoEvent.index)
+                  :event-type (pref event :GoEvent.event-type)
+                  :granted    (pref event :GoEvent.granted)
+                  :door       (pref event :GoEvent.door)
+                  :direction  (pref event :GoEvent.direction)
+                  :card       (pref event :GoEvent.card)
+                  :reason     (pref event :GoEvent.reason)))))
 
 
 (defun uhppoted-record-special-events (uhppote device-id enabled) "Enables/disables recording additional events for a controller"

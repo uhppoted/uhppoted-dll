@@ -2,7 +2,7 @@
 
 ### IN PROGRESS
 
-- [ ] Rename status.event throughout (because it's special in C# and g++ doesn't like it much either)
+- [x] Rename status.event throughout (because it's special in C# and g++ doesn't like it much either)
       - [x] C
       - [x] C++
       - [x] C#
