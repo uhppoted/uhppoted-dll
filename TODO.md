@@ -15,8 +15,20 @@
       - [x] Python
       - [ ] CCL
             - [x] device-id
-            - [ ] get-time
+            - [x] add-task
+            - [x] set-time-profile
+            - [ ] get-event-index
+            - [ ] delete-card
             - [ ] put-card
+            - [ ] get-time
+            - [ ] get-card-by-index
+            - [ ] get-cards
+            - [ ] set-door-control
+            - [ ] set-listener
+            - [ ] get-listener
+            - [ ] set-time
+            - [ ] get-status::event
+            - [ ] set-address
             - [ ] booleans
 
 - [ ] Replace slice'ing code with standard cgo functions

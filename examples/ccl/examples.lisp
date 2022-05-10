@@ -19,12 +19,14 @@
 			  :debug          T)))
 
 (defun get-devices () "" 
-  (format t "  ~a:~%    ~:w~%~%" "get-devices" (coerce (exec #'(lambda (u) (uhppoted-get-devices u))) 'list)))
+  (let ((devices (coerce (exec #'(lambda (u) (uhppoted-get-devices u))) 'list)))
+    (format t "  ~a:~%    ~:w~%~%" "get-devices" devices)))
 
 
 (defun get-device () "" 
-  (let ((device-id   405419896))
-    (display "get-device" device-id (exec #'(lambda (u) (uhppoted-get-device u device-id))))))
+  (let* ((device-id 405419896)
+         (device    (exec #'(lambda (u) (uhppoted-get-device u device-id)))))
+    (display "get-device" device-id device)))
 
 
 (defun set-address () "" 
@@ -32,40 +34,47 @@
         (address   "192.168.1.125")
         (subnet    "255.255.254.0")
         (gateway   "192.168.1.5"))
-    (display "set-address" device-id (exec #'(lambda (u) (uhppoted-set-address u device-id address subnet gateway))))))
+    (exec #'(lambda (u) (uhppoted-set-address u device-id address subnet gateway)))
+    (display "set-address" device-id nil)))
 
 
 (defun get-status () "" 
-  (let ((device-id 405419896))
-    (display "get-status" device-id (exec #'(lambda (u) (uhppoted-get-status u device-id))))))
+  (let* ((device-id 405419896)
+         (status (exec #'(lambda (u) (uhppoted-get-status u device-id)))))
+    (display "get-status" device-id status)))
 
 
 (defun get-time () "" 
   (let ((device-id 405419896))
-    (display "get-time" device-id (exec #'(lambda (u) (uhppoted-get-time u device-id))))))
+    (exec #'(lambda (u) (uhppoted-get-time u device-id)))
+    (display "get-time" device-id nil)))
 
 
 (defun set-time () "" 
   (let ((device-id 405419896)
         (datetime  (now)))
-    (display "set-time" device-id (exec #'(lambda (u) (uhppoted-set-time u device-id datetime))))))
+    (exec #'(lambda (u) (uhppoted-set-time u device-id datetime)))
+    (display "set-time" device-id nil)))
 
 
 (defun get-listener () "" 
   (let ((device-id 405419896))
-    (display "get-listener" device-id (exec #'(lambda (u) (uhppoted-get-listener u device-id))))))
+    (exec #'(lambda (u) (uhppoted-get-listener u device-id)))
+    (display "get-listener" device-id nil)))
 
 
 (defun set-listener () "" 
   (let ((device-id 405419896)
         (listener  "192.168.1.100:60001"))
-    (display "set-listener" device-id (exec #'(lambda (u) (uhppoted-set-listener u device-id listener))))))
+    (exec #'(lambda (u) (uhppoted-set-listener u device-id listener)))
+    (display "set-listener" device-id nil)))
 
 
 (defun get-door-control () "" 
-  (let ((device-id 405419896)
-        (door      4))
-    (display "get-door-control" device-id (exec #'(lambda (u) (uhppoted-get-door-control u device-id door))))))
+  (let* ((device-id 405419896)
+         (door      4)
+         (control   (exec #'(lambda (u) (uhppoted-get-door-control u device-id door)))))
+    (display "get-door-control" device-id control)))
 
 
 (defun set-door-control () "" 
@@ -73,30 +82,35 @@
         (door      4)
         (mode      uhppoted:normally-open)
         (delay     9))
-    (display "set-door-control" device-id (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay))))))
+    (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay)))
+    (display "set-door-control" device-id nil)))
 
 
 (defun open-door () "" 
   (let ((device-id 405419896)
         (door      4))
-    (display "open-door" device-id (exec #'(lambda (u) (uhppoted-open-door u device-id door))))))
+    (exec #'(lambda (u) (uhppoted-open-door u device-id door)))
+    (display "open-door" device-id nil)))
 
 
 (defun get-cards () "" 
   (let ((device-id 405419896))
-    (display "get-cards" device-id (exec #'(lambda (u) (uhppoted-get-cards u device-id))))))
+    (exec #'(lambda (u) (uhppoted-get-cards u device-id)))
+    (display "get-cards" device-id nil)))
 
 
 (defun get-card () "" 
-  (let ((device-id   405419896)
-        (card-number 8000001))
-    (display "get-card" device-id (exec #'(lambda (u) (uhppoted-get-card u device-id card-number))))))
+  (let* ((device-id   405419896)
+         (card-number 8000001)
+         (card (exec #'(lambda (u) (uhppoted-get-card u device-id card-number)))))
+    (display "get-card" device-id card)))
 
 
 (defun get-card-by-index () "" 
-  (let ((device-id 405419896)
-        (index     7))
-    (display "get-card-by-index" device-id (exec #'(lambda (u) (uhppoted-get-card-by-index u device-id index))))))
+  (let* ((device-id 405419896)
+         (index     7)
+         (card (exec #'(lambda (u) (uhppoted-get-card-by-index u device-id index)))))
+    (display "get-card-by-index" device-id card)))
 
 
 (defun put-card () "" 
@@ -105,47 +119,55 @@
         (from        "2022-01-01")
         (to          "2022-12-31")
         (doors       (make-array 4 :initial-contents '(0 1 31 75))))
-    (display "put-card" device-id (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors))))))
+    (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors)))
+    (display "put-card" device-id nil)))
 
 
 (defun delete-card () "" 
   (let ((device-id   405419896)
         (card-number 8000001))
-    (display "delete-card" device-id (exec #'(lambda (u) (uhppoted-delete-card u device-id card-number))))))
+    (exec #'(lambda (u) (uhppoted-delete-card u device-id card-number)))
+    (display "delete-card" device-id nil)))
 
 
 (defun delete-cards () "" 
   (let ((device-id 405419896))
-    (display "delete-cards" device-id (exec #'(lambda (u) (uhppoted-delete-cards u device-id))))))
+    (exec #'(lambda (u) (uhppoted-delete-cards u device-id)))
+    (display "delete-cards" device-id nil)))
 
 
 (defun get-event-index () "" 
   (let ((device-id 405419896))
-    (display "get-event-index" device-id (exec #'(lambda (u) (uhppoted-get-event-index u device-id))))))
+    (exec #'(lambda (u) (uhppoted-get-event-index u device-id)))
+    (display "get-event-index" device-id nil)))
 
 
 (defun set-event-index () "" 
   (let ((device-id 405419896)
         (index     91))
-    (display "set-event-index" device-id (exec #'(lambda (u) (uhppoted-set-event-index u device-id index))))))
+    (exec #'(lambda (u) (uhppoted-set-event-index u device-id index)))
+    (display "set-event-index" device-id nil)))
 
 
 (defun get-event () "" 
-  (let ((device-id 405419896)
-        (index     43))
-    (display "get-event" device-id (exec #'(lambda (u) (uhppoted-get-event u device-id index))))))
+  (let* ((device-id 405419896)
+         (index     43)
+         (event (exec #'(lambda (u) (uhppoted-get-event u device-id index)))))
+    (display "get-event" device-id event)))
 
 
 (defun record-special-events () "" 
   (let ((device-id 405419896)
         (enabled   t))
-    (display "record-special-events" device-id (exec #'(lambda (u) (uhppoted-record-special-events u device-id enabled))))))
+    (exec #'(lambda (u) (uhppoted-record-special-events u device-id enabled)))
+    (display "record-special-events" device-id nil)))
 
 
 (defun get-time-profile () "" 
-  (let ((device-id  405419896)
-        (profile-id 29))
-    (display "get-time-profile" device-id (exec #'(lambda (u) (uhppoted-get-time-profile u device-id profile-id))))))
+  (let* ((device-id  405419896)
+         (profile-id 29)
+         (profile (exec #'(lambda (u) (uhppoted-get-time-profile u device-id profile-id)))))
+    (display "get-time-profile" device-id profile)))
 
 
 (defun set-time-profile () "" 
@@ -167,12 +189,14 @@
                                        :segment2end   ""
                                        :segment3start ""
                                        :segment3end   "18:00")))
-    (display "set-time-profile" device-id (exec #'(lambda (u) (uhppoted-set-time-profile u device-id profile))))))
+    (exec #'(lambda (u) (uhppoted-set-time-profile u device-id profile)))
+    (display "set-time-profile" device-id profile)))
 
 
 (defun clear-time-profiles () "" 
   (let ((device-id 405419896))
-    (display "clear-time-profiles" device-id (exec #'(lambda (u) (uhppoted-clear-time-profiles u device-id))))))
+    (exec #'(lambda (u) (uhppoted-clear-time-profiles u device-id)))
+    (display "clear-time-profiles" device-id nil)))
 
 
 (defun add-task () "" 
@@ -190,28 +214,25 @@
                                :sunday    t
                                :at        "08:30"
                                :cards     11)))
-    (display "add-task" device-id (exec #'(lambda (u) (uhppoted-add-task u device-id task))))))
+    (exec #'(lambda (u) (uhppoted-add-task u device-id task)))
+    (display "add-task" device-id task)))
 
 
 (defun refresh-tasklist () "" 
   (let ((device-id 405419896))
-    (display "refresh-tasklist" device-id (exec #'(lambda (u) (uhppoted-refresh-tasklist u device-id))))))
+    (exec #'(lambda (u) (uhppoted-refresh-tasklist u device-id)))
+    (display "refresh-tasklist" device-id nil)))
 
 
 (defun clear-tasklist () "" 
   (let ((device-id 405419896))
-    (display "clear-tasklist" device-id (exec #'(lambda (u) (uhppoted-clear-tasklist u device-id))))))
+    (exec #'(lambda (u) (uhppoted-clear-tasklist u device-id)))
+    (display "clear-tasklist" device-id nil)))
 
 
 ; (print (type-of result))
 (defun display (tag device-id result) "" 
-  (let ((fields (mapcar #'slot-definition-name (class-direct-slots (class-of result)))))
-       (display-fields
-         tag 
-         (cons 
-           (list "device-id" device-id)
-           (loop for f in fields 
-             collect (list (string f) (slot-value result f)))))))
+  (display-fields tag (cons (list "device-id" device-id) (as-fields result))))
 
 
 (defun display-fields (tag fields) "" 
@@ -222,3 +243,8 @@
       do (format t fmt (string-downcase f) v))
 ))
 
+
+(defun as-fields (result) "" 
+  (let ((fields (mapcar #'slot-definition-name (class-direct-slots (class-of result)))))
+       (loop for f in fields 
+         collect (list (string f) (slot-value result f)))))
