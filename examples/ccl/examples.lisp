@@ -77,7 +77,8 @@
   (let* ((device-id 405419896)
          (door      4)
          (control   (exec #'(lambda (u) (uhppoted-get-door-control u device-id door)))))
-    (display "get-door-control" device-id (as-fields control))))
+    (display "get-door-control" device-id (list (list "mode"  (door-mode (door-control-mode  control)))
+                                                (list "delay" (door-control-delay control))))))
 
 
 (defun set-door-control () "" 
@@ -87,7 +88,7 @@
         (delay     9))
     (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay)))
     (display "set-door-control" device-id (list (list "door" door) 
-                                                (list "mode" mode) 
+                                                (list "mode" (door-mode mode))
                                                 (list "delay" delay)))))
 
 
@@ -259,3 +260,8 @@
           (t v)
       )))
 
+(defun door-mode (mode)
+  (cond ((equal mode uhppoted:normally-open)   "normally open")
+        ((equal mode uhppoted:normally-closed) "normally closed")
+        ((equal mode uhppoted:controlled)      "controlled")
+        (T  "<unknown>")))
