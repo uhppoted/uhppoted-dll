@@ -25,7 +25,7 @@
             - [x] set-address
             - [x] booleans
             - [x] door control modes
-            - [ ] error handling
+            - [x] error handling
             - [ ] flatten list of lists
             - [ ] get-status::event
 

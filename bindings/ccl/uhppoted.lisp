@@ -362,7 +362,8 @@
                                                         :unsigned-byte mode
                                                         :unsigned-byte delay
                                                         :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+      t))
 
 
 (defun uhppoted-open-door (uhppote device-id door) "Remotely opens a controller door"

@@ -16,16 +16,14 @@
 
 (defun exec (f) "" 
   (handler-bind
-  ((uhppoted-error
-     #'(lambda (c) 
-       (error 'failed :message  (uhppoted:message c)))))
-  (uhppoted f 
-        :bind-addr      "0.0.0.0"
-        :broadcast-addr "255.255.255.255"
-        :listen-addr    "0.0.0.0:60001"
-        :timeout        2500
-        :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
-        :debug          T)))
+    ((uhppoted-error #'(lambda (c) (error 'failed :message  (uhppoted:message c)))))
+    (uhppoted f 
+              :bind-addr      "0.0.0.0"
+              :broadcast-addr "255.255.255.255"
+              :listen-addr    "0.0.0.0:60001"
+              :timeout        2500
+              :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+              :debug          T)))
 
 
 (defun get-devices () "" 
