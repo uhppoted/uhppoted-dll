@@ -489,7 +489,7 @@
       (make-event :timestamp  (go-string (pref event :GoEvent.timestamp))
                   :index      (pref event :GoEvent.index)
                   :event-type (pref event :GoEvent.event-type)
-                  :granted    (pref event :GoEvent.granted)
+                  :granted    (if (equal 0 (pref event :GoEvent.granted)) nil T)
                   :door       (pref event :GoEvent.door)
                   :direction  (pref event :GoEvent.direction)
                   :card       (pref event :GoEvent.card)

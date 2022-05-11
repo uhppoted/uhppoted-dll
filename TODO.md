@@ -2,12 +2,6 @@
 
 ### IN PROGRESS
 
-- [x] Rename status.event throughout (because it's special in C# and g++ doesn't like it much either)
-      - [x] C
-      - [x] C++
-      - [x] C#
-      - [x] Python
-
 - [ ] Commonalize examples output
       - [x] C
       - [x] C++
@@ -17,19 +11,23 @@
             - [x] device-id
             - [x] add-task
             - [x] set-time-profile
-            - [ ] get-event-index
-            - [ ] delete-card
-            - [ ] put-card
-            - [ ] get-time
-            - [ ] get-card-by-index
-            - [ ] get-cards
-            - [ ] set-door-control
-            - [ ] set-listener
-            - [ ] get-listener
-            - [ ] set-time
+            - [x] get-event-index
+            - [x] set-event-index
+            - [x] delete-card
+            - [x] put-card
+            - [x] get-time
+            - [x] get-card-by-index
+            - [x] get-cards
+            - [x] set-door-control
+            - [x] set-listener
+            - [x] get-listener
+            - [x] set-time
+            - [x] set-address
+            - [x] booleans
+            - [ ] door control modes
+            - [ ] error handling
+            - [ ] flatten list of lists
             - [ ] get-status::event
-            - [ ] set-address
-            - [ ] booleans
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo
