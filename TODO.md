@@ -2,12 +2,12 @@
 
 ### IN PROGRESS
 
-- [ ] Commonalize examples output
+- [x] Commonalize examples output
       - [x] C
       - [x] C++
       - [x] C#
       - [x] Python
-      - [ ] CCL
+      - [x] CCL
             - [x] device-id
             - [x] add-task
             - [x] set-time-profile
@@ -27,9 +27,9 @@
             - [x] door control modes
             - [x] error handling
             - [x] flatten list of lists
-            - [ ] get-status::event
             - [x] get-status::doors
             - [x] get-status::buttons
+            - [x] get-status::event
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo

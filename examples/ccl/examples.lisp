@@ -87,7 +87,7 @@
          (control   (exec #'(lambda (u) (uhppoted-get-door-control u device-id door)))))
     (when control
       (display "get-door-control" device-id (list "mode"  (door-mode (door-control-mode  control))
-                                                  "delay"            (door-control-delay control))))))
+                                                  "delay" (door-control-delay control))))))
 
 
 (defun set-door-control () "" 
@@ -97,9 +97,9 @@
          (delay     9)
          (ok        (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay)))))
     (when ok 
-      (display "set-door-control" device-id (list "door" door
-                                                  "mode" (door-mode mode)
-                                                  "delay"           delay)))))
+      (display "set-door-control" device-id (list "door"  door
+                                                  "mode"  (door-mode mode)
+                                                  "delay" delay)))))
 
 
 (defun open-door () "" 
@@ -143,7 +143,7 @@
       (display "put-card" device-id (list "card"  card-number
                                           "from"  from
                                           "to"    to
-                                          "doors" doors))))
+                                          "doors" (format nil "~{~a ~}" (coerce doors 'list))))))
 
 
 (defun delete-card () "" 
@@ -266,16 +266,16 @@
 
 
 (defun display (tag device-id fields) "" 
-  (let* ((all (loop :for (k v) 
-                    :on (nconc (list "device-id" device-id) fields)
-                    :by #'cddr 
-                    :while v 
-                    :collect (list k v)))
-         (w (loop for (f) in all maximize (length f)))
+  (let* ((all (as-pairs (nconc (list "device-id" device-id) fields)))
+         (w   (label-width all))
          (fmt (format nil "  ~~~da  ~~a~~%"  w)))
     (format t "~%~a~%" tag)
     (loop for (f v) in all
-       do (format t fmt (string-downcase f) v))))
+       do (cond ((typep v 'cons) 
+                  (let* ((l (as-pairs v)) (w (label-width l)) (fmt (format nil "  ~a ~~~da  ~~a~~%"  f w)))
+                    (loop for (f v) in l
+                      do (format t fmt (string-downcase f) v))))
+                (t (format t fmt (string-downcase f) v))))))
 
 
 (defun as-fields (result) "" 
@@ -284,16 +284,26 @@
          append (list (string-downcase (string f)) (field-value result f)))))
 
 
+(defun as-pairs (fields) "" 
+  (loop for (k v) on fields by #'cddr while v collect (list k v)))
+
+
+(defun label-width (fields) ""
+  (loop for (f) in fields maximize (length f)))
+
+
 (defun field-value (result f) "" 
   (let ((v (slot-value result f)))
-    (cond ((as-fields v)      (as-fields v))
-          ((typep v 'boolean) (as-boolean v))
+    (cond ((typep v 'boolean) (as-boolean v))
           ((typep v 'cons)    (format nil "~{~a ~}" (mapcar #'as-boolean v)))
-          (t                  v)
-      )))
+          ((as-fields v)      (as-fields v))
+          (t                  v))))
+
 
 (defun as-boolean (v) "" 
-  (if v "Y" "N"))
+  (cond ((typep v 'boolean) (if v "Y" "N"))
+        (t v)))
+
 
 (defun door-mode (mode)
   (cond ((equal mode uhppoted:normally-open)   "normally open")
