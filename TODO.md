@@ -26,7 +26,7 @@
             - [x] booleans
             - [x] door control modes
             - [x] error handling
-            - [ ] flatten list of lists
+            - [x] flatten list of lists
             - [ ] get-status::event
 
 - [ ] Replace slice'ing code with standard cgo functions

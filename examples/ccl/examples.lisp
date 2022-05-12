@@ -39,9 +39,9 @@
          (gateway   "192.168.1.5")
          (ok        (exec #'(lambda (u) (uhppoted-set-address u device-id address subnet gateway)))))
     (when ok 
-      (display "set-address" device-id (list (list "address" address)
-                                             (list "subnet"  subnet)
-                                             (list "gateway" gateway))))))
+      (display "set-address" device-id (list "address" address
+                                             "subnet"  subnet
+                                             "gateway" gateway)))))
 
 
 (defun get-status () "" 
@@ -55,7 +55,7 @@
   (let* ((device-id 405419896)
          (datetime (exec #'(lambda (u) (uhppoted-get-time u device-id)))))
     (when datetime 
-      (display "get-time" device-id (list (list "date/time" datetime))))))
+      (display "get-time" device-id (list "date/time" datetime)))))
 
 
 (defun set-time () "" 
@@ -63,14 +63,14 @@
          (datetime  (now))
          (ok        (exec #'(lambda (u) (uhppoted-set-time u device-id datetime)))))
     (when ok 
-      (display "set-time" device-id (list (list "date/time" datetime))))))
+      (display "set-time" device-id (list "date/time" datetime)))))
 
 
 (defun get-listener () "" 
   (let* ((device-id 405419896)
          (listener (exec #'(lambda (u) (uhppoted-get-listener u device-id)))))
     (when listener
-      (display "get-listener" device-id (list (list "listener" listener))))))
+      (display "get-listener" device-id (list "listener" listener)))))
 
 
 (defun set-listener () "" 
@@ -78,7 +78,7 @@
          (listener  "192.168.1.100:60001")
          (ok        (exec #'(lambda (u) (uhppoted-set-listener u device-id listener)))))
     (when ok
-      (display "set-listener" device-id (list (list "listener" listener))))))
+      (display "set-listener" device-id (list "listener" listener)))))
 
 
 (defun get-door-control () "" 
@@ -86,8 +86,8 @@
          (door      4)
          (control   (exec #'(lambda (u) (uhppoted-get-door-control u device-id door)))))
     (when control
-      (display "get-door-control" device-id (list (list "mode"  (door-mode (door-control-mode  control)))
-                                                  (list "delay" (door-control-delay control)))))))
+      (display "get-door-control" device-id (list "mode"  (door-mode (door-control-mode  control))
+                                                  "delay"            (door-control-delay control))))))
 
 
 (defun set-door-control () "" 
@@ -97,9 +97,9 @@
          (delay     9)
          (ok        (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay)))))
     (when ok 
-      (display "set-door-control" device-id (list (list "door" door) 
-                                                  (list "mode" (door-mode mode))
-                                                  (list "delay" delay))))))
+      (display "set-door-control" device-id (list "door" door
+                                                  "mode" (door-mode mode)
+                                                  "delay"           delay)))))
 
 
 (defun open-door () "" 
@@ -107,14 +107,14 @@
          (door      4)
          (ok (exec #'(lambda (u) (uhppoted-open-door u device-id door)))))
     (when ok
-      (display "open-door" device-id (list (list "door" door))))))
+      (display "open-door" device-id (list "door" door)))))
 
 
 (defun get-cards () "" 
   (let* ((device-id 405419896)
          (cards (exec #'(lambda (u) (uhppoted-get-cards u device-id)))))
     (when cards
-      (display "get-cards" device-id (list (list "cards" cards))))))
+      (display "get-cards" device-id (list "cards" cards)))))
 
 
 (defun get-card () "" 
@@ -129,7 +129,7 @@
          (index     7)
          (card (exec #'(lambda (u) (uhppoted-get-card-by-index u device-id index)))))
     (when card
-      (display "get-card-by-index" device-id (cons (list "index" index) (as-fields card))))))
+      (display "get-card-by-index" device-id (nconc (list "index" index) (as-fields card))))))
 
 
 (defun put-card () "" 
@@ -140,10 +140,10 @@
          (doors       (make-array 4 :initial-contents '(0 1 31 75)))
          (ok          (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors)))))
     (when ok)
-      (display "put-card" device-id (list (list "card"  card-number) 
-                                          (list "from"  from) 
-                                          (list "to"    to) 
-                                          (list "doors" doors)))))
+      (display "put-card" device-id (list "card"  card-number
+                                          "from"  from
+                                          "to"    to
+                                          "doors" doors))))
 
 
 (defun delete-card () "" 
@@ -151,7 +151,7 @@
          (card-number 8000001)
          (ok          (exec #'(lambda (u) (uhppoted-delete-card u device-id card-number)))))
     (when ok
-      (display "delete-card" device-id (list (list "card" card-number))))))
+      (display "delete-card" device-id (list "card" card-number)))))
 
 
 (defun delete-cards () "" 
@@ -165,7 +165,7 @@
   (let* ((device-id 405419896)
          (index     (exec #'(lambda (u) (uhppoted-get-event-index u device-id)))))
     (when index
-      (display "get-event-index" device-id (list (list "index" index))))))
+      (display "get-event-index" device-id (list "index" index)))))
 
 
 (defun set-event-index () "" 
@@ -173,7 +173,7 @@
          (index     91)
          (ok        (exec #'(lambda (u) (uhppoted-set-event-index u device-id index)))))
     (when ok
-      (display "set-event-index" device-id (list (list "index" index))))))
+      (display "set-event-index" device-id (list "index" index)))))
 
 
 (defun get-event () "" 
@@ -181,7 +181,7 @@
          (index     43)
          (event (exec #'(lambda (u) (uhppoted-get-event u device-id index)))))
     (when event 
-      (display "get-event" device-id (as-fields event)))))
+        (display "get-event" device-id (as-fields event)))))
 
 
 (defun record-special-events () "" 
@@ -266,18 +266,23 @@
 
 
 (defun display (tag device-id fields) "" 
-  (let* ((all (cons (list "device-id" device-id) fields))
+  (let* ((all (loop :for (k v) 
+                    :on (nconc (list "device-id" device-id) fields)
+                    :by #'cddr 
+                    :while v 
+                    :collect (list k v)))
          (w (loop for (f) in all maximize (length f)))
          (fmt (format nil "  ~~~da  ~~a~~%"  w)))
     (format t "~%~a~%" tag)
     (loop for (f v) in all
-      do (format t fmt (string-downcase f) v))))
+       do (format t fmt (string-downcase f) v))))
 
 
 (defun as-fields (result) "" 
   (let ((fields (mapcar #'slot-definition-name (class-direct-slots (class-of result)))))
        (loop for f in fields 
-         collect (list (string-downcase (string f)) (field-value result f)))))
+         append (list (string-downcase (string f)) (field-value result f)))))
+
 
 (defun field-value (result f) "" 
   (let ((v (slot-value result f)))
@@ -285,6 +290,7 @@
           ((typep v 'boolean) (if v "Y" "N"))
           (t v)
       )))
+
 
 (defun door-mode (mode)
   (cond ((equal mode uhppoted:normally-open)   "normally open")
