@@ -56,8 +56,8 @@
     (evaluate "get-status" 
               (list (make-result :field "device ID"         :expected 405419896             :value (status-id        status))
                     (make-result :field "system date/time"  :expected "2022-03-19 15:48:32" :value (status-timestamp status))
-                    (make-result :field "doors state"       :expected '(1 0 0 1)            :value (status-doors     status))
-                    (make-result :field "buttons state"     :expected '(1 0 1 0)            :value (status-buttons   status))
+                    (make-result :field "doors state"       :expected '(t nil nil t)        :value (status-doors     status))
+                    (make-result :field "buttons state"     :expected '(t nil t   nil)      :value (status-buttons   status))
                     (make-result :field "relays state"      :expected 18                    :value (status-relays    status))
                     (make-result :field "inputs state"      :expected 52                    :value (status-inputs    status))
                     (make-result :field "system error"      :expected 86                    :value (status-syserror  status))

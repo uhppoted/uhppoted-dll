@@ -286,11 +286,14 @@
 
 (defun field-value (result f) "" 
   (let ((v (slot-value result f)))
-    (cond ((as-fields v) (as-fields v))
-          ((typep v 'boolean) (if v "Y" "N"))
-          (t v)
+    (cond ((as-fields v)      (as-fields v))
+          ((typep v 'boolean) (as-boolean v))
+          ((typep v 'cons)    (format nil "~{~a ~}" (mapcar #'as-boolean v)))
+          (t                  v)
       )))
 
+(defun as-boolean (v) "" 
+  (if v "Y" "N"))
 
 (defun door-mode (mode)
   (cond ((equal mode uhppoted:normally-open)   "normally open")

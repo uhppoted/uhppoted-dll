@@ -28,6 +28,8 @@
             - [x] error handling
             - [x] flatten list of lists
             - [ ] get-status::event
+            - [x] get-status::doors
+            - [x] get-status::buttons
 
 - [ ] Replace slice'ing code with standard cgo functions
       - https://pkg.go.dev/cmd/cgo
