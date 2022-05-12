@@ -24,4 +24,5 @@ jobs:
 
     - name: Build
       run: |
+        pip install yapf
         make build-debug
