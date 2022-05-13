@@ -93,7 +93,7 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 		return fmt.Errorf("invalid argument (doors) - expected valid pointer")
 	}
 
-	_doors := unsafe.Slice(doors, 4)
+	_doors := C.GoBytes(unsafe.Pointer(doors), 4)
 
 	if DEBUG {
 		fmt.Printf(">>> put-card\n")

@@ -2,41 +2,25 @@
 
 ### IN PROGRESS
 
-- [x] Commonalize examples output
-      - [x] C
-      - [x] C++
-      - [x] C#
-      - [x] Python
-      - [x] CCL
-            - [x] device-id
-            - [x] add-task
-            - [x] set-time-profile
-            - [x] get-event-index
-            - [x] set-event-index
-            - [x] delete-card
-            - [x] put-card
-            - [x] get-time
-            - [x] get-card-by-index
-            - [x] get-cards
-            - [x] set-door-control
-            - [x] set-listener
-            - [x] get-listener
-            - [x] set-time
-            - [x] set-address
-            - [x] booleans
-            - [x] door control modes
-            - [x] error handling
-            - [x] flatten list of lists
-            - [x] get-status::doors
-            - [x] get-status::buttons
-            - [x] get-status::event
+- [ ] Github workflow
+      - [ ] tests
+            - [x] C
+            - [x] C++
+            - [x] C#
+            - [ ] Python
+```
+Traceback (most recent call last):
+  File "tests.py", line 19, in <module>
+    import uhppoted
+  File "/home/runner/work/uhppoted-dll/uhppoted-dll/tests/python/../../bindings/python/uhppoted.py", line 18, in <module>
+    from functools import cache
+ImportError: cannot import name 'cache' from 'functools' (/usr/lib/python3.8/functools.py)
+```
+            - [ ] CCL
+      - [ ] examples
 
-- [ ] Replace slice'ing code with standard cgo functions
-      - https://pkg.go.dev/cmd/cgo
-      - func C.CBytes([]byte) unsafe.Pointer
-      - func C.GoStringN(*C.char, C.int) string
-      - func C.GoBytes(unsafe.Pointer, C.int) []byte
-      - (?) Pass string arguments rather than const char *
+- [x] Replace unsafe.Slice code with standard cgo functions
+      - [x] func C.GoBytes(unsafe.Pointer, C.int) []byte
 
 - [ ] Extend examples to use command line args
       - [ ] C
@@ -52,15 +36,6 @@
       - [ ] Python
       - [ ] CCL
       - [ ] LIB_PATH/DYLIB_PATH
-
-- [ ] Github workflow
-      - [ ] tests
-            - [x] C
-            - [x] C++
-            - [x] C#
-            - [ ] Python
-            - [ ] CCL
-      - [ ] examples
 
   - [ ] Constants for event types, reason, etc
   - [ ] C++ 

@@ -105,7 +105,7 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 		return fmt.Errorf("invalid argument (doors) - expected valid pointer")
 	}
 
-	_doors := unsafe.Slice(doors, 4)
+	_doors := C.GoBytes(unsafe.Pointer(doors), 4)
 	for i := 0; i < 4; i++ {
 		if _doors[i] != []uint8{0, 1, 31, 75}[i] {
 			return fmt.Errorf("Incorrect doors[%v] (%v)", i+1, _doors[i])

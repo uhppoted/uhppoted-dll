@@ -16,6 +16,12 @@ jobs:
         go-version: ^1.18
       id: go
 
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+      id: python
+
     - name: Checkout uhppoted-dll
       run: git clone https://github.com/uhppoted/uhppoted-dll.git ../uhppoted-dll
   

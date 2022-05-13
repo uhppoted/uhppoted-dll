@@ -15,6 +15,7 @@ else
 endif
 
 .PHONY: python
+.PHONY: c
 .PHONY: cpp
 .PHONY: csharp
 .PHONY: ccl
@@ -27,7 +28,7 @@ build:
 	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
 	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
 
-c: ./examples/c/example ./tests/c/test
+c: 
 	make -C ./examples/c -f Makefile build
 	make -C ./tests/c    -f Makefile build
 
