@@ -22,13 +22,22 @@ jobs:
         python-version: '3.9'
       id: python
 
+    - name: Set up Clozure Common Lisp
+      run: |
+        wget https://github.com/Clozure/ccl/releases/download/v1.12.1/ccl-1.12.1-linuxx86.tar.gz
+        tar xvzf ccl-1.12.1-linuxx86.tar.gz
+        ln -s ./ccl/lx86cl64 /usr/local/bin/ccl64
+
     - name: Checkout uhppoted-dll
       run: git clone https://github.com/uhppoted/uhppoted-dll.git ../uhppoted-dll
   
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
 
-    - name: Build
+    - name: Miscellaneous stuff
       run: |
         pip install yapf
-        make build-debug
+        apt-get install rlwrap
+
+    - name: Build
+      run: make build-debug
