@@ -4,12 +4,12 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-extern uint32_t DEVICE_ID;
 extern uint8_t PROFILE_ID;
 
 int getTimeProfile(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint8_t profileID = PROFILE_ID;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint8_t profileID = opts.time_profile_id;
     time_profile profile;
 
     if (get_time_profile(deviceID, profileID, &profile) < 0) {
@@ -44,9 +44,12 @@ int getTimeProfile(int argc, char **argv) {
 }
 
 int setTimeProfile(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint8_t profileID = opts.time_profile_id;
+
     time_profile profile = {
-        .ID = PROFILE_ID,
+        .ID = profileID,
         .linked = 71,
         .from = "2022-02-01",
         .to = "2022-06-30",
@@ -97,7 +100,7 @@ int setTimeProfile(int argc, char **argv) {
 }
 
 int clearTimeProfiles(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
 
     if (clear_time_profiles(deviceID) < 0) {
         printf("ERROR %s\n", errmsg());

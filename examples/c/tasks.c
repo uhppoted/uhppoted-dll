@@ -7,7 +7,7 @@
 extern uint32_t DEVICE_ID;
 
 int addTask(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
 
     task task = {
         .task = 6,
@@ -53,7 +53,7 @@ int addTask(int argc, char **argv) {
 }
 
 int refreshTaskList(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
 
     if (refresh_tasklist(deviceID) < 0) {
         printf("ERROR %s\n", errmsg());
@@ -70,7 +70,7 @@ int refreshTaskList(int argc, char **argv) {
 }
 
 int clearTaskList(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
 
     if (clear_tasklist(deviceID) < 0) {
         printf("ERROR %s\n", errmsg());

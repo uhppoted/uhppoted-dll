@@ -10,7 +10,8 @@ extern uint32_t CARD_INDEX;
 extern uint32_t EVENT_INDEX;
 
 int getEventIndex(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
     uint32_t index;
 
     if (get_event_index(deviceID, &index) < 0) {
@@ -29,8 +30,9 @@ int getEventIndex(int argc, char **argv) {
 }
 
 int setEventIndex(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t index = EVENT_INDEX;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint32_t index = opts.event_index;
 
     if (set_event_index(deviceID, index) < 0) {
         printf("ERROR %s\n", errmsg());
@@ -48,8 +50,9 @@ int setEventIndex(int argc, char **argv) {
 }
 
 int getEvent(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t index = EVENT_INDEX;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint32_t index = opts.event_index;
     event event;
 
     if (get_event(deviceID, index, &event) < 0) {
@@ -74,7 +77,7 @@ int getEvent(int argc, char **argv) {
 }
 
 int recordSpecialEvents(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
     bool enabled = true;
 
     if (record_special_events(deviceID, enabled) < 0) {

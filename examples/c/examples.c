@@ -227,6 +227,84 @@ void help() {
     printf("\n");
 }
 
+options parse(int argc, char **argv) {
+    options opts = {
+        .device_id = DEVICE_ID,
+        .ip_address = "192.168.1.125",
+        .subnet_mask = "255.255.255.0",
+        .gateway = "192.168.1.0",
+        .listener = "192.168.1.100:60001",
+        .card = CARD_NUMBER,
+        .card_index = CARD_INDEX,
+        .door = DOOR,
+        .event_index = EVENT_INDEX,
+        .time_profile_id = PROFILE_ID,
+    };
+
+    long lval;
+    int ix = 2;
+
+    while (ix < argc) {
+        if ((strcmp(argv[ix], "--controller") == 0) && ++ix < argc) {
+            if ((lval = strtol(argv[ix], NULL, 10)) > 0) {
+                opts.device_id = lval;
+            }
+        }
+
+        if ((strcmp(argv[ix], "--ip-address") == 0) && ++ix < argc) {
+            opts.ip_address = argv[ix];
+        }
+
+        if ((strcmp(argv[ix], "--subnet-mask") == 0) && ++ix < argc) {
+            opts.subnet_mask = argv[ix];
+        }
+
+        if ((strcmp(argv[ix], "--gateway-address") == 0) && ++ix < argc) {
+            opts.gateway = argv[ix];
+        }
+
+        if ((strcmp(argv[ix], "--listener-address") == 0) && ++ix < argc) {
+            opts.listener = argv[ix];
+        }
+
+        if ((strcmp(argv[ix], "--card") == 0) && ++ix < argc) {
+            if ((lval = strtol(argv[ix], NULL, 10)) > 0) {
+                opts.card = lval;
+            }
+        }
+
+        if ((strcmp(argv[ix], "--card-index") == 0) && ++ix < argc) {
+            if ((lval = strtol(argv[ix], NULL, 10)) > 0) {
+                opts.card_index = lval;
+            }
+        }
+
+        if ((strcmp(argv[ix], "--door") == 0) && ++ix < argc) {
+            lval = strtol(argv[ix], NULL, 10);
+            if (lval >= 1 && lval <= 4) {
+                opts.door = (uint8_t)lval;
+            }
+        }
+
+        if ((strcmp(argv[ix], "--event-index") == 0) && ++ix < argc) {
+            if ((lval = strtol(argv[ix], NULL, 10)) > 0) {
+                opts.event_index = lval;
+            }
+        }
+
+        if ((strcmp(argv[ix], "--time-profile") == 0) && ++ix < argc) {
+            lval = strtol(argv[ix], NULL, 10);
+            if (lval >= 2 && lval <= 255) {
+                opts.time_profile_id = (uint8_t)lval;
+            }
+        }
+
+        ix++;
+    }
+
+    return opts;
+}
+
 void display(const char *tag, int N, field fields[]) {
     int w = 0;
     for (int i = 0; i < N; i++) {

@@ -36,7 +36,7 @@ int getDevices(int argc, char **argv) {
 }
 
 int getDevice(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
     struct device d;
 
     if (get_device(deviceID, &d) != 0) {
@@ -60,10 +60,11 @@ int getDevice(int argc, char **argv) {
 }
 
 int setAddress(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    const char *address = "192.168.1.125";
-    const char *subnet = "255.255.254.0";
-    const char *gateway = "192.168.1.0";
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    const char *address = opts.ip_address;
+    const char *subnet = opts.subnet_mask;
+    const char *gateway = opts.gateway;
 
     if (set_address(deviceID, address, subnet, gateway) != 0) {
         printf("ERROR %s\n", errmsg());
@@ -83,7 +84,7 @@ int setAddress(int argc, char **argv) {
 }
 
 int getStatus(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
     struct status s;
 
     if (get_status(deviceID, &s) != 0) {
@@ -123,7 +124,7 @@ int getStatus(int argc, char **argv) {
 }
 
 int getTime(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
     char *datetime;
 
     if (get_time(deviceID, &datetime) != 0) {
@@ -144,7 +145,7 @@ int getTime(int argc, char **argv) {
 }
 
 int setTime(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
     time_t utc;
     struct tm *local;
     char datetime[20];
@@ -170,7 +171,7 @@ int setTime(int argc, char **argv) {
 }
 
 int getListener(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
     char *listener;
 
     if (get_listener(deviceID, &listener) != 0) {
@@ -191,17 +192,18 @@ int getListener(int argc, char **argv) {
 }
 
 int setListener(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    char *listener = "192.168.1.100:60001";
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    const char *listener = opts.listener;
 
-    if (set_listener(deviceID, listener) != 0) {
+    if (set_listener(deviceID, (char *)listener) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
 
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
-        {.field = "event listener", .type = "string", .value.string = listener},
+        {.field = "event listener", .type = "string", .value.string = (char *)listener},
     };
 
     display("set-listener", sizeof(fields) / sizeof(field), fields);
@@ -210,8 +212,9 @@ int setListener(int argc, char **argv) {
 }
 
 int getDoorControl(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint8_t door = DOOR;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint8_t door = opts.door;
     struct door_control control;
 
     if (get_door_control(deviceID, door, &control) != 0) {
@@ -247,8 +250,9 @@ int getDoorControl(int argc, char **argv) {
 }
 
 int setDoorControl(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint8_t door = DOOR;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint8_t door = opts.door;
     uint8_t mode = NORMALLY_OPEN;
     uint8_t delay = 9;
 
@@ -285,8 +289,9 @@ int setDoorControl(int argc, char **argv) {
 }
 
 int openDoor(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint8_t door = DOOR;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint8_t door = opts.door;
 
     if (open_door(deviceID, door) != 0) {
         printf("ERROR %s\n", errmsg());

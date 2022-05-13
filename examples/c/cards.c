@@ -4,12 +4,11 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-extern uint32_t DEVICE_ID;
 extern uint32_t CARD_NUMBER;
 extern uint32_t CARD_INDEX;
 
 int getCards(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
     int N;
 
     if (get_cards(deviceID, &N) < 0) {
@@ -33,8 +32,9 @@ int getCards(int argc, char **argv) {
 }
 
 int getCard(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t card_number = CARD_NUMBER;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint32_t card_number = opts.card;
     card card;
 
     if (get_card(deviceID, card_number, &card) < 0) {
@@ -59,8 +59,9 @@ int getCard(int argc, char **argv) {
 }
 
 int getCardByIndex(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t index = CARD_INDEX;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint32_t index = opts.card_index;
     card card;
 
     if (get_card_by_index(deviceID, index, &card) < 0) {
@@ -86,8 +87,9 @@ int getCardByIndex(int argc, char **argv) {
 }
 
 int putCard(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t card_number = CARD_NUMBER;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint32_t card_number = opts.card;
     char *from = "2022-01-01";
     char *to = "2022-12-31";
     uint8_t doors[4] = {0, 1, 31, 75};
@@ -114,8 +116,9 @@ int putCard(int argc, char **argv) {
 }
 
 int deleteCard(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t card_number = CARD_NUMBER;
+    options opts = parse(argc, argv);
+    uint32_t deviceID = opts.device_id;
+    uint32_t card_number = opts.card;
 
     if (delete_card(deviceID, card_number) < 0) {
         printf("ERROR %s\n", errmsg());
@@ -133,7 +136,7 @@ int deleteCard(int argc, char **argv) {
 }
 
 int deleteCards(int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    uint32_t deviceID = parse(argc, argv).device_id;
 
     if (delete_cards(deviceID) < 0) {
         printf("ERROR %s\n", errmsg());

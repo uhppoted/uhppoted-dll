@@ -36,6 +36,20 @@ typedef struct field {
 } field;
 
 
+typedef struct options {
+    uint32_t device_id;
+    const char *ip_address;
+    const char *subnet_mask;
+    const char *gateway;
+    const char *listener;
+    uint32_t card;
+    uint32_t card_index;
+    uint8_t door;
+    uint32_t event_index;
+    uint8_t time_profile_id;
+} options;
+
+
 extern int getDevices(int argc, char **argv);
 extern int getDevice(int argc, char **argv);
 extern int setAddress(int argc, char **argv);
@@ -68,5 +82,5 @@ extern int addTask(int argc, char **argv);
 extern int refreshTaskList(int argc, char **argv);
 extern int clearTaskList(int argc, char **argv);
 
+extern options parse(int argc, char **argv);
 extern void display(const char *tag, int N, field fields[]);
-

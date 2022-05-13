@@ -22,8 +22,10 @@ ImportError: cannot import name 'cache' from 'functools' (/usr/lib/python3.8/fun
 - [x] Replace unsafe.Slice code with standard cgo functions
       - [x] func C.GoBytes(unsafe.Pointer, C.int) []byte
 
+- [ ] Constants for event types, reason, etc
+
 - [ ] Extend examples to use command line args
-      - [ ] C
+      - [x] C
       - [ ] C++
       - [ ] C#
       - [x] Python
@@ -37,13 +39,13 @@ ImportError: cannot import name 'cache' from 'functools' (/usr/lib/python3.8/fun
       - [ ] CCL
       - [ ] LIB_PATH/DYLIB_PATH
 
-  - [ ] Constants for event types, reason, etc
-  - [ ] C++ 
-        - make doors/inputs in status bool
-  - [ ] CCL
-        - DOLIST
-        - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
-  - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
+- [ ] C++ 
+      - make doors/inputs in status bool
+- [ ] CCL
+      - DOLIST
+      - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
+
+- [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
 
 ## TODO
 
