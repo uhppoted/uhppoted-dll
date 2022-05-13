@@ -7,15 +7,7 @@
             - [x] C
             - [x] C++
             - [x] C#
-            - [ ] Python
-```
-Traceback (most recent call last):
-  File "tests.py", line 19, in <module>
-    import uhppoted
-  File "/home/runner/work/uhppoted-dll/uhppoted-dll/tests/python/../../bindings/python/uhppoted.py", line 18, in <module>
-    from functools import cache
-ImportError: cannot import name 'cache' from 'functools' (/usr/lib/python3.8/functools.py)
-```
+            - [x] Python
             - [ ] CCL
       - [ ] examples
 
