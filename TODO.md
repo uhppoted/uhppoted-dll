@@ -9,6 +9,10 @@
             - [x] C#
             - [x] Python
             - [ ] CCL
+```
+rlwrap ccl64 --eval '(setenv "LD_LIBRARY_PATH" "../../lib/tests")' --load main.lisp --eval '(make-app)' 
+rlwrap: error: Cannot execute ccl64: No such file or directory
+```
       - [ ] examples
 
 - [x] Replace unsafe.Slice code with standard cgo functions
