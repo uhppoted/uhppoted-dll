@@ -25,7 +25,7 @@ jobs:
     - name: Set up Clozure Common Lisp
       run: |
         mkdir -p /opt/ccl
-        wget -c https://github.com/Clozure/ccl/releases/download/v1.12.1/ccl-1.12.1-linuxx86.tar.gz -O - | tar xz -C /opt/ccl/
+        wget -c https://github.com/Clozure/ccl/releases/download/v1.12.1/ccl-1.12.1-linuxx86.tar.gz -O - | tar xvz -C /opt
         ln -s /opt/ccl/lx86cl64 /usr/local/bin/ccl64
 
     - name: Checkout uhppoted-dll
@@ -39,6 +39,9 @@ jobs:
         pip install yapf
         sudo apt-get install rlwrap
         echo $PATH
+        /opt/ccl/lx86cl64    --version
+        /usr/local/bin/ccl64 --version
+        ccl64                --version
 
     - name: Build
       run: make build-debug
