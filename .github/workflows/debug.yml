@@ -24,6 +24,7 @@ jobs:
 
     - name: Set up Clozure Common Lisp
       run: |
+        mkdir -p /opt/ccl
         wget -c https://github.com/Clozure/ccl/releases/download/v1.12.1/ccl-1.12.1-linuxx86.tar.gz -O - | tar xz -C /opt/ccl/
         ln -s /opt/ccl/lx86cl64 /usr/local/bin/ccl64
 
