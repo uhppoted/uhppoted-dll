@@ -37,7 +37,7 @@ jobs:
     - name: Miscellaneous stuff
       run: |
         pip install yapf
-        apt-get install rlwrap
+        sudo apt-get install rlwrap
 
     - name: Build
       run: make build-debug
