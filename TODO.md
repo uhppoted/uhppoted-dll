@@ -10,8 +10,10 @@
             - [x] Python
             - [ ] CCL
 ```
+make -C ./tests/ccl -f Makefile tests
+make[1]: Entering directory '/home/runner/work/uhppoted-dll/uhppoted-dll/tests/ccl'
 rlwrap ccl64 --eval '(setenv "LD_LIBRARY_PATH" "../../lib/tests")' --load main.lisp --eval '(make-app)' 
-rlwrap: error: Cannot execute ccl64: No such file or directory
+> Error: Error opening shared library libuhppoted.dylib : libuhppoted.dylib: cannot open shared object file: No such file or directory.
 ```
       - [ ] examples
 

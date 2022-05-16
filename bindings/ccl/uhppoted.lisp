@@ -1,10 +1,26 @@
 (in-package uhppoted)
 
+#+linux-target
+(open-shared-library 
+  (native-translated-namestring 
+    (make-pathname :directory (getenv "LD_LIBRARY_PATH") 
+           :name "libuhppoted" 
+           :type "so")))
+
+#+darwin-target
 (open-shared-library 
   (native-translated-namestring 
     (make-pathname :directory (getenv "DYLD_LIBRARY_PATH") 
 				   :name "libuhppoted" 
 				   :type "dylib")))
+
+#+windows-target
+(open-shared-library 
+  (native-translated-namestring 
+    (make-pathname :directory (getenv "LIBRARY_PATH") 
+           :name "uhppoted" 
+           :type "dll")))
+
 
 (defconstant NORMALLY-OPEN   1)
 (defconstant NORMALLY-CLOSED 2)
