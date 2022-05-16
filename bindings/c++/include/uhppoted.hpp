@@ -39,8 +39,8 @@ typedef struct event {
 typedef struct status {
     uint32_t ID;
     std::string sysdatetime;
-    uint8_t doors[4];
-    uint8_t buttons[4];
+    bool doors[4];
+    bool buttons[4];
     uint8_t relays;
     uint8_t inputs;
     uint8_t syserror;

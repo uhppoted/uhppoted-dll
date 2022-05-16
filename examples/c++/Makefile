@@ -115,5 +115,5 @@ clear-tasklist: build
 	$(CMD) clear-tasklist
 
 debug: format
-	clang -std=c++11 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
-	$(GO) && $(DLL)/debug && ./examples clear-tasklist
+	clang -std=c++17 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
+	$(GO) && $(DLL)/debug && ./examples get-status
