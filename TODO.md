@@ -17,7 +17,7 @@
 
 - [ ] Extend examples to use command line args
       - [x] C
-      - [ ] C++
+      - [x] C++
       - [ ] C#
       - [x] Python
       - [ ] CCL

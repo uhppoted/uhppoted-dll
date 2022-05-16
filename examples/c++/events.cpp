@@ -5,14 +5,9 @@
 
 using namespace std;
 
-extern const uint32_t DEVICE_ID;
-extern const uint32_t CARD_NUMBER;
-extern const uint32_t CARD_INDEX;
-extern const uint8_t DOOR;
-extern const uint32_t EVENT_INDEX;
-
 void getEventIndex(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     uint32_t index = u.get_event_index(deviceID);
 
@@ -25,8 +20,9 @@ void getEventIndex(uhppoted &u, int argc, char **argv) {
 }
 
 void setEventIndex(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t index = EVENT_INDEX;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t index = options.event_index;
 
     vector<field> fields = {
         field("ID", deviceID),
@@ -37,8 +33,9 @@ void setEventIndex(uhppoted &u, int argc, char **argv) {
 }
 
 void getEvent(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t index = EVENT_INDEX;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t index = options.event_index;
 
     event e = u.get_event(deviceID, index);
 
@@ -57,7 +54,8 @@ void getEvent(uhppoted &u, int argc, char **argv) {
 }
 
 void recordSpecialEvents(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
     bool enabled = true;
 
     u.record_special_events(deviceID, enabled);

@@ -5,10 +5,10 @@
 
 using namespace std;
 
-extern const uint32_t DEVICE_ID;
-
 void addTask(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+
     task task = {
         .task = 6,
         .door = 4,
@@ -48,7 +48,8 @@ void addTask(uhppoted &u, int argc, char **argv) {
 }
 
 void refreshTaskList(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     u.refresh_tasklist(deviceID);
 
@@ -60,7 +61,8 @@ void refreshTaskList(uhppoted &u, int argc, char **argv) {
 }
 
 void clearTaskList(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     u.clear_tasklist(deviceID);
 

@@ -4,8 +4,6 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-extern uint32_t DEVICE_ID;
-
 int addTask(int argc, char **argv) {
     uint32_t deviceID = parse(argc, argv).device_id;
 

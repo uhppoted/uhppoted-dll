@@ -5,13 +5,9 @@
 
 using namespace std;
 
-extern const uint32_t DEVICE_ID;
-extern const uint32_t CARD_NUMBER;
-extern const uint32_t CARD_INDEX;
-extern const uint8_t DOOR;
-
 void getCards(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     int N = u.get_cards(deviceID);
 
@@ -24,8 +20,9 @@ void getCards(uhppoted &u, int argc, char **argv) {
 }
 
 void getCard(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t cardID = CARD_NUMBER;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t cardID = options.card;
 
     card c = u.get_card(deviceID, cardID);
 
@@ -45,10 +42,11 @@ void getCard(uhppoted &u, int argc, char **argv) {
 }
 
 void getCardByIndex(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t index = CARD_INDEX;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t index = options.card_index;
 
-    card c = u.get_card_by_index(deviceID, CARD_INDEX);
+    card c = u.get_card_by_index(deviceID, index);
 
     vector<field> fields = {
         field("ID", deviceID),
@@ -67,8 +65,9 @@ void getCardByIndex(uhppoted &u, int argc, char **argv) {
 }
 
 void putCard(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t card_number = CARD_NUMBER;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t card_number = options.card;
     string from = "2022-01-01";
     string to = "2022-12-31";
     uint8_t doors[4] = {0, 1, 31, 75};
@@ -90,8 +89,9 @@ void putCard(uhppoted &u, int argc, char **argv) {
 }
 
 void deleteCard(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t card_number = CARD_NUMBER;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t card_number = options.card;
 
     u.delete_card(deviceID, card_number);
 
@@ -104,7 +104,8 @@ void deleteCard(uhppoted &u, int argc, char **argv) {
 }
 
 void deleteCards(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     u.delete_cards(deviceID);
 

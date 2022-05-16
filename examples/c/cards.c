@@ -4,9 +4,6 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-extern uint32_t CARD_NUMBER;
-extern uint32_t CARD_INDEX;
-
 int getCards(int argc, char **argv) {
     uint32_t deviceID = parse(argc, argv).device_id;
     int N;

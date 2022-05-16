@@ -8,6 +8,20 @@
 
 typedef std::tuple<std::string, std::any> field;
 
+typedef struct options {
+    uint32_t device_id;
+    std::string ip_address;
+    std::string subnet_mask;
+    std::string gateway;
+    std::string listener;
+    uint32_t card;
+    uint32_t card_index;
+    uint8_t door;
+    uint32_t event_index;
+    uint8_t time_profile_id;
+} options;
+
+
 void getDevices(uhppoted &, int argc, char **argv);
 void getDevice(uhppoted &u, int argc, char **argv);
 void setAddress(uhppoted &, int argc, char **argv);
@@ -40,4 +54,5 @@ void addTask(uhppoted &u, int argc, char **argv);
 void refreshTaskList(uhppoted &u, int argc, char **argv);
 void clearTaskList(uhppoted &u, int argc, char **argv);
 
+options parse(int argc, char **argv);
 void display(const std::string &, const std::vector<field> &);

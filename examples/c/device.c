@@ -5,9 +5,6 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-extern uint32_t DEVICE_ID;
-extern uint8_t DOOR;
-
 int getDevices(int argc, char **argv) {
     uint32_t *devices = NULL;
     int N;

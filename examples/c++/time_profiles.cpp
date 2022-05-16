@@ -5,12 +5,10 @@
 
 using namespace std;
 
-extern const uint32_t DEVICE_ID;
-extern const uint8_t PROFILE_ID;
-
 void getTimeProfile(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t profileID = PROFILE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t profileID = options.time_profile_id;
 
     time_profile profile = u.get_time_profile(deviceID, profileID);
 
@@ -39,9 +37,12 @@ void getTimeProfile(uhppoted &u, int argc, char **argv) {
 }
 
 void setTimeProfile(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint8_t profileID = options.time_profile_id;
+
     time_profile profile = {
-        .ID = PROFILE_ID,
+        .ID = profileID,
         .linked = 71,
         .from = "2022-02-01",
         .to = "2022-06-30",
@@ -87,7 +88,8 @@ void setTimeProfile(uhppoted &u, int argc, char **argv) {
 }
 
 void clearTimeProfiles(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     u.clear_time_profiles(deviceID);
 

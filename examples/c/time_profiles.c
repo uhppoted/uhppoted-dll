@@ -4,8 +4,6 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-extern uint8_t PROFILE_ID;
-
 int getTimeProfile(int argc, char **argv) {
     options opts = parse(argc, argv);
     uint32_t deviceID = opts.device_id;

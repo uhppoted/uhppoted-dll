@@ -4,11 +4,6 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-extern uint32_t DEVICE_ID;
-extern uint32_t CARD_NUMBER;
-extern uint32_t CARD_INDEX;
-extern uint32_t EVENT_INDEX;
-
 int getEventIndex(int argc, char **argv) {
     options opts = parse(argc, argv);
     uint32_t deviceID = opts.device_id;

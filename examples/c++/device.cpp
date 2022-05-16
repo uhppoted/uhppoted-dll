@@ -6,9 +6,6 @@
 
 using namespace std;
 
-extern const uint32_t DEVICE_ID;
-extern const uint8_t DOOR;
-
 void getDevices(uhppoted &u, int argc, char **argv) {
     auto devices = u.get_devices();
 
@@ -24,7 +21,8 @@ void getDevices(uhppoted &u, int argc, char **argv) {
 }
 
 void getDevice(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     auto d = u.get_device(deviceID);
 
@@ -42,10 +40,11 @@ void getDevice(uhppoted &u, int argc, char **argv) {
 }
 
 void setAddress(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    string address = "192.168.1.125";
-    string subnet = "255.255.254.0";
-    string gateway = "192.168.1.10";
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    string address = options.ip_address;
+    string subnet = options.subnet_mask;
+    string gateway = options.gateway;
 
     u.set_address(deviceID, address, subnet, gateway);
 
@@ -60,7 +59,8 @@ void setAddress(uhppoted &u, int argc, char **argv) {
 }
 
 void getStatus(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     auto s = u.get_status(deviceID);
 
@@ -94,7 +94,8 @@ void getStatus(uhppoted &u, int argc, char **argv) {
 }
 
 void getTime(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     auto datetime = u.get_time(deviceID);
 
@@ -107,12 +108,13 @@ void getTime(uhppoted &u, int argc, char **argv) {
 }
 
 void setTime(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
     char s[20];
     time_t now = time(nullptr);
 
     strftime(s, sizeof(s), "%Y-%m-%d %H:%M:%S", localtime(&now));
 
-    uint32_t deviceID = DEVICE_ID;
     string datetime = s;
 
     u.set_time(deviceID, datetime);
@@ -126,7 +128,8 @@ void setTime(uhppoted &u, int argc, char **argv) {
 }
 
 void getListener(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
 
     auto listener = u.get_listener(deviceID);
 
@@ -139,8 +142,9 @@ void getListener(uhppoted &u, int argc, char **argv) {
 }
 
 void setListener(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    string listener = "192.168.1.100:60001";
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    string listener = options.listener;
 
     u.set_listener(deviceID, listener);
 
@@ -153,8 +157,9 @@ void setListener(uhppoted &u, int argc, char **argv) {
 }
 
 void getDoorControl(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t door = DOOR;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t door = options.door;
 
     auto d = u.get_door_control(deviceID, door);
 
@@ -185,8 +190,9 @@ void getDoorControl(uhppoted &u, int argc, char **argv) {
 }
 
 void setDoorControl(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t door = DOOR;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t door = options.door;
     uint8_t mode = NORMALLY_OPEN;
     uint8_t delay = 9;
 
@@ -219,8 +225,9 @@ void setDoorControl(uhppoted &u, int argc, char **argv) {
 }
 
 void openDoor(uhppoted &u, int argc, char **argv) {
-    uint32_t deviceID = DEVICE_ID;
-    uint32_t door = DOOR;
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint32_t door = options.door;
 
     u.open_door(deviceID, door);
 
