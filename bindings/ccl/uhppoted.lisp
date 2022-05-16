@@ -18,7 +18,7 @@
 #+linux-target
 (open-shared-library 
   (native-translated-namestring 
-    (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "uhppoted" :type "so")))
+    (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so")))
 
 #+darwin-target
 (open-shared-library 
