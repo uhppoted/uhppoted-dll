@@ -31,7 +31,7 @@ typedef struct field {
         uint8_t uint8;
         uint32_t uint32;
         bool  boolean;
-        char * string;
+        const char * string;
     } value;
 } field;
 
@@ -84,3 +84,4 @@ extern int clearTaskList(int argc, char **argv);
 
 extern options parse(int argc, char **argv);
 extern void display(const char *tag, int N, field fields[]);
+extern const char *lookup_event_type(uint8_t);

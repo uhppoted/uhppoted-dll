@@ -107,7 +107,7 @@ int getStatus(int argc, char **argv) {
         {.field = "info", .type = "uint8", .value.uint8 = s.info},
         {.field = "event timestamp", .type = "string", .value.string = s.evt.timestamp},
         {.field = "      index", .type = "uint32", .value.uint32 = s.evt.index},
-        {.field = "      type", .type = "uint8", .value.uint8 = s.evt.eventType},
+        {.field = "      type", .type = "string", .value.string = lookup_event_type(s.evt.eventType)},
         {.field = "      granted", .type = "bool", .value.boolean = s.evt.granted},
         {.field = "      door", .type = "uint8", .value.uint8 = s.evt.door},
         {.field = "      direction", .type = "uint8", .value.uint8 = s.evt.direction},

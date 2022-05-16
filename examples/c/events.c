@@ -59,7 +59,7 @@ int getEvent(int argc, char **argv) {
         {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
         {.field = "event index", .type = "uint32", .value.uint32 = event.index},
         {.field = "      timestamp", .type = "string", .value.string = event.timestamp},
-        {.field = "      type", .type = "uint8", .value.uint8 = event.eventType},
+        {.field = "      type", .type = "string", .value.string = lookup_event_type(event.eventType)},
         {.field = "      granted", .type = "bool", .value.boolean = event.granted},
         {.field = "      direction", .type = "uint8", .value.uint8 = event.direction},
         {.field = "      card number", .type = "uint32", .value.uint32 = event.card},

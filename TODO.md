@@ -14,6 +14,8 @@
 - [x] C++: make doors/inputs in status bool
 
 - [ ] Constants for event types, reason, etc
+      - [ ] Update examples
+      - [ ] Update tests
 
 - [ ] Extend examples to use command line args
       - [x] C

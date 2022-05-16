@@ -107,5 +107,46 @@
 
            normally-open
            normally-closed
-           controlled))
+           controlled
+
+           event-type-none
+           event-type-swipe
+           event-type-door
+           event-type-alarm
+           event-type-overwritten
+
+           event-reason-swipe
+           event-reason-denied
+           event-reason-no-access-rights
+           event-reason-incorrect-password
+           event-reason-anti-passback
+           event-reason-more-cards
+           event-reason-first-card-open
+           event-reason-door-is-normally-closed
+           event-reason-interlock
+           event-reason-not-in-allowed-time-period
+           event-reason-invalid-timezone
+           event-reason-access-denied
+           event-reason-push-button-ok
+           event-reason-door-opened
+           event-reason-door-closed
+           event-reason-door-opened-supervisor-password
+           event-reason-controller-power-on
+           event-reason-controller-reset
+           event-reason-pushbutton-invalid-door-locked
+           event-reason-pushbutton-invalid-offline
+           event-reason-pushbutton-invalid-interlock
+           event-reason-pushbutton-invalid-threat
+           event-reason-door-open-too-long
+           event-reason-forced-open
+           event-reason-fire
+           event-reason-forced-closed
+           event-reason-theft-prevention
+           event-reason-24x7-zone
+           event-reason-emergency
+           event-reason-remote-open-door
+           event-reason-remote-open-door-usb-reader
+           
+           direction-in
+           direction-out))
 

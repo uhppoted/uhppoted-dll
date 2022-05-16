@@ -4,6 +4,59 @@ using System.Text;
 
 namespace uhppoted {
 
+public class DoorMode {
+    const uint NormallyOpen = 1;
+    const uint NormallyClosed = 2;
+    const uint Controlled = 3;
+}
+
+public class Direction {
+    const byte In = 1;
+    const byte Out = 2;
+}
+
+public class EventType {
+    const byte None = 0;
+    const byte Swipe = 1;
+    const byte Door = 2;
+    const byte Alarm = 3;
+    const byte Overwritten = 0xff;
+}
+
+public class EventReason {
+    const byte Swipe = 1;
+    const byte Denied = 5;
+    const byte NoAccessRights = 6;
+    const byte IncorrectPassword = 7;
+    const byte AntiPassback = 8;
+    const byte MoreCards = 9;
+    const byte FirstCardOpen = 10;
+    const byte DoorIsNormallyCosed = 11;
+    const byte Interlock = 12;
+    const byte NotInAllowedTimePeriod = 13;
+    const byte InvalidTimezone = 15;
+    const byte AccessDenied = 18;
+    const byte PushButtonOk = 20;
+    const byte DoorOpened = 23;
+    const byte DoorClosed = 24;
+    const byte DoorOpenedSupervisorPassword = 25;
+    const byte ControllerPowerOn = 28;
+    const byte ControllerReset = 29;
+    const byte PushbuttonInvalidDoorLocked = 31;
+    const byte PushbuttonInvalidOffline = 32;
+    const byte PushbuttonInvalidInterlock = 33;
+    const byte PushbuttonInvalidThreat = 34;
+    const byte DoorOpenTooLong = 37;
+    const byte ForcedOpen = 38;
+    const byte Fire = 39;
+    const byte ForcedClosed = 40;
+    const byte TheftPrevention = 41;
+    const byte Zone24x7 = 42;
+    const byte Emergency = 43;
+    const byte RemoteOpenDoor = 44;
+    const byte RemoteOpenDoorUSBReader = 45;
+}
+
 public class Controller {
     public uint ID;
     public string address;

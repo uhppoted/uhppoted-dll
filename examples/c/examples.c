@@ -16,6 +16,13 @@ const uint32_t CARD_INDEX = 7;
 const uint32_t EVENT_INDEX = 91;
 const uint8_t PROFILE_ID = 29;
 
+const char *EventNone = "none";
+const char *EventSwipe = "swipe";
+const char *EventDoor = "door";
+const char *EventAlarm = "alarm";
+const char *EventOverwritten = "overwritten";
+const char *EventUnknown = "unknown";
+
 typedef int(f)(int, char **a);
 
 typedef struct command {
@@ -329,4 +336,25 @@ void display(const char *tag, int N, field fields[]) {
         }
     }
     printf("\n");
+}
+
+const char *lookup_event_type(uint8_t event_type) {
+    switch (event_type) {
+    case EVENT_TYPE_NONE:
+        return EventNone;
+
+    case EVENT_TYPE_SWIPE:
+        return EventSwipe;
+
+    case EVENT_TYPE_DOOR:
+        return EventDoor;
+
+    case EVENT_TYPE_ALARM:
+        return EventAlarm;
+    case EVENT_TYPE_OVERWRITTEN:
+        return EventOverwritten;
+
+    default:
+        return EventUnknown;
+    }
 }
