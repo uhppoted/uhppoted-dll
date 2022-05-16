@@ -6,20 +6,19 @@
   (format t ">>> >> LD_LIBRARY_PATH ~a~%" (getenv "LD_LIBRARY_PATH"))
   (format t ">>> >> path ~a~%" (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so"))
   (format t ">>> >> native-path ~a~%" (native-translated-namestring 
-    (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so"))))
+    (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so")))
+  (format t ">>> >> ls(1): ~a~%" (directory "*.*" :directories t))
+  (format t ">>> >> ls(2): ~a~%" (directory "../../lib/tests/*.*" :directories t))
+  (format t ">>> >> open LIB ~a~%" 
+    (open-shared-library 
+      (native-translated-namestring 
+        (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so")))))
 
-#+darwin-target
-(progn
-  (format t ">>> TARGET-DARWIN~%")
-  (format t ">>> >> DYLD_LIBRARY_PATH ~a~%" (getenv "DYLD_LIBRARY_PATH"))
-  (format t ">>> >> path ~a~%"     (make-pathname :directory (getenv "DYLD_LIBRARY_PATH") :name "libuhppoted" :type "dylib"))
-  (format t ">>> >> native-path ~a~%" (native-translated-namestring 
-    (make-pathname :directory (getenv "DYLD_LIBRARY_PATH") :name "libuhppoted" :type "dylib"))))
 
 #+linux-target
 (open-shared-library 
   (native-translated-namestring 
-    (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so")))
+    (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "uhppoted" :type "so")))
 
 #+darwin-target
 (open-shared-library 
