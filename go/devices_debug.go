@@ -109,7 +109,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		fmt.Println()
 	}
 
-	status.ID = C.uint(deviceID)
+	status.ID = C.uint(405419896)
 	status.sysdatetime = C.CString("2022-03-19 15:48:32")
 
 	doors := unsafe.Slice(status.doors, 4)

@@ -21,6 +21,32 @@ public class command {
     }
 };
 
+public class options {
+    public uint deviceID;
+    public string ipAddress;
+    public string subnetMask;
+    public string gateway;
+    public string listener;
+    public uint card;
+    public uint cardIndex;
+    public byte door;
+    public uint eventIndex;
+    public byte timeProfileID;
+
+    public options(uint deviceID, string ipAddress, string subnetMask, string gateway, string listener, uint card, uint cardIndex, byte door, uint eventIndex, byte timeProfileID) {
+        this.deviceID = deviceID;
+        this.ipAddress = ipAddress;
+        this.subnetMask = subnetMask;
+        this.gateway = gateway;
+        this.listener = listener;
+        this.card = card;
+        this.cardIndex = cardIndex;
+        this.door = door;
+        this.eventIndex = eventIndex;
+        this.timeProfileID = timeProfileID;
+    }
+};
+
 public class examples {
     const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 8000001;
@@ -188,7 +214,8 @@ public class examples {
     }
 
     static void GetDevice(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         Device device = u.GetDevice(deviceID);
 
@@ -206,10 +233,11 @@ public class examples {
     }
 
     static void SetAddress(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        string address = "192.168.1.125";
-        string subnet = "255.255.255.254";
-        string gateway = "192.168.1.5";
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        string address = opts.ipAddress;
+        string subnet = opts.subnetMask;
+        string gateway = opts.gateway;
 
         u.SetAddress(deviceID, address, subnet, gateway);
 
@@ -224,12 +252,13 @@ public class examples {
     }
 
     static void GetStatus(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         Status status = u.GetStatus(deviceID);
 
         field[] fields = {
-            new uint32Field("ID", deviceID),
+            new uint32Field("ID", status.ID),
             new stringField("timestamp", status.sysdatetime),
             new boolField("doors[1]", status.doors[0]),
             new boolField("doors[2]", status.doors[1]),
@@ -258,7 +287,8 @@ public class examples {
     }
 
     static void GetTime(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         string datetime = u.GetTime(deviceID);
 
@@ -271,7 +301,8 @@ public class examples {
     }
 
     static void SetTime(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
         string datetime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         u.SetTime(deviceID, datetime);
@@ -285,7 +316,8 @@ public class examples {
     }
 
     static void GetListener(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         string listener = u.GetListener(deviceID);
 
@@ -298,8 +330,9 @@ public class examples {
     }
 
     static void SetListener(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        string listener = "192.168.1.100:60001";
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        string listener = opts.listener;
 
         u.SetListener(deviceID, listener);
 
@@ -312,8 +345,9 @@ public class examples {
     }
 
     static void GetDoorControl(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        byte door = DOOR;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        byte door = opts.door;
 
         DoorControl control = u.GetDoorControl(deviceID, door);
 
@@ -343,8 +377,9 @@ public class examples {
     }
 
     static void SetDoorControl(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        byte door = DOOR;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        byte door = opts.door;
         byte mode = ControlModes.NormallyOpen;
         byte delay = 9;
 
@@ -376,8 +411,9 @@ public class examples {
     }
 
     static void OpenDoor(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        byte door = DOOR;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        byte door = opts.door;
 
         u.OpenDoor(deviceID, door);
 
@@ -390,7 +426,8 @@ public class examples {
     }
 
     static void GetCards(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         uint cards = u.GetCards(deviceID);
 
@@ -403,8 +440,9 @@ public class examples {
     }
 
     static void GetCard(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        uint cardNumber = CARD_NUMBER;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        uint cardNumber = opts.card;
         Card card = u.GetCard(deviceID, cardNumber);
 
         field[] fields = {
@@ -422,8 +460,9 @@ public class examples {
     }
 
     static void GetCardByIndex(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        uint index = CARD_INDEX;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        uint index = opts.cardIndex;
 
         Card card = u.GetCardByIndex(deviceID, index);
 
@@ -443,8 +482,9 @@ public class examples {
     }
 
     static void PutCard(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        uint cardNumber = CARD_NUMBER;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        uint cardNumber = opts.card;
         string from = "2022-01-01";
         string to = "2022-12-31";
         byte[] doors = { 0, 1, 31, 75 };
@@ -466,8 +506,9 @@ public class examples {
     }
 
     static void DeleteCard(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        uint cardNumber = CARD_NUMBER;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        uint cardNumber = opts.card;
 
         u.DeleteCard(deviceID, cardNumber);
 
@@ -480,7 +521,8 @@ public class examples {
     }
 
     static void DeleteCards(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         u.DeleteCards(deviceID);
 
@@ -492,7 +534,8 @@ public class examples {
     }
 
     static void GetEventIndex(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         uint index = u.GetEventIndex(deviceID);
 
@@ -505,8 +548,9 @@ public class examples {
     }
 
     static void SetEventIndex(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        uint index = EVENT_INDEX;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        uint index = opts.eventIndex;
 
         u.SetEventIndex(deviceID, index);
 
@@ -519,8 +563,9 @@ public class examples {
     }
 
     static void GetEvent(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        uint index = EVENT_INDEX;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        uint index = opts.eventIndex;
 
         Event evt = u.GetEvent(deviceID, index);
 
@@ -540,7 +585,8 @@ public class examples {
     }
 
     static void RecordSpecialEvents(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
         bool enabled = true;
 
         u.RecordSpecialEvents(deviceID, enabled);
@@ -554,8 +600,9 @@ public class examples {
     }
 
     static void GetTimeProfile(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
-        byte profileID = PROFILE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        byte profileID = opts.timeProfileID;
 
         TimeProfile profile = u.GetTimeProfile(deviceID, profileID);
 
@@ -584,7 +631,8 @@ public class examples {
     }
 
     static void SetTimeProfile(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
         TimeProfile profile = new TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30",
                                               true, false, true, true, false, false, true,
                                               "08:30", "11:30",
@@ -618,7 +666,8 @@ public class examples {
     }
 
     static void ClearTimeProfiles(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         u.ClearTimeProfiles(deviceID);
 
@@ -630,7 +679,8 @@ public class examples {
     }
 
     static void AddTask(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
         Task task = new Task(6, 4, "2022-02-01", "2022-06-30",
                              true, false, true, true, false, false, true,
                              "08:30", 11);
@@ -658,7 +708,8 @@ public class examples {
     }
 
     static void RefreshTaskList(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         u.RefreshTaskList(deviceID);
 
@@ -670,7 +721,8 @@ public class examples {
     }
 
     static void ClearTaskList(Uhppoted u, string[] args) {
-        uint deviceID = DEVICE_ID;
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
 
         u.ClearTaskList(deviceID);
 
@@ -679,6 +731,80 @@ public class examples {
         };
 
         display("clear-tasklist", fields);
+    }
+
+    static options parse(string[] args) {
+        options opts = new options(DEVICE_ID, "192.168.1.125", "255.255.255.0", "192.168.1.0", "192.168.1.100:60001", CARD_NUMBER,
+                                   CARD_INDEX, DOOR, EVENT_INDEX, PROFILE_ID);
+
+        int ix = 1;
+        while (ix < args.Length) {
+            string arg = args[ix++];
+
+            switch (arg) {
+            case "--controller":
+                if (ix < args.Length) {
+                    opts.deviceID = Convert.ToUInt32(args[ix++]);
+                }
+                break;
+
+            case "--ip-address":
+                if (ix < args.Length) {
+                    opts.ipAddress = args[ix++];
+                }
+                break;
+
+            case "--subnet-mask":
+                if (ix < args.Length) {
+                    opts.subnetMask = args[ix++];
+                }
+                break;
+
+            case "--gateway-address":
+                if (ix < args.Length) {
+                    opts.gateway = args[ix++];
+                }
+                break;
+
+            case "--listener-address":
+                if (ix < args.Length) {
+                    opts.listener = args[ix++];
+                }
+                break;
+
+            case "--card":
+                if (ix < args.Length) {
+                    opts.card = Convert.ToUInt32(args[ix++]);
+                }
+                break;
+
+            case "--card-index":
+                if (ix < args.Length) {
+                    opts.cardIndex = Convert.ToUInt32(args[ix++]);
+                }
+                break;
+
+            case "--door":
+                if (ix < args.Length) {
+                    opts.door = Convert.ToByte(args[ix++]);
+                }
+                break;
+
+            case "--event-index":
+                if (ix < args.Length) {
+                    opts.eventIndex = Convert.ToUInt32(args[ix++]);
+                }
+                break;
+
+            case "--time-profile":
+                if (ix < args.Length) {
+                    opts.timeProfileID = Convert.ToByte(args[ix++]);
+                }
+                break;
+            }
+        }
+
+        return opts;
     }
 
     static void display(string tag, field[] fields) {

@@ -110,5 +110,5 @@ clear-tasklist: build
 	$(GO) && $(DLL) && $(CMD) clear-tasklist
 
 debug: build
-	$(GO) && $(DLL)/debug && $(CMD) get-status
+	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678
 

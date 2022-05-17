@@ -292,7 +292,7 @@ def get_status(u, args):
     status = u.get_status(device_id)
 
     display('get-status', [
-        ('ID', device_id),
+        ('ID', status.ID),
         ('date/time', status.sysdatetime),
         ('doors[1]', status.doors[0]),
         ('doors[2]', status.doors[1]),

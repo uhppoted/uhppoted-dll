@@ -65,7 +65,7 @@ void getStatus(uhppoted &u, int argc, char **argv) {
     auto s = u.get_status(deviceID);
 
     vector<field> fields = {
-        field("ID", deviceID),
+        field("ID", s.ID),
         field("date/time", s.sysdatetime),
         field("doors[1]", s.doors[0]),
         field("doors[2]", s.doors[1]),

@@ -18,17 +18,21 @@ rlwrap ccl64 --eval '(setenv "LD_LIBRARY_PATH" "../../lib/tests")' --load main.l
 GODEBUG=cgocheck=2 && ./tests
 ```
       - [ ] examples
-
-- [x] C++: make doors/inputs in status bool
+            - [ ] C
+            - [ ] C++
+            - [ ] C#
+            - [ ] Python
+            - [ ] CCL
 
 - [ ] Constants for event types, reason, etc
+      - [ ] lookup(...)
       - [ ] Update examples
       - [ ] Update tests
 
 - [ ] Extend examples to use command line args
       - [x] C
       - [x] C++
-      - [ ] C#
+      - [x] C#
       - [x] Python
       - [ ] CCL
   
