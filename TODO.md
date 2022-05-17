@@ -11,11 +11,11 @@
             - [x] CCL
 
       - [ ] examples
-            - [ ] C
-            - [ ] C++
-            - [ ] C#
-            - [ ] Python
-            - [ ] CCL
+```
+examples.cpp:181:15: error: ‘find_if’ was not declared in this scope
+  181 |     auto it = find_if(commands.begin(), commands.end(), [=](const command &v) { return v.cmd == cmd; });
+      |               ^~~~~~~
+```
 
 - [ ] Constants for event types, reason, etc
       - [ ] lookup(...)
