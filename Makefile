@@ -66,8 +66,13 @@ build-all: build
 	make -C ./tests/c++    -f Makefile tests
 	make -C ./tests/csharp -f Makefile tests
 	make -C ./tests/python -f Makefile tests
+	make -C ./tests/ccl    -f Makefile tests
 
 build-debug: build
-	make -C ./tests/ccl -f Makefile tests
+	make -C ./examples/c      -f Makefile build
+	make -C ./examples/c++    -f Makefile build
+	make -C ./examples/csharp -f Makefile build
+	make -C ./examples/python -f Makefile build
+	make -C ./examples/ccl    -f Makefile build
 
 

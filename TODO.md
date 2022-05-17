@@ -3,20 +3,13 @@
 ### IN PROGRESS
 
 - [ ] Github workflow
-      - [ ] tests
+      - [x] tests
             - [x] C
             - [x] C++
             - [x] C#
             - [x] Python
-            - [ ] CCL
-```
-rlwrap ccl64 --eval '(setenv "LD_LIBRARY_PATH" "../../lib/tests")' --load main.lisp --eval '(make-app)' 
->>> TARGET-LINUX
->>> >> LD_LIBRARY_PATH ../../lib/tests
->>> >> path ../../lib/tests/libuhppoted.so
->>> >> native-path ../../lib/tests/libuhppoted.so
-GODEBUG=cgocheck=2 && ./tests
-```
+            - [x] CCL
+
       - [ ] examples
             - [ ] C
             - [ ] C++
