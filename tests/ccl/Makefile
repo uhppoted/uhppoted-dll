@@ -9,7 +9,7 @@ else
     ifeq ($(UNAME),Darwin)
         DLL=(setenv "DYLD_LIBRARY_PATH" "$(LIB)")
     else 
-        DLL=(setenv "LD_LIBRARY_PATH" "$(LIB)")
+        DLL=(setenv "LD_LIBRARY_PATH" "$(realpath $(LIB))")
     endif
 endif
 

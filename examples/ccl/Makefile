@@ -9,14 +9,14 @@ else
     ifeq ($(UNAME),Darwin)
         DLL=(setenv "DYLD_LIBRARY_PATH" "$(LIB)")
     else 
-        DLL=(setenv "LD_LIBRARY_PATH" "$(LIB)")
+        DLL=(setenv "LD_LIBRARY_PATH" "$(realpath $(LIB))")
     endif
 endif
 
 .PHONY: run
 .PHONY: debug
 
-build: examples
+build: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp --eval '(make-app)' 
 
 usage: build
