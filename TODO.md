@@ -3,13 +3,6 @@
 ### IN PROGRESS
 
 - [ ] Github workflow
-      - [x] tests
-            - [x] C
-            - [x] C++
-            - [x] C#
-            - [x] Python
-            - [x] CCL
-
       - [ ] examples
 ```
 examples.cpp:181:15: error: ‘find_if’ was not declared in this scope

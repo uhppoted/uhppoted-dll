@@ -1,21 +1,6 @@
 (in-package uhppoted)
 
 #+linux-target
-(progn
-  (format t ">>> TARGET-LINUX~%")
-  (format t ">>> >> LD_LIBRARY_PATH ~a~%" (getenv "LD_LIBRARY_PATH"))
-  (format t ">>> >> path ~a~%" (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so"))
-  (format t ">>> >> native-path ~a~%" (native-translated-namestring 
-    (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so")))
-  (format t ">>> >> ls(1): ~a~%" (directory "*.*" :directories t))
-  (format t ">>> >> ls(2): ~a~%" (directory "../../lib/tests/*.*" :directories t))
-  (format t ">>> >> open LIB ~a~%" 
-    (open-shared-library 
-      (native-translated-namestring 
-        (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so")))))
-
-
-#+linux-target
 (open-shared-library 
   (native-translated-namestring 
     (make-pathname :directory (getenv "LD_LIBRARY_PATH") :name "libuhppoted" :type "so")))
