@@ -68,6 +68,7 @@ build-all: build
 	make -C ./tests/ccl       -f Makefile tests
 	make -C ./examples/c      -f Makefile build
 	make -C ./examples/c++    -f Makefile build
+	make -C ./examples/csharp -f Makefile build
 	make -C ./examples/python -f Makefile build
 	make -C ./examples/ccl    -f Makefile build
 

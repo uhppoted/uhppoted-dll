@@ -2,10 +2,8 @@
 
 ### IN PROGRESS
 
-- [ ] Github workflow
-      - [ ] examples
-        - https://systemoutofmemory.com/blogs/the-programmer-blog/c-sharp-switch-on-type
-        - https://stackoverflow.com/questions/43080505/c-sharp-7-0-switch-on-system-type
+- [x] Github workflow
+      - [x] examples
 
 - [ ] Constants for event types, reason, etc
       - [ ] lookup(...)
