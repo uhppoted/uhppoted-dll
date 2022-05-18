@@ -1,7 +1,7 @@
+#include <algorithm>
 #include <ctime>
 #include <iomanip>
 #include <iostream>
-#include <algorithm>
 
 #include "../include/uhppoted.hpp"
 #include "examples.hpp"

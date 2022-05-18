@@ -13,9 +13,9 @@ void getDevices(uhppoted &u, int argc, char **argv) {
     vector<field> fields;
 
     tag << "get-devices(" << devices.size() << ")";
-    for (auto id : devices) {
-        fields.push_back(field("", id));
-    }
+    // for (auto id : devices) {
+    //     fields.push_back(field("", id));
+    // }
 
     display(tag.str(), fields);
 }
