@@ -1,6 +1,7 @@
 #include <ctime>
 #include <iomanip>
 #include <iostream>
+#include <algorithm>
 
 #include "../include/uhppoted.hpp"
 #include "examples.hpp"
@@ -304,7 +305,7 @@ options parse(int argc, char **argv) {
 }
 
 void display(const std::string &tag, const std::vector<field> &fields) {
-    int w = 0;
+    unsigned w = 0;
     for (auto ix = fields.begin(); ix != fields.end(); ix++) {
         string field = get<0>(*ix);
 

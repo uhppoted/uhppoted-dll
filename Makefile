@@ -71,7 +71,7 @@ build-all: build
 build-debug: build
 	make -C ./examples/c      -f Makefile build
 	make -C ./examples/c++    -f Makefile build
-	make -C ./examples/csharp -f Makefile build
+	# make -C ./examples/csharp -f Makefile build
 	make -C ./examples/python -f Makefile build
 	make -C ./examples/ccl    -f Makefile build
 

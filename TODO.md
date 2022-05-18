@@ -4,11 +4,8 @@
 
 - [ ] Github workflow
       - [ ] examples
-```
-examples.cpp:181:15: error: ‘find_if’ was not declared in this scope
-  181 |     auto it = find_if(commands.begin(), commands.end(), [=](const command &v) { return v.cmd == cmd; });
-      |               ^~~~~~~
-```
+        - https://systemoutofmemory.com/blogs/the-programmer-blog/c-sharp-switch-on-type
+        - https://stackoverflow.com/questions/43080505/c-sharp-7-0-switch-on-system-type
 
 - [ ] Constants for event types, reason, etc
       - [ ] lookup(...)
