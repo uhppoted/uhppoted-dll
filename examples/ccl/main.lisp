@@ -47,7 +47,7 @@
                   (loop for (cmd fn) in cmds              
                         do (when (string= cmd arg) 
                                  (progn
-                                    (funcall fn)
+                                    (funcall fn *command-line-argument-list*)
                                     (return-from execute t))))
                   (progn
                     (format t "~%   *** ERROR: invalid command (~a)~%"  arg) 

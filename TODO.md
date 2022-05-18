@@ -15,12 +15,12 @@ examples.cpp:181:15: error: ‘find_if’ was not declared in this scope
       - [ ] Update examples
       - [ ] Update tests
 
-- [ ] Extend examples to use command line args
+- [x] Extend examples to use command line args
       - [x] C
       - [x] C++
       - [x] C#
       - [x] Python
-      - [ ] CCL
+      - [x] CCL
   
 - [ ] Usage and notes
       - [ ] C
