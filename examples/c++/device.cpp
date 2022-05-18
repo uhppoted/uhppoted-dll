@@ -7,15 +7,15 @@
 using namespace std;
 
 void getDevices(uhppoted &u, int argc, char **argv) {
-    vector<uint32_t> devices = u.get_devices();
+    auto devices = u.get_devices();
 
     stringstream tag;
-    vector<field> fields;
+    vector<field> fields(devices.size());
+    int ix = 0;
 
     tag << "get-devices(" << devices.size() << ")";
-    for (uint32_t id : devices) {
-        field f{"", id}; // Ref. https://stackoverflow.com/questions/39937495/no-member-named-value-in-stdis-convertible-when-using-clang
-        fields.push_back(f);
+    for (auto id : devices) {
+        fields[ix++] = field("", id);
     }
 
     display(tag.str(), fields);
