@@ -50,12 +50,12 @@ func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index
 
 	event.timestamp = C.CString("2022-04-15 12:29:15")
 	event.index = C.uint(index)
-	event.eventType = C.uchar(0x06)
+	event.eventType = C.uchar(1)
 	event.granted = cbool(true)
 	event.door = C.uchar(3)
 	event.direction = C.uchar(1)
 	event.card = C.uint(8165538)
-	event.reason = C.uchar(0x15)
+	event.reason = C.uchar(15)
 
 	return nil
 }

@@ -55,15 +55,19 @@ int getEvent(int argc, char **argv) {
         return -1;
     }
 
+    const char *eventType = lookup(LOOKUP_EVENT_TYPE, event.eventType, locale);
+    const char *direction = lookup(LOOKUP_DIRECTION, event.direction, locale);
+    const char *reason = lookup(LOOKUP_EVENT_REASON, event.reason, locale);
+
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
         {.field = "event index", .type = "uint32", .value.uint32 = event.index},
         {.field = "      timestamp", .type = "string", .value.string = event.timestamp},
-        {.field = "      type", .type = "string", .value.string = lookup_event_type(event.eventType)},
+        {.field = "      type", .type = "string", .value.string = eventType},
         {.field = "      granted", .type = "bool", .value.boolean = event.granted},
-        {.field = "      direction", .type = "uint8", .value.uint8 = event.direction},
+        {.field = "      direction", .type = "string", .value.string = direction},
         {.field = "      card number", .type = "uint32", .value.uint32 = event.card},
-        {.field = "      reason", .type = "uint8", .value.uint8 = event.reason},
+        {.field = "      reason", .type = "string", .value.string = reason},
     };
 
     display("get-event", sizeof(fields) / sizeof(field), fields);

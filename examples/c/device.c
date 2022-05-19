@@ -89,6 +89,10 @@ int getStatus(int argc, char **argv) {
         return -1;
     }
 
+    const char *direction = lookup(LOOKUP_DIRECTION, s.evt.direction, locale);
+    const char *eventType = lookup(LOOKUP_EVENT_TYPE, s.evt.eventType, locale);
+    const char *reason = lookup(LOOKUP_EVENT_REASON, s.evt.reason, locale);
+
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = s.ID},
         {.field = "date/time", .type = "string", .value.string = s.sysdatetime},
@@ -107,12 +111,12 @@ int getStatus(int argc, char **argv) {
         {.field = "info", .type = "uint8", .value.uint8 = s.info},
         {.field = "event timestamp", .type = "string", .value.string = s.evt.timestamp},
         {.field = "      index", .type = "uint32", .value.uint32 = s.evt.index},
-        {.field = "      type", .type = "string", .value.string = lookup_event_type(s.evt.eventType)},
+        {.field = "      type", .type = "string", .value.string = eventType},
         {.field = "      granted", .type = "bool", .value.boolean = s.evt.granted},
         {.field = "      door", .type = "uint8", .value.uint8 = s.evt.door},
-        {.field = "      direction", .type = "uint8", .value.uint8 = s.evt.direction},
+        {.field = "      direction", .type = "string", .value.string = direction},
         {.field = "      card", .type = "uint32", .value.uint32 = s.evt.card},
-        {.field = "      reason", .type = "uint8", .value.uint8 = s.evt.reason},
+        {.field = "      reason", .type = "string", .value.string = reason},
     };
 
     display("get-status", sizeof(fields) / sizeof(field), fields);
@@ -219,25 +223,12 @@ int getDoorControl(int argc, char **argv) {
         return -1;
     }
 
-    char *control_mode = "???";
-    switch (control.mode) {
-    case NORMALLY_OPEN:
-        control_mode = "normally open";
-        break;
-
-    case NORMALLY_CLOSED:
-        control_mode = "normally closed";
-        break;
-
-    case CONTROLLED:
-        control_mode = "controlled";
-        break;
-    }
+    const char *mode = lookup(LOOKUP_MODE, control.mode, locale);
 
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
         {.field = "door", .type = "uint8", .value.uint8 = door},
-        {.field = "mode", .type = "string", .value.string = control_mode},
+        {.field = "mode", .type = "string", .value.string = mode},
         {.field = "delay", .type = "uint8", .value.uint8 = control.delay},
     };
 
@@ -258,25 +249,12 @@ int setDoorControl(int argc, char **argv) {
         return -1;
     }
 
-    char *control_mode = "???";
-    switch (mode) {
-    case NORMALLY_OPEN:
-        control_mode = "normally open";
-        break;
-
-    case NORMALLY_CLOSED:
-        control_mode = "normally closed";
-        break;
-
-    case CONTROLLED:
-        control_mode = "controlled";
-        break;
-    }
+    const char *smode = lookup(LOOKUP_MODE, NORMALLY_OPEN, locale);
 
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
         {.field = "door", .type = "uint8", .value.uint8 = door},
-        {.field = "mode", .type = "string", .value.string = control_mode},
+        {.field = "mode", .type = "string", .value.string = smode},
         {.field = "delay", .type = "uint8", .value.uint8 = delay},
     };
 

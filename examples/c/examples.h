@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+extern const char *locale;
+
 typedef struct uint8 {
             uint8_t expected;
             uint8_t value;
@@ -84,4 +86,3 @@ extern int clearTaskList(int argc, char **argv);
 
 extern options parse(int argc, char **argv);
 extern void display(const char *tag, int N, field fields[]);
-extern const char *lookup_event_type(uint8_t);

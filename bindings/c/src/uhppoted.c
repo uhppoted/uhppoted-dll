@@ -9,6 +9,61 @@
 __thread char *err = NULL;
 __thread UHPPOTE *u = NULL;
 
+const char *LOOKUP_MODE = "door.mode";
+const char *LOOKUP_DIRECTION = "event.direction";
+const char *LOOKUP_EVENT_TYPE = "event.type";
+const char *LOOKUP_EVENT_REASON = "event.reason";
+
+const char *ModeNormallyOpen = "normally open";
+const char *ModeNormallyClosed = "normally closed";
+const char *ModeControlled = "controlled";
+const char *ModeUnknown = "unknown";
+
+const char *DirectionIn = "in";
+const char *DirectionOut = "out";
+const char *DirectionUnknown = "unknown";
+
+const char *EventTypeNone = "none";
+const char *EventTypeSwipe = "swipe";
+const char *EventTypeDoor = "door";
+const char *EventTypeAlarm = "alarm";
+const char *EventTypeOverwritten = "overwritten";
+const char *EventTypeUnknown = "unknown";
+
+const char *EventReasonNone = "";
+const char *EventReasonSwipe = "swipe";
+const char *EventReasonDenied = "swipe:denied (system)";
+const char *EventReasonNoAccessRights = "no access rights";
+const char *EventReasonIncorrectPassword = "incorrect password";
+const char *EventReasonAntiPassback = "anti-passback";
+const char *EventReasonMoreCards = "more cards";
+const char *EventReasonFirstCardOpen = "first card open";
+const char *EventReasonDoorIsNormallyClosed = "door is normally closed";
+const char *EventReasonInterlock = "interlock";
+const char *EventReasonNotInAllowedTimePeriod = "not in allowed time period";
+const char *EventReasonInvalidTimezone = "invalid timezone";
+const char *EventReasonAccessDenied = "access denied";
+const char *EventReasonPushButtonOk = "push button ok";
+const char *EventReasonDoorOpened = "door opened";
+const char *EventReasonDoorClosed = "door closed";
+const char *EventReasonDoorOpenedSupervisorPassword = "door opened (supervisor password)";
+const char *EventReasonControllerPowerOn = "controller power on";
+const char *EventReasonControllerReset = "controller reset";
+const char *EventReasonPushbuttonInvalidDoorLocked = "pushbutton invalid (door locked)";
+const char *EventReasonPushbuttonInvalidOffline = "pushbutton invalid (offline)";
+const char *EventReasonPushbuttonInvalidInterlock = "pushbutton invalid (interlock)";
+const char *EventReasonPushbuttonInvalidThreat = "pushbutton invalid (threat)";
+const char *EventReasonDoorOpenTooLong = "door open too long";
+const char *EventReasonForcedOpen = "forced open";
+const char *EventReasonFire = "fire";
+const char *EventReasonForcedClosed = "forced closed";
+const char *EventReasonTheftPrevention = "theft prevention";
+const char *EventReason24x7Zone = "24x7 zone";
+const char *EventReasonEmergency = "emergency";
+const char *EventReasonRemoteOpenDoor = "remote open door";
+const char *EventReasonRemoteOpenDoorUSBReader = "remote open door (USB reader)";
+const char *EventReasonUnknown = "unknown";
+
 const char *errmsg() { return err; }
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
@@ -607,4 +662,162 @@ int clear_tasklist(uint32_t id) {
     }
 
     return 0;
+}
+
+const char *lookup(const char *type, uint8_t code, const char *locale) {
+    if (strcmp(type, LOOKUP_MODE) == 0) {
+        switch (code) {
+        case NORMALLY_OPEN:
+            return ModeNormallyOpen;
+
+        case NORMALLY_CLOSED:
+            return ModeNormallyClosed;
+
+        case CONTROLLED:
+            return ModeControlled;
+
+        default:
+            return ModeUnknown;
+        }
+    }
+
+    if (strcmp(type, LOOKUP_DIRECTION) == 0) {
+        switch (code) {
+        case DIRECTION_IN:
+            return DirectionIn;
+
+        case DIRECTION_OUT:
+            return DirectionOut;
+
+        default:
+            return DirectionUnknown;
+        }
+    }
+
+    if (strcmp(type, LOOKUP_EVENT_TYPE) == 0) {
+        switch (code) {
+        case EVENT_TYPE_NONE:
+            return EventTypeNone;
+
+        case EVENT_TYPE_SWIPE:
+            return EventTypeSwipe;
+
+        case EVENT_TYPE_DOOR:
+            return EventTypeDoor;
+
+        case EVENT_TYPE_ALARM:
+            return EventTypeAlarm;
+
+        case EVENT_TYPE_OVERWRITTEN:
+            return EventTypeOverwritten;
+
+        default:
+            return EventTypeUnknown;
+        }
+    }
+
+    if (strcmp(type, LOOKUP_EVENT_REASON) == 0) {
+        switch (code) {
+        case EVENT_REASON_NONE:
+            return EventReasonNone;
+
+        case EVENT_REASON_SWIPE:
+            return EventReasonSwipe;
+
+        case EVENT_REASON_DENIED:
+            return EventReasonDenied;
+
+        case EVENT_REASON_NO_ACCESS_RIGHTS:
+            return EventReasonNoAccessRights;
+
+        case EVENT_REASON_INCORRECT_PASSWORD:
+            return EventReasonIncorrectPassword;
+
+        case EVENT_REASON_ANTI_PASSBACK:
+            return EventReasonAntiPassback;
+
+        case EVENT_REASON_MORE_CARDS:
+            return EventReasonMoreCards;
+
+        case EVENT_REASON_FIRST_CARD_OPEN:
+            return EventReasonFirstCardOpen;
+
+        case EVENT_REASON_DOOR_IS_NORMALLY_CLOSED:
+            return EventReasonDoorIsNormallyClosed;
+
+        case EVENT_REASON_INTERLOCK:
+            return EventReasonInterlock;
+
+        case EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD:
+
+            return EventReasonNotInAllowedTimePeriod;
+        case EVENT_REASON_INVALID_TIMEZONE:
+            return EventReasonInvalidTimezone;
+
+        case EVENT_REASON_ACCESS_DENIED:
+            return EventReasonAccessDenied;
+
+        case EVENT_REASON_PUSH_BUTTON_OK:
+            return EventReasonPushButtonOk;
+
+        case EVENT_REASON_DOOR_OPENED:
+            return EventReasonDoorOpened;
+
+        case EVENT_REASON_DOOR_CLOSED:
+            return EventReasonDoorClosed;
+
+        case EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD:
+            return EventReasonDoorOpenedSupervisorPassword;
+
+        case EVENT_REASON_CONTROLLER_POWER_ON:
+            return EventReasonControllerPowerOn;
+
+        case EVENT_REASON_CONTROLLER_RESET:
+            return EventReasonControllerReset;
+
+        case EVENT_REASON_PUSHBUTTON_INVALID_DOOR_LOCKED:
+            return EventReasonPushbuttonInvalidDoorLocked;
+
+        case EVENT_REASON_PUSHBUTTON_INVALID_OFFLINE:
+            return EventReasonPushbuttonInvalidOffline;
+
+        case EVENT_REASON_PUSHBUTTON_INVALID_INTERLOCK:
+            return EventReasonPushbuttonInvalidInterlock;
+
+        case EVENT_REASON_PUSHBUTTON_INVALID_THREAT:
+            return EventReasonPushbuttonInvalidThreat;
+
+        case EVENT_REASON_DOOR_OPEN_TOO_LONG:
+            return EventReasonDoorOpenTooLong;
+
+        case EVENT_REASON_FORCED_OPEN:
+            return EventReasonForcedOpen;
+
+        case EVENT_REASON_FIRE:
+            return EventReasonFire;
+
+        case EVENT_REASON_FORCED_CLOSED:
+            return EventReasonForcedClosed;
+
+        case EVENT_REASON_THEFT_PREVENTION:
+            return EventReasonTheftPrevention;
+
+        case EVENT_REASON_24X7_ZONE:
+            return EventReason24x7Zone;
+
+        case EVENT_REASON_EMERGENCY:
+            return EventReasonEmergency;
+
+        case EVENT_REASON_REMOTE_OPEN_DOOR:
+            return EventReasonRemoteOpenDoor;
+
+        case EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER:
+            return EventReasonRemoteOpenDoorUSBReader;
+
+        default:
+            return EventReasonUnknown;
+        }
+    }
+
+    return "?";
 }

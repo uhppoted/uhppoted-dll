@@ -16,6 +16,7 @@
 #define EVENT_TYPE_ALARM 3
 #define EVENT_TYPE_OVERWRITTEN 0xff
 
+#define EVENT_REASON_NONE 0
 #define EVENT_REASON_SWIPE 1
 #define EVENT_REASON_DENIED 5
 #define EVENT_REASON_NO_ACCESS_RIGHTS 6
@@ -47,6 +48,11 @@
 #define EVENT_REASON_EMERGENCY 43
 #define EVENT_REASON_REMOTE_OPEN_DOOR 44
 #define EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER 45
+
+extern const char *LOOKUP_MODE;
+extern const char *LOOKUP_DIRECTION;
+extern const char *LOOKUP_EVENT_TYPE;
+extern const char *LOOKUP_EVENT_REASON;
 
 typedef struct controller {
     uint32_t id;
@@ -138,6 +144,7 @@ typedef struct task {
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 const char *errmsg();
+const char *lookup(const char *, uint8_t, const char *);
 
 int get_devices(uint32_t **devices, int *N);
 int get_device(uint32_t id, struct device *);

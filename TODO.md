@@ -2,21 +2,14 @@
 
 ### IN PROGRESS
 
-- [x] Github workflow
-      - [x] examples
-
 - [ ] Constants for event types, reason, etc
       - [ ] lookup(...)
-      - [ ] Update examples
-      - [ ] Update tests
+            - [x] C
+            - [ ] C++
+            - [ ] C#
+            - [ ] Python
+            - [ ] CCL
 
-- [x] Extend examples to use command line args
-      - [x] C
-      - [x] C++
-      - [x] C#
-      - [x] Python
-      - [x] CCL
-  
 - [ ] Usage and notes
       - [ ] C
       - [ ] C++
@@ -34,7 +27,8 @@
 ## TODO
 
 - (?) lint
-- (?) Cross-compile
+- (?) Local cross-compile
       - https://github.com/elastic/golang-crossbuild
       - https://dh1tw.de/2019/12/cross-compiling-golang-cgo-projects/
+      - OR: github actions
 
