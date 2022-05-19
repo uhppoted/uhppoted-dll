@@ -83,12 +83,12 @@ void getStatus(uhppoted &u, int argc, char **argv) {
         field("info", s.info),
         field("event timestamp", s.evt.timestamp),
         field("      index", s.evt.index),
-        field("      type", s.evt.eventType),
+        field("      type", u.lookup(LOOKUP_EVENT_TYPE, s.evt.eventType, LOCALE)),
         field("      granted", s.evt.granted),
         field("      door", s.evt.door),
-        field("      direction", s.evt.direction),
+        field("      direction", u.lookup(LOOKUP_DIRECTION, s.evt.direction, LOCALE)),
         field("      card", s.evt.card),
-        field("      reason", s.evt.reason),
+        field("      reason", u.lookup(LOOKUP_EVENT_REASON, s.evt.reason, LOCALE)),
     };
 
     display("get-status", fields);
@@ -164,26 +164,10 @@ void getDoorControl(uhppoted &u, int argc, char **argv) {
 
     auto d = u.get_door_control(deviceID, door);
 
-    string control_mode = "???";
-
-    switch (d.mode) {
-    case NORMALLY_OPEN:
-        control_mode = "normally open";
-        break;
-
-    case NORMALLY_CLOSED:
-        control_mode = "normally closed";
-        break;
-
-    case CONTROLLED:
-        control_mode = "controlled";
-        break;
-    }
-
     vector<field> fields = {
         field("ID", deviceID),
         field("door", door),
-        field("mode", control_mode),
+        field("mode", u.lookup(LOOKUP_MODE, d.mode, LOCALE)),
         field("delay", d.delay),
     };
 
@@ -199,26 +183,10 @@ void setDoorControl(uhppoted &u, int argc, char **argv) {
 
     u.set_door_control(deviceID, door, mode, delay);
 
-    string control_mode = "???";
-
-    switch (mode) {
-    case NORMALLY_OPEN:
-        control_mode = "normally open";
-        break;
-
-    case NORMALLY_CLOSED:
-        control_mode = "normally closed";
-        break;
-
-    case CONTROLLED:
-        control_mode = "controlled";
-        break;
-    }
-
     vector<field> fields = {
         field("ID", deviceID),
         field("door", door),
-        field("mode", control_mode),
+        field("mode", u.lookup(LOOKUP_MODE, mode, LOCALE)),
         field("delay", delay),
     };
 

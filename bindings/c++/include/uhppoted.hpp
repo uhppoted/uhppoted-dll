@@ -19,6 +19,7 @@ const uint8_t EVENT_TYPE_DOOR = 2;
 const uint8_t EVENT_TYPE_ALARM = 3;
 const uint8_t EVENT_TYPE_OVERWRITTEN = 0xff;
 
+const uint8_t EVENT_REASON_NONE = 0;
 const uint8_t EVENT_REASON_SWIPE = 1;
 const uint8_t EVENT_REASON_DENIED = 5;
 const uint8_t EVENT_REASON_NO_ACCESS_RIGHTS = 6;
@@ -48,8 +49,13 @@ const uint8_t EVENT_REASON_FORCED_CLOSED = 40;
 const uint8_t EVENT_REASON_THEFT_PREVENTION = 41;
 const uint8_t EVENT_REASON_24X7_ZONE = 42;
 const uint8_t EVENT_REASON_EMERGENCY = 43;
-const uint8_t EVENT_REASON_REMOTE_OPEN_DOOR_ = 44;
+const uint8_t EVENT_REASON_REMOTE_OPEN_DOOR = 44;
 const uint8_t EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER = 45;
+
+extern const std::string LOOKUP_MODE;
+extern const std::string LOOKUP_DIRECTION;
+extern const std::string LOOKUP_EVENT_TYPE;
+extern const std::string LOOKUP_EVENT_REASON;
 
 typedef struct controller {
     uint32_t id;
@@ -178,6 +184,8 @@ class uhppoted {
     void add_task(uint32_t id, const task &task);
     void refresh_tasklist(uint32_t id);
     void clear_tasklist(uint32_t id);
+
+    const std::string lookup(const std::string &, uint8_t, const std::string &);
 
   private:
     UHPPOTE *u;

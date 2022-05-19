@@ -6,6 +6,8 @@
 
 #include "../include/uhppoted.hpp"
 
+extern const std::string LOCALE;
+
 typedef std::tuple<std::string, std::any> field;
 
 typedef struct options {

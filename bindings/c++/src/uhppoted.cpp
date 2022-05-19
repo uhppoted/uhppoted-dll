@@ -1,9 +1,65 @@
 #include <iostream>
+#include <map>
 #include <stdlib.h>
 
 #include "../include/uhppoted.hpp"
 
 using namespace std;
+
+const string LOOKUP_MODE = "door.mode";
+const string LOOKUP_DIRECTION = "event.direction";
+const string LOOKUP_EVENT_TYPE = "event.type";
+const string LOOKUP_EVENT_REASON = "event.reason";
+
+const char *ModeNormallyOpen = "normally open";
+const char *ModeNormallyClosed = "normally closed";
+const char *ModeControlled = "controlled";
+const char *ModeUnknown = "unknown";
+
+const char *DirectionIn = "in";
+const char *DirectionOut = "out";
+const char *DirectionUnknown = "unknown";
+
+const char *EventTypeNone = "none";
+const char *EventTypeSwipe = "swipe";
+const char *EventTypeDoor = "door";
+const char *EventTypeAlarm = "alarm";
+const char *EventTypeOverwritten = "overwritten";
+const char *EventTypeUnknown = "unknown";
+
+const char *EventReasonNone = "";
+const char *EventReasonSwipe = "swipe";
+const char *EventReasonDenied = "swipe:denied (system)";
+const char *EventReasonNoAccessRights = "no access rights";
+const char *EventReasonIncorrectPassword = "incorrect password";
+const char *EventReasonAntiPassback = "anti-passback";
+const char *EventReasonMoreCards = "more cards";
+const char *EventReasonFirstCardOpen = "first card open";
+const char *EventReasonDoorIsNormallyClosed = "door is normally closed";
+const char *EventReasonInterlock = "interlock";
+const char *EventReasonNotInAllowedTimePeriod = "not in allowed time period";
+const char *EventReasonInvalidTimezone = "invalid timezone";
+const char *EventReasonAccessDenied = "access denied";
+const char *EventReasonPushButtonOk = "push button ok";
+const char *EventReasonDoorOpened = "door opened";
+const char *EventReasonDoorClosed = "door closed";
+const char *EventReasonDoorOpenedSupervisorPassword = "door opened (supervisor password)";
+const char *EventReasonControllerPowerOn = "controller power on";
+const char *EventReasonControllerReset = "controller reset";
+const char *EventReasonPushbuttonInvalidDoorLocked = "pushbutton invalid (door locked)";
+const char *EventReasonPushbuttonInvalidOffline = "pushbutton invalid (offline)";
+const char *EventReasonPushbuttonInvalidInterlock = "pushbutton invalid (interlock)";
+const char *EventReasonPushbuttonInvalidThreat = "pushbutton invalid (threat)";
+const char *EventReasonDoorOpenTooLong = "door open too long";
+const char *EventReasonForcedOpen = "forced open";
+const char *EventReasonFire = "fire";
+const char *EventReasonForcedClosed = "forced closed";
+const char *EventReasonTheftPrevention = "theft prevention";
+const char *EventReason24x7Zone = "24x7 zone";
+const char *EventReasonEmergency = "emergency";
+const char *EventReasonRemoteOpenDoor = "remote open door";
+const char *EventReasonRemoteOpenDoorUSBReader = "remote open door (USB reader)";
+const char *EventReasonUnknown = "unknown";
 
 // NTS: std::make_shared can throw an exception but there doesn't seem
 //      to be a clean alternative
@@ -510,4 +566,87 @@ void uhppoted::clear_tasklist(uint32_t id) {
     if (err != NULL) {
         throw uhppoted_exception(err);
     }
+}
+
+const map<uint8_t, string> LookupMode = {
+    {NORMALLY_OPEN, ModeNormallyOpen},
+    {NORMALLY_CLOSED, ModeNormallyClosed},
+    {CONTROLLED, ModeControlled},
+};
+
+const map<uint8_t, string> LookupDirection = {
+    {DIRECTION_IN, DirectionIn},
+    {DIRECTION_OUT, DirectionOut},
+};
+
+const map<uint8_t, string> LookupEventType = {
+    {EVENT_TYPE_NONE, EventTypeNone},
+    {EVENT_TYPE_SWIPE, EventTypeSwipe},
+    {EVENT_TYPE_DOOR, EventTypeDoor},
+    {EVENT_TYPE_ALARM, EventTypeAlarm},
+    {EVENT_TYPE_OVERWRITTEN, EventTypeOverwritten},
+};
+
+const map<uint8_t, string> LookupEventReason = {
+    {EVENT_REASON_NONE, EventReasonNone},
+    {EVENT_REASON_SWIPE, EventReasonSwipe},
+    {EVENT_REASON_DENIED, EventReasonDenied},
+    {EVENT_REASON_NO_ACCESS_RIGHTS, EventReasonNoAccessRights},
+    {EVENT_REASON_INCORRECT_PASSWORD, EventReasonIncorrectPassword},
+    {EVENT_REASON_ANTI_PASSBACK, EventReasonAntiPassback},
+    {EVENT_REASON_MORE_CARDS, EventReasonMoreCards},
+    {EVENT_REASON_FIRST_CARD_OPEN, EventReasonFirstCardOpen},
+    {EVENT_REASON_DOOR_IS_NORMALLY_CLOSED, EventReasonDoorIsNormallyClosed},
+    {EVENT_REASON_INTERLOCK, EventReasonInterlock},
+    {EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD, EventReasonNotInAllowedTimePeriod},
+    {EVENT_REASON_INVALID_TIMEZONE, EventReasonInvalidTimezone},
+    {EVENT_REASON_ACCESS_DENIED, EventReasonAccessDenied},
+    {EVENT_REASON_PUSH_BUTTON_OK, EventReasonPushButtonOk},
+    {EVENT_REASON_DOOR_OPENED, EventReasonDoorOpened},
+    {EVENT_REASON_DOOR_CLOSED, EventReasonDoorClosed},
+    {EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD, EventReasonDoorOpenedSupervisorPassword},
+    {EVENT_REASON_CONTROLLER_POWER_ON, EventReasonControllerPowerOn},
+    {EVENT_REASON_CONTROLLER_RESET, EventReasonControllerReset},
+    {EVENT_REASON_PUSHBUTTON_INVALID_DOOR_LOCKED, EventReasonPushbuttonInvalidDoorLocked},
+    {EVENT_REASON_PUSHBUTTON_INVALID_OFFLINE, EventReasonPushbuttonInvalidOffline},
+    {EVENT_REASON_PUSHBUTTON_INVALID_INTERLOCK, EventReasonPushbuttonInvalidInterlock},
+    {EVENT_REASON_PUSHBUTTON_INVALID_THREAT, EventReasonPushbuttonInvalidThreat},
+    {EVENT_REASON_DOOR_OPEN_TOO_LONG, EventReasonDoorOpenTooLong},
+    {EVENT_REASON_FORCED_OPEN, EventReasonForcedOpen},
+    {EVENT_REASON_FIRE, EventReasonFire},
+    {EVENT_REASON_FORCED_CLOSED, EventReasonForcedClosed},
+    {EVENT_REASON_THEFT_PREVENTION, EventReasonTheftPrevention},
+    {EVENT_REASON_24X7_ZONE, EventReason24x7Zone},
+    {EVENT_REASON_EMERGENCY, EventReasonEmergency},
+    {EVENT_REASON_REMOTE_OPEN_DOOR, EventReasonRemoteOpenDoor},
+    {EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER, EventReasonRemoteOpenDoorUSBReader},
+};
+
+const map<string, map<uint8_t, string>> dictionaries = {
+    {LOOKUP_MODE, LookupMode},
+    {LOOKUP_DIRECTION, LookupDirection},
+    {LOOKUP_EVENT_TYPE, LookupEventType},
+    {LOOKUP_EVENT_REASON, LookupEventReason},
+};
+
+const map<string, string> unknown = {
+    {LOOKUP_MODE, ModeUnknown},
+    {LOOKUP_DIRECTION, DirectionUnknown},
+    {LOOKUP_EVENT_TYPE, EventTypeUnknown},
+    {LOOKUP_EVENT_REASON, EventReasonUnknown},
+};
+
+const string uhppoted::lookup(const string &type, uint8_t code, const string &locale) {
+    auto dictionary = dictionaries.find(type);
+
+    if (dictionary != dictionaries.end()) {
+        auto it = dictionary->second.find(code);
+        if (it != dictionary->second.end()) {
+            return it->second;
+        }
+
+        return unknown.at(type);
+    }
+
+    return "?";
 }

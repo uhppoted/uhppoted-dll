@@ -43,11 +43,11 @@ void getEvent(uhppoted &u, int argc, char **argv) {
         field("ID", deviceID),
         field("event index:", e.index),
         field("      timestamp", e.timestamp),
-        field("      type", e.eventType),
+        field("      type", u.lookup(LOOKUP_EVENT_TYPE, e.eventType, LOCALE)),
         field("      granted", e.granted),
-        field("      direction", e.direction),
+        field("      direction", u.lookup(LOOKUP_DIRECTION, e.direction, LOCALE)),
         field("      card number", e.card),
-        field("      reason", e.reason),
+        field("      reason", u.lookup(LOOKUP_EVENT_REASON, e.reason, LOCALE)),
     };
 
     display("get-event", fields);

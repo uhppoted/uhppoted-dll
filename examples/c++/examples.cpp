@@ -18,6 +18,8 @@ extern const uint32_t EVENT_INDEX = 7;
 extern const uint8_t DOOR = 4;
 extern const uint8_t PROFILE_ID = 29;
 
+extern const string LOCALE = "";
+
 const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
