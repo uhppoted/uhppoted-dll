@@ -2,13 +2,13 @@
 
 ### IN PROGRESS
 
-- [ ] Constants for event types, reason, etc
-      - [ ] lookup(...)
+- [x] Constants for event types, reason, etc
+      - [x] lookup(...)
             - [x] C
             - [x] C++
             - [x] C#
-            - [ ] Python
-            - [ ] CCL
+            - [x] Python
+            - [x] CCL
 
 - [ ] Usage and notes
       - [ ] C

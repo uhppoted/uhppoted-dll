@@ -119,5 +119,5 @@ run:
 debug: 
 	# GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load main.lisp
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load main.lisp --eval '(make-app)' 
-	$(CMD) get-card --controller 303986753 --card 123456
+	$(CMD) get-door-control
 

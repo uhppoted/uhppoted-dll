@@ -29,6 +29,7 @@
 (defconstant EVENT-TYPE-ALARM       3)
 (defconstant EVENT-TYPE-OVERWRITTEN 255)
 
+(defconstant EVENT-REASON-NONE                            0)
 (defconstant EVENT-REASON-SWIPE                           1)
 (defconstant EVENT-REASON-DENIED                          5)
 (defconstant EVENT-REASON-NO-ACCESS-RIGHTS                6)
@@ -61,6 +62,60 @@
 (defconstant EVENT-REASON-REMOTE-OPEN-DOOR                44)
 (defconstant EVENT-REASON-REMOTE-OPEN-DOOR-USB-READER     45)
 
+(defconstant LOOKUP-MODE         "door.mode")
+(defconstant LOOKUP-DIRECTION    "event.direction")
+(defconstant LOOKUP-EVENT-TYPE   "event.type")
+(defconstant LOOKUP-EVENT-REASON "event.reason")
+
+(defconstant ModeNormallyOpen   "normally open")
+(defconstant ModeNormallyClosed "normally closed")
+(defconstant ModeControlled     "controlled")
+(defconstant ModeUnknown        "unknown")
+
+(defconstant DirectionIn      "in")
+(defconstant DirectionOut     "out")
+(defconstant DirectionUnknown "unknown")
+
+(defconstant EventTypeNone        "none")
+(defconstant EventTypeSwipe       "swipe")
+(defconstant EventTypeDoor        "door")
+(defconstant EventTypeAlarm       "alarm")
+(defconstant EventTypeOverwritten "overwritten")
+(defconstant EventTypeUnknown     "unknown")
+
+(defconstant EventReasonNone                         "")
+(defconstant EventReasonSwipe                        "swipe")
+(defconstant EventReasonDenied                       "swipe:denied (system)")
+(defconstant EventReasonNoAccessRights               "no access rights")
+(defconstant EventReasonIncorrectPassword            "incorrect password")
+(defconstant EventReasonAntiPassback                 "anti-passback")
+(defconstant EventReasonMoreCards                    "more cards")
+(defconstant EventReasonFirstCardOpen                "first card open")
+(defconstant EventReasonDoorIsNormallyClosed         "door is normally closed")
+(defconstant EventReasonInterlock                    "interlock")
+(defconstant EventReasonNotInAllowedTimePeriod       "not in allowed time period")
+(defconstant EventReasonInvalidTimezone              "invalid timezone")
+(defconstant EventReasonAccessDenied                 "access denied")
+(defconstant EventReasonPushButtonOk                 "push button ok")
+(defconstant EventReasonDoorOpened                   "door opened")
+(defconstant EventReasonDoorClosed                   "door closed")
+(defconstant EventReasonDoorOpenedSupervisorPassword "door opened (supervisor password)")
+(defconstant EventReasonControllerPowerOn            "controller power on")
+(defconstant EventReasonControllerReset              "controller reset")
+(defconstant EventReasonPushbuttonInvalidDoorLocked  "pushbutton invalid (door locked)")
+(defconstant EventReasonPushbuttonInvalidOffline     "pushbutton invalid (offline)")
+(defconstant EventReasonPushbuttonInvalidInterlock   "pushbutton invalid (interlock)")
+(defconstant EventReasonPushbuttonInvalidThreat      "pushbutton invalid (threat)")
+(defconstant EventReasonDoorOpenTooLong              "door open too long")
+(defconstant EventReasonForcedOpen                   "forced open")
+(defconstant EventReasonFire                         "fire")
+(defconstant EventReasonForcedClosed                 "forced closed")
+(defconstant EventReasonTheftPrevention              "theft prevention")
+(defconstant EventReason24x7Zone                     "24x7 zone")
+(defconstant EventReasonEmergency                    "emergency")
+(defconstant EventReasonRemoteOpenDoor               "remote open door")
+(defconstant EventReasonRemoteOpenDoorUSBReader      "remote open door (USB reader)")
+(defconstant EventReasonUnknown                      "unknown")
 
 (defstruct device ID 
                   address
@@ -666,5 +721,112 @@
                                                      :address)))
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
+
+(defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"
+  (cond ((string= category lookup-mode)         (uhppoted-lookup-mode         code locale))
+        ((string= category lookup-direction)    (uhppoted-lookup-direction    code locale))
+        ((string= category lookup-event-type)   (uhppoted-lookup-event-type   code locale))
+        ((string= category lookup-event-reason) (uhppoted-lookup-event-reason code locale))
+        (t "?")))
+
+(defun uhppoted-lookup-mode (code locale) "Looks up the plain text description for a door control mode code"
+  (declare (ignore locale))
+  (cond ((equal code normally-open)   ModeNormallyOpen)
+        ((equal code normally-closed) ModeNormallyClosed)
+        ((equal code controlled)      ModeControlled)
+        (t ModeUnknown)))
+
+(defun uhppoted-lookup-direction (code locale) "Looks up the plain text description for an event direction code"
+  (declare (ignore locale))
+  (cond ((equal code direction-in)  DirectionIn)
+        ((equal code direction-out) DirectionOut)
+        (t DirectionUnknown)))
+
+(defun uhppoted-lookup-event-type (code locale) "Looks up the plain text description for an event type code"
+  (declare (ignore locale))
+  (cond ((equal code event-type-none)        EventTypeNone)
+        ((equal code event-type-swipe)       EventTypeSwipe)
+        ((equal code event-type-door)        EventTypeDoor)
+        ((equal code event-type-alarm)       EventTypeAlarm)
+        ((equal code event-type-overwritten) EventTypeOverwritten)
+        (t EventTypeUnknown)))
+
+(defun uhppoted-lookup-event-reason (code locale) "Looks up the plain text description for an event reasoncode"
+  (declare (ignore locale))
+  (cond ((equal code event-type-none)        EventTypeNone)
+        ((equal code event-type-swipe)       EventTypeSwipe)
+        ((equal code event-type-door)        EventTypeDoor)
+        ((equal code event-type-alarm)       EventTypeAlarm)
+        ((equal code event-type-overwritten) EventTypeOverwritten)
+
+        ((equal code event-reason-none)                            EventReasonNone)
+        ((equal code event-reason-swipe)                           EventReasonSwipe)
+        ((equal code event-reason-denied)                          EventReasonDenied)
+        ((equal code event-reason-no-access-rights)                EventReasonNoAccessRights)
+        ((equal code event-reason-incorrect-password)              EventReasonIncorrectPassword)
+        ((equal code event-reason-anti-passback)                   EventReasonAntiPassback)
+        ((equal code event-reason-more-cards)                      EventReasonMoreCards)
+        ((equal code event-reason-first-card-open)                 EventReasonFirstCardOpen)
+        ((equal code event-reason-door-is-normally-closed)         EventReasonDoorIsNormallyClosed)
+        ((equal code event-reason-interlock)                       EventReasonInterlock)
+        ((equal code event-reason-not-in-allowed-time-period)      EventReasonNotInAllowedTimePeriod)
+        ((equal code event-reason-invalid-timezone)                EventReasonInvalidTimezone)
+        ((equal code event-reason-access-denied)                   EventReasonAccessDenied)
+        ((equal code event-reason-push-button-ok)                  EventReasonPushButtonOk)
+        ((equal code event-reason-door-opened)                     EventReasonDoorOpened)
+        ((equal code event-reason-door-closed)                     EventReasonDoorClosed)
+        ((equal code event-reason-door-opened-supervisor-password) EventReasonDoorOpenedSupervisorPassword)
+        ((equal code event-reason-controller-power-on)             EventReasonControllerPowerOn)
+        ((equal code event-reason-controller-reset)                EventReasonControllerReset)
+        ((equal code event-reason-pushbutton-invalid-door-locked)  EventReasonPushbuttonInvalidDoorLocked)
+        ((equal code event-reason-pushbutton-invalid-offline)      EventReasonPushbuttonInvalidOffline)
+        ((equal code event-reason-pushbutton-invalid-interlock)    EventReasonPushbuttonInvalidInterlock)
+        ((equal code event-reason-pushbutton-invalid-threat)       EventReasonPushbuttonInvalidThreat)
+        ((equal code event-reason-door-open-too-long)              EventReasonDoorOpenTooLong)
+        ((equal code event-reason-forced-open)                     EventReasonForcedOpen)
+        ((equal code event-reason-fire)                            EventReasonFire)
+        ((equal code event-reason-forced-closed)                   EventReasonForcedClosed)
+        ((equal code event-reason-theft-prevention)                EventReasonTheftPrevention)
+        ((equal code event-reason-24x7-zone)                       EventReason24x7Zone)
+        ((equal code event-reason-emergency)                       EventReasonEmergency)
+        ((equal code event-reason-remote-open-door)                EventReasonRemoteOpenDoor)
+        ((equal code event-reason-remote-open-door-usb-reader)     EventReasonRemoteOpenDoorUSBReader)
+        (t EventReasonUnknown)))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

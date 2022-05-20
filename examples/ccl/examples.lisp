@@ -87,7 +87,7 @@
          (door      (args-door      args))
          (control   (exec #'(lambda (u) (uhppoted-get-door-control u device-id door)))))
     (when control
-      (display "get-door-control" device-id (list "mode"  (door-mode (door-control-mode  control))
+      (display "get-door-control" device-id (list "mode"  (uhppoted-lookup lookup-mode (door-control-mode  control) "")
                                                   "delay" (door-control-delay control))))))
 
 
@@ -99,7 +99,7 @@
          (ok        (exec #'(lambda (u) (uhppoted-set-door-control u device-id door mode delay)))))
     (when ok 
       (display "set-door-control" device-id (list "door"  door
-                                                  "mode"  (door-mode mode)
+                                                  "mode"  (uhppoted-lookup lookup-mode mode "")
                                                   "delay" delay)))))
 
 
@@ -319,7 +319,7 @@
 (defun as-fields (result) "" 
   (let ((fields (mapcar #'slot-definition-name (class-direct-slots (class-of result)))))
        (loop for f in fields 
-         append (list (string-downcase (string f)) (field-value result f)))))
+         append (list (string-downcase (string f)) (field-value (string f) result f)))))
 
 
 (defun as-pairs (fields) "" 
@@ -330,12 +330,16 @@
   (loop for (f) in fields maximize (length f)))
 
 
-(defun field-value (result f) "" 
-  (let ((v (slot-value result f)))
-    (cond ((typep v 'boolean) (as-boolean v))
-          ((typep v 'cons)    (format nil "~{~a ~}" (mapcar #'as-boolean v)))
-          ((as-fields v)      (as-fields v))
-          (t                  v))))
+(defun field-value (label result f) "" 
+  (let* ((v (slot-value result f))
+         (vv (cond ((typep v 'boolean) (as-boolean v))
+                   ((typep v 'cons)    (format nil "~{~a ~}" (mapcar #'as-boolean v)))
+                   ((as-fields v)      (as-fields v))
+                   (t                  v))))
+    (cond ((string= label "DIRECTION")  (uhppoted-lookup lookup-direction    vv ""))
+          ((string= label "EVENT-TYPE") (uhppoted-lookup lookup-event-type   vv ""))
+          ((string= label "REASON")     (uhppoted-lookup lookup-event-reason vv ""))
+          (t vv))))
 
 
 (defun as-boolean (v) "" 

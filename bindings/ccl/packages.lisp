@@ -34,6 +34,7 @@
            uhppoted-error
            with-warning
            message
+           uhppoted-lookup
 
            device-id
            device-address
@@ -148,5 +149,10 @@
            event-reason-remote-open-door-usb-reader
            
            direction-in
-           direction-out))
+           direction-out
+
+           lookup-mode
+           lookup-direction
+           lookup-event-type
+           lookup-event-reason))
 
