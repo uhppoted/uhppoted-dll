@@ -6,7 +6,7 @@
       - [ ] lookup(...)
             - [x] C
             - [x] C++
-            - [ ] C#
+            - [x] C#
             - [ ] Python
             - [ ] CCL
 

@@ -39,6 +39,7 @@ EVENT_TYPE_DOOR: Final[int] = 2
 EVENT_TYPE_ALARM: Final[int] = 3
 EVENT_TYPE_OVERWRITTEN: Final[int] = 0xff
 
+EVENT_REASON_NONE: Final[int] = 0
 EVENT_REASON_SWIPE: Final[int] = 1
 EVENT_REASON_DENIED: Final[int] = 5
 EVENT_REASON_NO_ACCESS_RIGHTS: Final[int] = 6
@@ -396,6 +397,157 @@ class Uhppote:
 
     def clear_tasklist(self, deviceID):
         self.ffi.ClearTaskList(self._uhppote, deviceID)
+
+
+# lookup
+
+LOOKUP_MODE: Final[str] = 'door.mode'
+LOOKUP_DIRECTION: Final[str] = 'event.direction'
+LOOKUP_EVENT_TYPE: Final[str] = 'event.type'
+LOOKUP_EVENT_REASON: Final[str] = 'event.reason'
+
+ModeNormallyOpen: Final[str] = 'normally open'
+ModeNormallyClosed: Final[str] = 'normally closed'
+ModeControlled: Final[str] = 'controlled'
+ModeUnknown: Final[str] = 'unknown'
+
+DirectionIn: Final[str] = 'in'
+DirectionOut: Final[str] = 'out'
+DirectionUnknown: Final[str] = 'unknown'
+
+EventTypeNone: Final[str] = 'none'
+EventTypeSwipe: Final[str] = 'swipe'
+EventTypeDoor: Final[str] = 'door'
+EventTypeAlarm: Final[str] = 'alarm'
+EventTypeOverwritten: Final[str] = 'overwritten'
+EventTypeUnknown: Final[str] = 'unknown'
+
+EventReasonNone: Final[str] = ''
+EventReasonSwipe: Final[str] = 'swipe'
+EventReasonDenied: Final[str] = 'swipe:denied (system)'
+EventReasonNoAccessRights: Final[str] = 'no access rights'
+EventReasonIncorrectPassword: Final[str] = 'incorrect password'
+EventReasonAntiPassback: Final[str] = 'anti-passback'
+EventReasonMoreCards: Final[str] = 'more cards'
+EventReasonFirstCardOpen: Final[str] = 'first card open'
+EventReasonDoorIsNormallyClosed: Final[str] = 'door is normally closed'
+EventReasonInterlock: Final[str] = 'interlock'
+EventReasonNotInAllowedTimePeriod: Final[str] = 'not in allowed time period'
+EventReasonInvalidTimezone: Final[str] = 'invalid timezone'
+EventReasonAccessDenied: Final[str] = 'access denied'
+EventReasonPushButtonOk: Final[str] = 'push button ok'
+EventReasonDoorOpened: Final[str] = 'door opened'
+EventReasonDoorClosed: Final[str] = 'door closed'
+EventReasonDoorOpenedSupervisorPassword: Final[str] = 'door opened (supervisor password)'
+EventReasonControllerPowerOn: Final[str] = 'controller power on'
+EventReasonControllerReset: Final[str] = 'controller reset'
+EventReasonPushbuttonInvalidDoorLocked: Final[str] = 'pushbutton invalid (door locked)'
+EventReasonPushbuttonInvalidOffline: Final[str] = 'pushbutton invalid (offline)'
+EventReasonPushbuttonInvalidInterlock: Final[str] = 'pushbutton invalid (interlock)'
+EventReasonPushbuttonInvalidThreat: Final[str] = 'pushbutton invalid (threat)'
+EventReasonDoorOpenTooLong: Final[str] = 'door open too long'
+EventReasonForcedOpen: Final[str] = 'forced open'
+EventReasonFire: Final[str] = 'fire'
+EventReasonForcedClosed: Final[str] = 'forced closed'
+EventReasonTheftPrevention: Final[str] = 'theft prevention'
+EventReason24x7Zone: Final[str] = '24x7 zone'
+EventReasonEmergency: Final[str] = 'emergency'
+EventReasonRemoteOpenDoor: Final[str] = 'remote open door'
+EventReasonRemoteOpenDoorUSBReader: Final[str] = 'remote open door (USB reader)'
+EventReasonUnknown: Final[str] = 'unknown'
+
+
+def LookupMode():
+    return {
+        NORMALLY_OPEN: ModeNormallyOpen,
+        NORMALLY_CLOSED: ModeNormallyClosed,
+        CONTROLLED: ModeControlled,
+    }
+
+
+def LookupDirection():
+    return {
+        DIRECTION_IN: DirectionIn,
+        DIRECTION_OUT: DirectionOut,
+    }
+
+
+def LookupEventType():
+    return {
+        EVENT_TYPE_NONE: EventTypeNone,
+        EVENT_TYPE_SWIPE: EventTypeSwipe,
+        EVENT_TYPE_DOOR: EventTypeDoor,
+        EVENT_TYPE_ALARM: EventTypeAlarm,
+        EVENT_TYPE_OVERWRITTEN: EventTypeOverwritten,
+    }
+
+
+def LookupEventReason():
+    return {
+        EVENT_REASON_NONE: EventReasonNone,
+        EVENT_REASON_SWIPE: EventReasonSwipe,
+        EVENT_REASON_DENIED: EventReasonDenied,
+        EVENT_REASON_NO_ACCESS_RIGHTS: EventReasonNoAccessRights,
+        EVENT_REASON_INCORRECT_PASSWORD: EventReasonIncorrectPassword,
+        EVENT_REASON_ANTIPASSBACK: EventReasonAntiPassback,
+        EVENT_REASON_MORE_CARDS: EventReasonMoreCards,
+        EVENT_REASON_FIRST_CARD_OPEN: EventReasonFirstCardOpen,
+        EVENT_REASON_DOOR_IS_NORMALLY_CLOSED: EventReasonDoorIsNormallyClosed,
+        EVENT_REASON_INTERLOCK: EventReasonInterlock,
+        EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD: EventReasonNotInAllowedTimePeriod,
+        EVENT_REASON_INVALID_TIMEZONE: EventReasonInvalidTimezone,
+        EVENT_REASON_ACCESS_DENIED: EventReasonAccessDenied,
+        EVENT_REASON_PUSHBUTTON_OK: EventReasonPushButtonOk,
+        EVENT_REASON_DOOR_OPENED: EventReasonDoorOpened,
+        EVENT_REASON_DOOR_CLOSED: EventReasonDoorClosed,
+        EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD: EventReasonDoorOpenedSupervisorPassword,
+        EVENT_REASON_CONTROLLER_POWER_ON: EventReasonControllerPowerOn,
+        EVENT_REASON_CONTROLLER_RESET: EventReasonControllerReset,
+        EVENT_REASON_PUSHBUTTON_INVALID_DOOR_LOCKED: EventReasonPushbuttonInvalidDoorLocked,
+        EVENT_REASON_PUSHBUTTON_INVALID_OFFLINE: EventReasonPushbuttonInvalidOffline,
+        EVENT_REASON_PUSHBUTTON_INVALID_INTERLOCK: EventReasonPushbuttonInvalidInterlock,
+        EVENT_REASON_PUSHBUTTON_INVALID_THREAT: EventReasonPushbuttonInvalidThreat,
+        EVENT_REASON_DOOR_OPEN_TOO_LONG: EventReasonDoorOpenTooLong,
+        EVENT_REASON_FORCED_OPEN: EventReasonForcedOpen,
+        EVENT_REASON_FIRE: EventReasonFire,
+        EVENT_REASON_FORCED_CLOSED: EventReasonForcedClosed,
+        EVENT_REASON_THEFT_PREVENTION: EventReasonTheftPrevention,
+        EVENT_REASON_ZONE_24X7: EventReason24x7Zone,
+        EVENT_REASON_EMERGENCY: EventReasonEmergency,
+        EVENT_REASON_REMOTE_OPEN_DOOR: EventReasonRemoteOpenDoor,
+        EVENT_REASON_REMOTE_OPEN_DOOR_USB: EventReasonRemoteOpenDoorUSBReader,
+    }
+
+
+def dictionaries():
+    return {
+        LOOKUP_MODE: LookupMode,
+        LOOKUP_DIRECTION: LookupDirection,
+        LOOKUP_EVENT_TYPE: LookupEventType,
+        LOOKUP_EVENT_REASON: LookupEventReason,
+    }
+
+
+def unknown():
+    return {
+        LOOKUP_MODE: ModeUnknown,
+        LOOKUP_DIRECTION: DirectionUnknown,
+        LOOKUP_EVENT_TYPE: EventTypeUnknown,
+        LOOKUP_EVENT_REASON: EventReasonUnknown,
+    }
+
+
+def lookup(category, code, locale):
+    tables = dictionaries()
+
+    if category in tables:
+        table = tables[category]()
+        if code in table:
+            return table[code]
+        else:
+            return unknown()[category]
+
+    return "?"
 
 
 # Go FFI types

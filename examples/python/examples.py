@@ -22,12 +22,19 @@ from uhppoted import NORMALLY_OPEN
 from uhppoted import NORMALLY_CLOSED
 from uhppoted import CONTROLLED
 
+from uhppoted import lookup
+from uhppoted import LOOKUP_MODE
+from uhppoted import LOOKUP_DIRECTION
+from uhppoted import LOOKUP_EVENT_TYPE
+from uhppoted import LOOKUP_EVENT_REASON
+
 DEVICE_ID = 405419896
 CARD_NUMBER = 8000001
 CARD_INDEX = 7
 EVENT_INDEX = 43
 DOOR = 4
 TIME_PROFILE_ID = 29
+LOCALE = ""
 
 
 def commands():
@@ -309,12 +316,12 @@ def get_status(u, args):
         ('seq no.  ', status.seqno),
         ('event timestamp', status.evt.timestamp),
         ('      index', status.evt.index),
-        ('      type', status.evt.eventType),
+        ('      type', lookup(LOOKUP_EVENT_TYPE, status.evt.eventType, LOCALE)),
         ('      granted', status.evt.granted),
         ('      door', status.evt.door),
-        ('      direction', status.evt.direction),
+        ('      direction', lookup(LOOKUP_DIRECTION, status.evt.direction, LOCALE)),
         ('      card', status.evt.card),
-        ('      reason', status.evt.reason),
+        ('      reason', lookup(LOOKUP_EVENT_REASON, status.evt.reason, LOCALE)),
     ])
 
 
@@ -370,16 +377,10 @@ def get_door_control(u, args):
 
     control = u.get_door_control(device_id, door)
 
-    modes = {
-        NORMALLY_OPEN: 'normally open',
-        NORMALLY_CLOSED: 'normally closed',
-        CONTROLLED: 'controlled',
-    }
-
     display('get-door-control', [
         ('ID', device_id),
         ('door', door),
-        ('mode', modes[control.mode]),
+        ('mode', lookup(LOOKUP_MODE, control.mode, LOCALE)),
         ('delay', control.delay),
     ])
 
@@ -542,12 +543,12 @@ def get_event(u, args):
         ('ID', device_id),
         ('event index', event.index),
         ('      timestamp', event.timestamp),
-        ('      type', event.eventType),
+        ('      type', lookup(LOOKUP_EVENT_TYPE, event.eventType, LOCALE)),
         ('      granted', event.granted),
         ('      door', event.door),
-        ('      direction', event.direction),
+        ('      direction', lookup(LOOKUP_DIRECTION, event.direction, LOCALE)),
         ('      card number', event.card),
-        ('      reason', event.reason),
+        ('      reason', lookup(LOOKUP_EVENT_REASON, event.reason, LOCALE)),
     ])
 
 
