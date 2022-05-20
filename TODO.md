@@ -5,7 +5,7 @@
 - [ ] Constants for event types, reason, etc
       - [ ] lookup(...)
             - [x] C
-            - [ ] C++
+            - [x] C++
             - [ ] C#
             - [ ] Python
             - [ ] CCL

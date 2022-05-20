@@ -225,7 +225,7 @@ public class Tests {
         DoorControl control = u.GetDoorControl(DEVICE_ID, DOOR);
 
         result[] resultset = {
-            new uint8Result("door control mode", ControlModes.Controlled, control.mode),
+            new uint8Result("door control mode", DoorMode.Controlled, control.mode),
             new uint8Result("door open delay", 7, control.delay),
         };
 
@@ -233,7 +233,7 @@ public class Tests {
     }
 
     static bool SetDoorControl(Uhppoted u) {
-        u.SetDoorControl(DEVICE_ID, DOOR, ControlModes.NormallyClosed, 6);
+        u.SetDoorControl(DEVICE_ID, DOOR, DoorMode.NormallyClosed, 6);
 
         result[] resultset = {};
 

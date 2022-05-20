@@ -636,8 +636,8 @@ const map<string, string> unknown = {
     {LOOKUP_EVENT_REASON, EventReasonUnknown},
 };
 
-const string uhppoted::lookup(const string &type, uint8_t code, const string &locale) {
-    auto dictionary = dictionaries.find(type);
+const string uhppoted::lookup(const string &category, uint8_t code, const string &locale) {
+    auto dictionary = dictionaries.find(category);
 
     if (dictionary != dictionaries.end()) {
         auto it = dictionary->second.find(code);
@@ -645,7 +645,7 @@ const string uhppoted::lookup(const string &type, uint8_t code, const string &lo
             return it->second;
         }
 
-        return unknown.at(type);
+        return unknown.at(category);
     }
 
     return "?";

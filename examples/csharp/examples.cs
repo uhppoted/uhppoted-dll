@@ -54,6 +54,7 @@ public class examples {
     const uint EVENT_INDEX = 43;
     const byte DOOR = 4;
     const byte PROFILE_ID = 29;
+    const string locale = "";
 
     static command[] commands = {
         new command("get-devices",
@@ -275,12 +276,12 @@ public class examples {
             new uint32Field("seqno", status.seqno),
             new stringField("event timestamp", status.evt.timestamp),
             new uint32Field("      index", status.evt.index),
-            new uint8Field("      type", status.evt.eventType),
+            new stringField("      type", lookup.find(lookup.LOOKUP_EVENT_TYPE, status.evt.eventType, locale)),
             new boolField("      granted", status.evt.granted),
             new uint8Field("      door", status.evt.door),
-            new uint8Field("      direction", status.evt.direction),
+            new stringField("      direction", lookup.find(lookup.LOOKUP_DIRECTION, status.evt.direction, locale)),
             new uint32Field("      card", status.evt.card),
-            new uint8Field("      reason", status.evt.reason),
+            new stringField("      reason", lookup.find(lookup.LOOKUP_EVENT_REASON, status.evt.reason, locale)),
         };
 
         display("get-status", fields);
@@ -351,25 +352,10 @@ public class examples {
 
         DoorControl control = u.GetDoorControl(deviceID, door);
 
-        string controlMode = "???";
-        switch (control.mode) {
-        case ControlModes.NormallyOpen:
-            controlMode = "normally open";
-            break;
-
-        case ControlModes.NormallyClosed:
-            controlMode = "normally closed";
-            break;
-
-        case ControlModes.Controlled:
-            controlMode = "controlled";
-            break;
-        }
-
         field[] fields = {
             new uint32Field("ID", deviceID),
             new uint8Field("door", door),
-            new stringField("mode", controlMode),
+            new stringField("mode", lookup.find(lookup.LOOKUP_MODE, control.mode, locale)),
             new uint8Field("delay", control.delay),
         };
 
@@ -380,30 +366,15 @@ public class examples {
         options opts = parse(args);
         uint deviceID = opts.deviceID;
         byte door = opts.door;
-        byte mode = ControlModes.NormallyOpen;
+        byte mode = DoorMode.NormallyOpen;
         byte delay = 9;
 
         u.SetDoorControl(deviceID, door, mode, delay);
 
-        string controlMode = "???";
-        switch (mode) {
-        case ControlModes.NormallyOpen:
-            controlMode = "normally open";
-            break;
-
-        case ControlModes.NormallyClosed:
-            controlMode = "normally closed";
-            break;
-
-        case ControlModes.Controlled:
-            controlMode = "controlled";
-            break;
-        }
-
         field[] fields = {
             new uint32Field("ID", deviceID),
             new uint8Field("door", door),
-            new stringField("mode", controlMode),
+            new stringField("mode", lookup.find(lookup.LOOKUP_MODE, mode, locale)),
             new uint8Field("delay", delay),
         };
 
@@ -573,12 +544,12 @@ public class examples {
             new uint32Field("ID", deviceID),
             new uint32Field("event index", evt.index),
             new stringField("      timestamp", evt.timestamp),
-            new uint8Field("      type", evt.eventType),
+            new stringField("      type", lookup.find(lookup.LOOKUP_EVENT_TYPE, evt.eventType, locale)),
             new boolField("      granted", evt.granted),
             new uint8Field("      door", evt.door),
-            new uint8Field("      direction", evt.direction),
+            new stringField("      direction", lookup.find(lookup.LOOKUP_DIRECTION, evt.direction, locale)),
             new uint32Field("      card number", evt.card),
-            new uint8Field("      reason", evt.reason),
+            new stringField("      reason", lookup.find(lookup.LOOKUP_EVENT_REASON, evt.reason, locale)),
         };
 
         display("get-event", fields);

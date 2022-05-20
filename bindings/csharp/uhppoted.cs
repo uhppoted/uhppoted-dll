@@ -1,260 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.Text;
 
 namespace uhppoted {
-
-public class DoorMode {
-    const uint NormallyOpen = 1;
-    const uint NormallyClosed = 2;
-    const uint Controlled = 3;
-}
-
-public class Direction {
-    const byte In = 1;
-    const byte Out = 2;
-}
-
-public class EventType {
-    const byte None = 0;
-    const byte Swipe = 1;
-    const byte Door = 2;
-    const byte Alarm = 3;
-    const byte Overwritten = 0xff;
-}
-
-public class EventReason {
-    const byte Swipe = 1;
-    const byte Denied = 5;
-    const byte NoAccessRights = 6;
-    const byte IncorrectPassword = 7;
-    const byte AntiPassback = 8;
-    const byte MoreCards = 9;
-    const byte FirstCardOpen = 10;
-    const byte DoorIsNormallyCosed = 11;
-    const byte Interlock = 12;
-    const byte NotInAllowedTimePeriod = 13;
-    const byte InvalidTimezone = 15;
-    const byte AccessDenied = 18;
-    const byte PushButtonOk = 20;
-    const byte DoorOpened = 23;
-    const byte DoorClosed = 24;
-    const byte DoorOpenedSupervisorPassword = 25;
-    const byte ControllerPowerOn = 28;
-    const byte ControllerReset = 29;
-    const byte PushbuttonInvalidDoorLocked = 31;
-    const byte PushbuttonInvalidOffline = 32;
-    const byte PushbuttonInvalidInterlock = 33;
-    const byte PushbuttonInvalidThreat = 34;
-    const byte DoorOpenTooLong = 37;
-    const byte ForcedOpen = 38;
-    const byte Fire = 39;
-    const byte ForcedClosed = 40;
-    const byte TheftPrevention = 41;
-    const byte Zone24x7 = 42;
-    const byte Emergency = 43;
-    const byte RemoteOpenDoor = 44;
-    const byte RemoteOpenDoorUSBReader = 45;
-}
-
-public class Controller {
-    public uint ID;
-    public string address;
-
-    public Controller(uint ID, string address) {
-        this.ID = ID;
-        this.address = address;
-    }
-};
-
-public class UhppotedException : Exception {
-    public UhppotedException(string message) : base(message) {}
-};
-
-public class Device {
-    public uint ID;
-    public string address;
-    public string subnet;
-    public string gateway;
-    public string MAC;
-    public string version;
-    public string date;
-
-    public Device(uint ID, string address, string subnet, string gateway,
-                  string MAC, string version, string date) {
-        this.ID = ID;
-        this.address = address;
-        this.subnet = subnet;
-        this.gateway = gateway;
-        this.MAC = MAC;
-        this.version = version;
-        this.date = date;
-    }
-};
-
-public class Event {
-    public string timestamp;
-    public uint index;
-    public byte eventType;
-    public bool granted;
-    public byte door;
-    public byte direction;
-    public uint card;
-    public byte reason;
-
-    public Event(string timestamp, uint index, byte eventType, bool granted,
-                 byte door, byte direction, uint card, byte reason) {
-        this.timestamp = timestamp;
-        this.index = index;
-        this.eventType = eventType;
-        this.granted = granted;
-        this.door = door;
-        this.direction = direction;
-        this.card = card;
-        this.reason = reason;
-    }
-};
-
-public class Status {
-    public uint ID;
-    public string sysdatetime;
-    public bool[] doors;
-    public bool[] buttons;
-    public byte relays;
-    public byte inputs;
-    public byte syserror;
-    public byte info;
-    public uint seqno;
-    public Event evt;
-
-    public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons,
-                  byte relays, byte inputs, byte syserror, byte info, uint seqno,
-                  Event evt) {
-        this.ID = ID;
-        this.sysdatetime = sysdatetime;
-        this.doors = doors;
-        this.buttons = buttons;
-        this.relays = relays;
-        this.inputs = inputs;
-        this.syserror = syserror;
-        this.info = info;
-        this.seqno = seqno;
-        this.evt = evt;
-    }
-};
-
-public class DoorControl {
-    public byte mode;
-    public byte delay;
-
-    public DoorControl(byte mode, byte delay) {
-        this.mode = mode;
-        this.delay = delay;
-    }
-};
-
-public static class ControlModes {
-    public const byte NormallyOpen = 1;
-    public const byte NormallyClosed = 2;
-    public const byte Controlled = 3;
-};
-
-public class Card {
-    public uint cardNumber;
-    public string from;
-    public string to;
-    public byte[] doors;
-
-    public Card(uint cardNumber, string from, string to, byte[] doors) {
-        this.cardNumber = cardNumber;
-        this.from = from;
-        this.to = to;
-        this.doors = doors;
-    }
-};
-
-public class TimeProfile {
-    public byte ID;
-    public byte linked;
-    public string from;
-    public string to;
-    public bool monday;
-    public bool tuesday;
-    public bool wednesday;
-    public bool thursday;
-    public bool friday;
-    public bool saturday;
-    public bool sunday;
-    public string segment1start;
-    public string segment1end;
-    public string segment2start;
-    public string segment2end;
-    public string segment3start;
-    public string segment3end;
-
-    public TimeProfile(byte ID, byte linked, string from, string to,
-                       bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
-                       string segment1start, string segment1end,
-                       string segment2start, string segment2end,
-                       string segment3start, string segment3end) {
-        this.ID = ID;
-        this.linked = linked;
-        this.from = from;
-        this.to = to;
-
-        this.monday = monday;
-        this.tuesday = tuesday;
-        this.wednesday = wednesday;
-        this.thursday = thursday;
-        this.friday = friday;
-        this.saturday = saturday;
-        this.sunday = sunday;
-
-        this.segment1start = segment1start;
-        this.segment1end = segment1end;
-        this.segment2start = segment2start;
-        this.segment2end = segment2end;
-        this.segment3start = segment3start;
-        this.segment3end = segment3end;
-    }
-};
-
-public class Task {
-    public byte task;
-    public byte door;
-    public string from;
-    public string to;
-    public bool monday;
-    public bool tuesday;
-    public bool wednesday;
-    public bool thursday;
-    public bool friday;
-    public bool saturday;
-    public bool sunday;
-    public string at;
-    public byte cards;
-
-    public Task(byte task, byte door, string from, string to,
-                bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
-                string at,
-                byte cards) {
-        this.task = task;
-        this.door = door;
-        this.from = from;
-        this.to = to;
-
-        this.monday = monday;
-        this.tuesday = tuesday;
-        this.wednesday = wednesday;
-        this.thursday = thursday;
-        this.friday = friday;
-        this.saturday = saturday;
-        this.sunday = sunday;
-
-        this.at = at;
-        this.cards = cards;
-    }
-};
 
 public class Uhppoted : IDisposable {
     private UHPPOTE u = new UHPPOTE();
@@ -777,12 +526,12 @@ public class Uhppoted : IDisposable {
     struct udevice {
         public uint ID;
         public string address;
-    };
+    }
 
     struct udevices {
         public uint N;
         public IntPtr devices; // array of udevice *
-    };
+    }
 
     struct UHPPOTE {
         public string bind;
@@ -792,7 +541,7 @@ public class Uhppoted : IDisposable {
         public IntPtr devices; // udevices * (optional list of non-local controller
                                // ID + address pairs)
         public bool debug;
-    };
+    }
 
     struct GoDevice {
         public uint ID;
@@ -802,7 +551,7 @@ public class Uhppoted : IDisposable {
         public string MAC;
         public string version;
         public string date;
-    };
+    }
 
     struct GoEvent {
         public string timestamp;
@@ -813,7 +562,7 @@ public class Uhppoted : IDisposable {
         public byte direction;
         public uint card;
         public byte reason;
-    };
+    }
 
     struct GoStatus {
         public uint ID;
@@ -826,19 +575,19 @@ public class Uhppoted : IDisposable {
         public byte info;
         public uint seqno;
         public IntPtr evt;
-    };
+    }
 
     struct GoDoorControl {
         public byte control;
         public byte delay;
-    };
+    }
 
     struct GoCard {
         public uint cardNumber;
         public string from;
         public string to;
         public IntPtr doors;
-    };
+    }
 
     struct GoTimeProfile {
         public byte ID;
@@ -858,7 +607,7 @@ public class Uhppoted : IDisposable {
         public string segment2end;
         public string segment3start;
         public string segment3end;
-    };
+    }
 
     struct GoTask {
         public byte task;
@@ -874,6 +623,394 @@ public class Uhppoted : IDisposable {
         public byte sunday;
         public string at;
         public byte cards;
+    }
+}
+
+public class DoorMode {
+    public const byte NormallyOpen = 1;
+    public const byte NormallyClosed = 2;
+    public const byte Controlled = 3;
+}
+
+public class Direction {
+    public const byte In = 1;
+    public const byte Out = 2;
+}
+
+public class EventType {
+    public const byte None = 0;
+    public const byte Swipe = 1;
+    public const byte Door = 2;
+    public const byte Alarm = 3;
+    public const byte Overwritten = 0xff;
+}
+
+public class EventReason {
+    public const byte None = 0;
+    public const byte Swipe = 1;
+    public const byte Denied = 5;
+    public const byte NoAccessRights = 6;
+    public const byte IncorrectPassword = 7;
+    public const byte AntiPassback = 8;
+    public const byte MoreCards = 9;
+    public const byte FirstCardOpen = 10;
+    public const byte DoorIsNormallyClosed = 11;
+    public const byte Interlock = 12;
+    public const byte NotInAllowedTimePeriod = 13;
+    public const byte InvalidTimezone = 15;
+    public const byte AccessDenied = 18;
+    public const byte PushButtonOk = 20;
+    public const byte DoorOpened = 23;
+    public const byte DoorClosed = 24;
+    public const byte DoorOpenedSupervisorPassword = 25;
+    public const byte ControllerPowerOn = 28;
+    public const byte ControllerReset = 29;
+    public const byte PushbuttonInvalidDoorLocked = 31;
+    public const byte PushbuttonInvalidOffline = 32;
+    public const byte PushbuttonInvalidInterlock = 33;
+    public const byte PushbuttonInvalidThreat = 34;
+    public const byte DoorOpenTooLong = 37;
+    public const byte ForcedOpen = 38;
+    public const byte Fire = 39;
+    public const byte ForcedClosed = 40;
+    public const byte TheftPrevention = 41;
+    public const byte Zone24x7 = 42;
+    public const byte Emergency = 43;
+    public const byte RemoteOpenDoor = 44;
+    public const byte RemoteOpenDoorUSBReader = 45;
+}
+
+public class Controller {
+    public uint ID;
+    public string address;
+
+    public Controller(uint ID, string address) {
+        this.ID = ID;
+        this.address = address;
+    }
+}
+
+public class UhppotedException : Exception {
+    public UhppotedException(string message) : base(message) {}
+}
+
+public class Device {
+    public uint ID;
+    public string address;
+    public string subnet;
+    public string gateway;
+    public string MAC;
+    public string version;
+    public string date;
+
+    public Device(uint ID, string address, string subnet, string gateway,
+                  string MAC, string version, string date) {
+        this.ID = ID;
+        this.address = address;
+        this.subnet = subnet;
+        this.gateway = gateway;
+        this.MAC = MAC;
+        this.version = version;
+        this.date = date;
+    }
+}
+
+public class Event {
+    public string timestamp;
+    public uint index;
+    public byte eventType;
+    public bool granted;
+    public byte door;
+    public byte direction;
+    public uint card;
+    public byte reason;
+
+    public Event(string timestamp, uint index, byte eventType, bool granted,
+                 byte door, byte direction, uint card, byte reason) {
+        this.timestamp = timestamp;
+        this.index = index;
+        this.eventType = eventType;
+        this.granted = granted;
+        this.door = door;
+        this.direction = direction;
+        this.card = card;
+        this.reason = reason;
+    }
+}
+
+public class Status {
+    public uint ID;
+    public string sysdatetime;
+    public bool[] doors;
+    public bool[] buttons;
+    public byte relays;
+    public byte inputs;
+    public byte syserror;
+    public byte info;
+    public uint seqno;
+    public Event evt;
+
+    public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons,
+                  byte relays, byte inputs, byte syserror, byte info, uint seqno,
+                  Event evt) {
+        this.ID = ID;
+        this.sysdatetime = sysdatetime;
+        this.doors = doors;
+        this.buttons = buttons;
+        this.relays = relays;
+        this.inputs = inputs;
+        this.syserror = syserror;
+        this.info = info;
+        this.seqno = seqno;
+        this.evt = evt;
+    }
+}
+
+public class DoorControl {
+    public byte mode;
+    public byte delay;
+
+    public DoorControl(byte mode, byte delay) {
+        this.mode = mode;
+        this.delay = delay;
+    }
+}
+
+public class Card {
+    public uint cardNumber;
+    public string from;
+    public string to;
+    public byte[] doors;
+
+    public Card(uint cardNumber, string from, string to, byte[] doors) {
+        this.cardNumber = cardNumber;
+        this.from = from;
+        this.to = to;
+        this.doors = doors;
+    }
+}
+
+public class TimeProfile {
+    public byte ID;
+    public byte linked;
+    public string from;
+    public string to;
+    public bool monday;
+    public bool tuesday;
+    public bool wednesday;
+    public bool thursday;
+    public bool friday;
+    public bool saturday;
+    public bool sunday;
+    public string segment1start;
+    public string segment1end;
+    public string segment2start;
+    public string segment2end;
+    public string segment3start;
+    public string segment3end;
+
+    public TimeProfile(byte ID, byte linked, string from, string to,
+                       bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
+                       string segment1start, string segment1end,
+                       string segment2start, string segment2end,
+                       string segment3start, string segment3end) {
+        this.ID = ID;
+        this.linked = linked;
+        this.from = from;
+        this.to = to;
+
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
+
+        this.segment1start = segment1start;
+        this.segment1end = segment1end;
+        this.segment2start = segment2start;
+        this.segment2end = segment2end;
+        this.segment3start = segment3start;
+        this.segment3end = segment3end;
+    }
+}
+
+public class Task {
+    public byte task;
+    public byte door;
+    public string from;
+    public string to;
+    public bool monday;
+    public bool tuesday;
+    public bool wednesday;
+    public bool thursday;
+    public bool friday;
+    public bool saturday;
+    public bool sunday;
+    public string at;
+    public byte cards;
+
+    public Task(byte task, byte door, string from, string to,
+                bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
+                string at,
+                byte cards) {
+        this.task = task;
+        this.door = door;
+        this.from = from;
+        this.to = to;
+
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
+
+        this.at = at;
+        this.cards = cards;
+    }
+}
+
+public class lookup {
+    public const string LOOKUP_MODE = "door.mode";
+    public const string LOOKUP_DIRECTION = "event.direction";
+    public const string LOOKUP_EVENT_TYPE = "event.type";
+    public const string LOOKUP_EVENT_REASON = "event.reason";
+
+    const string ModeNormallyOpen = "normally open";
+    const string ModeNormallyClosed = "normally closed";
+    const string ModeControlled = "controlled";
+    const string ModeUnknown = "unknown";
+
+    const string DirectionIn = "in";
+    const string DirectionOut = "out";
+    const string DirectionUnknown = "unknown";
+
+    const string EventTypeNone = "none";
+    const string EventTypeSwipe = "swipe";
+    const string EventTypeDoor = "door";
+    const string EventTypeAlarm = "alarm";
+    const string EventTypeOverwritten = "overwritten";
+    const string EventTypeUnknown = "unknown";
+
+    const string EventReasonNone = "";
+    const string EventReasonSwipe = "swipe";
+    const string EventReasonDenied = "swipe:denied (system)";
+    const string EventReasonNoAccessRights = "no access rights";
+    const string EventReasonIncorrectPassword = "incorrect password";
+    const string EventReasonAntiPassback = "anti-passback";
+    const string EventReasonMoreCards = "more cards";
+    const string EventReasonFirstCardOpen = "first card open";
+    const string EventReasonDoorIsNormallyClosed = "door is normally closed";
+    const string EventReasonInterlock = "interlock";
+    const string EventReasonNotInAllowedTimePeriod = "not in allowed time period";
+    const string EventReasonInvalidTimezone = "invalid timezone";
+    const string EventReasonAccessDenied = "access denied";
+    const string EventReasonPushButtonOk = "push button ok";
+    const string EventReasonDoorOpened = "door opened";
+    const string EventReasonDoorClosed = "door closed";
+    const string EventReasonDoorOpenedSupervisorPassword = "door opened (supervisor password)";
+    const string EventReasonControllerPowerOn = "controller power on";
+    const string EventReasonControllerReset = "controller reset";
+    const string EventReasonPushbuttonInvalidDoorLocked = "pushbutton invalid (door locked)";
+    const string EventReasonPushbuttonInvalidOffline = "pushbutton invalid (offline)";
+    const string EventReasonPushbuttonInvalidInterlock = "pushbutton invalid (interlock)";
+    const string EventReasonPushbuttonInvalidThreat = "pushbutton invalid (threat)";
+    const string EventReasonDoorOpenTooLong = "door open too long";
+    const string EventReasonForcedOpen = "forced open";
+    const string EventReasonFire = "fire";
+    const string EventReasonForcedClosed = "forced closed";
+    const string EventReasonTheftPrevention = "theft prevention";
+    const string EventReason24x7Zone = "24x7 zone";
+    const string EventReasonEmergency = "emergency";
+    const string EventReasonRemoteOpenDoor = "remote open door";
+    const string EventReasonRemoteOpenDoorUSBReader = "remote open door (USB reader)";
+    const string EventReasonUnknown = "unknown";
+
+    static Dictionary<uint, string> LookupMode = new Dictionary<uint, string>() {
+        { DoorMode.NormallyOpen, ModeNormallyOpen },
+        { DoorMode.NormallyClosed, ModeNormallyClosed },
+        { DoorMode.Controlled, ModeControlled },
     };
-};
+
+    static Dictionary<uint, string> LookupDirection = new Dictionary<uint, string>() {
+        { Direction.In, DirectionIn },
+        { Direction.Out, DirectionOut },
+    };
+
+    static Dictionary<uint, string> LookupEventType = new Dictionary<uint, string>() {
+        { EventType.None, EventTypeNone },
+        { EventType.Swipe, EventTypeSwipe },
+        { EventType.Door, EventTypeDoor },
+        { EventType.Alarm, EventTypeAlarm },
+        { EventType.Overwritten, EventTypeOverwritten },
+    };
+
+    static Dictionary<uint, string> LookupEventReason = new Dictionary<uint, string>() {
+        { EventReason.None, EventReasonNone },
+        { EventReason.Swipe, EventReasonSwipe },
+        { EventReason.Denied, EventReasonDenied },
+        { EventReason.NoAccessRights, EventReasonNoAccessRights },
+        { EventReason.IncorrectPassword, EventReasonIncorrectPassword },
+        { EventReason.AntiPassback, EventReasonAntiPassback },
+        { EventReason.MoreCards, EventReasonMoreCards },
+        { EventReason.FirstCardOpen, EventReasonFirstCardOpen },
+        { EventReason.DoorIsNormallyClosed, EventReasonDoorIsNormallyClosed },
+        { EventReason.Interlock, EventReasonInterlock },
+        { EventReason.NotInAllowedTimePeriod, EventReasonNotInAllowedTimePeriod },
+        { EventReason.InvalidTimezone, EventReasonInvalidTimezone },
+        { EventReason.AccessDenied, EventReasonAccessDenied },
+        { EventReason.PushButtonOk, EventReasonPushButtonOk },
+        { EventReason.DoorOpened, EventReasonDoorOpened },
+        { EventReason.DoorClosed, EventReasonDoorClosed },
+        { EventReason.DoorOpenedSupervisorPassword, EventReasonDoorOpenedSupervisorPassword },
+        { EventReason.ControllerPowerOn, EventReasonControllerPowerOn },
+        { EventReason.ControllerReset, EventReasonControllerReset },
+        { EventReason.PushbuttonInvalidDoorLocked, EventReasonPushbuttonInvalidDoorLocked },
+        { EventReason.PushbuttonInvalidOffline, EventReasonPushbuttonInvalidOffline },
+        { EventReason.PushbuttonInvalidInterlock, EventReasonPushbuttonInvalidInterlock },
+        { EventReason.PushbuttonInvalidThreat, EventReasonPushbuttonInvalidThreat },
+        { EventReason.DoorOpenTooLong, EventReasonDoorOpenTooLong },
+        { EventReason.ForcedOpen, EventReasonForcedOpen },
+        { EventReason.Fire, EventReasonFire },
+        { EventReason.ForcedClosed, EventReasonForcedClosed },
+        { EventReason.TheftPrevention, EventReasonTheftPrevention },
+        { EventReason.Zone24x7, EventReason24x7Zone },
+        { EventReason.Emergency, EventReasonEmergency },
+        { EventReason.RemoteOpenDoor, EventReasonRemoteOpenDoor },
+        { EventReason.RemoteOpenDoorUSBReader, EventReasonRemoteOpenDoorUSBReader },
+    };
+
+    static Dictionary<string, Dictionary<uint, string>> dictionaries = new Dictionary<string, Dictionary<uint, string>>() {
+        { LOOKUP_MODE, LookupMode },
+        { LOOKUP_DIRECTION, LookupDirection },
+        { LOOKUP_EVENT_TYPE, LookupEventType },
+        { LOOKUP_EVENT_REASON, LookupEventReason },
+    };
+
+    static Dictionary<string, string> unknown = new Dictionary<string, string>() {
+        { LOOKUP_MODE, ModeUnknown },
+        { LOOKUP_DIRECTION, DirectionUnknown },
+        { LOOKUP_EVENT_TYPE, EventTypeUnknown },
+        { LOOKUP_EVENT_REASON, EventReasonUnknown },
+    };
+
+    public static string find(string category, uint code, string locale) {
+        Dictionary<uint, string> dictionary;
+        string s;
+
+        if (dictionaries.TryGetValue(category, out dictionary)) {
+            if (dictionary.TryGetValue(code, out s)) {
+                return s;
+            }
+
+            return unknown[category];
+        }
+
+        return "?";
+    }
+}
+
 }
