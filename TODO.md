@@ -2,13 +2,8 @@
 
 ### IN PROGRESS
 
-- [x] Constants for event types, reason, etc
-      - [x] lookup(...)
-            - [x] C
-            - [x] C++
-            - [x] C#
-            - [x] Python
-            - [x] CCL
+- [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
+      - (?) pass in handler so that existing stuff doesn't break
 
 - [ ] Usage and notes
       - [ ] C
@@ -17,12 +12,11 @@
       - [ ] Python
       - [ ] CCL
       - [ ] LIB_PATH/DYLIB_PATH
+      - [ ] Update uhppoted README
 
 - [ ] CCL
       - DOLIST
       - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
-
-- [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
 
 ## TODO
 
