@@ -2,6 +2,9 @@
 
 ### IN PROGRESS
 
+- [ ] Try zig-cc
+      - https://jakstys.lt/2022/how-uber-uses-zig/
+
 - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
       - (?) pass in handler so that existing stuff doesn't break
 
@@ -24,5 +27,5 @@
 - (?) Local cross-compile
       - https://github.com/elastic/golang-crossbuild
       - https://dh1tw.de/2019/12/cross-compiling-golang-cgo-projects/
-      - OR: github actions
+      - github actions
 
