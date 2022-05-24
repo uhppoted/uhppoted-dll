@@ -58,7 +58,7 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 		return fmt.Errorf("invalid argument (card) - expected valid pointer")
 	}
 
-	response, err := uu.GetCardByIndex(deviceID, index)
+	response, err := uu.GetCardByIndex(deviceID, index, nil)
 	if err != nil {
 		return err
 	} else if response == nil {
@@ -100,11 +100,11 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 		CardNumber: cardNumber,
 		From:       (*types.Date)(&_from),
 		To:         (*types.Date)(&_to),
-		Doors: map[uint8]int{
-			1: int(_doors[0]),
-			2: int(_doors[1]),
-			3: int(_doors[2]),
-			4: int(_doors[3]),
+		Doors: map[uint8]uint8{
+			1: _doors[0],
+			2: _doors[1],
+			3: _doors[2],
+			4: _doors[3],
 		},
 	}
 

@@ -6,7 +6,7 @@
       - https://jakstys.lt/2022/how-uber-uses-zig/
 
 - [ ] GetCardByIndex should return 'card deleted' error for ff ff ff ff in response
-      - (?) pass in handler so that existing stuff doesn't break
+      - [ ] pass in handler so that existing stuff doesn't break
 
 - [ ] Usage and notes
       - [ ] C

@@ -509,13 +509,13 @@ func makeTimeProfile(profile *C.struct_TimeProfile) (*types.TimeProfile, error) 
 	if from, err := types.DateFromString(C.GoString(profile.from)); err != nil {
 		return nil, fmt.Errorf("invalid 'from' date (%v)", err)
 	} else {
-		p.From = from
+		p.From = &from
 	}
 
 	if to, err := types.DateFromString(C.GoString(profile.to)); err != nil {
 		return nil, fmt.Errorf("invalid 'to' date (%v)", err)
 	} else {
-		p.To = to
+		p.To = &to
 	}
 
 	hhmm := map[uint8][2]string{
@@ -576,8 +576,8 @@ func makeTask(task *C.struct_Task) (*types.Task, error) {
 	t := types.Task{
 		Task: types.TaskType(task.task),
 		Door: uint8(task.door),
-		From: *from,
-		To:   *to,
+		From: from,
+		To:   to,
 		Weekdays: map[time.Weekday]bool{
 			time.Monday:    task.monday != 0,
 			time.Tuesday:   task.tuesday != 0,
