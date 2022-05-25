@@ -58,11 +58,11 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 		return fmt.Errorf("invalid argument (card) - expected valid pointer")
 	}
 
-	response, err := uu.GetCardByIndex(deviceID, index, nil)
+	response, err := uu.GetCardByIndex(deviceID, index)
 	if err != nil {
 		return err
 	} else if response == nil {
-		return fmt.Errorf("%v: no response to get-card-by-index %v", deviceID, index)
+		return fmt.Errorf("%v: no card found at index %v", deviceID, index)
 	}
 
 	card.card_number = C.uint(response.CardNumber)
