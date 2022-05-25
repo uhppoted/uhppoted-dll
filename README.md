@@ -2,8 +2,6 @@
 
 # uhppoted-dll
 
-** IN DEVELOPMENT ***
-
 Shared library (DLL) for `uhppote-core` with bindings and examples for:
 
 - C
@@ -26,6 +24,10 @@ Supported operating systems:
 |           |                                                                                           |
 |           |                                                                                           |
 
+The releases do not include binaries - cross-compiling a DLL/shared-lib is not straightforward because
+the _cgo_ compiler links in a platfrom specific version of _glibc_. Building the DLL/shared-lib 
+is straightforward (see below) and only requires that _go_ and _cgo_ are installed on the system.
+
 ## Development
 
 ### Building from source
@@ -40,10 +42,12 @@ make build
 
 If you prefer to build manually:
 ```
-git clone https://github.com/uhppoted/uhppoted-dll.git
-cd uhppoted-core
-mkdir lib
-go build -trimpath -buildmode=c-shared -o ./lib/libuhppoted.so ./...
+   git clone https://github.com/uhppoted/uhppoted-dll.git
+   cd uhppoted-dll
+   go build -trimpath -buildmode=c-shared -o <lib> go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
+```
+
+_(The list of source files is required pending a fix for [cmd/cgo: inconsistent compiler behaviour when compiling a C.struct](https://github.com/golang/go/issues/52611#issuecomment-1120322135))_
 ```
 
 ### `debug` lib
@@ -64,6 +68,14 @@ returns a fixed response.
 | -------------------------------------------------------- | ------------------------------------------------------ |
 | [uhppote-core](https://github.com/uhppoted/uhppote-core) | Device level API implementation                        |
 |                                                          |                                                        |
+
+## Documentation
+
+- [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C++.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
+- [Python](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md)
+- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md)
 
 ## API
 

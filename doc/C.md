@@ -2,29 +2,13 @@
 
 The 'C' bindings comprise a single header ([uhppoted.h](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/c/include/uhppoted.h)) and  source file [uhppoted.c](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/c/src/uhppoted.c) - copy these to wherever makes it sense in your project. 
 
-Generate the DLL (Windows), shared lib (Linux) or dylib (MacOS) and place the generated lib in either:
-- system LD_LIBRARY path
-- exported LD_LIBRARY path
-- folder local to the executable.
+The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for 
+the platform:
+- LD_LIBRARY (Linux)
+- DYLIB_LIBRARY (MacOS)
+- Windows - see [Dynamic-Link Library Search Order](https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order)
 
-e.g.
-
-```
-   git clone https://github.com/uhppoted/uhppoted-dll.git
-   cd uhppoted-dll
-   make build
-   cp lib/uhppoted.dylib <dest>
-```
-
-Or, if not using make:
-```
-   git clone https://github.com/uhppoted/uhppoted-dll.git
-   cd uhppoted-dll
-   go build -trimpath -buildmode=c-shared -o uhppoted.dylib go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
-   cp uhppoted.dylib <dest>
-```
-
-_(The list of source files is required pending a fix for [cmd/cgo: inconsistent compiler behaviour when compiling a C.struct](https://github.com/golang/go/issues/52611#issuecomment-1120322135))_
+or in the same folder as the executable.
 
 Examples illustrating the use of the 'C' API can be found in the [examples/c](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/c) folder.
 
@@ -53,7 +37,7 @@ void setup(const char *bind, const char *broadcast, const char *listen, int time
 bind       IP address:port to which to bind the UDP socket. Defaults to 0.0.0.0:0
 broadcast  IP address:port for broadcast UDP packets. Defaults to 255.255.255.255:60000
 listen     IP address:port for events from controller (unused). Defaults to 0.0.0.0:60001
-timeout    milliseconds to wait for a reply. Default to 5 seconds.
+timeout    milliseconds to wait for a reply. Defaults to 5 seconds.
 debug      Displays the DLL and controller requests/responses if true.
 (varargs)  List of specific controllers and their associated IP addresses (e.g.for controllers
            located on a different interface, a VLAN or a VPN)
