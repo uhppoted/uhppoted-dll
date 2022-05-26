@@ -24,8 +24,8 @@ Internally, the API functions use a `UHPPOTE` struct that contains the informati
     teardown();
 ```
 
-The API functions all return an 0 _int_ result code if the function call was successful. A non-zero code indicates
-a failure and the associated text error message can be retrieved with `errmsg`.
+The API functions all return a _0_  result code if the function call was successful. A non-zero result indicates
+a failure and the associated text error message can be retrieved with `errmsg()`.
 
 ### `setup`
 

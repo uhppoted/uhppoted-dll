@@ -4,11 +4,11 @@
 
 Shared library (DLL) for `uhppote-core` with bindings and examples for:
 
-- C
-- C++
-- C#
-- Python
-- Clozure Common Lisp
+- [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
+- [Python]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md))
+- [Clozure Common Lisp]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md))
 
 Supported operating systems:
 - Linux
@@ -48,7 +48,6 @@ If you prefer to build manually:
 ```
 
 _(The list of source files is required pending a fix for [cmd/cgo: inconsistent compiler behaviour when compiling a C.struct](https://github.com/golang/go/issues/52611#issuecomment-1120322135))_
-```
 
 ### `debug` lib
 

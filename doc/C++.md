@@ -10,7 +10,7 @@ the platform:
 
 or in the same folder as the executable.
 
-Examples illustrating the use of the 'C__' API can be found in the [examples/c++](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/c++) folder.
+Examples illustrating the use of the 'C++' API can be found in the [examples/c++](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/c++) folder.
 
 ## API
 
@@ -95,7 +95,6 @@ address  controller IPv4 address
 subnet   controller IPv4 subnet mask
 gateway  controller gateway IPv4 address
 
-
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
 uhppoted_exception::what() method.
 ```
@@ -141,7 +140,7 @@ std::string uhppoted::get_listener(uint32_t id);
 
 id  controller serial number 
 
-Returns a the controller event listener IPv4 address:port as a string if the call succeeded.
+Returns the controller event listener IPv4 address:port as a string if the call succeeded.
 
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
 uhppoted_exception::what() method.
@@ -379,6 +378,7 @@ uhppoted_exception::what() method.
 void uhppoted::clear_tasklist(uint32_t id);
 
 id  controller serial number 
+
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
 uhppoted_exception::what() method.
 ```
