@@ -1,6 +1,6 @@
 # C++: Usage and Notes
 
-The 'C++' bindings comprise a single header ([uhppoted.h](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/c++/include/uhppoted.h)) and  source file [uhppoted.cpp](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/c++/src/uhppoted.cpp) - copy these to wherever makes it sense in your project. 
+The C++ bindings comprise a single header ([uhppoted.h](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/c++/include/uhppoted.h)) and  source file [uhppoted.cpp](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/c++/src/uhppoted.cpp) - copy these to wherever makes it sense in your project. 
 
 The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for 
 the platform:
@@ -10,7 +10,7 @@ the platform:
 
 or in the same folder as the executable.
 
-Examples illustrating the use of the 'C++' API can be found in the [examples/c++](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/c++) folder.
+Examples illustrating the use of the C++ API can be found in the [examples/c++](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/c++) folder.
 
 ## API
 

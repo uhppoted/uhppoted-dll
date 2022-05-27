@@ -1,6 +1,6 @@
 # C\#: Usage and Notes
 
-The 'C\#' bindings comprise a single file [uhppoted.cs](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/csharp/uhppoted.cs) - copy this to wherever makes it sense in your project. 
+The C\# bindings comprise a single file [uhppoted.cs](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/csharp/uhppoted.cs) - copy this to wherever makes it sense in your project. 
 
 The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for 
 the platform:
@@ -10,7 +10,7 @@ the platform:
 
 or in the same folder as the executable.
 
-Examples illustrating the use of the 'C\#' API can be found in the [examples/csharp](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/csharp) folder.
+Examples illustrating the use of the C\# API can be found in the [examples/csharp](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/csharp) folder.
 
 ## API
 
@@ -43,7 +43,7 @@ public class UhppotedException : Exception {
 
 ### `lookup`
 
-The `lookup.find` method is a static utility function to looku text equivalents to the following byte codes:
+The `lookup.find` method is a static utility function to lookup text equivalents to the following byte codes:
 - door control mode
 - event type
 - event reason
@@ -110,7 +110,7 @@ public string GetTime(uint ID)
 
 ID  controller serial number 
 
-Returns a date/time string (YYYY-MM-dd HH:mm:ss) the controller current date/time if the call succeeded.
+Returns a date/time string (YYYY-MM-dd HH:mm:ss) with the controller current date/time if the call succeeded.
 
 Throws a UhppotedException if the call failed.
 ```
@@ -153,7 +153,7 @@ public DoorControl GetDoorControl(uint ID, byte door)
 ID    controller serial number 
 door  door ID [1..4]
 
-Returns a DoorControl class with populated with the controller door configuration if the call succeeded.
+Returns a DoorControl class populated with the controller door configuration if the call succeeded.
 
 Throws a UhppotedException if the call failed.
 ```
@@ -228,7 +228,7 @@ doors        4 byte array with card permissions
 Throws a UhppotedException if the call failed.
 ```
 
-### `Uhppoted::DeleteCcard`
+### `Uhppoted::DeleteCard`
 ```
 public void DeleteCard(uint ID, uint cardNumber)
 
@@ -251,7 +251,7 @@ Throws a UhppotedException if the call failed.
 ```
 public uint GetEventIndex(uint ID)
 
-ID     controller serial number 
+ID  controller serial number 
 
 Returns the controller event index if the call succeeded.
 
@@ -307,7 +307,7 @@ Throws a UhppotedException if the call failed.
 public void SetTimeProfile(uint ID, TimeProfile profile)
 
 ID       controller serial number 
-profile  time_profile class initialised with the time profile to store on the controller.
+profile  TimeProfile class initialised with the time profile to store on the controller.
 
 Throws a UhppotedException if the call failed.
 ```
@@ -326,7 +326,7 @@ Throws a UhppotedException if the call failed.
 public void AddTask(uint ID, Task task)
 
 ID    controller serial number 
-task  task class initialised with the task to store on the controller.
+task  Task class initialised with the task to store on the controller.
 
 Throws a UhppotedException if the call failed.
 ```
@@ -352,17 +352,16 @@ Throws a UhppotedException if the call failed.
 ## Types
 
 ### `Controller`
-Container class for use with the `uhppoted` _conclassor_.
+Container class for use with the `Uhppoted` _constructor_.
 ```
 public class Controller {
     public uint ID;
     public string address;
-
 }
 ```
 
 ### `Device`
-Container class for the controller information retrieved by `get_device`
+Container class for the controller information retrieved by `GetDevice`
 ```
 public class Device {
     public uint ID;
@@ -376,7 +375,7 @@ public class Device {
 ```
 
 ### `Event`
-Container class for the event information retrieved by `get_event`.
+Container class for the event information retrieved by `GetEvent`.
 ```
 public class Event {
     public string timestamp;
@@ -391,7 +390,7 @@ public class Event {
 ```
 
 ### `Status`
-Container class for the controller status information retrieved by `get_status`
+Container class for the controller status information retrieved by `GetStatus`
 ```
 public class Status {
     public uint ID;
@@ -408,7 +407,7 @@ public class Status {
 ```
 
 ### `DoorControl`
-Container class for door configuration for `get_door_control` and `set_door_control`.
+Container class for door configuration for `GetDoorControl` and `SetDoorControl`.
 ```
 public class DoorControl {
     public byte mode;
@@ -417,7 +416,7 @@ public class DoorControl {
 ```
 
 ### `Card`
-Container class for card information retrieved by `get_card` and `get_card_by_index`.
+Container class for card information retrieved by `GetCard` and `GetCardByIndex`.
 ```
 public class Card {
     public uint cardNumber;
@@ -428,8 +427,8 @@ public class Card {
 ```
 
 ### `TimeProfile`
-Container class for time profile information retrieved/set by `get_time_profile` and 
-`set_time_profile`.
+Container class for time profile information retrieved/set by `GetTimeProfile` and 
+`SetTimeProfile`.
 ```
 public class TimeProfile {
     public byte ID;
@@ -453,7 +452,7 @@ public class TimeProfile {
 ```
 
 ### task
-Container class for the task information required for `add_task`.
+Container class for the task information required for `AddTask`.
 ```
 public class Task {
     public byte task;
