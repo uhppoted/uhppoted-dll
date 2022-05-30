@@ -2,8 +2,7 @@
 
 The Python bindings comprise a single file [uhppoted.pyt](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/python/uhppoted.py) - copy this to wherever makes it sense in your project. 
 
-The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for 
-the platform:
+The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for the platform:
 - LD_LIBRARY (Linux)
 - DYLIB_LIBRARY (MacOS)
 - Windows - see [Dynamic-Link Library Search Order](https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order)
@@ -72,7 +71,7 @@ uhppoted.get_device(ID)
 
 ID  controller serial number 
 
-Returns a Device dataclass instance with populated with the controller device information if the call succeeded.
+Returns a Device dataclass instance populated with the controller device information if the call succeeded.
 
 Raises an Exception if the call failed.
 ```
@@ -95,7 +94,7 @@ uhppoted.get_status(ID)
 
 ID  controller serial number 
 
-Returns a Status dataclass instance with populated with the controller status information if the call succeeded.
+Returns a Status dataclass instance populated with the controller status information if the call succeeded.
 
 Raises an Exception if the call failed.
 ```
