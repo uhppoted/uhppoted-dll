@@ -30,9 +30,9 @@ is straightforward (see below) and only requires that _go_ and _cgo_ are install
 
 ## Development
 
-### Building from source
+### Installation
 
-Assuming you have `Go` and `make` installed:
+The DLL/shared lib/dylib has to be built from source and requires `Go`:
 
 ```
 git clone https://github.com/uhppoted/uhppoted-dll.git
@@ -47,7 +47,21 @@ If you prefer to build manually:
    go build -trimpath -buildmode=c-shared -o <lib> go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
 ```
 
-_(The list of source files is required pending a fix for [cmd/cgo: inconsistent compiler behaviour when compiling a C.struct](https://github.com/golang/go/issues/52611#issuecomment-1120322135))_
+_NOTE: _The list of source files is required pending a fix for [cmd/cgo: inconsistent compiler behaviour when compiling a C.struct](https://github.com/golang/go/issues/52611#issuecomment-1120322135)_
+
+Copy the generated DLL (Windows), shared lib (Linux) or dylib (MacOS) to the library search path for the platform:
+- LD_LIBRARY (Linux)
+- DYLIB_LIBRARY (MacOS)
+- Windows - see [Dynamic-Link Library Search Order](https://docs.microsoft.com/en-us/windows/win32/dlls/dynamic-link-library-search-order)
+- (OR) to the same folder as the project executable.
+
+The usage for the language specfic bindings are described in their own documents:
+- [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
+- [Python]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md))
+- [Clozure Common Lisp]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md))
+
 
 ### `debug` lib
 

@@ -9,7 +9,7 @@
       - [x] Python
       - [x] CCL
       - [x] Update uhppoted README
-            - [ ] LIBRARY_PATH/DYLIB_LIBRARY_PATH
+            - [x] LIBRARY_PATH/DYLIB_LIBRARY_PATH
 
 - [ ] CCL
       - DOLIST
