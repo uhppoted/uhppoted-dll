@@ -2,18 +2,10 @@
 
 ### IN PROGRESS
 
-- [ ] Usage and notes
-      - [x] C
-      - [x] C++
-      - [x] C#
-      - [x] Python
-      - [x] CCL
-      - [x] Update uhppoted README
-            - [x] LIBRARY_PATH/DYLIB_LIBRARY_PATH
-
-- [ ] CCL
-      - DOLIST
-      - simplify main loop with `thereis` (https://gigamonkeys.com/book/loop-for-black-belts.html)
+- [ ] Release
+      - [x] Include in uhppoted release build
+      - [x] Update dependencies and release info in README
+      - [x] CHANGELOG.md
 
 ## TODO
 - (?) Cross-compile

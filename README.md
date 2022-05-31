@@ -20,9 +20,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
-|           |                                                                                           |
-|           |                                                                                           |
-|           |                                                                                           |
+| v0.7.2    | Initial release                                                                           |           |           |                                                                                           |
 
 The releases do not include binaries - cross-compiling a DLL/shared-lib is not straightforward because
 the _cgo_ compiler links in a platfrom specific version of _glibc_. Building the DLL/shared-lib 
@@ -80,6 +78,7 @@ returns a fixed response.
 | *Dependency*                                             | *Description*                                          |
 | -------------------------------------------------------- | ------------------------------------------------------ |
 | [uhppote-core](https://github.com/uhppoted/uhppote-core) | Device level API implementation                        |
+| [uhppoted-lib](https://github.com/uhppoted/uhppoted-lib) | Library of commonalised functionality            s      |
 |                                                          |                                                        |
 
 ## Documentation
