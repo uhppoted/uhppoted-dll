@@ -20,7 +20,8 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
-| v0.7.2    | Initial release                                                                           |           |           |                                                                                           |
+| v0.8.0    | Maintenance release to update dependencies on `uhppote-core` and `uhppoted-lib`           |
+| v0.7.3    | Initial release                                                                           |
 
 The releases do not include binaries - cross-compiling a DLL/shared-lib is not straightforward because
 the _cgo_ compiler links in a platfrom specific version of _glibc_. Building the DLL/shared-lib 

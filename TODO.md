@@ -1,11 +1,6 @@
-## v0.7.x
+## v0.8.0
 
 ### IN PROGRESS
-
-- [ ] Release
-      - [x] Include in uhppoted release build
-      - [x] Update dependencies and release info in README
-      - [x] CHANGELOG.md
 
 ## TODO
 - (?) Cross-compile
