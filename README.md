@@ -10,6 +10,9 @@ Shared library (DLL) for `uhppote-core` with bindings and examples for:
 - [Python]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md))
 - [Clozure Common Lisp]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md))
 
+3rd party bindings:
+- [Rust](https://github.com/wouterdebie/uhppote-rs)
+
 Supported operating systems:
 - Linux
 - MacOS
@@ -20,6 +23,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.8.1    | Maintenance release to update dependencies on `uhppote-core` and `uhppoted-lib`           |
 | v0.8.0    | Maintenance release to update dependencies on `uhppote-core` and `uhppoted-lib`           |
 | v0.7.3    | Initial release                                                                           |
 

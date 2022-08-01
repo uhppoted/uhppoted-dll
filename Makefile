@@ -38,6 +38,11 @@ build:
 	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
 
 build-all: build
+	go fmt ./go/...
+	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
+	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
+	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
+
 	make -C ./tests/c         -f Makefile tests
 	make -C ./tests/c++       -f Makefile tests
 	make -C ./tests/csharp    -f Makefile tests
