@@ -31,6 +31,9 @@ update-release:
 	go get -u github.com/uhppoted/uhppote-core
 	go get -u github.com/uhppoted/uhppoted-lib
 
+format:
+	go fmt ./go/...
+
 build: 
 	go fmt ./go/...
 	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
