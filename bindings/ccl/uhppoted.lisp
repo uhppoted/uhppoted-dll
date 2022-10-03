@@ -31,6 +31,8 @@
 
 (defconstant EVENT-REASON-NONE                            0)
 (defconstant EVENT-REASON-SWIPE                           1)
+(defconstant EVENT-REASON-SWIPE-OPEN                      2)
+(defconstant EVENT-REASON-SWIPE-CLOSE                     3)
 (defconstant EVENT-REASON-DENIED                          5)
 (defconstant EVENT-REASON-NO-ACCESS-RIGHTS                6)
 (defconstant EVENT-REASON-INCORRECT-PASSWORD              7)
@@ -85,6 +87,8 @@
 
 (defconstant EventReasonNone                         "")
 (defconstant EventReasonSwipe                        "swipe")
+(defconstant EventReasonSwipeOpen                    "swipe open")
+(defconstant EventReasonSwipeClose                   "swipe close")
 (defconstant EventReasonDenied                       "swipe:denied (system)")
 (defconstant EventReasonNoAccessRights               "no access rights")
 (defconstant EventReasonIncorrectPassword            "incorrect password")
@@ -761,6 +765,8 @@
 
         ((equal code event-reason-none)                            EventReasonNone)
         ((equal code event-reason-swipe)                           EventReasonSwipe)
+        ((equal code event-reason-swipe-open)                      EventReasonSwipeOpen)
+        ((equal code event-reason-swipe-close)                     EventReasonSwipeClose)
         ((equal code event-reason-denied)                          EventReasonDenied)
         ((equal code event-reason-no-access-rights)                EventReasonNoAccessRights)
         ((equal code event-reason-incorrect-password)              EventReasonIncorrectPassword)

@@ -648,6 +648,8 @@ public class EventType {
 public class EventReason {
     public const byte None = 0;
     public const byte Swipe = 1;
+    public const byte SwipeOpen = 2;
+    public const byte SwipeClose = 3;
     public const byte Denied = 5;
     public const byte NoAccessRights = 6;
     public const byte IncorrectPassword = 7;
@@ -897,6 +899,8 @@ public class lookup {
 
     const string EventReasonNone = "";
     const string EventReasonSwipe = "swipe";
+    const string EventReasonSwipeOpen = "swipe open";
+    const string EventReasonSwipeClose = "swipe close";
     const string EventReasonDenied = "swipe:denied (system)";
     const string EventReasonNoAccessRights = "no access rights";
     const string EventReasonIncorrectPassword = "incorrect password";
@@ -951,6 +955,8 @@ public class lookup {
     static Dictionary<uint, string> LookupEventReason = new Dictionary<uint, string>() {
         { EventReason.None, EventReasonNone },
         { EventReason.Swipe, EventReasonSwipe },
+        { EventReason.SwipeOpen, EventReasonSwipeOpen },
+        { EventReason.SwipeClose, EventReasonSwipeClose },
         { EventReason.Denied, EventReasonDenied },
         { EventReason.NoAccessRights, EventReasonNoAccessRights },
         { EventReason.IncorrectPassword, EventReasonIncorrectPassword },

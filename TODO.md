@@ -2,6 +2,10 @@
 
 ### IN PROGRESS
 
+- [ ] https://github.com/uhppoted/uhppoted-dll/issues/1
+      - [ ] tests for lookup(...)
+      - [ ] codegen lookup(..)
+
 ## TODO
 - (?) Cross-compile
       - (?) https://github.com/elastic/golang-crossbuild

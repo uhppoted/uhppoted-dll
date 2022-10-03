@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [Unreleased]
+
+### Changed
+1. Added event reason lookup for _swipe open_ and _swipe closed_
+
 ## [0.8.1](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.1) - 2022-08-01
 
 ### Changed

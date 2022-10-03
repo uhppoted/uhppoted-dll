@@ -29,6 +29,8 @@ const char *EventTypeUnknown = "unknown";
 
 const char *EventReasonNone = "";
 const char *EventReasonSwipe = "swipe";
+const char *EventReasonSwipeOpen = "swipe open";
+const char *EventReasonSwipeClose = "swipe close";
 const char *EventReasonDenied = "swipe:denied (system)";
 const char *EventReasonNoAccessRights = "no access rights";
 const char *EventReasonIncorrectPassword = "incorrect password";
@@ -590,6 +592,8 @@ const map<uint8_t, string> LookupEventType = {
 const map<uint8_t, string> LookupEventReason = {
     {EVENT_REASON_NONE, EventReasonNone},
     {EVENT_REASON_SWIPE, EventReasonSwipe},
+    {EVENT_REASON_SWIPE_OPEN, EventReasonSwipeOpen},
+    {EVENT_REASON_SWIPE_CLOSE, EventReasonSwipeClose},
     {EVENT_REASON_DENIED, EventReasonDenied},
     {EVENT_REASON_NO_ACCESS_RIGHTS, EventReasonNoAccessRights},
     {EVENT_REASON_INCORRECT_PASSWORD, EventReasonIncorrectPassword},

@@ -41,6 +41,8 @@ EVENT_TYPE_OVERWRITTEN: Final[int] = 0xff
 
 EVENT_REASON_NONE: Final[int] = 0
 EVENT_REASON_SWIPE: Final[int] = 1
+EVENT_REASON_SWIPE_OPEN: Final[int] = 2
+EVENT_REASON_SWIPE_CLOSE: Final[int] = 3
 EVENT_REASON_DENIED: Final[int] = 5
 EVENT_REASON_NO_ACCESS_RIGHTS: Final[int] = 6
 EVENT_REASON_INCORRECT_PASSWORD: Final[int] = 7
@@ -179,6 +181,7 @@ class Task:
 
 
 class Uhppote:
+
     def __init__(self, uhppote=None):
         self.ffi = FFI(self.errcheck)
         self._uhppote = None
@@ -424,6 +427,8 @@ EventTypeUnknown: Final[str] = 'unknown'
 
 EventReasonNone: Final[str] = ''
 EventReasonSwipe: Final[str] = 'swipe'
+EventReasonSwipeOpen: Final[str] = 'swipe open'
+EventReasonSwipeClose: Final[str] = 'swipe close'
 EventReasonDenied: Final[str] = 'swipe:denied (system)'
 EventReasonNoAccessRights: Final[str] = 'no access rights'
 EventReasonIncorrectPassword: Final[str] = 'incorrect password'
@@ -486,6 +491,8 @@ def LookupEventReason():
     return {
         EVENT_REASON_NONE: EventReasonNone,
         EVENT_REASON_SWIPE: EventReasonSwipe,
+        EVENT_REASON_SWIPE_OPEN: EventReasonSwipeOpen,
+        EVENT_REASON_SWIPE_CLOSE: EventReasonSwipeClose,
         EVENT_REASON_DENIED: EventReasonDenied,
         EVENT_REASON_NO_ACCESS_RIGHTS: EventReasonNoAccessRights,
         EVENT_REASON_INCORRECT_PASSWORD: EventReasonIncorrectPassword,
@@ -554,6 +561,7 @@ def lookup(category, code, locale):
 
 
 class FFI:
+
     def __init__(self, errcheck):
         self.GetDevices = ffi('GetDevices', errcheck)
         self.GetDevice = ffi('GetDevice', errcheck)

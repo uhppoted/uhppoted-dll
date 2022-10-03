@@ -117,6 +117,8 @@
            event-type-overwritten
 
            event-reason-swipe
+           event-reason-swipe-open
+           event-reason-swipe-close
            event-reason-denied
            event-reason-no-access-rights
            event-reason-incorrect-password

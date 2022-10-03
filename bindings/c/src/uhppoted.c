@@ -32,6 +32,8 @@ const char *EventTypeUnknown = "unknown";
 
 const char *EventReasonNone = "";
 const char *EventReasonSwipe = "swipe";
+const char *EventReasonSwipeOpen = "swipe open";
+const char *EventReasonSwipeClose = "swipe close";
 const char *EventReasonDenied = "swipe:denied (system)";
 const char *EventReasonNoAccessRights = "no access rights";
 const char *EventReasonIncorrectPassword = "incorrect password";
@@ -723,6 +725,12 @@ const char *lookup(const char *type, uint8_t code, const char *locale) {
 
         case EVENT_REASON_SWIPE:
             return EventReasonSwipe;
+
+        case EVENT_REASON_SWIPE_OPEN:
+            return EventReasonSwipeOpen;
+
+        case EVENT_REASON_SWIPE_CLOSE:
+            return EventReasonSwipeClose;
 
         case EVENT_REASON_DENIED:
             return EventReasonDenied;

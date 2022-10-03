@@ -21,6 +21,8 @@ const uint8_t EVENT_TYPE_OVERWRITTEN = 0xff;
 
 const uint8_t EVENT_REASON_NONE = 0;
 const uint8_t EVENT_REASON_SWIPE = 1;
+const uint8_t EVENT_REASON_SWIPE_OPEN = 2;
+const uint8_t EVENT_REASON_SWIPE_CLOSE = 3;
 const uint8_t EVENT_REASON_DENIED = 5;
 const uint8_t EVENT_REASON_NO_ACCESS_RIGHTS = 6;
 const uint8_t EVENT_REASON_INCORRECT_PASSWORD = 7;
