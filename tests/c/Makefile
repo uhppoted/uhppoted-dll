@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
 GO=GODEBUG=cgocheck=2
-SRC=tests.c device.c cards.c events.c time_profiles.c tasks.c
+SRC=tests.c device.c cards.c events.c time_profiles.c tasks.c lookup.c
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -112,6 +112,9 @@ refresh-tasklist: build
 
 clear-tasklist: build
 	$(CMD) clear-tasklist
+
+lookup: build
+	$(CMD) lookup
 
 all: build
 	$(CMD) all
