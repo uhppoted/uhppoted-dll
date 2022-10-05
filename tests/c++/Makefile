@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c++
 GO=GODEBUG=cgocheck=2
-SRC=tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp
+SRC=tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp lookup.cpp
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -113,6 +113,9 @@ refresh-tasklist: build
 
 clear-tasklist: build
 	$(CMD) clear-tasklist
+
+lookup: build
+	$(CMD) lookup
 
 all: build
 	$(CMD) all

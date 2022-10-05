@@ -43,6 +43,7 @@ vector<test> tests = {
     {"add-task", addTask},
     {"refresh-tasklist", refreshTaskList},
     {"clear-tasklist", clearTaskList},
+    {"lookup", internationalisation},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

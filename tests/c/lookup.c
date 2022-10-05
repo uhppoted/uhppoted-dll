@@ -100,7 +100,6 @@ bool internationalisation() {
         {.field = "emergency", .type = "string", .value.string.expected = "emergency", .value.string.value = emergency},
         {.field = "remote_open_door", .type = "string", .value.string.expected = "remote open door", .value.string.value = remote_open_door},
         {.field = "remote_open_door_usb_reader", .type = "string", .value.string.expected = "remote open door (USB reader)", .value.string.value = remote_open_door_usb_reader},
-
     };
 
     return evaluate("lookup", sizeof(resultset) / sizeof(result), resultset);
