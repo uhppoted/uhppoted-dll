@@ -1,0 +1,236 @@
+{
+  "lookup": {
+    "doors": {
+      "modes": [
+        {
+          "mode": "normally open",
+          "code": 1,
+          "message": "normally open"
+        },
+        {
+          "mode": "normally closed",
+          "code": 2,
+          "message": "normally closed"
+        },
+        {
+          "mode": "controlled",
+          "code": 3,
+          "message": "controlled"
+        }
+      ]
+    },
+    "events": {
+      "types": [
+        {
+          "type": "none",
+          "code": 0,
+          "message": "none"
+        },
+        {
+          "type": "swipe",
+          "code": 1,
+          "message": "swipe"
+        },
+        {
+          "type": "door",
+          "code": 2,
+          "message": "door"
+        },
+        {
+          "type": "alarm",
+          "code": 3,
+          "message": "alarm"
+        },
+        {
+          "type": "overwritten",
+          "code": 255,
+          "message": "overwritten"
+        }
+      ],
+      "directions": [
+        {
+          "direction": "in",
+          "code": 1,
+          "message": "in"
+        },
+        {
+          "direction": "out",
+          "code": 2,
+          "message": "out"
+        }
+      ],
+      "reasons": [
+        {
+          "reason": "none",
+          "code": 0,
+          "message": ""
+        },
+        {
+          "reason": "swipe",
+          "code": 1,
+          "message": "swipe"
+        },
+        {
+          "reason": "swipe-open",
+          "code": 2,
+          "message": "swipe open"
+        },
+        {
+          "reason": "swipe-close",
+          "code": 3,
+          "message": "swipe close"
+        },
+        {
+          "reason": "denied",
+          "code": 5,
+          "message": "swipe:denied (system)"
+        },
+        {
+          "reason": "no-access-rights",
+          "code": 6,
+          "message": "no access rights"
+        },
+        {
+          "reason": "incorrect-password",
+          "code": 7,
+          "message": "incorrect password"
+        },
+        {
+          "reason": "anti-passback",
+          "code": 8,
+          "message": "anti-passback"
+        },
+        {
+          "reason": "more-cards",
+          "code": 9,
+          "message": "more cards"
+        },
+        {
+          "reason": "first-card-open",
+          "code": 10,
+          "message": "first card open"
+        },
+        {
+          "reason": "door-is-normally-closed",
+          "code": 11,
+          "message": "door is normally closed"
+        },
+        {
+          "reason": "interlock",
+          "code": 12,
+          "message": "interlock"
+        },
+        {
+          "reason": "not-in-allowed-time-period",
+          "code": 13,
+          "message": "not in allowed time period"
+        },
+        {
+          "reason": "invalid-timezone",
+          "code": 15,
+          "message": "invalid timezone"
+        },
+        {
+          "reason": "access-denied",
+          "code": 18,
+          "message": "access denied"
+        },
+        {
+          "reason": "push-button-ok",
+          "code": 20,
+          "message": "pushbutton ok"
+        },
+        {
+          "reason": "door-opened",
+          "code": 23,
+          "message": "door opened"
+        },
+        {
+          "reason": "door-closed",
+          "code": 24,
+          "message": "door closed"
+        },
+        {
+          "reason": "door-opened-supervisor-password",
+          "code": 25,
+          "message": "door opened (supervisor password)"
+        },
+        {
+          "reason": "controller-power-on",
+          "code": 28,
+          "message": "controller power on"
+        },
+        {
+          "reason": "controller-reset",
+          "code": 29,
+          "message": "controller reset"
+        },
+        {
+          "reason": "pushbutton-invalid-door-locked",
+          "code": 31,
+          "message": "pushbutton invalid (door locked)"
+        },
+        {
+          "reason": "pushbutton-invalid-offline",
+          "code": 32,
+          "message": "pushbutton invalid (offline)"
+        },
+        {
+          "reason": "pushbutton-invalid-interlock",
+          "code": 33,
+          "message": "pushbutton invalid (interlock)"
+        },
+        {
+          "reason": "pushbutton-invalid-threat",
+          "code": 34,
+          "message": "pushbutton invalid (threat)"
+        },
+        {
+          "reason": "door-open-too-long",
+          "code": 37,
+          "message": "door open too long"
+        },
+        {
+          "reason": "forced-open",
+          "code": 38,
+          "message": "forced open"
+        },
+        {
+          "reason": "fire",
+          "code": 39,
+          "message": "fire"
+        },
+        {
+          "reason": "forced-closed",
+          "code": 40,
+          "message": "forced closed"
+        },
+        {
+          "reason": "theft-prevention",
+          "code": 41,
+          "message": "theft prevention"
+        },
+        {
+          "reason": "24x7-zone",
+          "code": 42,
+          "message": "24x7 zone"
+        },
+        {
+          "reason": "emergency",
+          "code": 43,
+          "message": "emergency"
+        },
+        {
+          "reason": "remote-open-door",
+          "code": 44,
+          "message": "remote open door"
+        },
+        {
+          "reason": "remote-open-door-usb-reader",
+          "code": 45,
+          "message": "remote open door (USB reader)"
+        }
+      ]
+    }
+  }
+}
