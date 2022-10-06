@@ -35,7 +35,7 @@ bool internationalisation(uhppoted &u) {
     const string not_in_allowed_time_period = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD, "");
     const string invalid_timezone = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_INVALID_TIMEZONE, "");
     const string access_denied = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_ACCESS_DENIED, "");
-    const string push_button_ok = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_PUSH_BUTTON_OK, "");
+    const string pushbutton_ok = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_PUSHBUTTON_OK, "");
     const string door_opened = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DOOR_OPENED, "");
     const string door_closed = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DOOR_CLOSED, "");
     const string door_opened_supervisor_password = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD, "");
@@ -84,7 +84,7 @@ bool internationalisation(uhppoted &u) {
         result("not_in_allowed_time_period", string("not in allowed time period"), not_in_allowed_time_period),
         result("invalid_timezone", string("invalid timezone"), invalid_timezone),
         result("access_denied", string("access denied"), access_denied),
-        result("push_button_ok", string("pushbutton ok"), push_button_ok),
+        result("push_button_ok", string("pushbutton ok"), pushbutton_ok),
         result("door_opened", string("door opened"), door_opened),
         result("door_closed", string("door closed"), door_closed),
         result("door_opened_supervisor_password", string("door opened (supervisor password)"), door_opened_supervisor_password),

@@ -35,7 +35,9 @@ update-release:
 
 regen:
 	# find .codegen/.models -name "*.json" -exec sh -c 'jq . {} | sponge {}' \;
-	$(CODEGEN) --models .codegen/.models --templates .codegen/c++ --out bindings/c++
+	$(CODEGEN) --models .codegen/.models --templates .codegen/c      --out bindings/c
+	$(CODEGEN) --models .codegen/.models --templates .codegen/c++    --out bindings/c++
+	$(CODEGEN) --models .codegen/.models --templates .codegen/python --out bindings/python
 
 format:
 	go fmt ./go/...

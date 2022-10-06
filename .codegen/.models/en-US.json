@@ -136,7 +136,7 @@
           "message": "access denied"
         },
         {
-          "reason": "push-button-ok",
+          "reason": "pushbutton-ok",
           "code": 20,
           "message": "pushbutton ok"
         },

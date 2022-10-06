@@ -34,7 +34,7 @@ bool internationalisation() {
     const char *not_in_allowed_time_period = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD, "");
     const char *invalid_timezone = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_INVALID_TIMEZONE, "");
     const char *access_denied = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_ACCESS_DENIED, "");
-    const char *push_button_ok = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_PUSH_BUTTON_OK, "");
+    const char *push_button_ok = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_PUSHBUTTON_OK, "");
     const char *door_opened = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DOOR_OPENED, "");
     const char *door_closed = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DOOR_CLOSED, "");
     const char *door_opened_supervisor_password = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD, "");

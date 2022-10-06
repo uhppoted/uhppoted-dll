@@ -757,15 +757,15 @@ const char *lookup(const char *type, uint8_t code, const char *locale) {
             return EventReasonInterlock;
 
         case EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD:
-
             return EventReasonNotInAllowedTimePeriod;
+
         case EVENT_REASON_INVALID_TIMEZONE:
             return EventReasonInvalidTimezone;
 
         case EVENT_REASON_ACCESS_DENIED:
             return EventReasonAccessDenied;
 
-        case EVENT_REASON_PUSH_BUTTON_OK:
+        case EVENT_REASON_PUSHBUTTON_OK:
             return EventReasonPushButtonOk;
 
         case EVENT_REASON_DOOR_OPENED:

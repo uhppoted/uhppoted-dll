@@ -605,7 +605,7 @@ const map<uint8_t, string> LookupEventReason = {
     {EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD, EventReasonNotInAllowedTimePeriod},
     {EVENT_REASON_INVALID_TIMEZONE, EventReasonInvalidTimezone},
     {EVENT_REASON_ACCESS_DENIED, EventReasonAccessDenied},
-    {EVENT_REASON_PUSH_BUTTON_OK, EventReasonPushButtonOk},
+    {EVENT_REASON_PUSHBUTTON_OK, EventReasonPushButtonOk},
     {EVENT_REASON_DOOR_OPENED, EventReasonDoorOpened},
     {EVENT_REASON_DOOR_CLOSED, EventReasonDoorClosed},
     {EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD, EventReasonDoorOpenedSupervisorPassword},

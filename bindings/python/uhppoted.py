@@ -1,5 +1,6 @@
 import ctypes
 import platform
+import lookup as internationalisation
 
 from ctypes import c_bool
 from ctypes import c_char_p
@@ -26,53 +27,55 @@ elif 'Darwin' in platform.system():
 else:
     lib = ctypes.cdll.LoadLibrary("libuhppoted.so")
 
-NORMALLY_OPEN: Final[int] = 1
-NORMALLY_CLOSED: Final[int] = 2
-CONTROLLED: Final[int] = 3
+# yapf: disable
+NORMALLY_OPEN:    Final[int] = internationalisation.NORMALLY_OPEN
+NORMALLY_CLOSED:  Final[int] = internationalisation.NORMALLY_CLOSED
+CONTROLLED:       Final[int] = internationalisation.CONTROLLED
 
-DIRECTION_IN: Final[int] = 1
-DIRECTION_OUT: Final[int] = 2
+DIRECTION_IN:     Final[int] = internationalisation.DIRECTION_IN
+DIRECTION_OUT:    Final[int] = internationalisation.DIRECTION_OUT
 
-EVENT_TYPE_NONE: Final[int] = 0
-EVENT_TYPE_SWIPE: Final[int] = 1
-EVENT_TYPE_DOOR: Final[int] = 2
-EVENT_TYPE_ALARM: Final[int] = 3
-EVENT_TYPE_OVERWRITTEN: Final[int] = 0xff
+EVENT_TYPE_NONE:        Final[int] = internationalisation.EVENT_TYPE_NONE
+EVENT_TYPE_SWIPE:       Final[int] = internationalisation.EVENT_TYPE_SWIPE
+EVENT_TYPE_DOOR:        Final[int] = internationalisation.EVENT_TYPE_DOOR
+EVENT_TYPE_ALARM:       Final[int] = internationalisation.EVENT_TYPE_ALARM
+EVENT_TYPE_OVERWRITTEN: Final[int] = internationalisation.EVENT_TYPE_OVERWRITTEN
 
-EVENT_REASON_NONE: Final[int] = 0
-EVENT_REASON_SWIPE: Final[int] = 1
-EVENT_REASON_SWIPE_OPEN: Final[int] = 2
-EVENT_REASON_SWIPE_CLOSE: Final[int] = 3
-EVENT_REASON_DENIED: Final[int] = 5
-EVENT_REASON_NO_ACCESS_RIGHTS: Final[int] = 6
-EVENT_REASON_INCORRECT_PASSWORD: Final[int] = 7
-EVENT_REASON_ANTIPASSBACK: Final[int] = 8
-EVENT_REASON_MORE_CARDS: Final[int] = 9
-EVENT_REASON_FIRST_CARD_OPEN: Final[int] = 10
-EVENT_REASON_DOOR_IS_NORMALLY_CLOSED: Final[int] = 11
-EVENT_REASON_INTERLOCK: Final[int] = 12
-EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD: Final[int] = 13
-EVENT_REASON_INVALID_TIMEZONE: Final[int] = 15
-EVENT_REASON_ACCESS_DENIED: Final[int] = 18
-EVENT_REASON_PUSHBUTTON_OK: Final[int] = 20
-EVENT_REASON_DOOR_OPENED: Final[int] = 23
-EVENT_REASON_DOOR_CLOSED: Final[int] = 24
-EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD: Final[int] = 25
-EVENT_REASON_CONTROLLER_POWER_ON: Final[int] = 28
-EVENT_REASON_CONTROLLER_RESET: Final[int] = 29
-EVENT_REASON_PUSHBUTTON_INVALID_DOOR_LOCKED: Final[int] = 31
-EVENT_REASON_PUSHBUTTON_INVALID_OFFLINE: Final[int] = 32
-EVENT_REASON_PUSHBUTTON_INVALID_INTERLOCK: Final[int] = 33
-EVENT_REASON_PUSHBUTTON_INVALID_THREAT: Final[int] = 34
-EVENT_REASON_DOOR_OPEN_TOO_LONG: Final[int] = 37
-EVENT_REASON_FORCED_OPEN: Final[int] = 38
-EVENT_REASON_FIRE: Final[int] = 39
-EVENT_REASON_FORCED_CLOSED: Final[int] = 40
-EVENT_REASON_THEFT_PREVENTION: Final[int] = 41
-EVENT_REASON_ZONE_24X7: Final[int] = 42
-EVENT_REASON_EMERGENCY: Final[int] = 43
-EVENT_REASON_REMOTE_OPEN_DOOR: Final[int] = 44
-EVENT_REASON_REMOTE_OPEN_DOOR_USB: Final[int] = 45
+EVENT_REASON_NONE:                            Final[int] = internationalisation.EVENT_REASON_NONE
+EVENT_REASON_SWIPE:                           Final[int] = internationalisation.EVENT_REASON_SWIPE
+EVENT_REASON_SWIPE_OPEN:                      Final[int] = internationalisation.EVENT_REASON_SWIPE_OPEN
+EVENT_REASON_SWIPE_CLOSE:                     Final[int] = internationalisation.EVENT_REASON_SWIPE_CLOSE
+EVENT_REASON_DENIED:                          Final[int] = internationalisation.EVENT_REASON_DENIED
+EVENT_REASON_NO_ACCESS_RIGHTS:                Final[int] = internationalisation.EVENT_REASON_NO_ACCESS_RIGHTS
+EVENT_REASON_INCORRECT_PASSWORD:              Final[int] = internationalisation.EVENT_REASON_INCORRECT_PASSWORD
+EVENT_REASON_ANTI_PASSBACK:                   Final[int] = internationalisation.EVENT_REASON_ANTI_PASSBACK
+EVENT_REASON_MORE_CARDS:                      Final[int] = internationalisation.EVENT_REASON_MORE_CARDS
+EVENT_REASON_FIRST_CARD_OPEN:                 Final[int] = internationalisation.EVENT_REASON_FIRST_CARD_OPEN
+EVENT_REASON_DOOR_IS_NORMALLY_CLOSED:         Final[int] = internationalisation.EVENT_REASON_DOOR_IS_NORMALLY_CLOSED
+EVENT_REASON_INTERLOCK:                       Final[int] = internationalisation.EVENT_REASON_INTERLOCK
+EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD:      Final[int] = internationalisation.EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD
+EVENT_REASON_INVALID_TIMEZONE:                Final[int] = internationalisation.EVENT_REASON_INVALID_TIMEZONE
+EVENT_REASON_ACCESS_DENIED:                   Final[int] = internationalisation.EVENT_REASON_ACCESS_DENIED
+EVENT_REASON_PUSHBUTTON_OK:                   Final[int] = internationalisation.EVENT_REASON_PUSHBUTTON_OK
+EVENT_REASON_DOOR_OPENED:                     Final[int] = internationalisation.EVENT_REASON_DOOR_OPENED
+EVENT_REASON_DOOR_CLOSED:                     Final[int] = internationalisation.EVENT_REASON_DOOR_CLOSED
+EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD: Final[int] = internationalisation.EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD
+EVENT_REASON_CONTROLLER_POWER_ON:             Final[int] = internationalisation.EVENT_REASON_CONTROLLER_POWER_ON
+EVENT_REASON_CONTROLLER_RESET:                Final[int] = internationalisation.EVENT_REASON_CONTROLLER_RESET
+EVENT_REASON_PUSHBUTTON_INVALID_DOOR_LOCKED:  Final[int] = internationalisation.EVENT_REASON_PUSHBUTTON_INVALID_DOOR_LOCKED
+EVENT_REASON_PUSHBUTTON_INVALID_OFFLINE:      Final[int] = internationalisation.EVENT_REASON_PUSHBUTTON_INVALID_OFFLINE
+EVENT_REASON_PUSHBUTTON_INVALID_INTERLOCK:    Final[int] = internationalisation.EVENT_REASON_PUSHBUTTON_INVALID_INTERLOCK
+EVENT_REASON_PUSHBUTTON_INVALID_THREAT:       Final[int] = internationalisation.EVENT_REASON_PUSHBUTTON_INVALID_THREAT
+EVENT_REASON_DOOR_OPEN_TOO_LONG:              Final[int] = internationalisation.EVENT_REASON_DOOR_OPEN_TOO_LONG
+EVENT_REASON_FORCED_OPEN:                     Final[int] = internationalisation.EVENT_REASON_FORCED_OPEN
+EVENT_REASON_FIRE:                            Final[int] = internationalisation.EVENT_REASON_FIRE
+EVENT_REASON_FORCED_CLOSED:                   Final[int] = internationalisation.EVENT_REASON_FORCED_CLOSED
+EVENT_REASON_THEFT_PREVENTION:                Final[int] = internationalisation.EVENT_REASON_THEFT_PREVENTION
+EVENT_REASON_24X7_ZONE:                       Final[int] = internationalisation.EVENT_REASON_24X7_ZONE
+EVENT_REASON_EMERGENCY:                       Final[int] = internationalisation.EVENT_REASON_EMERGENCY
+EVENT_REASON_REMOTE_OPEN_DOOR:                Final[int] = internationalisation.EVENT_REASON_REMOTE_OPEN_DOOR
+EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER:     Final[int] = internationalisation.EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER
+# yapf: enable
 
 
 @dataclass
@@ -496,7 +499,7 @@ def LookupEventReason():
         EVENT_REASON_DENIED: EventReasonDenied,
         EVENT_REASON_NO_ACCESS_RIGHTS: EventReasonNoAccessRights,
         EVENT_REASON_INCORRECT_PASSWORD: EventReasonIncorrectPassword,
-        EVENT_REASON_ANTIPASSBACK: EventReasonAntiPassback,
+        EVENT_REASON_ANTI_PASSBACK: EventReasonAntiPassback,
         EVENT_REASON_MORE_CARDS: EventReasonMoreCards,
         EVENT_REASON_FIRST_CARD_OPEN: EventReasonFirstCardOpen,
         EVENT_REASON_DOOR_IS_NORMALLY_CLOSED: EventReasonDoorIsNormallyClosed,
@@ -519,10 +522,10 @@ def LookupEventReason():
         EVENT_REASON_FIRE: EventReasonFire,
         EVENT_REASON_FORCED_CLOSED: EventReasonForcedClosed,
         EVENT_REASON_THEFT_PREVENTION: EventReasonTheftPrevention,
-        EVENT_REASON_ZONE_24X7: EventReason24x7Zone,
+        EVENT_REASON_24X7_ZONE: EventReason24x7Zone,
         EVENT_REASON_EMERGENCY: EventReasonEmergency,
         EVENT_REASON_REMOTE_OPEN_DOOR: EventReasonRemoteOpenDoor,
-        EVENT_REASON_REMOTE_OPEN_DOOR_USB: EventReasonRemoteOpenDoorUSBReader,
+        EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER: EventReasonRemoteOpenDoorUSBReader,
     }
 
 

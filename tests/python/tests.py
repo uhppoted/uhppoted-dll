@@ -383,7 +383,7 @@ def internationalisation(u):
     denied = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DENIED, '')
     no_access_rights = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_NO_ACCESS_RIGHTS, '')
     incorrect_password = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_INCORRECT_PASSWORD, '')
-    anti_passback = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_ANTIPASSBACK, '')
+    anti_passback = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_ANTI_PASSBACK, '')
     more_cards = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_MORE_CARDS, '')
     first_card_open = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FIRST_CARD_OPEN, '')
     door_is_normally_closed = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DOOR_IS_NORMALLY_CLOSED, '')
@@ -408,10 +408,10 @@ def internationalisation(u):
     fire = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FIRE, '')
     forced_closed = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FORCED_CLOSED, '')
     theft_prevention = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_THEFT_PREVENTION, '')
-    zone24x7 = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_ZONE_24X7, '')
+    zone24x7 = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_24X7_ZONE, '')
     emergency = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_EMERGENCY, '')
     remote_open_door = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_REMOTE_OPEN_DOOR, '')
-    remote_open_door_usb_reader = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_REMOTE_OPEN_DOOR_USB, '')
+    remote_open_door_usb_reader = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER, '')
 
     return evaluate('lookup', [
         ('normally open', 'normally open', normally_open),
