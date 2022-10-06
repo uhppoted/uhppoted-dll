@@ -21,6 +21,11 @@ import uhppoted
 from uhppoted import NORMALLY_OPEN
 from uhppoted import NORMALLY_CLOSED
 from uhppoted import CONTROLLED
+from uhppoted import lookup
+from uhppoted import LOOKUP_MODE
+from uhppoted import LOOKUP_DIRECTION
+from uhppoted import LOOKUP_EVENT_TYPE
+from uhppoted import LOOKUP_EVENT_REASON
 
 DEVICE_ID = 405419896
 CARD_NUMBER = 8165538
@@ -59,6 +64,7 @@ def tests():
         'add-task': add_task,
         'refresh-tasklist': refresh_tasklist,
         'clear-tasklist': clear_tasklist,
+        'lookup': internationalisation,
     }
 
 
@@ -354,6 +360,105 @@ def clear_tasklist(u):
     u.clear_tasklist(DEVICE_ID)
 
     return evaluate('clear-tasklist', [])
+
+
+def internationalisation(u):
+    normally_open = lookup(LOOKUP_MODE, uhppoted.NORMALLY_OPEN, '')
+    normally_closed = lookup(LOOKUP_MODE, uhppoted.NORMALLY_CLOSED, '')
+    controlled = lookup(LOOKUP_MODE, uhppoted.CONTROLLED, '')
+
+    direction_in = lookup(LOOKUP_DIRECTION, uhppoted.DIRECTION_IN, '')
+    direction_out = lookup(LOOKUP_DIRECTION, uhppoted.DIRECTION_OUT, '')
+
+    event_type_none = lookup(LOOKUP_EVENT_TYPE, uhppoted.EVENT_TYPE_NONE, '')
+    event_type_swipe = lookup(LOOKUP_EVENT_TYPE, uhppoted.EVENT_TYPE_SWIPE, '')
+    event_type_door = lookup(LOOKUP_EVENT_TYPE, uhppoted.EVENT_TYPE_DOOR, '')
+    event_type_alarm = lookup(LOOKUP_EVENT_TYPE, uhppoted.EVENT_TYPE_ALARM, '')
+    event_type_overwritten = lookup(LOOKUP_EVENT_TYPE, uhppoted.EVENT_TYPE_OVERWRITTEN, '')
+
+    none = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_NONE, '')
+    swipe = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_SWIPE, '')
+    swipe_open = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_SWIPE_OPEN, '')
+    swipe_close = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_SWIPE_CLOSE, '')
+    denied = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DENIED, '')
+    no_access_rights = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_NO_ACCESS_RIGHTS, '')
+    incorrect_password = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_INCORRECT_PASSWORD, '')
+    anti_passback = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_ANTIPASSBACK, '')
+    more_cards = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_MORE_CARDS, '')
+    first_card_open = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FIRST_CARD_OPEN, '')
+    door_is_normally_closed = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DOOR_IS_NORMALLY_CLOSED, '')
+    interlock = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_INTERLOCK, '')
+    not_in_allowed_time_period = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_NOT_IN_ALLOWED_TIME_PERIOD, '')
+    invalid_timezone = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_INVALID_TIMEZONE, '')
+    access_denied = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_ACCESS_DENIED, '')
+    push_button_ok = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_PUSHBUTTON_OK, '')
+    door_opened = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DOOR_OPENED, '')
+    door_closed = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DOOR_CLOSED, '')
+    door_opened_supervisor_password = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DOOR_OPENED_SUPERVISOR_PASSWORD,
+                                             '')
+    controller_power_on = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_CONTROLLER_POWER_ON, '')
+    controller_reset = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_CONTROLLER_RESET, '')
+    pushbutton_invalid_door_locked = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_PUSHBUTTON_INVALID_DOOR_LOCKED,
+                                            '')
+    pushbutton_invalid_offline = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_PUSHBUTTON_INVALID_OFFLINE, '')
+    pushbutton_invalid_interlock = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_PUSHBUTTON_INVALID_INTERLOCK, '')
+    pushbutton_invalid_threat = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_PUSHBUTTON_INVALID_THREAT, '')
+    door_open_too_long = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_DOOR_OPEN_TOO_LONG, '')
+    forced_open = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FORCED_OPEN, '')
+    fire = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FIRE, '')
+    forced_closed = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FORCED_CLOSED, '')
+    theft_prevention = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_THEFT_PREVENTION, '')
+    zone24x7 = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_ZONE_24X7, '')
+    emergency = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_EMERGENCY, '')
+    remote_open_door = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_REMOTE_OPEN_DOOR, '')
+    remote_open_door_usb_reader = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_REMOTE_OPEN_DOOR_USB, '')
+
+    return evaluate('lookup', [
+        ('normally open', 'normally open', normally_open),
+        ('normally closed', 'normally closed', normally_closed),
+        ('controlled', 'controlled', controlled),
+        ('direction:in', 'in', direction_in),
+        ('direction:out', 'out', direction_out),
+        ('event type:none', 'none', event_type_none),
+        ('event type:swipe', 'swipe', event_type_swipe),
+        ('event type:door', 'door', event_type_door),
+        ('event type:alarm', 'alarm', event_type_alarm),
+        ('event type:overwritten', 'overwritten', event_type_overwritten),
+        ('none', '', none),
+        ('swipe', 'swipe', swipe),
+        ('swipe open', 'swipe open', swipe_open),
+        ('swipe close', 'swipe close', swipe_close),
+        ('denied', 'swipe:denied (system)', denied),
+        ('no_access_rights', 'no access rights', no_access_rights),
+        ('incorrect_password', 'incorrect password', incorrect_password),
+        ('anti_passback', 'anti-passback', anti_passback),
+        ('more_cards', 'more cards', more_cards),
+        ('first_card_open', 'first card open', first_card_open),
+        ('door_is_normally_closed', 'door is normally closed', door_is_normally_closed),
+        ('interlock', 'interlock', interlock),
+        ('not_in_allowed_time_period', 'not in allowed time period', not_in_allowed_time_period),
+        ('invalid_timezone', 'invalid timezone', invalid_timezone),
+        ('access_denied', 'access denied', access_denied),
+        ('push_button_ok', 'pushbutton ok', push_button_ok),
+        ('door_opened', 'door opened', door_opened),
+        ('door_closed', 'door closed', door_closed),
+        ('door_opened_supervisor_password', 'door opened (supervisor password)', door_opened_supervisor_password),
+        ('controller_power_on', 'controller power on', controller_power_on),
+        ('controller_reset', 'controller reset', controller_reset),
+        ('pushbutton_invalid_door_locked', 'pushbutton invalid (door locked)', pushbutton_invalid_door_locked),
+        ('pushbutton_invalid_offline', 'pushbutton invalid (offline)', pushbutton_invalid_offline),
+        ('pushbutton_invalid_interlock', 'pushbutton invalid (interlock)', pushbutton_invalid_interlock),
+        ('pushbutton_invalid_threat', 'pushbutton invalid (threat)', pushbutton_invalid_threat),
+        ('door_open_too_long', 'door open too long', door_open_too_long),
+        ('forced_open', 'forced open', forced_open),
+        ('fire', 'fire', fire),
+        ('forced_closed', 'forced closed', forced_closed),
+        ('theft_prevention', 'theft prevention', theft_prevention),
+        ('24x7 zone', '24x7 zone', zone24x7),
+        ('emergency', 'emergency', emergency),
+        ('remote_open_door', 'remote open door', remote_open_door),
+        ('remote_open_door_usb_reader', 'remote open door (USB reader)', remote_open_door_usb_reader),
+    ])
 
 
 def evaluate(tag, resultset):

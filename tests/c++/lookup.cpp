@@ -21,6 +21,7 @@ bool internationalisation(uhppoted &u) {
     const string event_type_overwritten = u.lookup(LOOKUP_EVENT_TYPE, EVENT_TYPE_OVERWRITTEN, "");
 
     const string none = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_NONE, "");
+    const string swipe = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_SWIPE, "");
     const string swipe_open = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_SWIPE_OPEN, "");
     const string swipe_close = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_SWIPE_CLOSE, "");
     const string denied = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DENIED, "");
@@ -55,8 +56,6 @@ bool internationalisation(uhppoted &u) {
     const string remote_open_door_usb_reader = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER, "");
 
     vector<result> rs = {
-        result("swipe open", string("swipe open"), swipe_open),
-
         result("normally open", string("normally open"), normally_open),
         result("normally closed", string("normally closed"), normally_closed),
         result("controlled", string("controlled"), controlled),
@@ -71,6 +70,7 @@ bool internationalisation(uhppoted &u) {
         result("event type:overwritten", string("overwritten"), event_type_overwritten),
 
         result("none", string(""), none),
+        result("swipe", string("swipe"), swipe),
         result("swipe open", string("swipe open"), swipe_open),
         result("swipe close", string("swipe close"), swipe_close),
         result("denied", string("swipe:denied (system)"), denied),

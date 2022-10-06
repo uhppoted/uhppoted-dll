@@ -20,6 +20,7 @@ bool internationalisation() {
     const char *event_type_overwritten = lookup(LOOKUP_EVENT_TYPE, EVENT_TYPE_OVERWRITTEN, "");
 
     const char *none = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_NONE, "");
+    const char *swipe = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_SWIPE, "");
     const char *swipe_open = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_SWIPE_OPEN, "");
     const char *swipe_close = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_SWIPE_CLOSE, "");
     const char *denied = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_DENIED, "");
@@ -68,6 +69,7 @@ bool internationalisation() {
         {.field = "event type:overwritten", .type = "string", .value.string.expected = "overwritten", .value.string.value = event_type_overwritten},
 
         {.field = "none", .type = "string", .value.string.expected = "", .value.string.value = none},
+        {.field = "swipe", .type = "string", .value.string.expected = "swipe", .value.string.value = swipe},
         {.field = "swipe open", .type = "string", .value.string.expected = "swipe open", .value.string.value = swipe_open},
         {.field = "swipe close", .type = "string", .value.string.expected = "swipe close", .value.string.value = swipe_close},
         {.field = "denied", .type = "string", .value.string.expected = "swipe:denied (system)", .value.string.value = denied},

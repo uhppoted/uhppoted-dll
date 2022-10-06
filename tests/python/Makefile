@@ -106,6 +106,9 @@ refresh-tasklist: build
 clear-tasklist: build
 	$(CMD) clear-tasklist
 
+lookup: build
+	$(CMD) lookup
+
 all: build
 	$(CMD) all
 
