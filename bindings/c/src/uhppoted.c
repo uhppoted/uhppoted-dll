@@ -810,7 +810,7 @@ const char *lookup(const char *type, uint8_t code, const char *locale) {
         case EVENT_REASON_THEFT_PREVENTION:
             return EventReasonTheftPrevention;
 
-        case EVENT_REASON_24X7_ZONE:
+        case EVENT_REASON_ZONE_24X7:
             return EventReason24x7Zone;
 
         case EVENT_REASON_EMERGENCY:

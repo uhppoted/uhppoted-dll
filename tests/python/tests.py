@@ -408,7 +408,7 @@ def internationalisation(u):
     fire = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FIRE, '')
     forced_closed = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_FORCED_CLOSED, '')
     theft_prevention = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_THEFT_PREVENTION, '')
-    zone24x7 = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_24X7_ZONE, '')
+    zone24x7 = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_ZONE_24X7, '')
     emergency = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_EMERGENCY, '')
     remote_open_door = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_REMOTE_OPEN_DOOR, '')
     remote_open_door_usb_reader = lookup(LOOKUP_EVENT_REASON, uhppoted.EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER, '')

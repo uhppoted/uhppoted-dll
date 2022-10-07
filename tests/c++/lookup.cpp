@@ -50,7 +50,7 @@ bool internationalisation(uhppoted &u) {
     const string fire = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_FIRE, "");
     const string forced_closed = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_FORCED_CLOSED, "");
     const string theft_prevention = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_THEFT_PREVENTION, "");
-    const string zone24x7 = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_24X7_ZONE, "");
+    const string zone24x7 = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_ZONE_24X7, "");
     const string emergency = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_EMERGENCY, "");
     const string remote_open_door = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_REMOTE_OPEN_DOOR, "");
     const string remote_open_door_usb_reader = u.lookup(LOOKUP_EVENT_REASON, EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER, "");

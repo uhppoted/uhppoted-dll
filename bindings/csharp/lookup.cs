@@ -19,7 +19,7 @@ public class EventType {
     public const byte Swipe = 1;
     public const byte Door = 2;
     public const byte Alarm = 3;
-    public const byte Overwritten = 0xff;
+    public const byte Overwritten = 255;
 }
 
 public class EventReason {
@@ -38,16 +38,16 @@ public class EventReason {
     public const byte NotInAllowedTimePeriod = 13;
     public const byte InvalidTimezone = 15;
     public const byte AccessDenied = 18;
-    public const byte PushButtonOk = 20;
+    public const byte PushbuttonOk = 20;
     public const byte DoorOpened = 23;
     public const byte DoorClosed = 24;
     public const byte DoorOpenedSupervisorPassword = 25;
     public const byte ControllerPowerOn = 28;
     public const byte ControllerReset = 29;
-    public const byte PushButtonInvalidDoorLocked = 31;
-    public const byte PushButtonInvalidOffline = 32;
-    public const byte PushButtonInvalidInterlock = 33;
-    public const byte PushButtonInvalidThreat = 34;
+    public const byte PushbuttonInvalidDoorLocked = 31;
+    public const byte PushbuttonInvalidOffline = 32;
+    public const byte PushbuttonInvalidInterlock = 33;
+    public const byte PushbuttonInvalidThreat = 34;
     public const byte DoorOpenTooLong = 37;
     public const byte ForcedOpen = 38;
     public const byte Fire = 39;

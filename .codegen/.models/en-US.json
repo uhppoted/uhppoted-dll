@@ -211,7 +211,7 @@
           "message": "theft prevention"
         },
         {
-          "reason": "24x7-zone",
+          "reason": "zone 24x7",
           "code": 42,
           "message": "24x7 zone"
         },
@@ -226,7 +226,7 @@
           "message": "remote open door"
         },
         {
-          "reason": "remote-open-door-usb-reader",
+          "reason": "remote-open-door-USB-reader",
           "code": 45,
           "message": "remote open door (USB reader)"
         }

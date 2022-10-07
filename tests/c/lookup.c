@@ -49,7 +49,7 @@ bool internationalisation() {
     const char *fire = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_FIRE, "");
     const char *forced_closed = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_FORCED_CLOSED, "");
     const char *theft_prevention = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_THEFT_PREVENTION, "");
-    const char *zone24x7 = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_24X7_ZONE, "");
+    const char *zone24x7 = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_ZONE_24X7, "");
     const char *emergency = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_EMERGENCY, "");
     const char *remote_open_door = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_REMOTE_OPEN_DOOR, "");
     const char *remote_open_door_usb_reader = lookup(LOOKUP_EVENT_REASON, EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER, "");

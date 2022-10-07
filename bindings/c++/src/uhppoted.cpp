@@ -620,7 +620,7 @@ const map<uint8_t, string> LookupEventReason = {
     {EVENT_REASON_FIRE, EventReasonFire},
     {EVENT_REASON_FORCED_CLOSED, EventReasonForcedClosed},
     {EVENT_REASON_THEFT_PREVENTION, EventReasonTheftPrevention},
-    {EVENT_REASON_24X7_ZONE, EventReason24x7Zone},
+    {EVENT_REASON_ZONE_24X7, EventReason24x7Zone},
     {EVENT_REASON_EMERGENCY, EventReasonEmergency},
     {EVENT_REASON_REMOTE_OPEN_DOOR, EventReasonRemoteOpenDoor},
     {EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER, EventReasonRemoteOpenDoorUSBReader},

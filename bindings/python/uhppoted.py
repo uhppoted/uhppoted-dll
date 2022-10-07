@@ -71,7 +71,7 @@ EVENT_REASON_FORCED_OPEN:                     Final[int] = internationalisation.
 EVENT_REASON_FIRE:                            Final[int] = internationalisation.EVENT_REASON_FIRE
 EVENT_REASON_FORCED_CLOSED:                   Final[int] = internationalisation.EVENT_REASON_FORCED_CLOSED
 EVENT_REASON_THEFT_PREVENTION:                Final[int] = internationalisation.EVENT_REASON_THEFT_PREVENTION
-EVENT_REASON_24X7_ZONE:                       Final[int] = internationalisation.EVENT_REASON_24X7_ZONE
+EVENT_REASON_ZONE_24X7:                       Final[int] = internationalisation.EVENT_REASON_ZONE_24X7
 EVENT_REASON_EMERGENCY:                       Final[int] = internationalisation.EVENT_REASON_EMERGENCY
 EVENT_REASON_REMOTE_OPEN_DOOR:                Final[int] = internationalisation.EVENT_REASON_REMOTE_OPEN_DOOR
 EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER:     Final[int] = internationalisation.EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER
@@ -522,7 +522,7 @@ def LookupEventReason():
         EVENT_REASON_FIRE: EventReasonFire,
         EVENT_REASON_FORCED_CLOSED: EventReasonForcedClosed,
         EVENT_REASON_THEFT_PREVENTION: EventReasonTheftPrevention,
-        EVENT_REASON_24X7_ZONE: EventReason24x7Zone,
+        EVENT_REASON_ZONE_24X7: EventReason24x7Zone,
         EVENT_REASON_EMERGENCY: EventReasonEmergency,
         EVENT_REASON_REMOTE_OPEN_DOOR: EventReasonRemoteOpenDoor,
         EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER: EventReasonRemoteOpenDoorUSBReader,

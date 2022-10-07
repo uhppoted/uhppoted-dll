@@ -38,6 +38,7 @@ regen:
 	$(CODEGEN) --models .codegen/.models --templates .codegen/c      --out bindings/c
 	$(CODEGEN) --models .codegen/.models --templates .codegen/c++    --out bindings/c++
 	$(CODEGEN) --models .codegen/.models --templates .codegen/python --out bindings/python
+	$(CODEGEN) --models .codegen/.models --templates .codegen/csharp --out bindings/csharp
 
 format:
 	go fmt ./go/...
