@@ -24,7 +24,7 @@ format-dotnet:
 	dotnet format --include $(BINDINGS)/*.cs --folder
 
 build: format
-	csc $(BINDINGS)/uhppoted.cs tests.cs
+	csc $(BINDINGS)/uhppoted.cs $(BINDINGS)/lookup.cs tests.cs
 
 usage: build
 	$(CMD) help
