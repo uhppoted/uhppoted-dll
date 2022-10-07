@@ -55,6 +55,7 @@ public class Tests {
         new test("add-task", AddTask),
         new test("refresh-tasklist", RefreshTaskList),
         new test("clear-tasklist", ClearTaskList),
+        new test("lookup", Internationalisation),
     };
 
     public static void Main(string[] args) {
@@ -433,6 +434,105 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("clear-tasklist", resultset);
+    }
+
+    static bool Internationalisation(Uhppoted u) {
+        string normally_open = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyOpen, "");
+        string normally_closed = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyClosed, "");
+        string controlled = lookup.find(lookup.LOOKUP_MODE, DoorMode.Controlled, "");
+
+        string direction_in = lookup.find(lookup.LOOKUP_DIRECTION, Direction.In, "");
+        string direction_out = lookup.find(lookup.LOOKUP_DIRECTION, Direction.Out, "");
+
+        string event_type_none = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.None, "");
+        string event_type_swipe = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Swipe, "");
+        string event_type_door = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Door, "");
+        string event_type_alarm = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Alarm, "");
+        string event_type_overwritten = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Overwritten, "");
+
+        string none = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.None, "");
+        string swipe = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Swipe, "");
+        string swipe_open = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.SwipeOpen, "");
+        string swipe_close = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.SwipeClose, "");
+        string denied = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Denied, "");
+        string no_access_rights = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.NoAccessRights, "");
+        string incorrect_password = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.IncorrectPassword, "");
+        string anti_passback = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.AntiPassback, "");
+        string more_cards = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.MoreCards, "");
+        string first_card_open = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.FirstCardOpen, "");
+        string door_is_normally_closed = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorIsNormallyClosed, "");
+        string interlock = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Interlock, "");
+        string not_in_allowed_time_period = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.NotInAllowedTimePeriod, "");
+        string invalid_timezone = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.InvalidTimezone, "");
+        string access_denied = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.AccessDenied, "");
+        string push_button_ok = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushButtonOk, "");
+        string door_opened = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpened, "");
+        string door_closed = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorClosed, "");
+        string door_opened_supervisor_password = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpenedSupervisorPassword, "");
+        string controller_power_on = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ControllerPowerOn, "");
+        string controller_reset = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ControllerReset, "");
+        string pushbutton_invalid_door_locked = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushButtonInvalidDoorLocked, "");
+        string pushbutton_invalid_offline = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushButtonInvalidOffline, "");
+        string pushbutton_invalid_interlock = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushButtonInvalidInterlock, "");
+        string pushbutton_invalid_threat = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushButtonInvalidThreat, "");
+        string door_open_too_long = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpenTooLong, "");
+        string forced_open = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ForcedOpen, "");
+        string fire = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Fire, "");
+        string forced_closed = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ForcedClosed, "");
+        string theft_prevention = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.TheftPrevention, "");
+        string zone24x7 = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Zone24x7, "");
+        string emergency = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Emergency, "");
+        string remote_open_door = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.RemoteOpenDoor, "");
+        string remote_open_door_usb_reader = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.RemoteOpenDoorUSBReader, "");
+
+        result[] resultset = {
+            new stringResult("normally open", "normally open", normally_open),
+            new stringResult("normally closed", "normally closed", normally_closed),
+            new stringResult("controlled", "controlled", controlled),
+            new stringResult("direction:in", "in", direction_in),
+            new stringResult("direction:out", "out", direction_out),
+            new stringResult("event type:none", "none", event_type_none),
+            new stringResult("event type:swipe", "swipe", event_type_swipe),
+            new stringResult("event type:door", "door", event_type_door),
+            new stringResult("event type:alarm", "alarm", event_type_alarm),
+            new stringResult("event type:overwritten", "overwritten", event_type_overwritten),
+            new stringResult("none", "", none),
+            new stringResult("swipe", "swipe", swipe),
+            new stringResult("swipe open", "swipe open", swipe_open),
+            new stringResult("swipe close", "swipe close", swipe_close),
+            new stringResult("denied", "swipe:denied (system)", denied),
+            new stringResult("no_access_rights", "no access rights", no_access_rights),
+            new stringResult("incorrect_password", "incorrect password", incorrect_password),
+            new stringResult("anti_passback", "anti-passback", anti_passback),
+            new stringResult("more_cards", "more cards", more_cards),
+            new stringResult("first_card_open", "first card open", first_card_open),
+            new stringResult("door_is_normally_closed", "door is normally closed", door_is_normally_closed),
+            new stringResult("interlock", "interlock", interlock),
+            new stringResult("not_in_allowed_time_period", "not in allowed time period", not_in_allowed_time_period),
+            new stringResult("invalid_timezone", "invalid timezone", invalid_timezone),
+            new stringResult("access_denied", "access denied", access_denied),
+            new stringResult("push_button_ok", "pushbutton ok", push_button_ok),
+            new stringResult("door_opened", "door opened", door_opened),
+            new stringResult("door_closed", "door closed", door_closed),
+            new stringResult("door_opened_supervisor_password", "door opened (supervisor password)", door_opened_supervisor_password),
+            new stringResult("controller_power_on", "controller power on", controller_power_on),
+            new stringResult("controller_reset", "controller reset", controller_reset),
+            new stringResult("pushbutton_invalid_door_locked", "pushbutton invalid (door locked)", pushbutton_invalid_door_locked),
+            new stringResult("pushbutton_invalid_offline", "pushbutton invalid (offline)", pushbutton_invalid_offline),
+            new stringResult("pushbutton_invalid_interlock", "pushbutton invalid (interlock)", pushbutton_invalid_interlock),
+            new stringResult("pushbutton_invalid_threat", "pushbutton invalid (threat)", pushbutton_invalid_threat),
+            new stringResult("door_open_too_long", "door open too long", door_open_too_long),
+            new stringResult("forced_open", "forced open", forced_open),
+            new stringResult("fire", "fire", fire),
+            new stringResult("forced_closed", "forced closed", forced_closed),
+            new stringResult("theft_prevention", "theft prevention", theft_prevention),
+            new stringResult("24x7 zone", "24x7 zone", zone24x7),
+            new stringResult("emergency", "emergency", emergency),
+            new stringResult("remote_open_door", "remote open door", remote_open_door),
+            new stringResult("remote_open_door_usb_reader", "remote open door (USB reader)", remote_open_door_usb_reader),
+        };
+
+        return evaluate("lookup", resultset);
     }
 
     static bool evaluate(string tag, result[] resultset) {

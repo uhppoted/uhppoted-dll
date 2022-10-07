@@ -667,10 +667,10 @@ public class EventReason {
     public const byte DoorOpenedSupervisorPassword = 25;
     public const byte ControllerPowerOn = 28;
     public const byte ControllerReset = 29;
-    public const byte PushbuttonInvalidDoorLocked = 31;
-    public const byte PushbuttonInvalidOffline = 32;
-    public const byte PushbuttonInvalidInterlock = 33;
-    public const byte PushbuttonInvalidThreat = 34;
+    public const byte PushButtonInvalidDoorLocked = 31;
+    public const byte PushButtonInvalidOffline = 32;
+    public const byte PushButtonInvalidInterlock = 33;
+    public const byte PushButtonInvalidThreat = 34;
     public const byte DoorOpenTooLong = 37;
     public const byte ForcedOpen = 38;
     public const byte Fire = 39;
@@ -912,16 +912,16 @@ public class lookup {
     const string EventReasonNotInAllowedTimePeriod = "not in allowed time period";
     const string EventReasonInvalidTimezone = "invalid timezone";
     const string EventReasonAccessDenied = "access denied";
-    const string EventReasonPushButtonOk = "push button ok";
+    const string EventReasonPushButtonOk = "pushbutton ok";
     const string EventReasonDoorOpened = "door opened";
     const string EventReasonDoorClosed = "door closed";
     const string EventReasonDoorOpenedSupervisorPassword = "door opened (supervisor password)";
     const string EventReasonControllerPowerOn = "controller power on";
     const string EventReasonControllerReset = "controller reset";
-    const string EventReasonPushbuttonInvalidDoorLocked = "pushbutton invalid (door locked)";
-    const string EventReasonPushbuttonInvalidOffline = "pushbutton invalid (offline)";
-    const string EventReasonPushbuttonInvalidInterlock = "pushbutton invalid (interlock)";
-    const string EventReasonPushbuttonInvalidThreat = "pushbutton invalid (threat)";
+    const string EventReasonPushButtonInvalidDoorLocked = "pushbutton invalid (door locked)";
+    const string EventReasonPushButtonInvalidOffline = "pushbutton invalid (offline)";
+    const string EventReasonPushButtonInvalidInterlock = "pushbutton invalid (interlock)";
+    const string EventReasonPushButtonInvalidThreat = "pushbutton invalid (threat)";
     const string EventReasonDoorOpenTooLong = "door open too long";
     const string EventReasonForcedOpen = "forced open";
     const string EventReasonFire = "fire";
@@ -974,10 +974,10 @@ public class lookup {
         { EventReason.DoorOpenedSupervisorPassword, EventReasonDoorOpenedSupervisorPassword },
         { EventReason.ControllerPowerOn, EventReasonControllerPowerOn },
         { EventReason.ControllerReset, EventReasonControllerReset },
-        { EventReason.PushbuttonInvalidDoorLocked, EventReasonPushbuttonInvalidDoorLocked },
-        { EventReason.PushbuttonInvalidOffline, EventReasonPushbuttonInvalidOffline },
-        { EventReason.PushbuttonInvalidInterlock, EventReasonPushbuttonInvalidInterlock },
-        { EventReason.PushbuttonInvalidThreat, EventReasonPushbuttonInvalidThreat },
+        { EventReason.PushButtonInvalidDoorLocked, EventReasonPushButtonInvalidDoorLocked },
+        { EventReason.PushButtonInvalidOffline, EventReasonPushButtonInvalidOffline },
+        { EventReason.PushButtonInvalidInterlock, EventReasonPushButtonInvalidInterlock },
+        { EventReason.PushButtonInvalidThreat, EventReasonPushButtonInvalidThreat },
         { EventReason.DoorOpenTooLong, EventReasonDoorOpenTooLong },
         { EventReason.ForcedOpen, EventReasonForcedOpen },
         { EventReason.Fire, EventReasonFire },
