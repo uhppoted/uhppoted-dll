@@ -32,6 +32,7 @@
         '("add-task"              tests:add-task)
         '("refresh-tasklist"      tests:refresh-tasklist)
         '("clear-tasklist"        tests:clear-tasklist)
+        '("lookup"                tests:internationalisation)
 ))
 
 

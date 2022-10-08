@@ -110,12 +110,16 @@
            normally-closed
            controlled
 
+           direction-in
+           direction-out
+
            event-type-none
            event-type-swipe
            event-type-door
            event-type-alarm
            event-type-overwritten
 
+           event-reason-none
            event-reason-swipe
            event-reason-swipe-open
            event-reason-swipe-close
@@ -130,7 +134,7 @@
            event-reason-not-in-allowed-time-period
            event-reason-invalid-timezone
            event-reason-access-denied
-           event-reason-push-button-ok
+           event-reason-pushbutton-ok
            event-reason-door-opened
            event-reason-door-closed
            event-reason-door-opened-supervisor-password
@@ -145,14 +149,11 @@
            event-reason-fire
            event-reason-forced-closed
            event-reason-theft-prevention
-           event-reason-24x7-zone
+           event-reason-zone-24x7
            event-reason-emergency
            event-reason-remote-open-door
            event-reason-remote-open-door-usb-reader
            
-           direction-in
-           direction-out
-
            lookup-mode
            lookup-direction
            lookup-event-type
