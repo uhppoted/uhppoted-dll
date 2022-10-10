@@ -4,6 +4,10 @@
 
 ### Changed
 1. Added event reason lookup for _swipe open_ and _swipe closed_
+2. Started internationalising messages:
+   - Restructured sources to use seperate `lookup.xxx` file for lookup codes
+   - Codegen'd lookup codes from single internationalisation JSON model
+
 
 ## [0.8.1](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.1) - 2022-08-01
 
