@@ -1,4 +1,5 @@
 (load "../../bindings/ccl/packages.lisp")
+(load "../../bindings/ccl/lookup.lisp")
 (load "../../bindings/ccl/uhppoted.lisp")
 (load "packages.lisp")
 (load "tests.lisp")

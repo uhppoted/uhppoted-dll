@@ -3,10 +3,14 @@
 ### IN PROGRESS
 
 - [ ] https://github.com/uhppoted/uhppoted-dll/issues/1
-      - [ ] tests for lookup(...)
+      - [x] tests for lookup(...)
       - [ ] codegen lookup(..)
 
 ## TODO
+
+- [ ] CCL
+      - [ ] Rework timeout logic for get-device etc
+
 - (?) Cross-compile
       - (?) https://github.com/elastic/golang-crossbuild
       - (?) https://dh1tw.de/2019/12/cross-compiling-golang-cgo-projects/
