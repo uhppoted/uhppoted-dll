@@ -28,6 +28,10 @@ format: $(SRC)
 build: format 
 	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
+debug: format
+	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
+	$(CMD) get-device $(DEVICEID)
+
 usage: build
 	$(CMD)
 
@@ -117,8 +121,3 @@ refresh-tasklist: build
 
 clear-tasklist: build
 	$(CMD) clear-tasklist $(DEVICEID)
-
-debug: format
-	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
-	$(GO) && $(DLL)/debug && ./examples get-event $(DEVICEID) --event-index 33
-

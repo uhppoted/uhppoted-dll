@@ -109,8 +109,11 @@ typedef struct Task {
 import "C"
 
 import (
+	"encoding/binary"
+	"encoding/hex"
 	"fmt"
 	"net"
+	"regexp"
 	"time"
 	"unsafe"
 
@@ -135,13 +138,57 @@ func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
 
 //export GetDevice
 func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getDevice(uu, device, deviceID); err != nil {
-		return C.CString(err.Error())
+	p := unsafe.Pointer(u)
+
+	fmt.Println()
+	fmt.Printf("UHPPOTE: %+v\n", *u)
+	fmt.Printf("         bind: %v\n", C.GoString(u.bind))
+	fmt.Println()
+	fmt.Printf("         bind:      0x%x\n", u.bind)
+	fmt.Printf("         broadcast: 0x%x\n", u.broadcast)
+	fmt.Printf("         listen:    0x%x\n", u.listen)
+	fmt.Printf("         timeout:   0x%x  %v\n", u.timeout, u.timeout)
+	fmt.Printf("         devices:   0x%x\n", u.devices)
+	fmt.Printf("         debug:     %v\n", u.debug)
+	fmt.Println()
+
+	bytes := make([]byte, 48)
+	for i := 0; i < 48; i++ {
+		bytes[i] = *(*byte)(unsafe.Add(p, i))
 	}
 
+	dump(bytes)
+
+	bindPtr := binary.LittleEndian.Uint64(bytes[0:8])
+	broadcastPtr := binary.LittleEndian.Uint64(bytes[8:16])
+	listenPtr := binary.LittleEndian.Uint64(bytes[16:24])
+	timeout := binary.LittleEndian.Uint64(bytes[24:32])
+	devicesPtr := binary.LittleEndian.Uint64(bytes[32:40])
+	debug := binary.LittleEndian.Uint64(bytes[40:48])
+	fmt.Printf(">        bind:      0x%x\n", bindPtr)
+	fmt.Printf(">        broadcast: 0x%x\n", broadcastPtr)
+	fmt.Printf(">        listen:    0x%x\n", listenPtr)
+	fmt.Printf(">        timeout:   0x%x  %v\n", timeout, timeout)
+	fmt.Printf(">        devices:   0x%x\n", devicesPtr)
+	fmt.Printf(">        debug:     0x%x\n", debug)
+	fmt.Println()
+
+	device.ID = C.uint(deviceID)
+	device.address = C.CString("192.168.1.101")
+	device.subnet = C.CString("255.255.255.0")
+	device.gateway = C.CString("192.168.1.1")
+	device.MAC = C.CString("00:12:23:34:45:56")
+	device.version = C.CString("v8.92")
+	device.date = C.CString("2018-11-05")
+
 	return nil
+}
+
+func dump(m []byte) {
+	prefix := ""
+	regex := regexp.MustCompile("(?m)^(.*)")
+
+	fmt.Printf("%s\n", regex.ReplaceAllString(hex.Dump(m), prefix+"$1"))
 }
 
 //export SetAddress

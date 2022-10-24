@@ -87,6 +87,8 @@ void setup(const char *bind, const char *broadcast, const char *listen,
         teardown();
     }
 
+    printf(">>>>>>>>>>> %lu\n", sizeof(UHPPOTE));
+
     if ((u = (UHPPOTE *)malloc(sizeof(UHPPOTE))) != NULL) {
         u->bind = bind;
         u->broadcast = broadcast;
@@ -138,6 +140,21 @@ void setup(const char *bind, const char *broadcast, const char *listen,
         u->devices = devices;
         u->devices->N = N;
         u->devices->devices = list;
+
+        uint8_t *p = (uint8_t *)u;
+        for (int i = 0; i < sizeof(UHPPOTE); i++) {
+            printf(">>> %-2d  %-3u  %02x\n", i, *p, *p);
+            p++;
+        }
+
+        printf("\n\n");
+        printf(">>>>>>>>>>> %lu\n", strlen(u->bind));
+
+        uint8_t *q = (uint8_t *)u->bind;
+        for (int i = 0; i < strlen(u->bind); i++) {
+            printf(">>> %-2d  %-3u  %02x\n", i, *q, *q);
+            q++;
+        }
     }
 }
 
