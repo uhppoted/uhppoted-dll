@@ -1,7 +1,7 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
 CMD=python examples.py 
-SRC=go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
+SRC=go/devices.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)

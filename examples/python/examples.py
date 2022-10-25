@@ -29,7 +29,6 @@ from uhppoted import LOOKUP_EVENT_TYPE
 from uhppoted import LOOKUP_EVENT_REASON
 
 DEVICE_ID = 405419896
-CARD_NUMBER = 8000001
 CARD_INDEX = 7
 EVENT_INDEX = 43
 DOOR = 4
@@ -82,30 +81,6 @@ def commands():
         'open-door': {
             'help': "Remotely opens a controller door",
             'fn': open_door,
-        },
-        'get-cards': {
-            'help': "Retrieves the number of cards stored on a controller",
-            'fn': get_cards,
-        },
-        'get-card': {
-            'help': "Retrieves the card detail for card number from a controller",
-            'fn': get_card,
-        },
-        'get-card-by-index': {
-            'help': "Retrieves the card detail for the card stored at an index on a controller",
-            'fn': get_card_by_index,
-        },
-        'put-card': {
-            'help': "Adds or updates the card detail for card number stored on a controller",
-            'fn': put_card,
-        },
-        'delete-card': {
-            'help': "Deletes a card from a controller",
-            'fn': delete_card,
-        },
-        'delete-cards': {
-            'help': "Deletes all cards from a controller",
-            'fn': delete_cards,
         },
         'get-event-index': {
             'help': "Retrieves the current event index from a controller",
@@ -184,8 +159,6 @@ def main():
                         default='192.168.1.100:60001',
                         help='controller event listener address')
 
-    parser.add_argument('--card', type=int, default=CARD_NUMBER, help='card number')
-    parser.add_argument('--card-index', type=int, default=CARD_INDEX, help='card index')
     parser.add_argument('--door', type=int, default=DOOR, help='controller door ID [1..4]')
     parser.add_argument('--event-index', type=int, default=EVENT_INDEX, help='event index')
     parser.add_argument('--time-profile', type=int, default=TIME_PROFILE_ID, help='time profile ID')
@@ -416,97 +389,6 @@ def open_door(u, args):
     display('open-door', [
         ('ID', device_id),
         ('door', door),
-    ])
-
-
-def get_cards(u, args):
-    device_id = args.controller
-
-    cards = u.get_cards(device_id)
-
-    display('get-cards', [
-        ('ID', device_id),
-        ('cards', cards),
-    ])
-
-
-def get_card(u, args):
-    device_id = args.controller
-    card_number = args.card
-
-    card = u.get_card(device_id, card_number)
-
-    display('get-card', [
-        ('ID', device_id),
-        ('card number', card.cardNumber),
-        ('     from', card.start),
-        ('     to', card.end),
-        ('     door[1]', card.doors[0]),
-        ('     door[2]', card.doors[1]),
-        ('     door[3]', card.doors[2]),
-        ('     door[4]', card.doors[3]),
-    ])
-
-
-def get_card_by_index(u, args):
-    device_id = args.controller
-    index = args.card_index
-
-    card = u.get_card_by_index(device_id, index)
-
-    display('get-card-by-index', [
-        ('ID', device_id),
-        ('index', index),
-        ('card number', card.cardNumber),
-        ('     from', card.start),
-        ('     to', card.end),
-        ('     door[1]', card.doors[0]),
-        ('     door[2]', card.doors[1]),
-        ('     door[3]', card.doors[2]),
-        ('     door[4]', card.doors[3]),
-    ])
-
-
-def put_card(u, args):
-    device_id = args.controller
-    card_number = args.card
-    start = '2022-01-01'
-    end = '2022-12-31'
-    doors = [0, 1, 31, 75]
-
-    card = u.put_card(device_id, card_number, start, end, doors)
-
-    display('put-card', [
-        ('ID', device_id),
-        ('card-number', card_number),
-        ('     from', start),
-        ('     to', end),
-        ('     door[1]', doors[0]),
-        ('     door[2]', doors[1]),
-        ('     door[3]', doors[2]),
-        ('     door[4]', doors[3]),
-    ])
-
-
-def delete_card(u, args):
-    device_id = args.controller
-    card_number = args.card
-
-    u.delete_card(device_id, card_number)
-
-    display('delete-card', [
-        ('ID', device_id),
-        ('card number', card_number),
-    ])
-
-
-def delete_cards(u, args):
-    device_id = args.controller
-
-    u.delete_cards(device_id)
-
-    display('delete-cards', [
-        ('ID', device_id),
     ])
 
 

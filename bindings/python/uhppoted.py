@@ -138,14 +138,6 @@ class DoorControl:
 
 
 @dataclass
-class Card:
-    cardNumber: int
-    start: str
-    end: str
-    doors: list[int]
-
-
-@dataclass
 class TimeProfile:
     ID: int
     linked: int
@@ -289,53 +281,6 @@ class Uhppote:
 
     def open_door(self, deviceID, door):
         self.ffi.OpenDoor(self._uhppote, deviceID, door)
-
-    def get_cards(self, deviceID):
-        cards = ctypes.c_int(0)
-
-        self.ffi.GetCards(self._uhppote, byref(cards), deviceID)
-
-        return cards.value
-
-    def get_card(self, deviceID, cardNumber):
-        card = GoCard()
-        card.doors = (c_ubyte * 4)(*[0] * 4)
-
-        self.ffi.GetCard(self._uhppote, byref(card), deviceID, cardNumber)
-
-        doors = [0, 0, 0, 0]
-        for i in range(4):
-            doors[i] = card.doors[i]
-
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
-
-    def get_card_by_index(self, deviceID, index):
-        card = GoCard()
-        card.doors = (c_ubyte * 4)(*[0] * 4)
-
-        self.ffi.GetCardByIndex(self._uhppote, byref(card), deviceID, index)
-
-        doors = [0, 0, 0, 0]
-        for i in range(4):
-            doors[i] = card.doors[i]
-
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
-
-    def put_card(self, deviceID, cardNumber, start, end, doors):
-        _doors = (c_ubyte * 4)(*[0] * 4)
-        _doors[0] = doors[0]
-        _doors[1] = doors[1]
-        _doors[2] = doors[2]
-        _doors[3] = doors[3]
-
-        self.ffi.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')),
-                         c_char_p(bytes(end, 'utf-8')), _doors)
-
-    def delete_card(self, deviceID, cardNumber):
-        self.ffi.DeleteCard(self._uhppote, deviceID, cardNumber)
-
-    def delete_cards(self, deviceID):
-        self.ffi.DeleteCards(self._uhppote, deviceID)
 
     def get_event_index(self, deviceID):
         index = ctypes.c_ulong(0)
@@ -577,12 +522,6 @@ class FFI:
         self.GetDoorControl = ffi('GetDoorControl', errcheck)
         self.SetDoorControl = ffi('SetDoorControl', errcheck)
         self.OpenDoor = ffi('OpenDoor', errcheck)
-        self.GetCards = ffi('GetCards', errcheck)
-        self.GetCard = ffi('GetCard', errcheck)
-        self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
-        self.PutCard = ffi('PutCard', errcheck)
-        self.DeleteCard = ffi('DeleteCard', errcheck)
-        self.DeleteCards = ffi('DeleteCards', errcheck)
         self.GetEventIndex = ffi('GetEventIndex', errcheck)
         self.SetEventIndex = ffi('SetEventIndex', errcheck)
         self.GetEvent = ffi('GetEvent', errcheck)
@@ -620,12 +559,6 @@ def libfunctions():
         'GetDoorControl':      (lib.GetDoorControl,      [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]),
         'SetDoorControl':      (lib.SetDoorControl,      [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]),
         'OpenDoor':            (lib.OpenDoor,            [POINTER(GoUHPPOTE), c_ulong, c_ubyte]),
-        'GetCards':            (lib.GetCards,            [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]),
-        'GetCard':             (lib.GetCard,             [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
-        'GetCardByIndex':      (lib.GetCardByIndex,      [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
-        'PutCard':             (lib.PutCard,             [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte)]),
-        'DeleteCard':          (lib.DeleteCard,          [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
-        'DeleteCards':         (lib.DeleteCards,         [POINTER(GoUHPPOTE), c_ulong]),
         'GetEventIndex':       (lib.GetEventIndex,       [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]),
         'SetEventIndex':       (lib.SetEventIndex,       [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
         'GetEvent':            (lib.GetEvent,            [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]),
@@ -716,15 +649,6 @@ class GoDoorControl(Structure):
     _fields_ = [
         ('control', c_ubyte),
         ('delay', c_ubyte),
-    ]
-
-
-class GoCard(Structure):
-    _fields_ = [
-        ('cardNumber', c_uint32),
-        ('start', c_char_p),
-        ('end', c_char_p),
-        ('doors', POINTER(c_ubyte)),  # uint8_t[4]
     ]
 
 
