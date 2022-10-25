@@ -1,7 +1,7 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
 CMD=python examples.py 
-SRC=go/devices.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
+SRC=go/devices.go go/events.go go/time_profiles.go go/tasks.go go/main_linux_arm.go
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -15,14 +15,13 @@ else
 endif
 
 format:
-	yapf -ri .
-	yapf -ri ../../bindings/python
+#	yapf -ri .
+#	yapf -ri ../../bindings/python
 
 build: format
 
 debug: build
-#	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678
-	cd ../.. && go fmt ./go/... && go build -trimpath -buildmode=c-shared -o ./lib/libuhppoted.dylib $(SRC)
+	cd ../.. && go fmt ./go/... && go build -trimpath -buildmode=c-shared -o ./lib/libuhppoted.so $(SRC)
 	$(GO) && $(DLL) && $(CMD) get-device
 
 usage: build

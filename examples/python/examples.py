@@ -177,8 +177,8 @@ def main():
         timeout = 2500
         debug = True
         controllers = [
-            uhppoted.Controller(405419896, '192.168.1.100'),
-            uhppoted.Controller(303986753, '192.168.1.100'),
+        #    uhppoted.Controller(405419896, '192.168.1.100'),
+         #   uhppoted.Controller(303986753, '192.168.1.100'),
         ]
 
         u = uhppoted.Uhppote(
@@ -239,15 +239,15 @@ def get_device(u, args):
 
     info = u.get_device(device_id)
 
-    display('get-device', [
-        ('ID', device_id),
-        ('IP address', info.address),
-        ('subnet mask', info.subnet),
-        ('gateway address', info.gateway),
-        ('MAC', info.MAC),
-        ('version', info.version),
-        ('released', info.date),
-    ])
+#    display('get-device', [
+#        ('ID', device_id),
+#        ('IP address', info.address),
+#        ('subnet mask', info.subnet),
+#        ('gateway address', info.gateway),
+#        ('MAC', info.MAC),
+#        ('version', info.version),
+#        ('released', info.date),
+#    ])
 
 
 def set_address(u, args):

@@ -1,4 +1,4 @@
-//go:build !(linux && arm)
+//go:build linux && arm
 
 package main
 
@@ -145,34 +145,35 @@ func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32) *C
 	fmt.Printf("GOOS:     %+v\n", runtime.GOOS)
 	fmt.Printf("GOARCH:   %+v\n", runtime.GOARCH)
 	fmt.Printf("compiler: %+v\n", runtime.Compiler)
-	fmt.Printf("file:     %+v\n", "main.go")
-	fmt.Println()
-
-	fmt.Printf("UHPPOTE: %+v\n", *u)
-	fmt.Printf("         bind: %v\n", C.GoString(u.bind))
-	fmt.Println()
-	fmt.Printf("         bind:      0x%x\n", u.bind)
-	fmt.Printf("         broadcast: 0x%x\n", u.broadcast)
-	fmt.Printf("         listen:    0x%x\n", u.listen)
-	fmt.Printf("         timeout:   0x%x  %v\n", u.timeout, u.timeout)
-	fmt.Printf("         devices:   0x%x\n", u.devices)
-	fmt.Printf("         debug:     %v\n", u.debug)
+	fmt.Printf("file:     %+v\n", "main_linux_arm.go")
 	fmt.Println()
 
 	p := unsafe.Pointer(u)
-	bytes := make([]byte, 48)
-	for i := 0; i < 48; i++ {
+
+	fmt.Printf("UHPPOTE: %+v\n", *u)
+	fmt.Println()
+	fmt.Printf("         bind:      0x%08x  %v\n", u.bind, C.GoString(u.bind))
+	fmt.Printf("         broadcast: 0x%08x  %v\n", u.broadcast, C.GoString(u.broadcast))
+	fmt.Printf("         listen:    0x%08x  %v\n", u.listen, C.GoString(u.listen))
+	fmt.Printf("         timeout:   0x%08x  %v\n", u.timeout, u.timeout)
+	fmt.Printf("         devices:   0x%08x  %v\n", u.devices, u.devices)
+	fmt.Printf("         debug:       %-8v  %v\n", "", u.debug)
+	fmt.Println()
+
+	bytes := make([]byte, 28)
+	for i := 0; i < 28; i++ {
 		bytes[i] = *(*byte)(unsafe.Add(p, i))
 	}
 
 	dump(bytes)
 
-	bindPtr := binary.LittleEndian.Uint64(bytes[0:8])
-	broadcastPtr := binary.LittleEndian.Uint64(bytes[8:16])
-	listenPtr := binary.LittleEndian.Uint64(bytes[16:24])
-	timeout := binary.LittleEndian.Uint64(bytes[24:32])
-	devicesPtr := binary.LittleEndian.Uint64(bytes[32:40])
-	debug := binary.LittleEndian.Uint64(bytes[40:48])
+	bindPtr := binary.LittleEndian.Uint32(bytes[0:4])
+	broadcastPtr := binary.LittleEndian.Uint32(bytes[4:8])
+	listenPtr := binary.LittleEndian.Uint32(bytes[8:12])
+	timeout := binary.LittleEndian.Uint32(bytes[12:16])
+	devicesPtr := binary.LittleEndian.Uint32(bytes[16:20])
+	debug := binary.LittleEndian.Uint32(bytes[20:24])
+
 	fmt.Printf(">        bind:      0x%x\n", bindPtr)
 	fmt.Printf(">        broadcast: 0x%x\n", broadcastPtr)
 	fmt.Printf(">        listen:    0x%x\n", listenPtr)
