@@ -175,10 +175,10 @@ def main():
         broadcast = '255.255.255.255'
         listen = '0.0.0.0:60001'
         timeout = 2500
-        debug = True
+        debug = False
         controllers = [
-        #    uhppoted.Controller(405419896, '192.168.1.100'),
-         #   uhppoted.Controller(303986753, '192.168.1.100'),
+           uhppoted.Controller(405419896, '192.168.1.100'),
+           uhppoted.Controller(303986753, '192.168.1.100'),
         ]
 
         u = uhppoted.Uhppote(

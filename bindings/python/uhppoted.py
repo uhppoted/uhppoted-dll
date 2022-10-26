@@ -592,6 +592,7 @@ class GoUHPPOTE(Structure):
         self.broadcast = c_char_p(bytes(broadcast, 'utf-8'))
         self.listen = c_char_p(bytes(listen, 'utf-8'))
         self.timeout = timeout
+        self.ndevices = 0x123456
         self.devices = None
         self.debug = c_bool(debug)
 
@@ -603,7 +604,6 @@ class GoUHPPOTE(Structure):
                 list.devices[ix] = GoController(c.id, c_char_p(bytes(c.address, 'utf-8')))
 
             self.devices = pointer(list)
-
 
 class GoDevice(Structure):
     _fields_ = [
