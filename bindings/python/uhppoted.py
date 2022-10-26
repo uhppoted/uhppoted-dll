@@ -650,8 +650,7 @@ class GoControllers(Structure):
 
 class GoUHPPOTE(Structure):
     _fields_ = [('bind', c_char_p), ('broadcast', c_char_p), ('listen', c_char_p),
-                ('timeout', c_int), ('ndevices', c_int), ('devices', POINTER(GoControllers)),
-                ('debug', c_bool)]
+                ('timeout', c_int), ('devices', POINTER(GoControllers)), ('debug', c_bool)]
 
     def __init__(self, bind, broadcast, listen, timeout, controllers, debug):
         super(GoUHPPOTE, self).__init__()

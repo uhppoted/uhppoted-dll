@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## [Unreleased]
+
+1. Removed unused `ndevices` field from Python bindings (ref. https://github.com/uhppoted/uhppoted-dll/issues/2)
+
+
 ## [0.8.2](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.2) - 2022-10-14
 
 ### Changed
