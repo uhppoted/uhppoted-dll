@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
 GO=GODEBUG=cgocheck=2
-SRC=tests.c device.c cards.c events.c time_profiles.c tasks.c lookup.c
+SRC=tests.c device.c cards.c events.c time_profiles.c tasks.c lookup.c structs.c
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -25,6 +25,11 @@ format: $(SRC)
 
 build: format
 	gcc -Wall -o tests $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
+
+debug: format
+	cd ../.. && make build
+	gcc -Wall -o tests $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
+	$(CMD) structs	
 
 usage: build
 	$(CMD) help
@@ -115,6 +120,9 @@ clear-tasklist: build
 
 lookup: build
 	$(CMD) lookup
+
+structs: build
+	$(CMD) structs
 
 all: build
 	$(CMD) all

@@ -2,6 +2,14 @@
 
 ### IN PROGRESS
 
+- [ ] https://github.com/uhppoted/uhppoted-dll/issues/2
+      - [ ] UHPPOTE struct test
+      - [ ] C
+      - [ ] C++
+      - [ ] C#
+      - [ ] Python
+      - [ ] CCL
+
 - [ ] https://github.com/uhppoted/uhppoted-dll/issues/1
       - [x] tests for lookup(...)
       - [ ] codegen lookup(..)

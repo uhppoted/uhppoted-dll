@@ -54,6 +54,7 @@ const test tests[] = {
     {.name = "refresh-tasklist", .fn = refreshTaskList},
     {.name = "clear-tasklist", .fn = clearTaskList},
     {.name = "lookup", .fn = internationalisation},
+    {.name = "structs", .fn = structs},
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

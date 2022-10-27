@@ -68,6 +68,7 @@ extern bool refreshTaskList();
 extern bool clearTaskList();
 
 extern bool internationalisation();
+extern bool structs();
 
 extern const uint32_t DEVICE_ID;
 extern const uint32_t CARD_NUMBER;
