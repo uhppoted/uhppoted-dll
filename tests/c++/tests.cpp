@@ -44,7 +44,7 @@ vector<test> tests = {
     {"refresh-tasklist", refreshTaskList},
     {"clear-tasklist", clearTaskList},
     {"lookup", internationalisation},
-    // {"structs", structs},
+    {"structs", structs},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
@@ -54,8 +54,8 @@ extern const uint32_t EVENT_INDEX = 51;
 extern const uint8_t DOOR = 4;
 extern const uint8_t PROFILE_ID = 49;
 
-const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
-const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
+extern const controller ALPHA = {.id = 405419896, .address = "192.168.1.100"};
+extern const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
 void usage();
 bool passed(const string &);

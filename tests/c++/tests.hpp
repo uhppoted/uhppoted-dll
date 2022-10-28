@@ -15,6 +15,8 @@ extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;
 extern const uint8_t DOOR;
 extern const uint8_t PROFILE_ID;
+extern const controller ALPHA;
+extern const controller BETA;
 
 extern bool getDevices(uhppoted &);
 extern bool getDevice(uhppoted &);
