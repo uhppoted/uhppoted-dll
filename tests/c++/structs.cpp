@@ -7,7 +7,7 @@
 using namespace std;
 
 bool structs(uhppoted &u) {
-    vector<controller> controllers = {ALPHA, BETA};
+    vector<controller> controllers;
 
     uhppoted utrue("0.0.0.0", "255.255.255.255:60000", "0.0.0.0:60001", 2500, controllers, true);
     uhppoted ufalse("0.0.0.0", "255.255.255.255:60000", "0.0.0.0:60001", 2500, controllers, false);

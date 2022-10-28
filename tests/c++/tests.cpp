@@ -44,7 +44,7 @@ vector<test> tests = {
     {"refresh-tasklist", refreshTaskList},
     {"clear-tasklist", clearTaskList},
     {"lookup", internationalisation},
-    {"structs", structs},
+    // {"structs", structs},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
