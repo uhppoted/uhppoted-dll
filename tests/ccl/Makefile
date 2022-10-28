@@ -20,6 +20,12 @@ endif
 build: 
 	rlwrap ccl64 --eval '$(DLL)' --load main.lisp --eval '(make-app)' 
 
+debug: 
+	# GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp 
+	cd ../.. && make build
+	rlwrap ccl64 --eval '$(DLL)' --load main.lisp --eval '(make-app)' 
+	$(CMD) structs
+
 usage: build
 	$(CMD) help
 
@@ -110,12 +116,12 @@ clear-tasklist: build
 lookup: build
 	$(CMD) lookup
 
+structs: build
+	$(CMD) structs
+
 all: build
 	$(CMD) all
 
 tests: build
 	$(CMD)
-
-debug: 
-	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp 
 

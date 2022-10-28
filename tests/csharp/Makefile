@@ -26,6 +26,11 @@ format-dotnet:
 build: format
 	csc $(BINDINGS)/uhppoted.cs $(BINDINGS)/lookup.cs tests.cs
 
+debug: format
+	cd ../.. && make build
+	csc $(BINDINGS)/uhppoted.cs $(BINDINGS)/lookup.cs tests.cs
+	$(CMD) structs
+
 usage: build
 	$(CMD) help
 
@@ -115,6 +120,9 @@ clear-tasklist: build
 
 lookup: build
 	$(CMD) lookup
+
+structs: build
+	$(CMD) structs
 
 all: build
 	$(CMD) all

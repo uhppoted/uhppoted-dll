@@ -349,6 +349,26 @@
                 (make-result :field "remote-open-door-usb-reader"     :expected "remote open door (USB reader)"     :value remote-open-door-usb-reader)))))
 
 
+(defun structs () "" 
+  (handler-bind
+    ((uhppoted-error #'(lambda (c) (error 'failed :message  (uhppoted:message c)))))
+    (progn
+      (uhppoted #'(lambda (u) (uhppoted-get-device u 4294967295)) 
+                :bind-addr      "0.0.0.0"
+                :broadcast-addr "255.255.255.255"
+                :listen-addr    "0.0.0.0:60001"
+                :timeout        2500
+                :debug          t)
+
+      (uhppoted #'(lambda (u) (uhppoted-get-device u 4294967294)) 
+                :bind-addr      "0.0.0.0"
+                :broadcast-addr "255.255.255.255"
+                :listen-addr    "0.0.0.0:60001"
+                :timeout        2500
+                :debug          nil)
+      (passed "structs"))))
+
+
 (defun evaluate (tag results)
   (let ((ok t))
     (loop for v in results

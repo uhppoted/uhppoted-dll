@@ -32,6 +32,7 @@
            refresh-tasklist
            clear-tasklist
            internationalisation
+           structs
            failed
            message))
 

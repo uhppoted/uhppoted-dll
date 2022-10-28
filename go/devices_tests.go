@@ -4,7 +4,6 @@ package main
 
 import (
 	"C"
-	"encoding/json"
 	"fmt"
 	"net"
 	"reflect"
@@ -45,8 +44,24 @@ func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) er
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
 
-	if deviceID != 405419896 {
-		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	// Ref. https://github.com/uhppoted/uhppoted-dll/issues/2
+	switch deviceID {
+	case 0xffffffff: // TEST HACK: returns an error if uu.debug is false
+		v := unpack(uu, "debug")
+		if debug, ok := v.(bool); !ok || !debug {
+			return fmt.Errorf("invalid 'debug' value")
+		}
+
+	case 0xfffffffe: // TEST HACK: returns an error if uu.debug is true
+		v := unpack(uu, "debug")
+		if debug, ok := v.(bool); !ok || debug {
+			return fmt.Errorf("invalid 'debug' value")
+		}
+
+	default:
+		if deviceID != 405419896 {
+			return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+		}
 	}
 
 	device.ID = C.uint(deviceID)
@@ -140,12 +155,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 	if datetime == nil {
 		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
-	}
-
-	// TEST HACK: returns a string representation of UHPPOTE
-	if deviceID == 0xffffffff {
-		*datetime = C.CString(unpack(uu))
-		return nil
 	}
 
 	if deviceID != 405419896 {
@@ -261,7 +270,7 @@ func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
 	return nil
 }
 
-func unpack(u uhppote.IUHPPOTE) string {
+func unpack(u uhppote.IUHPPOTE, field string) any {
 	type U struct {
 		BindAddr      string         `json:"bind"`
 		BroadcastAddr string         `json:"broadcast"`
@@ -271,38 +280,40 @@ func unpack(u uhppote.IUHPPOTE) string {
 	}
 
 	typeof := fmt.Sprintf("%v", reflect.TypeOf(u))
+
 	if typeof == "*uhppote.uhppote" {
 		v := reflect.Indirect(reflect.ValueOf(u))
-		bindAddr := reflect.Indirect(v.FieldByName("bindAddr")).FieldByName("IP").Bytes()
-		bindPort := reflect.Indirect(v.FieldByName("bindAddr")).FieldByName("Port").Int()
-		broadcastAddr := reflect.Indirect(v.FieldByName("broadcastAddr")).FieldByName("IP").Bytes()
-		broadcastPort := reflect.Indirect(v.FieldByName("broadcastAddr")).FieldByName("Port").Int()
-		listenAddr := reflect.Indirect(v.FieldByName("listenAddr")).FieldByName("IP").Bytes()
-		listenPort := reflect.Indirect(v.FieldByName("listenAddr")).FieldByName("Port").Int()
+		// bindAddr := reflect.Indirect(v.FieldByName("bindAddr")).FieldByName("IP").Bytes()
+		// bindPort := reflect.Indirect(v.FieldByName("bindAddr")).FieldByName("Port").Int()
+		// broadcastAddr := reflect.Indirect(v.FieldByName("broadcastAddr")).FieldByName("IP").Bytes()
+		// broadcastPort := reflect.Indirect(v.FieldByName("broadcastAddr")).FieldByName("Port").Int()
+		// listenAddr := reflect.Indirect(v.FieldByName("listenAddr")).FieldByName("IP").Bytes()
+		// listenPort := reflect.Indirect(v.FieldByName("listenAddr")).FieldByName("Port").Int()
 		debug := v.FieldByName("debug").Bool()
 		// devices := v.FieldByName("devices")
 
-		bind := []any{bindAddr[0], bindAddr[1], bindAddr[2], bindAddr[3], bindPort}
-		broadcast := []any{broadcastAddr[0], broadcastAddr[1], broadcastAddr[2], broadcastAddr[3], broadcastPort}
-		listen := []any{listenAddr[0], listenAddr[1], listenAddr[2], listenAddr[3], listenPort}
-		controllers := map[string]any{}
+		// bind := []any{bindAddr[0], bindAddr[1], bindAddr[2], bindAddr[3], bindPort}
+		// broadcast := []any{broadcastAddr[0], broadcastAddr[1], broadcastAddr[2], broadcastAddr[3], broadcastPort}
+		// listen := []any{listenAddr[0], listenAddr[1], listenAddr[2], listenAddr[3], listenPort}
+		// controllers := map[string]any{}
 
-		uu := struct {
-			U `json:"UHPPOTE"`
-		}{
-			U{
-				BindAddr:      fmt.Sprintf("%v.%v.%v.%v:%v", bind...),
-				BroadcastAddr: fmt.Sprintf("%v.%v.%v.%v:%v", broadcast...),
-				ListenAddr:    fmt.Sprintf("%v.%v.%v.%v:%v", listen...),
-				Debug:         debug,
-				Controllers:   controllers,
-			},
+		// uu := struct {
+		// 	U `json:"UHPPOTE"`
+		// }{
+		// 	U{
+		// 		BindAddr:      fmt.Sprintf("%v.%v.%v.%v:%v", bind...),
+		// 		BroadcastAddr: fmt.Sprintf("%v.%v.%v.%v:%v", broadcast...),
+		// 		ListenAddr:    fmt.Sprintf("%v.%v.%v.%v:%v", listen...),
+		// 		Debug:         debug,
+		// 		Controllers:   controllers,
+		// 	},
+		// }
+
+		switch field {
+		case "debug":
+			return debug
 		}
-
-		bytes, _ := json.Marshal(uu)
-
-		return string(bytes)
 	}
 
-	return "???"
+	return nil
 }

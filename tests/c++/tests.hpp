@@ -49,6 +49,7 @@ extern bool refreshTaskList(uhppoted &);
 extern bool clearTaskList(uhppoted &);
 
 extern bool internationalisation(uhppoted &);
+extern bool structs(uhppoted &);
 
 extern bool evaluate(const std::string &, const std::vector<result> &);
 extern bool passed(const std::string &);

@@ -19,6 +19,10 @@ format:
 
 build: format
 
+debug: format
+	cd ../.. && make build
+	$(CMD) structs
+
 usage: build
 	$(CMD) help
 
@@ -108,6 +112,9 @@ clear-tasklist: build
 
 lookup: build
 	$(CMD) lookup
+
+structs: build
+	$(CMD) structs
 
 all: build
 	$(CMD) all

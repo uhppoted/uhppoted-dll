@@ -6,30 +6,37 @@
 #include "uhppoted.h"
 
 bool structs() {
-    // setup("0.0.0.0:0", "255.255.255.255", "0.0.0.0:60001", 2500, true, &alpha, &beta, NULL);
-
     const char *tag = "structs";
-    char *uhppote;
+    struct device d;
+    bool debug1 = true;
+    bool debug2 = true;
 
-    const uint32_t id = 0xffffffff;
+    setup("0.0.0.0:0", "255.255.255.255", "0.0.0.0:60001", 2500, true, NULL);
+    if (get_device(0xffffffff, &d) != 0) {
+        debug1 = false;
+    }
 
-    if (get_time(id, &uhppote) != 0) {
-        printf("ERROR %s\n", errmsg());
-        return false;
+    setup("0.0.0.0:0", "255.255.255.255", "0.0.0.0:60001", 2500, false, NULL);
+    if (get_device(0xfffffffe, &d) != 0) {
+        debug2 = false;
     }
 
     const result resultset[] = {
         {
-            .field = "UHPPOTE",
-            .type = "string",
-            .value.string.expected = "{\"UHPPOTE\":{\"bind\":\"0.0.0.0:0\",\"broadcast\":\"255.255.255.255:60000\",\"listen\":\"0.0.0.0:60001\",\"debug\":true,\"controllers\":{}}}",
-            .value.string.value = uhppote,
+            .field = "UHPPOTE.debug",
+            .type = "boolean",
+            .value.boolean.expected = true,
+            .value.boolean.value = debug1,
+        },
+        {
+            .field = "UHPPOTE.debug",
+            .type = "boolean",
+            .value.boolean.expected = true,
+            .value.boolean.value = debug2,
         },
     };
 
     bool ok = evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
-
-    free(uhppote);
 
     return ok;
 }

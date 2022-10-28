@@ -65,6 +65,7 @@ def tests():
         'refresh-tasklist': refresh_tasklist,
         'clear-tasklist': clear_tasklist,
         'lookup': internationalisation,
+        'structs': structs,
     }
 
 
@@ -459,6 +460,22 @@ def internationalisation(u):
         ('remote_open_door', 'remote open door', remote_open_door),
         ('remote_open_door_usb_reader', 'remote open door (USB reader)', remote_open_door_usb_reader),
     ])
+
+
+def structs(u):
+    bind = '0.0.0.0'
+    broadcast = '255.255.255.255'
+    listen = '0.0.0.0:60001'
+    timeout = 2500
+    controllers = []
+
+    u1 = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, True))
+    u2 = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, False))
+
+    u1.get_device(0xffffffff)
+    u2.get_device(0xfffffffe)
+
+    return passed('structs')
 
 
 def evaluate(tag, resultset):

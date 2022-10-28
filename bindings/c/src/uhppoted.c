@@ -76,10 +76,9 @@ const char *errmsg() { return err; }
  * - controllers: (none)
  * - debug:       false
  *
- * NOTES: 1.
- * https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
- *        2.
- * https://www.linkedin.com/pulse/modern-c-variadic-functions-how-shoot-yourself-foot-avoid-zinin
+ * NOTES: 
+ * 1. https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
+ * 2. https://www.linkedin.com/pulse/modern-c-variadic-functions-how-shoot-yourself-foot-avoid-zinin
  */
 void setup(const char *bind, const char *broadcast, const char *listen,
            int timeout, int debug, ...) {

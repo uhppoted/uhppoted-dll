@@ -34,6 +34,7 @@
         '("refresh-tasklist"      tests:refresh-tasklist)
         '("clear-tasklist"        tests:clear-tasklist)
         '("lookup"                tests:internationalisation)
+        '("structs"               tests:structs)
 ))
 
 

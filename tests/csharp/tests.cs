@@ -24,8 +24,10 @@ public class Tests {
     const byte DOOR = 4;
     const byte PROFILE_ID = 49;
 
-    static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
-                                        new Controller(303986753, "192.168.1.100") };
+    static Controller[] controllers = {
+        new Controller(405419896, "192.168.1.100"),
+        new Controller(303986753, "192.168.1.100")
+    };
 
     static test[] tests = {
         new test("get-devices", GetDevices),
@@ -56,6 +58,7 @@ public class Tests {
         new test("refresh-tasklist", RefreshTaskList),
         new test("clear-tasklist", ClearTaskList),
         new test("lookup", Internationalisation),
+        new test("structs", Structs),
     };
 
     public static void Main(string[] args) {
@@ -533,6 +536,16 @@ public class Tests {
         };
 
         return evaluate("lookup", resultset);
+    }
+
+    static bool Structs(Uhppoted u) {
+        Uhppoted u1 = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, true);
+        Uhppoted u2 = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, false);
+
+        u1.GetDevice(0xffffffff);
+        u2.GetDevice(0xfffffffe);
+
+        return passed("structs");
     }
 
     static bool evaluate(string tag, result[] resultset) {
