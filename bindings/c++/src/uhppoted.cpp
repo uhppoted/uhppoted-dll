@@ -84,13 +84,13 @@ uhppoted::uhppoted() { u = NULL; }
  * - debug:       false
  *
  */
-uhppoted::uhppoted(const string bind, const string broadcast,
-                   const string listen, int timeout,
-                   const vector<controller> controllers, bool debug) : uhppoted() {
+uhppoted::uhppoted(const string &_bind, const string &_broadcast,
+                   const string &_listen, int timeout,
+                   const vector<controller> controllers, bool debug) : bind(_bind), broadcast(_broadcast), listen(_listen) {
     if ((u = new UHPPOTE) != NULL) {
-        u->bind = bind.c_str();
-        u->broadcast = broadcast.c_str();
-        u->listen = listen.c_str();
+        u->bind = this->bind.c_str();
+        u->broadcast = this->broadcast.c_str();
+        u->listen = this->listen.c_str();
         u->timeout = timeout;
         u->devices = NULL;
         u->debug = debug;
