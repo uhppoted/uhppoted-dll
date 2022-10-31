@@ -68,7 +68,7 @@ build-all: build
 	make -C ./examples/ccl    -f Makefile build
 
 build-debug: build
-	make -C ./examples/csharp -f Makefile build
+	make -C ./tests/c++       -f Makefile tests
 
 release: update-release build-all
 	# No binary release
