@@ -539,8 +539,9 @@ public class Tests {
     }
 
     static bool Structs(Uhppoted u) {
-        Uhppoted u1 = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, true);
-        Uhppoted u2 = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, false);
+        Controller[] controllers = {};
+        Uhppoted u1 = new Uhppoted("0.0.0.1", "255.255.255.254", "0.0.0.0:60002", 2501, controllers, true);
+        Uhppoted u2 = new Uhppoted("0.0.0.2", "255.255.255.253", "0.0.0.0:60003", 2502, controllers, false);
 
         u1.GetDevice(0xffffffff);
         u2.GetDevice(0xfffffffe);

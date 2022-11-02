@@ -40,7 +40,7 @@ public class Uhppoted : IDisposable {
         }
 
         udevices devices = new udevices();
-        devices.N = 2;
+        devices.N = N;
         devices.devices = p;
 
         IntPtr r = Marshal.AllocHGlobal(Marshal.SizeOf(devices));

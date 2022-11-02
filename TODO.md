@@ -3,23 +3,16 @@
 ### IN PROGRESS
 
 - [ ] https://github.com/uhppoted/uhppoted-dll/issues/2
-      - [ ] UHPPOTE struct test
+      - [x] UHPPOTE struct test
       - [x] C
-      - [ ] C++
+      - [x] C++
       - [x] C#
       - [x] Python
       - [x] CCL
+      - [x] C++ _structs_ test fails on github
+      - [ ] RaspberryPi 4
 
-- [ ] C++ _structs_ test fails on github
-```
-g++ -std=c++17 -Wall  -o tests tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp lookup.cpp structs.cpp ../../bindings/c++/src/uhppoted.cpp -I../../bindings/c++/include -I../../lib/tests -L../../lib/tests -luhppoted
-GODEBUG=cgocheck=2 && export LD_LIBRARY_PATH=../../lib/tests && ./tests
-get-devices           ok
-...
-get-card-by-index     ok
-
- *** ERROR ���U is not a valid UDP address:port
- ```
+- [x] https://github.com/uhppoted/uhppoted-dll/issues/4
 
 - [ ] https://github.com/uhppoted/uhppoted-dll/issues/1
       - [x] tests for lookup(...)
