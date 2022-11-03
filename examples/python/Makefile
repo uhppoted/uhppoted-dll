@@ -1,6 +1,6 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
-CMD=python examples.py 
+CMD=python3 examples.py 
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
