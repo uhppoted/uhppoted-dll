@@ -23,6 +23,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.8.3    | Bug fixes for Python, C++ and C# bindings                                                 |
 | v0.8.2    | Fixed runtime crash (concurrent writes) and added _swipe open_ and _swipe close_ events   |
 | v0.8.1    | Maintenance release to update dependencies on `uhppote-core` and `uhppoted-lib`           |
 | v0.8.0    | Maintenance release to update dependencies on `uhppote-core` and `uhppoted-lib`           |

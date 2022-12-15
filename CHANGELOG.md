@@ -1,7 +1,8 @@
 # CHANGELOG
 
-## [Unreleased]
+## [0.8.3](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.3) - 2022-12-16
 
+### Changed
 1. Removed unused `ndevices` field from Python bindings (ref. https://github.com/uhppoted/uhppoted-dll/issues/2)
 2. Fixed address copy bug in C++ bindings.
 3. Fixed hard-coded controller list length in C# bindings (ref. https://github.com/uhppoted/uhppoted-dll/issues/4)

@@ -2,7 +2,7 @@
 
 ### IN PROGRESS
 
-- [ ] https://github.com/uhppoted/uhppoted-dll/issues/2
+- [x] https://github.com/uhppoted/uhppoted-dll/issues/2
       - [x] UHPPOTE struct test
       - [x] C
       - [x] C++
@@ -10,7 +10,7 @@
       - [x] Python
       - [x] CCL
       - [x] C++ _structs_ test fails on github
-      - [ ] RaspberryPi 4
+      - [x] RaspberryPi 4
 
 - [x] https://github.com/uhppoted/uhppoted-dll/issues/4
 
@@ -19,6 +19,9 @@
       - [ ] codegen lookup(..)
 
 ## TODO
+
+- [ ] Link to musl for Linux
+      - https://honnef.co/posts/2015/06/statically_compiled_go_programs__always__even_with_cgo__using_musl
 
 - [ ] CCL
       - [ ] Rework timeout logic for get-device etc
