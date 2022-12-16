@@ -73,6 +73,10 @@ build-debug: build
 release: update-release build-all
 	# No binary release
 
+publish: release
+	echo "Releasing version $(VERSION)"
+	gh release create "$(VERSION)" --draft --prerelease --title "$(VERSION)-beta" --notes-file release-notes.md
+
 c: 
 	make -C ./examples/c -f Makefile build
 	make -C ./tests/c    -f Makefile build
