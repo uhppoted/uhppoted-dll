@@ -2,23 +2,14 @@
 
 ### IN PROGRESS
 
-- [x] https://github.com/uhppoted/uhppoted-dll/issues/2
-      - [x] UHPPOTE struct test
-      - [x] C
-      - [x] C++
-      - [x] C#
-      - [x] Python
-      - [x] CCL
-      - [x] C++ _structs_ test fails on github
-      - [x] RaspberryPi 4
+## TODO
 
-- [x] https://github.com/uhppoted/uhppoted-dll/issues/4
+- [ ] Explore building DLLs on github
+      - MacOS actions
+      - https://github.blog/2022-11-02-github-partners-with-arm-to-revolutionize-internet-of-things-software-development-with-github-actions/
 
 - [ ] https://github.com/uhppoted/uhppoted-dll/issues/1
-      - [x] tests for lookup(...)
       - [ ] codegen lookup(..)
-
-## TODO
 
 - [ ] Link to musl for Linux
       - https://honnef.co/posts/2015/06/statically_compiled_go_programs__always__even_with_cgo__using_musl

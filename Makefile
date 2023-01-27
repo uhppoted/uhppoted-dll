@@ -70,6 +70,9 @@ build-all: build
 build-debug: build
 	make -C ./tests/c++       -f Makefile tests
 
+godoc:
+	godoc -http=:80	-index_interval=60s
+
 release: update-release build-all
 	# No binary release
 
