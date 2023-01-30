@@ -31,6 +31,7 @@
            add-task
            refresh-tasklist
            clear-tasklist
+           set-pc-control
            internationalisation
            structs
            failed

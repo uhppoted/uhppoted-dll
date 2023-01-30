@@ -256,6 +256,12 @@
   (exec #'(lambda (u) (uhppoted-clear-tasklist u TEST-DEVICE-ID)))
   (evaluate "clear-tasklist" '()))
 
+
+(defun set-pc-control () "" 
+  (exec #'(lambda (u) (uhppoted-set-pc-control u TEST-DEVICE-ID t)))
+  (evaluate "set-pc-control" '()))
+
+
 (defun internationalisation () "" 
   (let ((mode-normally-open              (uhppoted-lookup lookup-mode         normally-open                                ""))
         (mode-normally-closed            (uhppoted-lookup lookup-mode         normally-closed                              ""))

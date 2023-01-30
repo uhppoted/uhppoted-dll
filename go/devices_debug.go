@@ -255,3 +255,14 @@ func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
 
 	return nil
 }
+
+func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
+	if DEBUG {
+		fmt.Printf(">>> set-pc-control\n")
+		fmt.Printf("    ID:      %v\n", deviceID)
+		fmt.Printf("    enabled: %v\n", enabled)
+		fmt.Println()
+	}
+
+	return nil
+}

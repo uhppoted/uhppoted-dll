@@ -207,3 +207,18 @@ void openDoor(uhppoted &u, int argc, char **argv) {
 
     display("open-door", fields);
 }
+
+void setPCControl(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    bool enabled = true;
+
+    u.set_pc_control(deviceID, enabled);
+
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("enabled", enabled),
+    };
+
+    display("set_pc_control", fields);
+}

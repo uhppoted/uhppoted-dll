@@ -270,6 +270,18 @@ func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
 	return nil
 }
 
+func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if !enabled {
+		return fmt.Errorf("Incorrect enabled value (%v)", enabled)
+	}
+
+	return nil
+}
+
 func unpack(u uhppote.IUHPPOTE, field string) any {
 	type U struct {
 		BindAddr      string         `json:"bind"`

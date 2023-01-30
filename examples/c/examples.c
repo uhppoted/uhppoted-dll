@@ -162,6 +162,11 @@ const command commands[] = {
         .help = "Clears a controller task list.",
         .fn = clearTaskList,
     },
+    {
+        .cmd = "set-pc-control",
+        .help = "Enables/disables remote access control.",
+        .fn = setPCControl,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

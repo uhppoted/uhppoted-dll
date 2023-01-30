@@ -209,6 +209,7 @@ extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);
 extern char* AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task);
 extern char* RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID);
 extern char* ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID);
+extern char* SetPCControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled);
 
 #ifdef __cplusplus
 }

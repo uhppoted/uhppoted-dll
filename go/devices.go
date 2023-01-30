@@ -258,3 +258,16 @@ func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
 
 	return nil
 }
+
+func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
+	ok, err := uu.SetPCControl(deviceID, enabled)
+	if err != nil {
+		return err
+	} else if !ok && enabled {
+		return fmt.Errorf("%v: failed to enable remote access control", deviceID)
+	} else if !ok && !enabled {
+		return fmt.Errorf("%v: failed to disable remote access control", deviceID)
+	}
+
+	return nil
+}

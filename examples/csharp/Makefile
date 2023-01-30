@@ -119,5 +119,8 @@ refresh-tasklist: build
 clear-tasklist: build
 	$(CMD) clear-tasklist $(DEVICEID)
 
+set-pc-control: build
+	$(CMD) set-pc-control $(DEVICEID)
+
 debug: build
 	$(GO) && export $(DLL)/debug && mono ./examples.exe get-status --controller 12345678

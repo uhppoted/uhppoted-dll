@@ -167,6 +167,11 @@ const vector<command> commands = {
         .help = "Clear a controller task list.",
         .fn = clearTaskList,
     },
+    {
+        .cmd = "set-pc-control",
+        .help = "Enables/disables controller remote access control.",
+        .fn = setPCControl,
+    },
 };
 
 int main(int argc, char **argv) {

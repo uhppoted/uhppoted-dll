@@ -64,6 +64,7 @@ def tests():
         'add-task': add_task,
         'refresh-tasklist': refresh_tasklist,
         'clear-tasklist': clear_tasklist,
+        'set-pc-control': set_pc_control,
         'lookup': internationalisation,
         'structs': structs,
     }
@@ -361,6 +362,13 @@ def clear_tasklist(u):
     u.clear_tasklist(DEVICE_ID)
 
     return evaluate('clear-tasklist', [])
+
+
+def set_pc_control(u):
+    tag = 'set-pc-control'
+    u.set_pc_control(DEVICE_ID, True)
+
+    return evaluate(tag, [])
 
 
 def internationalisation(u):

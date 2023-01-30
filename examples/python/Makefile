@@ -109,6 +109,9 @@ refresh-tasklist: build
 clear-tasklist: build
 	$(GO) && $(DLL) && $(CMD) clear-tasklist
 
+set-pc-control: build
+	$(GO) && $(DLL) && $(CMD) set-pc-control
+
 debug: build
 	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678
 

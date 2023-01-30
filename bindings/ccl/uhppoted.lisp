@@ -677,6 +677,14 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
+(defun uhppoted-set-pc-control (uhppote device-id enabled) "Enables/disables controller remote access control"
+  (with-macptrs ((err (external-call "SetPCControl" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :unsigned-byte (if enabled 1 0)
+                                                    :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
+
 (defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"
   (cond ((string= category lookup-mode)         (uhppoted-lookup-mode         code locale))
         ((string= category lookup-direction)    (uhppoted-lookup-direction    code locale))

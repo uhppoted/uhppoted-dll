@@ -113,6 +113,9 @@ refresh-tasklist: build
 clear-tasklist: build
 	$(CMD) clear-tasklist
 
+set-pc-control: build
+	$(CMD) set-pc-control
+
 lookup: build
 	$(CMD) lookup
 

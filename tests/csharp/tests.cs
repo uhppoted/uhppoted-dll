@@ -57,6 +57,7 @@ public class Tests {
         new test("add-task", AddTask),
         new test("refresh-tasklist", RefreshTaskList),
         new test("clear-tasklist", ClearTaskList),
+        new test("set-pc-control", SetPCControl),
         new test("lookup", Internationalisation),
         new test("structs", Structs),
     };
@@ -437,6 +438,14 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("clear-tasklist", resultset);
+    }
+
+    static bool SetPCControl(Uhppoted u) {
+        u.SetPCControl(DEVICE_ID, true);
+
+        result[] resultset = {};
+
+        return evaluate("set-pc-control", resultset);
     }
 
     static bool Internationalisation(Uhppoted u) {

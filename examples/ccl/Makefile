@@ -113,6 +113,9 @@ refresh-tasklist: build
 clear-tasklist: build
 	$(CMD) clear-tasklist $(DEVICEID)
 
+set-pc-control: build
+	$(CMD) set-pc-control $(DEVICEID)
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp
 

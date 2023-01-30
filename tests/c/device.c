@@ -236,3 +236,16 @@ bool openDoor() {
 
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
+
+bool setPCControl() {
+    const char *tag = "set-pc-control";
+
+    if (set_pc_control(DEVICE_ID, true) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}

@@ -46,6 +46,7 @@ extern bool setListener();
 extern bool getDoorControl();
 extern bool setDoorControl();
 extern bool openDoor();
+extern bool setPCControl();
 
 extern bool getCards();
 extern bool getCard();

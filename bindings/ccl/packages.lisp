@@ -31,6 +31,7 @@
            uhppoted-add-task
            uhppoted-refresh-tasklist
            uhppoted-clear-tasklist
+           uhppoted-set-pc-control
            uhppoted-error
            with-warning
            message

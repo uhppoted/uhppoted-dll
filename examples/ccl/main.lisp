@@ -32,6 +32,7 @@
         '("add-task"              examples:add-task              "Adds a scheduled task to a controller.")
         '("refresh-tasklist"      examples:refresh-tasklist      "Refreshes a controller task list to activate added tasks.")
         '("clear-tasklist"        examples:clear-tasklist        "Clears a controller task list.")
+        '("set-pc-control"        examples:set-pc-control        "Enables/disables controller remote access control.")
 ))
 
 

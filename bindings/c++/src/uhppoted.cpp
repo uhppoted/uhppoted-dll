@@ -570,6 +570,13 @@ void uhppoted::clear_tasklist(uint32_t id) {
     }
 }
 
+void uhppoted::set_pc_control(uint32_t id, bool enabled) {
+    char *err = SetPCControl(u, id, enabled);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}
+
 const map<uint8_t, string> LookupMode = {
     {NORMALLY_OPEN, ModeNormallyOpen},
     {NORMALLY_CLOSED, ModeNormallyClosed},

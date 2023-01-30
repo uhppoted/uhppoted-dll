@@ -147,6 +147,10 @@ def commands():
             'help': "Clears a controller task list",
             'fn': clear_tasklist,
         },
+        'set-pc-control': {
+            'help': "Enables/disables controller remote access control",
+            'fn': set_pc_control,
+        },
     }
 
 
@@ -674,6 +678,18 @@ def clear_tasklist(u, args):
 
     display('clear-tasklist', [
         ('ID', device_id),
+    ])
+
+
+def set_pc_control(u, args):
+    device_id = args.controller
+    enabled = True
+
+    u.set_pc_control(device_id, enabled)
+
+    display('set-pc-controls', [
+        ('ID', device_id),
+        ('enabled', enabled),
     ])
 
 

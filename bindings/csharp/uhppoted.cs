@@ -440,6 +440,13 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void SetPCControl(uint deviceID, bool enabled) {
+        string err = SetPCControl(ref this.u, deviceID, enabled);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
     // Go FFI
 
     [DllImport("uhppoted.dll")]
@@ -522,6 +529,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("uhppoted.dll")]
     private static extern string ClearTaskList(ref UHPPOTE u, uint deviceID);
+
+    [DllImport("uhppoted.dll")]
+    private static extern string SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled);
 
     struct udevice {
         public uint ID;

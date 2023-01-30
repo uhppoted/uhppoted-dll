@@ -665,6 +665,16 @@ int clear_tasklist(uint32_t id) {
     return 0;
 }
 
+int set_pc_control(uint32_t id, bool enabled) {
+    char *err = SetPCControl(u, id, enabled);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
+
 const char *lookup(const char *type, uint8_t code, const char *locale) {
     if (strcmp(type, LOOKUP_MODE) == 0) {
         switch (code) {

@@ -118,6 +118,9 @@ refresh-tasklist: build
 clear-tasklist: build
 	$(CMD) clear-tasklist $(DEVICEID)
 
+set-pc-control: build
+	$(CMD) set-pc-control $(DEVICEID)
+
 debug: format
 	g++ -std=c++17 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
 	$(GO) && $(DLL)/debug && ./examples get-status --controller 12345678

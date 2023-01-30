@@ -1,6 +1,6 @@
 # TODO
 
-### IN PROGRESS
+- [x] `SetPCControl` (https://github.com/uhppoted/uhppote-core/issues/7)
 
 ## TODO
 

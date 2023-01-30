@@ -4,6 +4,7 @@
 
 ### Added
 1. Overview Go doc.
+2. `SetPCControl` command to enable or disable controller remote access control.
 
 
 ## [0.8.3](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.3) - 2022-12-16

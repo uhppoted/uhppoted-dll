@@ -266,6 +266,14 @@
       (display "clear-tasklist" device-id nil))))
 
 
+(defun set-pc-control (args) "" 
+  (let* ((device-id (args-device-id args))
+         (enabled   t)
+         (ok        (exec #'(lambda (u) (uhppoted-set-pc-control u device-id enabled)))))
+    (when ok
+      (display "set-pc-control" device-id nil))))
+
+
 (defun args-device-id (args) 
   (parse-integer (parse-args args "--controller" "405419896")))
 

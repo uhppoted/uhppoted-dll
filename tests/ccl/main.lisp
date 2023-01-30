@@ -33,6 +33,7 @@
         '("add-task"              tests:add-task)
         '("refresh-tasklist"      tests:refresh-tasklist)
         '("clear-tasklist"        tests:clear-tasklist)
+        '("set-pc-control"        tests:set-pc-control)
         '("lookup"                tests:internationalisation)
         '("structs"               tests:structs)
 ))

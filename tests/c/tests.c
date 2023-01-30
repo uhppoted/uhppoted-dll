@@ -53,6 +53,7 @@ const test tests[] = {
     {.name = "add-task", .fn = addTask},
     {.name = "refresh-tasklist", .fn = refreshTaskList},
     {.name = "clear-tasklist", .fn = clearTaskList},
+    {.name = "set-pc-control", .fn = setPCControl},
     {.name = "lookup", .fn = internationalisation},
     {.name = "structs", .fn = structs},
 };

@@ -30,5 +30,6 @@
            clear-time-profiles
            add-task
            refresh-tasklist
-           clear-tasklist))
+           clear-tasklist
+           set-pc-control))
 

@@ -145,3 +145,11 @@ bool openDoor(uhppoted &u) {
 
     return evaluate("open-door", rs);
 }
+
+bool setPCControl(uhppoted &u) {
+    u.set_pc_control(DEVICE_ID, true);
+
+    vector<result> rs = {};
+
+    return evaluate("set-pc-control", rs);
+}

@@ -138,6 +138,9 @@ public class examples {
         new command("clear-tasklist",
                     "Clears a controller task list.",
                     ClearTaskList),
+        new command("set-pc-control",
+                    "Enables/disables controller remote access control.",
+                    SetPCControl),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -702,6 +705,21 @@ public class examples {
         };
 
         display("clear-tasklist", fields);
+    }
+
+    static void SetPCControl(Uhppoted u, string[] args) {
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        bool enabled = true;
+
+        u.SetPCControl(deviceID, enabled);
+
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new boolField("enabled", enabled),
+        };
+
+        display("set-pc-control", fields);
     }
 
     static options parse(string[] args) {

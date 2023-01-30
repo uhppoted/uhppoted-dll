@@ -282,3 +282,22 @@ int openDoor(int argc, char **argv) {
 
     return 0;
 }
+
+int setPCControl(int argc, char **argv) {
+    uint32_t deviceID = parse(argc, argv).device_id;
+    bool enabled = true;
+
+    if (set_pc_control(deviceID, enabled) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "enabled", .type = "bool", .value.boolean = enabled},
+    };
+
+    display("set-pc-control", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}
