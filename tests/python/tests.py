@@ -234,6 +234,7 @@ def get_card(u):
         ('door[2]', 1, card.doors[1]),
         ('door[3]', 31, card.doors[2]),
         ('door[42]', 75, card.doors[3]),
+        ('card PIN', 7531, card.PIN),
     ])
 
 
@@ -248,11 +249,12 @@ def get_card_by_index(u):
         ('door[2]', 1, card.doors[1]),
         ('door[3]', 31, card.doors[2]),
         ('door[42]', 75, card.doors[3]),
+        ('card PIN', 7531, card.PIN),
     ])
 
 
 def put_card(u):
-    u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75])
+    u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75], 7531)
 
     return evaluate('put-card', [])
 

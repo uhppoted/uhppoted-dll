@@ -416,6 +416,8 @@ int get_card(uint32_t id, uint32_t card_number, card *c) {
     c->doors[2] = card.doors[2];
     c->doors[3] = card.doors[3];
 
+    c->PIN = card.PIN;
+
     free(card.from);
     free(card.to);
     free(card.doors);
@@ -444,6 +446,8 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
     c->doors[2] = card.doors[2];
     c->doors[3] = card.doors[3];
 
+    c->PIN = card.PIN;
+
     free(card.from);
     free(card.to);
     free(card.doors);
@@ -451,8 +455,8 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
     return 0;
 }
 
-int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4]) {
-    char *err = PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors);
+int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4], const uint32_t PIN) {
+    char *err = PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors, PIN);
     if (err != NULL) {
         set_error(err);
         return -1;

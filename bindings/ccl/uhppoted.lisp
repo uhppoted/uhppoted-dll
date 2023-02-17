@@ -106,7 +106,8 @@
 (defstruct card card-number 
                 from
                 to
-                doors)
+                doors
+                PIN)
 
 (defstruct time-profile ID
                         linked
@@ -196,7 +197,8 @@
   (:struct :GoCard (:card-number :unsigned-fullword)
                    (:from        :address)
                    (:to          :address)
-                   (:doors     :address)))
+                   (:doors       :address)
+                   (:PIN         :unsigned-fullword)))
 
 (def-foreign-type nil
   (:struct :GoTimeProfile (:ID            :unsigned-byte)
@@ -462,7 +464,8 @@
                    :doors       (list (%get-unsigned-byte doors 0)
                                       (%get-unsigned-byte doors 1)
                                       (%get-unsigned-byte doors 2)
-                                      (%get-unsigned-byte doors 3)))))))
+                                      (%get-unsigned-byte doors 3))
+                   :PIN         (pref card :GoCard.PIN))))))
 
 
 (defun uhppoted-get-card-by-index (uhppote device-id index) "Retrieves card detail for the card stored at an index on controller"
@@ -480,10 +483,11 @@
                    :doors       (list (%get-unsigned-byte doors 0)
                                       (%get-unsigned-byte doors 1)
                                       (%get-unsigned-byte doors 2)
-                                      (%get-unsigned-byte doors 3)))))))
+                                      (%get-unsigned-byte doors 3))
+                   :PIN         (pref card :GoCard.PIN))))))
 
 
-(defun uhppoted-put-card (uhppote device-id card-number from to doors) "Adds or updates the card detail stored on a controller"
+(defun uhppoted-put-card (uhppote device-id card-number from to doors PIN) "Adds or updates the card detail stored on a controller"
   (with-cstrs ((from_ from)
                (to_   to))
     (multiple-value-bind (doors_ pdoors) (make-heap-ivector 4 '(unsigned-byte 1))
@@ -499,6 +503,7 @@
                                                        :address       from_  
                                                        :address       to_
                                                        :address       pdoors
+                                                       :unsigned-long PIN
                                                        :address)))
             (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
             t)))

@@ -274,6 +274,7 @@ public class Tests {
             new uint8Result("doors[2]", 1, card.doors[1]),
             new uint8Result("doors[3]", 31, card.doors[2]),
             new uint8Result("doors[4]", 75, card.doors[3]),
+            new uint32Result("card PIN", 7531, card.PIN),
         };
 
         return evaluate("get-card", resultset);
@@ -290,6 +291,7 @@ public class Tests {
             new uint8Result("doors[2]", 1, card.doors[1]),
             new uint8Result("doors[3]", 31, card.doors[2]),
             new uint8Result("doors[4]", 75, card.doors[3]),
+            new uint32Result("card PIN", 7531, card.PIN),
         };
 
         return evaluate("get-card-by-index", resultset);
@@ -298,7 +300,7 @@ public class Tests {
     static bool PutCard(Uhppoted u) {
         byte[] doors = { 0, 1, 31, 75 };
 
-        u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors);
+        u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors, 7531);
 
         result[] resultset = {};
 

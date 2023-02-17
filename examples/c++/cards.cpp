@@ -35,7 +35,7 @@ void getCard(uhppoted &u, int argc, char **argv) {
         field("     door[2]", c.doors[1]),
         field("     door[3]", c.doors[2]),
         field("     door[4]", c.doors[3]),
-
+        field("     PIN", c.PIN),
     };
 
     display("get-card", fields);
@@ -58,7 +58,7 @@ void getCardByIndex(uhppoted &u, int argc, char **argv) {
         field("     door[2]", c.doors[1]),
         field("     door[3]", c.doors[2]),
         field("     door[4]", c.doors[3]),
-
+        field("     PIN", c.PIN),
     };
 
     display("get-card-by-index", fields);
@@ -71,8 +71,9 @@ void putCard(uhppoted &u, int argc, char **argv) {
     string from = "2022-01-01";
     string to = "2022-12-31";
     uint8_t doors[4] = {0, 1, 31, 75};
+    uint32_t PIN = 7531;
 
-    u.put_card(deviceID, card_number, from, to, doors);
+    u.put_card(deviceID, card_number, from, to, doors, PIN);
 
     vector<field> fields = {
         field("ID", deviceID),
@@ -83,6 +84,7 @@ void putCard(uhppoted &u, int argc, char **argv) {
         field("     door[2]", doors[1]),
         field("     door[3]", doors[2]),
         field("     door[4]", doors[3]),
+        field("     PIN", PIN),
     };
 
     display("put-card", fields);

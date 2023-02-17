@@ -143,6 +143,7 @@ class Card:
     start: str
     end: str
     doors: list[int]
+    PIN: int
 
 
 @dataclass
@@ -307,7 +308,8 @@ class Uhppote:
         for i in range(4):
             doors[i] = card.doors[i]
 
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors,
+                    card.PIN)
 
     def get_card_by_index(self, deviceID, index):
         card = GoCard()
@@ -319,9 +321,10 @@ class Uhppote:
         for i in range(4):
             doors[i] = card.doors[i]
 
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors)
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors,
+                    card.PIN)
 
-    def put_card(self, deviceID, cardNumber, start, end, doors):
+    def put_card(self, deviceID, cardNumber, start, end, doors, PIN):
         _doors = (c_ubyte * 4)(*[0] * 4)
         _doors[0] = doors[0]
         _doors[1] = doors[1]
@@ -329,7 +332,7 @@ class Uhppote:
         _doors[3] = doors[3]
 
         self.ffi.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')),
-                         c_char_p(bytes(end, 'utf-8')), _doors)
+                         c_char_p(bytes(end, 'utf-8')), _doors, PIN)
 
     def delete_card(self, deviceID, cardNumber):
         self.ffi.DeleteCard(self._uhppote, deviceID, cardNumber)
@@ -627,7 +630,7 @@ def libfunctions():
         'GetCards':            (lib.GetCards,            [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]),
         'GetCard':             (lib.GetCard,             [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
         'GetCardByIndex':      (lib.GetCardByIndex,      [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
-        'PutCard':             (lib.PutCard,             [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte)]),
+        'PutCard':             (lib.PutCard,             [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong]),
         'DeleteCard':          (lib.DeleteCard,          [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
         'DeleteCards':         (lib.DeleteCards,         [POINTER(GoUHPPOTE), c_ulong]),
         'GetEventIndex':       (lib.GetEventIndex,       [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]),
@@ -729,6 +732,7 @@ class GoCard(Structure):
         ('start', c_char_p),
         ('end', c_char_p),
         ('doors', POINTER(c_ubyte)),  # uint8_t[4]
+        ('PIN', c_uint32),
     ]
 
 

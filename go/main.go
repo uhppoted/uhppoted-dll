@@ -67,6 +67,7 @@ typedef struct Card {
     char* from;
     char* to;
 	uint8_t *doors; // uint_8[4]
+    uint32_t PIN;
 } Card;
 
 typedef struct TimeProfile {
@@ -277,10 +278,10 @@ func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, i
 }
 
 //export PutCard
-func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8) *C.char {
+func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := putCard(uu, deviceID, cardNumber, from, to, doors); err != nil {
+	} else if err := putCard(uu, deviceID, cardNumber, from, to, doors, PIN); err != nil {
 		return C.CString(err.Error())
 	}
 

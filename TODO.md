@@ -1,6 +1,8 @@
 # TODO
 
 - [x] `SetPCControl` (https://github.com/uhppoted/uhppote-core/issues/7)
+- [x] Card + PIN (https://github.com/uhppoted/uhppote-core/issues/8)
+
 
 ## TODO
 

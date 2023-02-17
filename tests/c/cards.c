@@ -44,6 +44,7 @@ bool getCard() {
         { .field = "card doors[2]",    .type = "uint8",  .value.uint8.expected = 1,             .value.uint8.value = card.doors[1] },
         { .field = "card doors[3]",    .type = "uint8",  .value.uint8.expected = 31,            .value.uint8.value = card.doors[2] },
         { .field = "card doors[4]",    .type = "uint8",  .value.uint8.expected = 75,            .value.uint8.value = card.doors[3] },
+        { .field = "card PIN",         .type = "uint32", .value.uint32.expected = 7531,         .value.uint32.value = card.PIN },
     };
     // clang-format on
 
@@ -68,6 +69,7 @@ bool getCardByIndex() {
         { .field = "card doors[2]",    .type = "uint8",  .value.uint8.expected = 1,             .value.uint8.value = card.doors[1] },
         { .field = "card doors[3]",    .type = "uint8",  .value.uint8.expected = 31,            .value.uint8.value = card.doors[2] },
         { .field = "card doors[4]",    .type = "uint8",  .value.uint8.expected = 75,            .value.uint8.value = card.doors[3] },
+        { .field = "card PIN",         .type = "uint32", .value.uint32.expected = 7531,         .value.uint32.value = card.PIN },
     };
     // clang-format on
 
@@ -78,7 +80,7 @@ bool putCard() {
     const char *tag = "put-card";
     uint8_t doors[4] = {0, 1, 31, 75};
 
-    if (put_card(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", (uint8_t *)doors) < 0) {
+    if (put_card(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", (uint8_t *)doors, 7531) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }

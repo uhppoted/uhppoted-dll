@@ -72,6 +72,7 @@
            card-from
            card-to
            card-doors
+           card-PIN
 
            make-time-profile
            time-profile-id

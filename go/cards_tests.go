@@ -42,6 +42,7 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 	card.card_number = C.uint(8165538)
 	card.from = C.CString("2022-01-01")
 	card.to = C.CString("2022-12-31")
+	card.PIN = C.uint(7531)
 
 	doors := unsafe.Slice(card.doors, 4)
 
@@ -69,6 +70,7 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	card.card_number = C.uint(8165538)
 	card.from = C.CString("2022-01-01")
 	card.to = C.CString("2022-12-31")
+	card.PIN = C.uint(7531)
 
 	doors := unsafe.Slice(card.doors, 4)
 
@@ -80,7 +82,7 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	return nil
 }
 
-func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8) error {
+func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) error {
 	if deviceID != 405419896 {
 		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
@@ -110,6 +112,10 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 		if _doors[i] != []uint8{0, 1, 31, 75}[i] {
 			return fmt.Errorf("Incorrect doors[%v] (%v)", i+1, _doors[i])
 		}
+	}
+
+	if PIN != 7531 {
+		return fmt.Errorf("Incorrect card PIN (%v)", PIN)
 	}
 
 	return nil

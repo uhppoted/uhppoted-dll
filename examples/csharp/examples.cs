@@ -54,6 +54,7 @@ public class examples {
     const uint EVENT_INDEX = 43;
     const byte DOOR = 4;
     const byte PROFILE_ID = 29;
+    const uint PIN = 7531;
     const string locale = "";
 
     static command[] commands = {
@@ -428,6 +429,7 @@ public class examples {
             new uint8Field("     door[2]", card.doors[1]),
             new uint8Field("     door[3]", card.doors[2]),
             new uint8Field("     door[4]", card.doors[3]),
+            new uint32Field("     PIN", card.PIN),
         };
 
         display("get-card", fields);
@@ -450,6 +452,7 @@ public class examples {
             new uint8Field("     door[2]", card.doors[1]),
             new uint8Field("     door[3]", card.doors[2]),
             new uint8Field("     door[4]", card.doors[3]),
+            new uint32Field("     PIN", card.PIN),
         };
 
         display("get-card-by-index", fields);
@@ -459,11 +462,12 @@ public class examples {
         options opts = parse(args);
         uint deviceID = opts.deviceID;
         uint cardNumber = opts.card;
-        string from = "2022-01-01";
-        string to = "2022-12-31";
+        string from = "2023-01-01";
+        string to = "2023-12-31";
         byte[] doors = { 0, 1, 31, 75 };
+        uint PIN = 7531;
 
-        u.PutCard(deviceID, cardNumber, from, to, doors);
+        u.PutCard(deviceID, cardNumber, from, to, doors, PIN);
 
         field[] fields = {
             new uint32Field("ID", deviceID),
@@ -474,6 +478,7 @@ public class examples {
             new uint8Field("     door[2]", doors[1]),
             new uint8Field("     door[3]", doors[2]),
             new uint8Field("     door[4]", doors[3]),
+            new uint32Field("     PIN", PIN),
         };
 
         display("put-card", fields);

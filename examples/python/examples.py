@@ -30,7 +30,7 @@ from uhppoted import LOOKUP_EVENT_REASON
 
 DEVICE_ID = 405419896
 CARD_NUMBER = 8000001
-CARD_INDEX = 7
+CARD_INDEX = 3
 EVENT_INDEX = 43
 DOOR = 4
 TIME_PROFILE_ID = 29
@@ -449,6 +449,7 @@ def get_card(u, args):
         ('     door[2]', card.doors[1]),
         ('     door[3]', card.doors[2]),
         ('     door[4]', card.doors[3]),
+        ('     PIN', card.PIN),
     ])
 
 
@@ -468,17 +469,19 @@ def get_card_by_index(u, args):
         ('     door[2]', card.doors[1]),
         ('     door[3]', card.doors[2]),
         ('     door[4]', card.doors[3]),
+        ('     PIN', card.PIN),
     ])
 
 
 def put_card(u, args):
     device_id = args.controller
     card_number = args.card
-    start = '2022-01-01'
-    end = '2022-12-31'
+    start = '2023-01-01'
+    end = '2023-12-31'
     doors = [0, 1, 31, 75]
+    PIN = 7531
 
-    card = u.put_card(device_id, card_number, start, end, doors)
+    card = u.put_card(device_id, card_number, start, end, doors, PIN)
 
     display('put-card', [
         ('ID', device_id),
@@ -489,6 +492,7 @@ def put_card(u, args):
         ('     door[2]', doors[1]),
         ('     door[3]', doors[2]),
         ('     door[4]', doors[3]),
+        ('     PIN', PIN),
     ])
 
 

@@ -27,6 +27,7 @@ bool getCard(uhppoted &u) {
         result("card doors[2]", uint8_t(1), card.doors[1]),
         result("card doors[3]", uint8_t(31), card.doors[2]),
         result("card doors[4]", uint8_t(75), card.doors[3]),
+        result("card PIN", uint32_t(7531), card.PIN),
     };
 
     return evaluate("get-card", rs);
@@ -43,6 +44,7 @@ bool getCardByIndex(uhppoted &u) {
         result("card doors[2]", uint8_t(1), card.doors[1]),
         result("card doors[3]", uint8_t(31), card.doors[2]),
         result("card doors[4]", uint8_t(75), card.doors[3]),
+        result("card PIN", uint32_t(7531), card.PIN),
     };
 
     return evaluate("get-card-by-index", rs);
@@ -51,7 +53,7 @@ bool getCardByIndex(uhppoted &u) {
 bool putCard(uhppoted &u) {
     uint8_t doors[4] = {0, 1, 31, 75};
 
-    u.put_card(DEVICE_ID, CARD_ID, "2022-01-01", "2022-12-31", doors);
+    u.put_card(DEVICE_ID, CARD_ID, "2022-01-01", "2022-12-31", doors, 7531);
 
     vector<result> rs = {};
 

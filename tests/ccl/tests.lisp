@@ -3,6 +3,7 @@
 (defconstant TEST-DEVICE-ID   405419896)
 (defconstant TEST-CARD-NUMBER 8165538)
 (defconstant TEST-CARD-INDEX  19)
+(defconstant TEST-PIN         7531)
 (defconstant TEST-EVENT-INDEX 51)
 (defconstant TEST-DOOR        4)
 (defconstant TEST-PROFILE-ID  49)
@@ -124,20 +125,22 @@
               (list (make-result :field "card number"      :expected 8165538      :value (card-card-number card))
                     (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from card))
                     (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to card))
-                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))))))
+                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))
+                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN card))))))
 
 
 (defun get-card-by-index () "" 
   (let ((card (exec #'(lambda (u) (uhppoted-get-card-by-index u TEST-DEVICE-ID TEST-CARD-INDEX)))))
     (evaluate "get-card-by-index" 
               (list (make-result :field "card number"      :expected 8165538      :value (card-card-number card))
-                    (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from card))
-                    (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to card))
-                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))))))
+                    (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from  card))
+                    (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to    card))
+                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))
+                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN   card))))))
 
 (defun put-card () "" 
   (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
-    (exec #'(lambda (u) (uhppoted-put-card u TEST-DEVICE-ID TEST-CARD-NUMBER "2022-01-01" "2022-12-31" doors)))
+    (exec #'(lambda (u) (uhppoted-put-card u TEST-DEVICE-ID TEST-CARD-NUMBER "2022-01-01" "2022-12-31" doors TEST-PIN)))
     (evaluate "put-card" '())))
 
 

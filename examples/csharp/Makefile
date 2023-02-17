@@ -78,7 +78,7 @@ get-card: build
 	$(CMD) get-card $(DEVICEID) $(CARD)
 
 get-card-by-index: build
-	$(CMD) get-card-by-index $(DEVICEID) --card-index 7
+	$(CMD) get-card-by-index $(DEVICEID) --card-index 3
 
 put-card: build
 	$(CMD) put-card $(DEVICEID) $(CARD)

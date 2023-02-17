@@ -48,6 +48,7 @@ int getCard(int argc, char **argv) {
         {.field = "     door[2]", .type = "uint8", .value.uint8 = card.doors[1]},
         {.field = "     door[3]", .type = "uint8", .value.uint8 = card.doors[2]},
         {.field = "     door[4]", .type = "uint8", .value.uint8 = card.doors[3]},
+        {.field = "     PIN", .type = "uint32", .value.uint32 = card.PIN},
     };
 
     display("get-card", sizeof(fields) / sizeof(field), fields);
@@ -76,6 +77,7 @@ int getCardByIndex(int argc, char **argv) {
         {.field = "     door[2]", .type = "uint8", .value.uint8 = card.doors[1]},
         {.field = "     door[3]", .type = "uint8", .value.uint8 = card.doors[2]},
         {.field = "     door[4]", .type = "uint8", .value.uint8 = card.doors[3]},
+        {.field = "     PIN", .type = "uint32", .value.uint32 = card.PIN},
     };
 
     display("get-card-by-index", sizeof(fields) / sizeof(field), fields);
@@ -90,8 +92,9 @@ int putCard(int argc, char **argv) {
     char *from = "2022-01-01";
     char *to = "2022-12-31";
     uint8_t doors[4] = {0, 1, 31, 75};
+    uint32_t PIN = 7531;
 
-    if (put_card(deviceID, card_number, from, to, doors) < 0) {
+    if (put_card(deviceID, card_number, from, to, doors, PIN) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -105,6 +108,7 @@ int putCard(int argc, char **argv) {
         {.field = "     door[2]", .type = "uint8", .value.uint8 = doors[1]},
         {.field = "     door[3]", .type = "uint8", .value.uint8 = doors[2]},
         {.field = "     door[4]", .type = "uint8", .value.uint8 = doors[3]},
+        {.field = "     PIN", .type = "uint32", .value.uint32 = PIN},
     };
 
     display("put-card", sizeof(fields) / sizeof(field), fields);

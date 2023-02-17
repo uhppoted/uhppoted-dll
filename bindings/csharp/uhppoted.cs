@@ -258,7 +258,7 @@ public class Uhppoted : IDisposable {
         Marshal.Copy(card.doors, doors, 0, 4);
         Marshal.FreeHGlobal(card.doors);
 
-        return new Card(card.cardNumber, card.from, card.to, doors);
+        return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
     }
 
     public Card GetCardByIndex(uint deviceID, uint index) {
@@ -278,11 +278,11 @@ public class Uhppoted : IDisposable {
         Marshal.Copy(card.doors, doors, 0, 4);
         Marshal.FreeHGlobal(card.doors);
 
-        return new Card(card.cardNumber, card.from, card.to, doors);
+        return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
     }
 
-    public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors) {
-        string err = PutCard(ref this.u, deviceID, cardNumber, from, to, doors);
+    public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN) {
+        string err = PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
@@ -492,7 +492,7 @@ public class Uhppoted : IDisposable {
     private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
 
     [DllImport("uhppoted.dll")]
-    private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors);
+    private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN);
 
     [DllImport("uhppoted.dll")]
     private static extern string DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber);
@@ -597,6 +597,7 @@ public class Uhppoted : IDisposable {
         public string from;
         public string to;
         public IntPtr doors;
+        public uint PIN;
     }
 
     struct GoTimeProfile {
@@ -737,12 +738,14 @@ public class Card {
     public string from;
     public string to;
     public byte[] doors;
+    public uint PIN;
 
-    public Card(uint cardNumber, string from, string to, byte[] doors) {
+    public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN) {
         this.cardNumber = cardNumber;
         this.from = from;
         this.to = to;
         this.doors = doors;
+        this.PIN = PIN;
     }
 }
 

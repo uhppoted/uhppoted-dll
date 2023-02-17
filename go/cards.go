@@ -42,6 +42,7 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 	card.card_number = C.uint(c.CardNumber)
 	card.from = C.CString(fmt.Sprintf("%v", c.From))
 	card.to = C.CString(fmt.Sprintf("%v", c.To))
+	card.PIN = C.uint(c.PIN)
 
 	doors := unsafe.Slice(card.doors, 4)
 
@@ -58,28 +59,29 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 		return fmt.Errorf("invalid argument (card) - expected valid pointer")
 	}
 
-	response, err := uu.GetCardByIndex(deviceID, index)
+	c, err := uu.GetCardByIndex(deviceID, index)
 	if err != nil {
 		return err
-	} else if response == nil {
+	} else if c == nil {
 		return fmt.Errorf("%v: no card found at index %v", deviceID, index)
 	}
 
-	card.card_number = C.uint(response.CardNumber)
-	card.from = C.CString(fmt.Sprintf("%v", response.From))
-	card.to = C.CString(fmt.Sprintf("%v", response.To))
+	card.card_number = C.uint(c.CardNumber)
+	card.from = C.CString(fmt.Sprintf("%v", c.From))
+	card.to = C.CString(fmt.Sprintf("%v", c.To))
+	card.PIN = C.uint(c.PIN)
 
 	doors := unsafe.Slice(card.doors, 4)
 
-	doors[0] = C.uchar(response.Doors[1])
-	doors[1] = C.uchar(response.Doors[2])
-	doors[2] = C.uchar(response.Doors[3])
-	doors[3] = C.uchar(response.Doors[4])
+	doors[0] = C.uchar(c.Doors[1])
+	doors[1] = C.uchar(c.Doors[2])
+	doors[2] = C.uchar(c.Doors[3])
+	doors[3] = C.uchar(c.Doors[4])
 
 	return nil
 }
 
-func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8) error {
+func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) error {
 	_from, err := time.Parse("2006-01-02", C.GoString(from))
 	if err != nil {
 		return fmt.Errorf("Invalid 'from' date (%v)", err)
@@ -106,6 +108,7 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 			3: _doors[2],
 			4: _doors[3],
 		},
+		PIN: types.PIN(PIN),
 	}
 
 	ok, err := uu.PutCard(deviceID, card)

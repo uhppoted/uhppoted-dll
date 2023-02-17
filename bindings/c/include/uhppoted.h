@@ -59,6 +59,7 @@ typedef struct card {
     char from[11];
     char to[11];
     uint8_t doors[4];
+    uint32_t PIN;
 } card;
 
 typedef struct time_profile {
@@ -118,7 +119,7 @@ int open_door(uint32_t id, uint8_t door);
 int get_cards(uint32_t id, int *N);
 int get_card(uint32_t id, uint32_t card_number, card *card);
 int get_card_by_index(uint32_t id, uint32_t index, card *card);
-int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4]);
+int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4], const uint32_t PIN);
 int delete_card(uint32_t id, uint32_t card_number);
 int delete_cards(uint32_t id);
 

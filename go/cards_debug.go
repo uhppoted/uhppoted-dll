@@ -41,6 +41,7 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 	card.card_number = C.uint(8165538)
 	card.from = C.CString("2022-01-01")
 	card.to = C.CString("2022-12-31")
+	card.PIN = C.uint(7531)
 
 	doors := unsafe.Slice(card.doors, 4)
 
@@ -67,6 +68,7 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	card.card_number = C.uint(8165538)
 	card.from = C.CString("2022-01-01")
 	card.to = C.CString("2022-12-31")
+	card.PIN = C.uint(7531)
 
 	doors := unsafe.Slice(card.doors, 4)
 
@@ -78,7 +80,7 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	return nil
 }
 
-func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8) error {
+func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) error {
 	_from, err := time.Parse("2006-01-02", C.GoString(from))
 	if err != nil {
 		return fmt.Errorf("Invalid 'from' date (%v)", err)
@@ -105,6 +107,7 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 		fmt.Printf("         doors[2]: %v\n", int(_doors[1]))
 		fmt.Printf("         doors[3]: %v\n", int(_doors[2]))
 		fmt.Printf("         doors[4]: %v\n", int(_doors[3]))
+		fmt.Printf("         PIN:      %v\n", PIN)
 		fmt.Println()
 	}
 
