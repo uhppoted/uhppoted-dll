@@ -96,6 +96,10 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 		return fmt.Errorf("invalid argument (doors) - expected valid pointer")
 	}
 
+	if PIN > 999999 {
+		return fmt.Errorf("Invalid PIN code (%v)", PIN)
+	}
+
 	_doors := C.GoBytes(unsafe.Pointer(doors), 4)
 
 	card := types.Card{

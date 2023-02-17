@@ -187,6 +187,25 @@ Retrieves a stored card's information using an index into the card list.
 
 Adds or updates a card record on the controller.
 
+Note:
+    The UHPPOTE access controller has a weird behaviour around the PIN field. According to the SDK 
+    documentation, valid PINs are in the range 0 to 999999. However the controller will accept a 
+    PIN number out of that range and only keep the lower 7 nibbles of the 32-bit unsigned value.
+    e.g:
+
+    | PIN     | Hex value | Stored as (hex) | Retrieved as (hex) | Retrieved as (decimal) |
+    |---------|-----------|-----------------|--------------------|------------------------|
+    | 0       | 0x000000  | 0x000000        | 0x000000           | 0                      |
+    | 999999  | 0x0f423f  | 0x0f423f        | 0x0f423f           | 999999                 |
+    | 1000000 | 0x0f4240  | 0x000000        | 0x000000           | 0                      |
+    | 1000001 | 0x0f4241  | 0x000000        | 0x000000           | 0                      |
+    | 1048576 | 0x100000  | 0x000000        | 0x000000           | 0                      |
+    | 1048577 | 0x100001  | 0x000000        | 0x000001           | 1                      |
+    | 1999999 | 0x1E847F  | 0x0E847F        | 0x000001           | 951423                 |
+
+    Like the _uhppote-core_ `put-card` implementation, the DLL implemenation returns an error 
+    for an out of range PIN.
+
 #### `DeleteCard`
 
 Deletes a card record from the controller.
