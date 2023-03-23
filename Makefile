@@ -25,6 +25,7 @@ endif
 .PHONY: examples
 .PHONY: tests
 .PHONY: update
+.PHONY: vuln
 
 update:
 	go get -u github.com/uhppoted/uhppote-core@master
@@ -45,13 +46,16 @@ regen:
 format:
 	go fmt ./go/...
 
+vuln:
+	govulncheck ./...
+
 build: 
 	go fmt ./go/...
 	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
 	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
 	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
 
-build-all: build
+build-all: build vuln
 	go fmt ./go/...
 	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
