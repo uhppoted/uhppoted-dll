@@ -16,6 +16,7 @@ else
     endif
 endif
 
+.DEFAULT_GOAL := build-all
 .PHONY: python
 .PHONY: c
 .PHONY: cpp
