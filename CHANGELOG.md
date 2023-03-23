@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+### Updated
+1. Reworked card _from_ and _to_ date fields to use zero type rather than pointers.
+2. Added _govulncheck_ to CI build.
+3. Added _staticcheck_ to CI build.
+
 
 ## [0.8.4](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.4) - 2023-03-17
 

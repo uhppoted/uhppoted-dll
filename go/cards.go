@@ -83,12 +83,12 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) error {
 	_from, err := types.DateFromString(C.GoString(from))
 	if err != nil {
-		return fmt.Errorf("Invalid 'from' date (%v)", err)
+		return fmt.Errorf("invalid 'from' date (%v)", err)
 	}
 
 	_to, err := types.DateFromString(C.GoString(to))
 	if err != nil {
-		return fmt.Errorf("Invalid 'to' date (%v)", err)
+		return fmt.Errorf("invalid 'to' date (%v)", err)
 	}
 
 	if doors == nil {
@@ -96,7 +96,7 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 	}
 
 	if PIN > 999999 {
-		return fmt.Errorf("Invalid PIN code (%v)", PIN)
+		return fmt.Errorf("invalid PIN code (%v)", PIN)
 	}
 
 	_doors := C.GoBytes(unsafe.Pointer(doors), 4)
