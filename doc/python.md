@@ -1,6 +1,6 @@
 # Python: Usage and Notes
 
-The Python bindings comprise a single file [uhppoted.pyt](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/python/uhppoted.py) - copy this to wherever makes it sense in your project. 
+The Python bindings comprise a single file [uhppoted.py](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/python/uhppoted.py) - copy this to wherever makes it sense in your project. 
 
 The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for the platform:
 - LD_LIBRARY (Linux)
