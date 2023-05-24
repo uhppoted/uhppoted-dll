@@ -7,8 +7,8 @@ Shared library (DLL) for `uhppote-core` with bindings and examples for:
 - [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
 - [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
 - [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
-- [Python]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md))
-- [Clozure Common Lisp]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md))
+- [Python](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md)
+- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md)
 
 3rd party bindings:
 - [Rust](https://github.com/wouterdebie/uhppote-rs)
