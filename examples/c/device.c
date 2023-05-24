@@ -301,3 +301,22 @@ int setPCControl(int argc, char **argv) {
 
     return 0;
 }
+
+int setInterlock(int argc, char **argv) {
+    uint32_t deviceID = parse(argc, argv).device_id;
+    uint8_t interlock = 1;
+
+    if (set_interlock(deviceID, interlock) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "interlock", .type = "uint8", .value.uint8 = interlock},
+    };
+
+    display("set-interlock", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}

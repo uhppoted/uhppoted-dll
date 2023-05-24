@@ -1,8 +1,16 @@
 # TODO
 
-- [x] `SetPCControl` (https://github.com/uhppoted/uhppote-core/issues/7)
-- [x] Card + PIN (https://github.com/uhppoted/uhppote-core/issues/8)
+- [x] `set-interlock`
+      - [x] Go lib
+      - [x] C
+      - [x] C++
+      - [x] Python
+      - [x] C#
+      - [x] CCL
+      - [x] CHANGELOG
+      - [x] README
 
+- [ ] C++: rework to use unique_ptr
 
 ## TODO
 

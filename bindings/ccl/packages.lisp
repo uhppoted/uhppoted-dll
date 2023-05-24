@@ -32,6 +32,7 @@
            uhppoted-refresh-tasklist
            uhppoted-clear-tasklist
            uhppoted-set-pc-control
+           uhppoted-set-interlock
            uhppoted-error
            with-warning
            message

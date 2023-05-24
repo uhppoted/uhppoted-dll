@@ -127,6 +127,7 @@ returns a fixed response.
 - [`AddTask`](#addtask)
 - [`RefreshTaskList`](#refreshtasklist)
 - [`SetPCControl`](#setpccontrol)
+- [`SetInterlock`](#setinterlock)
 
 #### `GetDevices`
 
@@ -266,4 +267,20 @@ once every 30 seconds otherwise it reverts to local control of access using the 
 communication is not required to be a 'set-pc-control' command - any command is sufficient). If the access
 controller has reverted to local control because no message has been received from the host for more than
 30 seconds, any subsequent communication from the remote host will re-establish remote control mode again.
+
+#### `SetInterlock`
+
+Sets a controller door interlock. 
+
+The door interlock prevents a door from opening unless the interlock condition is valid for that door. The API takes
+a byte value as the interlock mode, corresponding to one of the following modes:
+
+| Value | Mode    | Description                                                                                                     |
+|-------|---------|-----------------------------------------------------------------------------------------------------------------|
+| 0     | none    | Any door can opened subject to access restrictions                                                              |
+| 1     | 1&2,3&4 | Door 1 can be opened if 2 is closed and vice versa. Door 3 can be opened if 4 is closed (and vice versa)        |
+| 2     | 1&3,2&4 | Door 1 can be opened if 3 is closed and vice versa. Door 2 can be opened if 4 is closed (and vice versa)        |
+| 3     | 1&2&3   | Door 1 can be opened if 2 and 3 are both closed, door 2 if 1 and 3 are closed and door 3 if 1 and 2 are closed  |
+| 4     | 1&2&3&4 | A door can only be opened if all the other doors are closed                                                     |
+
 

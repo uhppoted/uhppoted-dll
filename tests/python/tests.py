@@ -65,6 +65,7 @@ def tests():
         'refresh-tasklist': refresh_tasklist,
         'clear-tasklist': clear_tasklist,
         'set-pc-control': set_pc_control,
+        'set-interlock': set_interlock,
         'lookup': internationalisation,
         'structs': structs,
     }
@@ -369,6 +370,13 @@ def clear_tasklist(u):
 def set_pc_control(u):
     tag = 'set-pc-control'
     u.set_pc_control(DEVICE_ID, True)
+
+    return evaluate(tag, [])
+
+
+def set_interlock(u):
+    tag = 'set-interlock'
+    u.set_interlock(DEVICE_ID, 3)
 
     return evaluate(tag, [])
 

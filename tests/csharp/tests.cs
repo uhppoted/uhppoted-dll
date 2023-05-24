@@ -58,6 +58,7 @@ public class Tests {
         new test("refresh-tasklist", RefreshTaskList),
         new test("clear-tasklist", ClearTaskList),
         new test("set-pc-control", SetPCControl),
+        new test("set-interlock", SetInterlock),
         new test("lookup", Internationalisation),
         new test("structs", Structs),
     };
@@ -448,6 +449,14 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("set-pc-control", resultset);
+    }
+
+    static bool SetInterlock(Uhppoted u) {
+        u.SetInterlock(DEVICE_ID, 3);
+
+        result[] resultset = {};
+
+        return evaluate("set-interlock", resultset);
     }
 
     static bool Internationalisation(Uhppoted u) {

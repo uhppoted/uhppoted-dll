@@ -282,6 +282,18 @@ func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
 	return nil
 }
 
+func setInterlock(uu uhppote.IUHPPOTE, deviceID uint32, interlock uint8) error {
+	if deviceID != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
+
+	if types.Interlock(interlock) != types.Interlock123 {
+		return fmt.Errorf("Incorrect interlock (%v)", interlock)
+	}
+
+	return nil
+}
+
 func unpack(u uhppote.IUHPPOTE, field string) any {
 	type U struct {
 		BindAddr      string         `json:"bind"`

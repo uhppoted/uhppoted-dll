@@ -143,6 +143,7 @@ class uhppoted {
     void clear_tasklist(uint32_t id);
 
     void set_pc_control(uint32_t id, bool enabled);
+    void set_interlock(uint32_t id, uint8_t interlock);
 
     const std::string lookup(const std::string &, uint8_t, const std::string &);
 

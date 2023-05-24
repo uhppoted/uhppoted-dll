@@ -447,6 +447,13 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void SetInterlock(uint deviceID, byte interlock) {
+        string err = SetInterlock(ref this.u, deviceID, interlock);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
     // Go FFI
 
     [DllImport("uhppoted.dll")]
@@ -532,6 +539,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("uhppoted.dll")]
     private static extern string SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled);
+
+    [DllImport("uhppoted.dll")]
+    private static extern string SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock);
 
     struct udevice {
         public uint ID;

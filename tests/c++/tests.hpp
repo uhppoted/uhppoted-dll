@@ -51,6 +51,7 @@ extern bool refreshTaskList(uhppoted &);
 extern bool clearTaskList(uhppoted &);
 
 extern bool setPCControl(uhppoted &);
+extern bool setInterlock(uhppoted &);
 
 extern bool internationalisation(uhppoted &);
 extern bool structs(uhppoted &);

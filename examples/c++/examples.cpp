@@ -172,6 +172,11 @@ const vector<command> commands = {
         .help = "Enables/disables controller remote access control.",
         .fn = setPCControl,
     },
+    {
+        .cmd = "set-interlock",
+        .help = "Sets a controller interlock mode.",
+        .fn = setInterlock,
+    },
 };
 
 int main(int argc, char **argv) {

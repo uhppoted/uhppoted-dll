@@ -265,6 +265,11 @@
   (evaluate "set-pc-control" '()))
 
 
+(defun set-interlock () "" 
+  (exec #'(lambda (u) (uhppoted-set-interlock u TEST-DEVICE-ID 3)))
+  (evaluate "set-interlock" '()))
+
+
 (defun internationalisation () "" 
   (let ((mode-normally-open              (uhppoted-lookup lookup-mode         normally-open                                ""))
         (mode-normally-closed            (uhppoted-lookup lookup-mode         normally-closed                              ""))

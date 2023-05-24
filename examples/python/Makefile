@@ -112,6 +112,9 @@ clear-tasklist: build
 set-pc-control: build
 	$(GO) && $(DLL) && $(CMD) set-pc-control
 
+set-interlock: build
+	$(GO) && $(DLL) && $(CMD) set-interlock --controller 423187757
+
 debug: build
 	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678
 

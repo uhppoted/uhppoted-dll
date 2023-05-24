@@ -151,6 +151,10 @@ def commands():
             'help': "Enables/disables controller remote access control",
             'fn': set_pc_control,
         },
+        'set-interlock': {
+            'help': "Sets the controller interlock mode",
+            'fn': set_interlock,
+        },
     }
 
 
@@ -691,9 +695,21 @@ def set_pc_control(u, args):
 
     u.set_pc_control(device_id, enabled)
 
-    display('set-pc-controls', [
+    display('set-pc-control', [
         ('ID', device_id),
         ('enabled', enabled),
+    ])
+
+
+def set_interlock(u, args):
+    device_id = args.controller
+    interlock = 1
+
+    u.set_interlock(device_id, interlock)
+
+    display('set-interlock', [
+        ('ID', device_id),
+        ('interlock', interlock),
     ])
 
 

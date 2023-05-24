@@ -679,6 +679,16 @@ int set_pc_control(uint32_t id, bool enabled) {
     return 0;
 }
 
+int set_interlock(uint32_t id, uint8_t interlock) {
+    char *err = SetInterlock(u, id, interlock);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
+
 const char *lookup(const char *type, uint8_t code, const char *locale) {
     if (strcmp(type, LOOKUP_MODE) == 0) {
         switch (code) {

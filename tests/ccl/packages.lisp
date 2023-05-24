@@ -32,6 +32,7 @@
            refresh-tasklist
            clear-tasklist
            set-pc-control
+           set-interlock
            internationalisation
            structs
            failed

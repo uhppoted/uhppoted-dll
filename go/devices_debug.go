@@ -266,3 +266,14 @@ func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
 
 	return nil
 }
+
+func setInterlock(uu uhppote.IUHPPOTE, deviceID uint32, interlock uint8) error {
+	if DEBUG {
+		fmt.Printf(">>> set-interlock\n")
+		fmt.Printf("    ID:        %v\n", deviceID)
+		fmt.Printf("    interlock: %v\n", interlock)
+		fmt.Println()
+	}
+
+	return nil
+}

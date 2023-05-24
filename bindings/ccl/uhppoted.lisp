@@ -690,6 +690,14 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
+(defun uhppoted-set-interlock (uhppote device-id interlock) "Sets a controller interlock ode"
+  (with-macptrs ((err (external-call "SetInterlock" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :unsigned-byte interlock
+                                                    :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
+
 (defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"
   (cond ((string= category lookup-mode)         (uhppoted-lookup-mode         code locale))
         ((string= category lookup-direction)    (uhppoted-lookup-direction    code locale))

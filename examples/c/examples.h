@@ -63,7 +63,6 @@ extern int setListener(int argc, char **argv);
 extern int getDoorControl(int argc, char **argv);
 extern int setDoorControl(int argc, char **argv);
 extern int openDoor(int argc, char **argv);
-extern int setPCControl(int argc, char **argv);
 
 extern int getCards(int argc, char **argv);
 extern int getCard(int argc, char **argv);
@@ -84,6 +83,9 @@ extern int clearTimeProfiles(int argc, char **argv);
 extern int addTask(int argc, char **argv);
 extern int refreshTaskList(int argc, char **argv);
 extern int clearTaskList(int argc, char **argv);
+
+extern int setPCControl(int argc, char **argv);
+extern int setInterlock(int argc, char **argv);
 
 extern options parse(int argc, char **argv);
 extern void display(const char *tag, int N, field fields[]);

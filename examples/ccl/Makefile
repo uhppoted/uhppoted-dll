@@ -116,6 +116,9 @@ clear-tasklist: build
 set-pc-control: build
 	$(CMD) set-pc-control $(DEVICEID)
 
+set-interlock: build
+	$(CMD) set-interlock --controller 423187757
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp
 

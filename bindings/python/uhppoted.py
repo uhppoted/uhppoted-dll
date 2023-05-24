@@ -410,6 +410,9 @@ class Uhppote:
     def set_pc_control(self, deviceID, enabled):
         self.ffi.SetPCControl(self._uhppote, deviceID, enabled)
 
+    def set_interlock(self, deviceID, interlock):
+        self.ffi.SetInterlock(self._uhppote, deviceID, interlock)
+
 
 # lookup
 
@@ -600,6 +603,7 @@ class FFI:
         self.RefreshTaskList = ffi('RefreshTaskList', errcheck)
         self.ClearTaskList = ffi('ClearTaskList', errcheck)
         self.SetPCControl = ffi('SetPCControl', errcheck)
+        self.SetInterlock = ffi('SetInterlock', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -644,6 +648,7 @@ def libfunctions():
         'RefreshTaskList':     (lib.RefreshTaskList,     [POINTER(GoUHPPOTE), c_ulong]),
         'ClearTaskList':       (lib.ClearTaskList,       [POINTER(GoUHPPOTE), c_ulong]),
         'SetPCControl':        (lib.SetPCControl,        [POINTER(GoUHPPOTE), c_ulong, c_bool]),
+        'SetInterlock':        (lib.SetInterlock,        [POINTER(GoUHPPOTE), c_ulong, c_ubyte]),
     }
 # yapf: enable
 

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+1. `set-interlock` command to set a controller door interlock mode.
+
 ### Updated
 1. Reworked card _from_ and _to_ date fields to use zero type rather than pointers.
 2. Added _govulncheck_ to CI build.

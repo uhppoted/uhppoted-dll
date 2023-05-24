@@ -46,7 +46,6 @@ extern bool setListener();
 extern bool getDoorControl();
 extern bool setDoorControl();
 extern bool openDoor();
-extern bool setPCControl();
 
 extern bool getCards();
 extern bool getCard();
@@ -67,6 +66,9 @@ extern bool clearTimeProfiles();
 extern bool addTask();
 extern bool refreshTaskList();
 extern bool clearTaskList();
+
+extern bool setPCControl();
+extern bool setInterlock();
 
 extern bool internationalisation();
 extern bool structs();

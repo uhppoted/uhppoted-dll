@@ -579,6 +579,13 @@ void uhppoted::set_pc_control(uint32_t id, bool enabled) {
     }
 }
 
+void uhppoted::set_interlock(uint32_t id, uint8_t interlock) {
+    char *err = SetInterlock(u, id, interlock);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}
+
 const map<uint8_t, string> LookupMode = {
     {NORMALLY_OPEN, ModeNormallyOpen},
     {NORMALLY_CLOSED, ModeNormallyClosed},

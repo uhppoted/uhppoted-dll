@@ -276,6 +276,14 @@
       (display "set-pc-control" device-id nil))))
 
 
+(defun set-interlock (args) "" 
+  (let* ((device-id (args-device-id args))
+         (interlock 1)
+         (ok        (exec #'(lambda (u) (uhppoted-set-interlock u device-id interlock)))))
+    (when ok
+      (display "set-interlock" device-id nil))))
+
+
 (defun args-device-id (args) 
   (parse-integer (parse-args args "--controller" "405419896")))
 

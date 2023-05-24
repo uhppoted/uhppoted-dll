@@ -137,3 +137,4 @@ int refresh_tasklist(uint32_t id);
 int clear_tasklist(uint32_t id);
 
 int set_pc_control(uint32_t id, bool enabled);
+int set_interlock(uint32_t id, uint8_t interlock);

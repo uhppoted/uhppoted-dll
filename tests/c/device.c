@@ -249,3 +249,16 @@ bool setPCControl() {
 
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
+
+bool setInterlock() {
+    const char *tag = "set-interlock";
+
+    if (set_interlock(DEVICE_ID, 3) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}

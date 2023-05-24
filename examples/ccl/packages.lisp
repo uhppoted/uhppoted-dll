@@ -31,5 +31,6 @@
            add-task
            refresh-tasklist
            clear-tasklist
-           set-pc-control))
+           set-pc-control
+           set-interlock))
 

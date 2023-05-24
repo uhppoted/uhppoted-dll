@@ -142,6 +142,9 @@ public class examples {
         new command("set-pc-control",
                     "Enables/disables controller remote access control.",
                     SetPCControl),
+        new command("set-interlock",
+                    "Set a controller interlock mode.",
+                    SetInterlock),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -727,6 +730,20 @@ public class examples {
         display("set-pc-control", fields);
     }
 
+    static void SetInterlock(Uhppoted u, string[] args) {
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        byte interlock = 1;
+
+        u.SetInterlock(deviceID, interlock);
+
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("interlock", interlock),
+        };
+
+        display("set-interlock", fields);
+    }
     static options parse(string[] args) {
         options opts = new options(DEVICE_ID, "192.168.1.125", "255.255.255.0", "192.168.1.0", "192.168.1.100:60001", CARD_NUMBER,
                                    CARD_INDEX, DOOR, EVENT_INDEX, PROFILE_ID);

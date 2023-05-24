@@ -122,5 +122,8 @@ clear-tasklist: build
 set-pc-control: build
 	$(CMD) set-pc-control $(DEVICEID)
 
+set-interlock: build
+	$(CMD) set-interlock $(DEVICEID) --controller 423187757
+
 debug: build
 	$(GO) && export $(DLL)/debug && mono ./examples.exe get-status --controller 12345678

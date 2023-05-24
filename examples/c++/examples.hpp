@@ -57,6 +57,7 @@ void refreshTaskList(uhppoted &u, int argc, char **argv);
 void clearTaskList(uhppoted &u, int argc, char **argv);
 
 void setPCControl(uhppoted &u, int argc, char **argv);
+void setInterlock(uhppoted &u, int argc, char **argv);
 
 options parse(int argc, char **argv);
 void display(const std::string &, const std::vector<field> &);

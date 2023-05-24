@@ -121,6 +121,9 @@ clear-tasklist: build
 set-pc-control: build
 	$(CMD) set-pc-control $(DEVICEID)
 
+set-interlock: build
+	$(CMD) set-interlock $(DEVICEID) --controller 423187757
+
 debug: format
 	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
 	$(GO) && $(DLL)/debug && ./examples get-event $(DEVICEID) --event-index 33

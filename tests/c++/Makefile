@@ -122,6 +122,9 @@ clear-tasklist: build
 set-pc-control: build
 	$(CMD) set-pc-control
 
+set-interlock: build
+	$(CMD) set-interlock
+
 lookup: build
 	$(CMD) lookup
 

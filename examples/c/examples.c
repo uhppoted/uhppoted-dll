@@ -167,6 +167,11 @@ const command commands[] = {
         .help = "Enables/disables remote access control.",
         .fn = setPCControl,
     },
+    {
+        .cmd = "set-interlock",
+        .help = "Sets a controller interlock mode.",
+        .fn = setInterlock,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

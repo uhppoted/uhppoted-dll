@@ -222,3 +222,18 @@ void setPCControl(uhppoted &u, int argc, char **argv) {
 
     display("set_pc_control", fields);
 }
+
+void setInterlock(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    uint8_t interlock = 1;
+
+    u.set_interlock(deviceID, interlock);
+
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("interlock", interlock),
+    };
+
+    display("set_interlock", fields);
+}

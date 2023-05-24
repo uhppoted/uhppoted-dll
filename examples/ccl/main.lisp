@@ -33,6 +33,7 @@
         '("refresh-tasklist"      examples:refresh-tasklist      "Refreshes a controller task list to activate added tasks.")
         '("clear-tasklist"        examples:clear-tasklist        "Clears a controller task list.")
         '("set-pc-control"        examples:set-pc-control        "Enables/disables controller remote access control.")
+        '("set-interlock"         examples:set-interlock         "Sets a controller interlock mode.")
 ))
 
 
