@@ -1,6 +1,8 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
 CMD=python3 examples.py 
+CONTROLLER ?= 405419896
+INTERLOCK  ?=3
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -113,7 +115,7 @@ set-pc-control: build
 	$(GO) && $(DLL) && $(CMD) set-pc-control
 
 set-interlock: build
-	$(GO) && $(DLL) && $(CMD) set-interlock --controller 423187757
+	$(GO) && $(DLL) && $(CMD) set-interlock --controller $(CONTROLLER) --interlock $(INTERLOCK)
 
 debug: build
 	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678

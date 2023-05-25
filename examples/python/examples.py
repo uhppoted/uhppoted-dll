@@ -172,6 +172,8 @@ def main():
                         default=DEVICE_ID,
                         help='controller serial number')
 
+    parser.add_argument('--interlock', type=int, default=1, help='controller door interlock')
+
     parser.add_argument('--ip-address',
                         type=str,
                         default='192.168.1.100',
@@ -703,7 +705,7 @@ def set_pc_control(u, args):
 
 def set_interlock(u, args):
     device_id = args.controller
-    interlock = 1
+    interlock = args.interlock
 
     u.set_interlock(device_id, interlock)
 
