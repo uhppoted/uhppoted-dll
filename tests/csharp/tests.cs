@@ -452,7 +452,7 @@ public class Tests {
     }
 
     static bool SetInterlock(Uhppoted u) {
-        u.SetInterlock(DEVICE_ID, 3);
+        u.SetInterlock(DEVICE_ID, 4);
 
         result[] resultset = {};
 

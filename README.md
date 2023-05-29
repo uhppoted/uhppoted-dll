@@ -278,9 +278,10 @@ a byte value as the interlock mode, corresponding to one of the following modes:
 | Value | Mode    | Description                                                                                                     |
 |-------|---------|-----------------------------------------------------------------------------------------------------------------|
 | 0     | none    | Any door can opened subject to access restrictions                                                              |
-| 1     | 1&2,3&4 | Door 1 can be opened if 2 is closed and vice versa. Door 3 can be opened if 4 is closed (and vice versa)        |
-| 2     | 1&3,2&4 | Door 1 can be opened if 3 is closed and vice versa. Door 2 can be opened if 4 is closed (and vice versa)        |
-| 3     | 1&2&3   | Door 1 can be opened if 2 and 3 are both closed, door 2 if 1 and 3 are closed and door 3 if 1 and 2 are closed  |
-| 4     | 1&2&3&4 | A door can only be opened if all the other doors are closed                                                     |
+| 1     | 1&2     | Door 1 can be opened if 2 is closed and vice versa, doors 3 and 4 are not interlocked                           |
+| 2     | 3&4     | Door 3 can be opened if 4 is closed and vice versa, doors 1 and 2 are not interlocked                           |
+| 3     | 1&2,3&4 | Door 1 can be opened if 2 is closed and vice versa. Door 3 can be opened if 4 is closed (and vice versa)        |
+| 4     | 1&2&3   | Door 1 can be opened if 2 and 3 are both closed, door 2 if 1 and 3 are closed and door 3 if 1 and 2 are closed  |
+| 8     | 1&2&3&4 | A door can only be opened if all the other doors are closed                                                     |
 
 

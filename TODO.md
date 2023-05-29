@@ -9,6 +9,11 @@
       - [x] CCL
       - [x] CHANGELOG
       - [x] README
+      - [ ] Add to C doc
+      - [ ] Add to C++ doc
+      - [ ] Add to Python doc
+      - [ ] Add to C# doc
+      - [ ] Add to CCL doc
 
 - [ ] C++: rework to use unique_ptr
 

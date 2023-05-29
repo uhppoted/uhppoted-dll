@@ -376,7 +376,7 @@ def set_pc_control(u):
 
 def set_interlock(u):
     tag = 'set-interlock'
-    u.set_interlock(DEVICE_ID, 3)
+    u.set_interlock(DEVICE_ID, 4)
 
     return evaluate(tag, [])
 

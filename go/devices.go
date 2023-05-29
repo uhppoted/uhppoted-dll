@@ -273,7 +273,7 @@ func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
 }
 
 func setInterlock(uu uhppote.IUHPPOTE, deviceID uint32, interlock uint8) error {
-	if interlock > 4 {
+	if interlock != 0 && interlock != 1 && interlock != 2 && interlock != 3 && interlock != 4 && interlock != 8 {
 		return fmt.Errorf("invalid interlock value (%v)", interlock)
 	} else if ok, err := uu.SetInterlock(deviceID, types.Interlock(interlock)); err != nil {
 		return err

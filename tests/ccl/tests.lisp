@@ -266,7 +266,7 @@
 
 
 (defun set-interlock () "" 
-  (exec #'(lambda (u) (uhppoted-set-interlock u TEST-DEVICE-ID 3)))
+  (exec #'(lambda (u) (uhppoted-set-interlock u TEST-DEVICE-ID 4)))
   (evaluate "set-interlock" '()))
 
 

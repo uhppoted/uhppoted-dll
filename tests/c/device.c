@@ -253,7 +253,7 @@ bool setPCControl() {
 bool setInterlock() {
     const char *tag = "set-interlock";
 
-    if (set_interlock(DEVICE_ID, 3) < 0) {
+    if (set_interlock(DEVICE_ID, 4) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }

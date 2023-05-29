@@ -155,7 +155,7 @@ bool setPCControl(uhppoted &u) {
 }
 
 bool setInterlock(uhppoted &u) {
-    u.set_interlock(DEVICE_ID, 3);
+    u.set_interlock(DEVICE_ID, 4);
 
     vector<result> rs = {};
 
