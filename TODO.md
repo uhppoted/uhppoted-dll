@@ -14,8 +14,8 @@
       - [x] Add to Python doc
       - [x] Add to C# doc
       - [x] Add to CCL doc
-      - [ ] Reinstate github workflow
 
+- [x] Reinstate github workflow
 - [ ] C++: rework to use unique_ptr
 
 ## TODO
