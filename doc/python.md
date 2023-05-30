@@ -344,6 +344,33 @@ ID  controller serial number
 Raises an Exception if the call failed.
 ```
 
+### `set_pc_control`
+```
+uhppoted.set_pc_control(ID, enabled)
+
+ID       controller serial number 
+enabled  enables/disables host control
+
+Raises an Exception if the call failed.
+```
+
+### `set_interlock`
+```
+uhppoted.set_interlock(ID, interlock)
+
+ID        controller serial number 
+interlock controller door interlock mode
+          0: no interlock
+          1: doors 1&2
+          2: doors 3&4
+          3: doors 1&2,3&4
+          4: doors 1&2&3
+          8: doors 1&2&3&4
+
+
+Raises an Exception if the call failed.
+```
+
 ## Types
 
 ### `Controller`

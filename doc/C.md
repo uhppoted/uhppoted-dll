@@ -414,6 +414,36 @@ Returns:
 - -1 if the call failed. The error message can be retrieved using errmsg().
 ```
 
+### `set_pc_control`
+```
+int set_pc_control(uint32_t id, bool enabled);
+
+id      controller serial number 
+enabled enables/disables PC control
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
+### `set_interlock`
+```
+int set_interlock(uint32_t id, uint8_t interlock);
+
+id        controller serial number 
+interlock controller door interlock mode
+          0: no interlock
+          1: doors 1&2
+          2: doors 3&4
+          3: doors 1&2,3&4
+          4: doors 1&2&3
+          8: doors 1&2&3&4
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
 ## Types
 
 ### `controller`

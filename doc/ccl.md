@@ -370,6 +370,32 @@ device-id  controller serial number
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
+### `set_pc_control`
+```
+(defun uhppoted-set-pc-control (uhppote device-id enabled) ...)
+
+device-id  controller serial number 
+enabled    enables/disables host control
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
+### `set_interlock`
+```
+(defun uhppoted-set-interlock (uhppote device-id interlock) ...)
+
+device-id  controller serial number 
+interlock  controller door interlock mode
+           0: no interlock
+           1: doors 1&2
+           2: doors 3&4
+           3: doors 1&2,3&4
+           4: doors 1&2&3
+           8: doors 1&2&3&4
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
 ## Types
 
 ### `Device`

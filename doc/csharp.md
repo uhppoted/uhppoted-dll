@@ -349,6 +349,33 @@ ID  controller serial number
 Throws a UhppotedException if the call failed.
 ```
 
+### `Uhppoted::SetPCControl`
+```
+public void SetPCControl(uint ID, bool enabled)
+
+ID      controller serial number 
+enabled enables/disables host control
+
+Throws a UhppotedException if the call failed.
+```
+
+### `Uhppoted::SetInterlock`
+```
+public void SetInterlock(uint ID, byte interlock)
+
+ID        controller serial number 
+interlock controller door interlock mode
+          0: no interlock
+          1: doors 1&2
+          2: doors 3&4
+          3: doors 1&2,3&4
+          4: doors 1&2&3
+          8: doors 1&2&3&4
+
+Throws a UhppotedException if the call failed.
+```
+
+
 ## Types
 
 ### `Controller`
