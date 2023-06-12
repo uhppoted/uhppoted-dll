@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [0.8.5](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.5) - 2023-06-14
 
 ### Added
 
