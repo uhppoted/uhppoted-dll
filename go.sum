@@ -26,3 +26,5 @@ github.com/uhppoted/uhppoted-lib v0.8.5-0.20230328170917-1841478dba74 h1:tVKrQTe
 github.com/uhppoted/uhppoted-lib v0.8.5-0.20230328170917-1841478dba74/go.mod h1:Y9vtzlt4bfJEAw5XGROJyPh9aMPUUuH9MdhoeDxDhmE=
 github.com/uhppoted/uhppoted-lib v0.8.5-0.20230606184151-bf11be9b95f5 h1:Vdg1vh6k2W1Yf5yHWngFDVbDRqhngrasQATJNiE67cY=
 github.com/uhppoted/uhppoted-lib v0.8.5-0.20230606184151-bf11be9b95f5/go.mod h1:XQgAFv5Do4RShVpgKpji/VmqFC8ipcsjo7Mnq2manj0=
+github.com/uhppoted/uhppoted-lib v0.8.5-0.20230613171422-1f9293083395 h1:xbH2STvy1uIbY0VFiEkFzdaa0FfZqpQOW0asAP0JCBk=
+github.com/uhppoted/uhppoted-lib v0.8.5-0.20230613171422-1f9293083395/go.mod h1:euK2cLO934w0GDgvvnWMjYNtZ29K1xSMrMse6THOzDQ=
