@@ -59,6 +59,7 @@ public class Tests {
         new test("clear-tasklist", ClearTaskList),
         new test("set-pc-control", SetPCControl),
         new test("set-interlock", SetInterlock),
+        new test("activate-keypads", ActivateKeypads),
         new test("lookup", Internationalisation),
         new test("structs", Structs),
     };
@@ -457,6 +458,14 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("set-interlock", resultset);
+    }
+
+    static bool ActivateKeypads(Uhppoted u) {
+        u.ActivateKeypads(DEVICE_ID, true, true, false, true);
+
+        result[] resultset = {};
+
+        return evaluate("activate-keypads", resultset);
     }
 
     static bool Internationalisation(Uhppoted u) {

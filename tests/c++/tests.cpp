@@ -45,6 +45,7 @@ vector<test> tests = {
     {"clear-tasklist", clearTaskList},
     {"set-pc-control", setPCControl},
     {"set-interlock", setInterlock},
+    {"activate-keypads", activateKeypads},
     {"lookup", internationalisation},
     {"structs", structs},
 };

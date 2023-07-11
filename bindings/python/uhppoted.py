@@ -413,6 +413,9 @@ class Uhppote:
     def set_interlock(self, deviceID, interlock):
         self.ffi.SetInterlock(self._uhppote, deviceID, interlock)
 
+    def activate_keypads(self, deviceID, reader1, reader2, reader3, reader4):
+        self.ffi.ActivateKeypads(self._uhppote, deviceID, reader1, reader2, reader3, reader4)
+
 
 # lookup
 
@@ -604,6 +607,7 @@ class FFI:
         self.ClearTaskList = ffi('ClearTaskList', errcheck)
         self.SetPCControl = ffi('SetPCControl', errcheck)
         self.SetInterlock = ffi('SetInterlock', errcheck)
+        self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -649,6 +653,7 @@ def libfunctions():
         'ClearTaskList':       (lib.ClearTaskList,       [POINTER(GoUHPPOTE), c_ulong]),
         'SetPCControl':        (lib.SetPCControl,        [POINTER(GoUHPPOTE), c_ulong, c_bool]),
         'SetInterlock':        (lib.SetInterlock,        [POINTER(GoUHPPOTE), c_ulong, c_ubyte]),
+        'ActivateKeypads':     (lib.ActivateKeypads,     [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool]),
     }
 # yapf: enable
 

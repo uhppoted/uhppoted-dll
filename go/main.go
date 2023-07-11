@@ -427,10 +427,10 @@ func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
 }
 
 //export SetPCControl
-func SetPCControl(u *C.struct_UHPPOTE, deviceID uint32, enabled bool) *C.char {
+func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := setPCControl(uu, deviceID, enabled); err != nil {
+	} else if err := setPCControl(uu, controller, enabled); err != nil {
 		return C.CString(err.Error())
 	}
 
@@ -438,10 +438,21 @@ func SetPCControl(u *C.struct_UHPPOTE, deviceID uint32, enabled bool) *C.char {
 }
 
 //export SetInterlock
-func SetInterlock(u *C.struct_UHPPOTE, deviceID uint32, interlock uint8) *C.char {
+func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := setInterlock(uu, deviceID, interlock); err != nil {
+	} else if err := setInterlock(uu, controller, interlock); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+//export ActivateKeypads
+func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := activateKeypads(uu, controller, reader1, reader2, reader3, reader4); err != nil {
 		return C.CString(err.Error())
 	}
 

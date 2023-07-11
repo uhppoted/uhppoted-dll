@@ -116,6 +116,9 @@ set-pc-control: build
 set-interlock: build
 	$(CMD) set-interlock
 
+activate-keypads: build
+	$(CMD) activate-keypads
+
 lookup: build
 	$(CMD) lookup
 

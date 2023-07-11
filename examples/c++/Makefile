@@ -122,7 +122,10 @@ set-pc-control: build
 	$(CMD) set-pc-control $(DEVICEID)
 
 set-interlock: build
-	$(CMD) set-interlock $(DEVICEID) --controller 423187757
+	$(CMD) set-interlock $(DEVICEID)
+
+activate-keypads: build
+	$(CMD) activate-keypads $(DEVICEID)
 
 debug: format
 	g++ -std=c++17 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted

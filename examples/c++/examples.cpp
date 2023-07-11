@@ -177,6 +177,11 @@ const vector<command> commands = {
         .help = "Sets a controller interlock mode.",
         .fn = setInterlock,
     },
+    {
+        .cmd = "activate-keypads",
+        .help = "Activates/deactivates a controller reader access keypads.",
+        .fn = activateKeypads,
+    },
 };
 
 int main(int argc, char **argv) {

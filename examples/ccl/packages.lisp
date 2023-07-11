@@ -32,5 +32,6 @@
            refresh-tasklist
            clear-tasklist
            set-pc-control
-           set-interlock))
+           set-interlock
+           activate-keypads))
 

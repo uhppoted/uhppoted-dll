@@ -210,8 +210,9 @@ extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);
 extern char* AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task);
 extern char* RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID);
 extern char* ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID);
-extern char* SetPCControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled);
-extern char* SetInterlock(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 interlock);
+extern char* SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled);
+extern char* SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock);
+extern char* ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4);
 
 #ifdef __cplusplus
 }

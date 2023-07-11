@@ -586,6 +586,13 @@ void uhppoted::set_interlock(uint32_t id, uint8_t interlock) {
     }
 }
 
+void uhppoted::activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4) {
+    char *err = ActivateKeypads(u, id, reader1, reader2, reader3, reader4);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}
+
 const map<uint8_t, string> LookupMode = {
     {NORMALLY_OPEN, ModeNormallyOpen},
     {NORMALLY_CLOSED, ModeNormallyClosed},

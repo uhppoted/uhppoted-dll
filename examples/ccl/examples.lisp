@@ -271,7 +271,7 @@
 (defun set-pc-control (args) "" 
   (let* ((device-id (args-device-id args))
          (enabled   t)
-         (ok        (exec #'(lambda (u) (uhppoted-set-pc-control u device-id enabled)))))
+         (ok (exec #'(lambda (u) (uhppoted-set-pc-control u device-id enabled)))))
     (when ok
       (display "set-pc-control" device-id nil))))
 
@@ -279,9 +279,20 @@
 (defun set-interlock (args) "" 
   (let* ((device-id (args-device-id args))
          (interlock 1)
-         (ok        (exec #'(lambda (u) (uhppoted-set-interlock u device-id interlock)))))
+         (ok (exec #'(lambda (u) (uhppoted-set-interlock u device-id interlock)))))
     (when ok
       (display "set-interlock" device-id nil))))
+
+
+(defun activate-keypads (args) "" 
+  (let* ((device-id (args-device-id args))
+         (reader1 t)
+         (reader2 t)
+         (reader3 nil)
+         (reader4 t)
+         (ok (exec #'(lambda (u) (uhppoted-activate-keypads u device-id reader1 reader2 reader3 reader4)))))
+    (when ok
+      (display "activate-keypads" device-id nil))))
 
 
 (defun args-device-id (args) 

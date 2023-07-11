@@ -69,6 +69,7 @@ extern bool clearTaskList();
 
 extern bool setPCControl();
 extern bool setInterlock();
+extern bool activateKeypads();
 
 extern bool internationalisation();
 extern bool structs();

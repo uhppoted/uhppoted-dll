@@ -145,6 +145,9 @@ public class examples {
         new command("set-interlock",
                     "Set a controller interlock mode.",
                     SetInterlock),
+        new command("activate-keypads",
+                    "Activates and deactivates a controller reader access keypads.",
+                    ActivateKeypads),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -744,6 +747,28 @@ public class examples {
 
         display("set-interlock", fields);
     }
+
+    static void ActivateKeypads(Uhppoted u, string[] args) {
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        bool reader1 = true;
+        bool reader2 = true;
+        bool reader3 = false;
+        bool reader4 = true;
+
+        u.ActivateKeypads(deviceID, reader1, reader2, reader3, reader4);
+
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new boolField("reader 1", reader1),
+            new boolField("reader 2", reader2),
+            new boolField("reader 3", reader3),
+            new boolField("reader 4", reader4),
+        };
+
+        display("activate-keypads", fields);
+    }
+
     static options parse(string[] args) {
         options opts = new options(DEVICE_ID, "192.168.1.125", "255.255.255.0", "192.168.1.0", "192.168.1.100:60001", CARD_NUMBER,
                                    CARD_INDEX, DOOR, EVENT_INDEX, PROFILE_ID);

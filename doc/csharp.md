@@ -375,6 +375,19 @@ interlock controller door interlock mode
 Throws a UhppotedException if the call failed.
 ```
 
+### `Uhppoted::ActivateKeypads`
+```
+public void ActivateKeypads(uint ID, bool reader1, bool reader2, bool reader3, bool reader4)
+
+ID      controller serial number 
+reader1 activates/deactivates reader 1 access keypad
+reader2 activates/deactivates reader 2 access keypad
+reader3 activates/deactivates reader 3 access keypad
+reader4 activates/deactivates reader 4 access keypad
+
+Throws a UhppotedException if the call failed.
+```
+
 
 ## Types
 

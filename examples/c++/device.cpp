@@ -220,7 +220,7 @@ void setPCControl(uhppoted &u, int argc, char **argv) {
         field("enabled", enabled),
     };
 
-    display("set_pc_control", fields);
+    display("set-pc-control", fields);
 }
 
 void setInterlock(uhppoted &u, int argc, char **argv) {
@@ -235,5 +235,26 @@ void setInterlock(uhppoted &u, int argc, char **argv) {
         field("interlock", interlock),
     };
 
-    display("set_interlock", fields);
+    display("set-interlock", fields);
+}
+
+void activateKeypads(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t deviceID = options.device_id;
+    bool reader1 = true;
+    bool reader2 = true;
+    bool reader3 = false;
+    bool reader4 = true;
+
+    u.activate_keypads(deviceID, reader1, reader2, reader3, reader4);
+
+    vector<field> fields = {
+        field("ID", deviceID),
+        field("reader 1", reader1),
+        field("reader 2", reader2),
+        field("reader 3", reader3),
+        field("reader 4", reader4),
+    };
+
+    display("activate-keypads", fields);
 }

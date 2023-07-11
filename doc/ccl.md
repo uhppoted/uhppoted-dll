@@ -82,7 +82,7 @@ code      code from the returned information
 locale    Language code to use for the text lookup. Defaults to uk-en.
 ```
 
-### `get_devices`
+### `get-devices`
 ```
 (defun uhppoted-get-devices (uhppote &optional (N 16)) ...)
 
@@ -91,7 +91,7 @@ Returns an array of controller serial numbers if the call succeeded.
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_device`
+### `get-device`
 ```
 (defun uhppoted-get-device (uhppote device-id) ...)
 
@@ -102,7 +102,7 @@ Returns a `device` struct populated with the controller device information if th
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_address`
+### `set-address`
 ```
 (defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) ...)
 
@@ -114,7 +114,7 @@ gateway-addr  controller gateway IPv4 address
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_status`
+### `get-status`
 ```
 (defun uhppoted-get-status (uhppote device-id) ...)
 
@@ -125,7 +125,7 @@ Returns a `status` struct populated with the controller status information if th
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_time`
+### `get-time`
 ```
 (defun uhppoted-get-time (uhppote device-id) ...)
 
@@ -136,7 +136,7 @@ Returns a date/time string (YYYY-MM-dd HH:mm:ss) with the controller current dat
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_time`
+### `set-time`
 ```
 (defun uhppoted-set-time (uhppote device-id datetime) ...)
 
@@ -146,7 +146,7 @@ datetime   date/time string (YYYY-MM-dd HH:mm:ss)
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_listener`
+### `get-listener`
 ```
 (defun uhppoted-get-listener (uhppote device-id) ...)
 
@@ -157,7 +157,7 @@ Returns the controller event listener IPv4 address:port as a string if the call 
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_listener`
+### `set-listener`
 ```
 (defun uhppoted-set-listener (uhppote device-id listener) ...)
 
@@ -167,7 +167,7 @@ listener   listener IPv4 address:port string
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_door_control`
+### `get-door-control`
 ```
 (defun uhppoted-get-door-control (uhppote device-id door) ...)
 
@@ -179,7 +179,7 @@ Returns a `door-control` struct populated with the controller door configuration
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_door_control`
+### `set-door-control`
 ```
 (defun uhppoted-set-door-control (uhppote device-id door mode delay) ...)
 
@@ -191,7 +191,7 @@ delay      door open delay in seconds
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `open_door`
+### `open-door`
 ```
 (defun uhppoted-open-door (uhppote device-id door) ...)
 
@@ -201,7 +201,7 @@ door       door ID [1..4]
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_cards`
+### `get-cards`
 ```
 (defun uhppoted-get-cards (uhppote device-id) ...)
 
@@ -212,7 +212,7 @@ Returns the number of cards stored on the controller if the call succeeded.
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_card`
+### `get-card`
 ```
 (defun uhppoted-get-card (uhppote device-id card-number) ...)
 
@@ -224,7 +224,7 @@ Returns a `card` struct with the controller card information if the call succeed
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_card_by_index`
+### `get-card-by-index`
 ```
 (defun uhppoted-get-card-by-index (uhppote device-id index) ...)
 
@@ -236,7 +236,7 @@ Returns a `card` struct with the controller card information if the call succeed
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `put_card`
+### `put-card`
 ```
 (defun uhppoted-put-card (uhppote device-id card-number from to doors) ...)
 
@@ -249,7 +249,7 @@ doors        4 byte array with card permissions
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `delete_card`
+### `delete-card`
 ```
 (defun uhppoted-delete-card (uhppote device-id card-number) ...)
 
@@ -259,7 +259,7 @@ card-number  card number
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `delete_cards`
+### `delete-cards`
 ```
 (defun uhppoted-delete-cards (uhppote device-id) ...)
 
@@ -268,7 +268,7 @@ device-id  controller serial number
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_event_index`
+### `get-event-index`
 ```
 (defun uhppoted-get-event-index (uhppote device-id) ...)
 
@@ -279,7 +279,7 @@ Returns the controller event index if the call succeeded.
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_event_index`
+### `set-event-index`
 ```
 (defun uhppoted-record-special-events (uhppote device-id enabled) ...)
 
@@ -289,7 +289,7 @@ index      controller event index
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_event`
+### `get-event`
 ```
 (defun uhppoted-get-event (uhppote device-id index) ...)
 
@@ -301,7 +301,7 @@ Returns an `event` struct with the controller event stored at the index.
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `record_special_events`
+### `record-special-events`
 ```
 (defun uhppoted-record-special-events (uhppote device-id enabled) ...)
 
@@ -311,7 +311,7 @@ enabled   Enables/disables recording of door, etc events
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `get_time_profile`
+### `get-time-profile`
 ```
 (defun uhppoted-get-time-profile (uhppote device-id profile-id) ...)
 
@@ -323,7 +323,7 @@ Returns a `time-profile` struct with the time profile stored at the profile ID o
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_time_profile`
+### `set-time-profile`
 ```
 (defun uhppoted-set-time-profile (uhppote device-id profile) ...)
 
@@ -333,7 +333,7 @@ profile   `time-profile` struct  initialised with the time profile to store on t
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `clear_time_profiles`
+### `clear-time-profiles`
 ```
 (defun uhppoted-clear-time-profiles (uhppote device-id) ...)
 
@@ -342,7 +342,7 @@ device-id  controller serial number
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `add_task`
+### `add-task`
 ```
 (defun uhppoted-add-task (uhppote device-id task) ...)
 
@@ -352,7 +352,7 @@ task      `task` struct initialised with the task to store on the controller.
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `refresh_tasklist`
+### `refresh-tasklist`
 ```
 (defun uhppoted-refresh-tasklist (uhppote device-id) ...)
 
@@ -361,7 +361,7 @@ device-id  controller serial number
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `clear_tasklist`
+### `clear-tasklist`
 ```
 (defun uhppoted-clear-tasklist (uhppote device-id) ...)
 
@@ -370,7 +370,7 @@ device-id  controller serial number
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_pc_control`
+### `set-pc-control`
 ```
 (defun uhppoted-set-pc-control (uhppote device-id enabled) ...)
 
@@ -380,7 +380,7 @@ enabled    enables/disables host control
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set_interlock`
+### `set-interlock`
 ```
 (defun uhppoted-set-interlock (uhppote device-id interlock) ...)
 
@@ -392,6 +392,19 @@ interlock  controller door interlock mode
            3: doors 1&2,3&4
            4: doors 1&2&3
            8: doors 1&2&3&4
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
+### `activate-keypads`
+```
+(defun uhppoted-activate-keypads (uhppote device-id reader1 reader2 reader3 reader4) ...)
+
+device-id  controller serial number 
+reader1    activates/deactivates reader 1 access keypad
+reader2    activates/deactivates reader 2 access keypad
+reader3    activates/deactivates reader 3 access keypad
+reader4    activates/deactivates reader 4 access keypad
 
 Raises a `uhppoted-error` condition if the call failed.
 ```

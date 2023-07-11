@@ -270,6 +270,11 @@
   (evaluate "set-interlock" '()))
 
 
+(defun activate-keypads () "" 
+  (exec #'(lambda (u) (uhppoted-activate-keypads u TEST-DEVICE-ID t t nil t)))
+  (evaluate "activate-keypads" '()))
+
+
 (defun internationalisation () "" 
   (let ((mode-normally-open              (uhppoted-lookup lookup-mode         normally-open                                ""))
         (mode-normally-closed            (uhppoted-lookup lookup-mode         normally-closed                              ""))

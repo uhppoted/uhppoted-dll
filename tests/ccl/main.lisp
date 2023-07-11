@@ -35,6 +35,7 @@
         '("clear-tasklist"        tests:clear-tasklist)
         '("set-pc-control"        tests:set-pc-control)
         '("set-interlock"         tests:set-interlock)
+        '("activate-keypads"      tests:activate-keypads)
         '("lookup"                tests:internationalisation)
         '("structs"               tests:structs)
 ))

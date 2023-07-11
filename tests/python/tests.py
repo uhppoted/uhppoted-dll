@@ -66,6 +66,7 @@ def tests():
         'clear-tasklist': clear_tasklist,
         'set-pc-control': set_pc_control,
         'set-interlock': set_interlock,
+        'activate-keypads': activate_keypads,
         'lookup': internationalisation,
         'structs': structs,
     }
@@ -377,6 +378,13 @@ def set_pc_control(u):
 def set_interlock(u):
     tag = 'set-interlock'
     u.set_interlock(DEVICE_ID, 4)
+
+    return evaluate(tag, [])
+
+
+def activate_keypads(u):
+    tag = 'activate-keypads'
+    u.activate_keypads(DEVICE_ID, True, True, False, True)
 
     return evaluate(tag, [])
 

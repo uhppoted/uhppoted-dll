@@ -270,9 +270,9 @@ func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
 	return nil
 }
 
-func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
-	if deviceID != 405419896 {
-		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+func setPCControl(uu uhppote.IUHPPOTE, controller uint32, enabled bool) error {
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", controller)
 	}
 
 	if !enabled {
@@ -282,13 +282,32 @@ func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
 	return nil
 }
 
-func setInterlock(uu uhppote.IUHPPOTE, deviceID uint32, interlock uint8) error {
-	if deviceID != 405419896 {
-		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+func setInterlock(uu uhppote.IUHPPOTE, controller uint32, interlock uint8) error {
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", controller)
 	}
 
 	if types.Interlock(interlock) != types.Interlock123 {
 		return fmt.Errorf("Incorrect interlock (%v)", interlock)
+	}
+
+	return nil
+}
+
+func activateKeypads(uu uhppote.IUHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool) error {
+	keypads := map[uint8]bool{
+		1: reader1,
+		2: reader2,
+		3: reader3,
+		4: reader4,
+	}
+
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect device ID (%v)", controller)
+	}
+
+	if !keypads[1] || !keypads[2] || keypads[3] || !keypads[4] {
+		return fmt.Errorf("Incorrect keypads (%v%v)", keypads)
 	}
 
 	return nil

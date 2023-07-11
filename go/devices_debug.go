@@ -256,10 +256,10 @@ func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
 	return nil
 }
 
-func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
+func setPCControl(uu uhppote.IUHPPOTE, controller uint32, enabled bool) error {
 	if DEBUG {
 		fmt.Printf(">>> set-pc-control\n")
-		fmt.Printf("    ID:      %v\n", deviceID)
+		fmt.Printf("    ID:      %v\n", controller)
 		fmt.Printf("    enabled: %v\n", enabled)
 		fmt.Println()
 	}
@@ -267,11 +267,25 @@ func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
 	return nil
 }
 
-func setInterlock(uu uhppote.IUHPPOTE, deviceID uint32, interlock uint8) error {
+func setInterlock(uu uhppote.IUHPPOTE, controller uint32, interlock uint8) error {
 	if DEBUG {
 		fmt.Printf(">>> set-interlock\n")
-		fmt.Printf("    ID:        %v\n", deviceID)
+		fmt.Printf("    ID:        %v\n", controller)
 		fmt.Printf("    interlock: %v\n", interlock)
+		fmt.Println()
+	}
+
+	return nil
+}
+
+func activateKeypads(uu uhppote.IUHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool) error {
+	if DEBUG {
+		fmt.Printf(">>> activate-keypads\n")
+		fmt.Printf("    ID:        %v\n", controller)
+		fmt.Printf("    readers 1: %v\n", reader1)
+		fmt.Printf("            2: %v\n", reader2)
+		fmt.Printf("            3: %v\n", reader3)
+		fmt.Printf("            4: %v\n", reader4)
 		fmt.Println()
 	}
 

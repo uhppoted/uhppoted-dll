@@ -262,3 +262,16 @@ bool setInterlock() {
 
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
+
+bool activateKeypads() {
+    const char *tag = "activate-keypads";
+
+    if (activate_keypads(DEVICE_ID, true, true, false, true) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}

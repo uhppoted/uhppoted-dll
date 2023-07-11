@@ -454,6 +454,13 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void ActivateKeypads(uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4) {
+        string err = ActivateKeypads(ref this.u, deviceID, reader1, reader2, reader3, reader4);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
     // Go FFI
 
     [DllImport("uhppoted.dll")]
@@ -542,6 +549,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("uhppoted.dll")]
     private static extern string SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock);
+
+    [DllImport("uhppoted.dll")]
+    private static extern string ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4);
 
     struct udevice {
         public uint ID;

@@ -144,6 +144,7 @@ class uhppoted {
 
     void set_pc_control(uint32_t id, bool enabled);
     void set_interlock(uint32_t id, uint8_t interlock);
+    void activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4);
 
     const std::string lookup(const std::string &, uint8_t, const std::string &);
 

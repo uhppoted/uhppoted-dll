@@ -117,7 +117,10 @@ set-pc-control: build
 	$(CMD) set-pc-control $(DEVICEID)
 
 set-interlock: build
-	$(CMD) set-interlock --controller 423187757
+	$(CMD) set-interlock $(DEVICEID)
+
+activate-keypads: build
+	$(CMD) activate-keypads $(DEVICEID)
 
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp

@@ -259,26 +259,43 @@ func openDoor(uu uhppote.IUHPPOTE, deviceID uint32, door uint8) error {
 	return nil
 }
 
-func setPCControl(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) error {
-	ok, err := uu.SetPCControl(deviceID, enabled)
+func setPCControl(uu uhppote.IUHPPOTE, controller uint32, enabled bool) error {
+	ok, err := uu.SetPCControl(controller, enabled)
 	if err != nil {
 		return err
 	} else if !ok && enabled {
-		return fmt.Errorf("%v: failed to enable remote access control", deviceID)
+		return fmt.Errorf("%v: failed to enable remote access control", controller)
 	} else if !ok && !enabled {
-		return fmt.Errorf("%v: failed to disable remote access control", deviceID)
+		return fmt.Errorf("%v: failed to disable remote access control", controller)
 	}
 
 	return nil
 }
 
-func setInterlock(uu uhppote.IUHPPOTE, deviceID uint32, interlock uint8) error {
+func setInterlock(uu uhppote.IUHPPOTE, controller uint32, interlock uint8) error {
 	if interlock != 0 && interlock != 1 && interlock != 2 && interlock != 3 && interlock != 4 && interlock != 8 {
 		return fmt.Errorf("invalid interlock value (%v)", interlock)
-	} else if ok, err := uu.SetInterlock(deviceID, types.Interlock(interlock)); err != nil {
+	} else if ok, err := uu.SetInterlock(controller, types.Interlock(interlock)); err != nil {
 		return err
 	} else if !ok {
-		return fmt.Errorf("%v: failed to set controller interlock", deviceID)
+		return fmt.Errorf("%v: failed to set controller interlock", controller)
+	}
+
+	return nil
+}
+
+func activateKeypads(uu uhppote.IUHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool) error {
+	keypads := map[uint8]bool{
+		1: reader1,
+		2: reader2,
+		3: reader3,
+		4: reader4,
+	}
+
+	if ok, err := uu.ActivateKeypads(controller, keypads); err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: failed to activate/deactivate controller reader access keypads", controller)
 	}
 
 	return nil

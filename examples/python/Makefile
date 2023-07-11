@@ -117,6 +117,9 @@ set-pc-control: build
 set-interlock: build
 	$(GO) && $(DLL) && $(CMD) set-interlock --controller $(CONTROLLER) --interlock $(INTERLOCK)
 
+activate-keypads: build
+	$(GO) && $(DLL) && $(CMD) activate-keypads
+
 debug: build
 	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678
 

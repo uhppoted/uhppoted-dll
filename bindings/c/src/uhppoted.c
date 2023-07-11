@@ -689,6 +689,16 @@ int set_interlock(uint32_t id, uint8_t interlock) {
     return 0;
 }
 
+int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4) {
+    char *err = ActivateKeypads(u, id, reader1, reader2, reader3, reader4);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
+
 const char *lookup(const char *type, uint8_t code, const char *locale) {
     if (strcmp(type, LOOKUP_MODE) == 0) {
         switch (code) {

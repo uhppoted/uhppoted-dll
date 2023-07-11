@@ -86,6 +86,7 @@ extern int clearTaskList(int argc, char **argv);
 
 extern int setPCControl(int argc, char **argv);
 extern int setInterlock(int argc, char **argv);
+extern int activateKeypads(int argc, char **argv);
 
 extern options parse(int argc, char **argv);
 extern void display(const char *tag, int N, field fields[]);

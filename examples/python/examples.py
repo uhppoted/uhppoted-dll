@@ -155,6 +155,10 @@ def commands():
             'help': "Sets the controller interlock mode",
             'fn': set_interlock,
         },
+        'activate-keypads': {
+            'help': "Activates and deactivates the controller reader access keypads",
+            'fn': activate_keypads,
+        },
     }
 
 
@@ -712,6 +716,24 @@ def set_interlock(u, args):
     display('set-interlock', [
         ('ID', device_id),
         ('interlock', interlock),
+    ])
+
+
+def activate_keypads(u, args):
+    device_id = args.controller
+    reader1 = True
+    reader2 = True
+    reader3 = False
+    reader4 = True
+
+    u.activate_keypads(device_id, reader1, reader2, reader3, reader4)
+
+    display('activate-keypads', [
+        ('ID', device_id),
+        ('reader 1', reader1),
+        ('reader 2', reader2),
+        ('reader 3', reader3),
+        ('reader 4', reader4),
     ])
 
 

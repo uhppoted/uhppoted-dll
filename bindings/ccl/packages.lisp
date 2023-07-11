@@ -33,6 +33,7 @@
            uhppoted-clear-tasklist
            uhppoted-set-pc-control
            uhppoted-set-interlock
+           uhppoted-activate-keypads
            uhppoted-error
            with-warning
            message

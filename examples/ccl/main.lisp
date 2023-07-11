@@ -34,6 +34,7 @@
         '("clear-tasklist"        examples:clear-tasklist        "Clears a controller task list.")
         '("set-pc-control"        examples:set-pc-control        "Enables/disables controller remote access control.")
         '("set-interlock"         examples:set-interlock         "Sets a controller interlock mode.")
+        '("activate-keypads"      examples:activate-keypads      "Activates and deactivates a controller reader access keypads.")
 ))
 
 

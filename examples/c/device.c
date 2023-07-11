@@ -320,3 +320,28 @@ int setInterlock(int argc, char **argv) {
 
     return 0;
 }
+
+int activateKeypads(int argc, char **argv) {
+    uint32_t deviceID = parse(argc, argv).device_id;
+    bool reader1 = true;
+    bool reader2 = true;
+    bool reader3 = false;
+    bool reader4 = true;
+
+    if (activate_keypads(deviceID, reader1, reader2, reader3, reader4) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
+        {.field = "reader1", .type = "bool", .value.boolean = reader1},
+        {.field = "reader2", .type = "bool", .value.boolean = reader2},
+        {.field = "reader3", .type = "bool", .value.boolean = reader3},
+        {.field = "reader4", .type = "bool", .value.boolean = reader4},
+    };
+
+    display("activate-keypads", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}

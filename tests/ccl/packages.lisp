@@ -33,6 +33,7 @@
            clear-tasklist
            set-pc-control
            set-interlock
+           activate-keypads
            internationalisation
            structs
            failed

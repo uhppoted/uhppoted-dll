@@ -161,3 +161,11 @@ bool setInterlock(uhppoted &u) {
 
     return evaluate("set-interlock", rs);
 }
+
+bool activateKeypads(uhppoted &u) {
+    u.activate_keypads(DEVICE_ID, true, true, false, true);
+
+    vector<result> rs = {};
+
+    return evaluate("activate-keypads", rs);
+}

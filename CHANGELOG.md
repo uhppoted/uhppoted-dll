@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+1. `activate-keypads` command to activate and deactivate a controller reader access keypads.
+
 
 ## [0.8.5](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.5) - 2023-06-13
 

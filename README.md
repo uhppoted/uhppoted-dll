@@ -129,6 +129,7 @@ returns a fixed response.
 - [`RefreshTaskList`](#refreshtasklist)
 - [`SetPCControl`](#setpccontrol)
 - [`SetInterlock`](#setinterlock)
+- [`ActivateKeypads`](#activatekeypads)
 
 #### `GetDevices`
 
@@ -285,4 +286,10 @@ a byte value as the interlock mode, corresponding to one of the following modes:
 | 4     | 1&2&3   | Door 1 can be opened if 2 and 3 are both closed, door 2 if 1 and 3 are closed and door 3 if 1 and 2 are closed  |
 | 8     | 1&2&3&4 | A door can only be opened if all the other doors are closed                                                     |
 
+
+#### `ActivateKeypads`
+
+Activates and deactivates a controller reader access keypads. 
+
+Note that the controllers do not provide the capability for activating or deactivating individual keypads.
 

@@ -690,11 +690,22 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
-(defun uhppoted-set-interlock (uhppote device-id interlock) "Sets a controller interlock ode"
+(defun uhppoted-set-interlock (uhppote device-id interlock) "Sets a controller interlock mode"
   (with-macptrs ((err (external-call "SetInterlock" :address uhppote 
                                                     :unsigned-long device-id 
                                                     :unsigned-byte interlock
                                                     :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
+
+(defun uhppoted-activate-keypads (uhppote device-id reader1 reader2 reader3 reader4) "Activates and deactivates a controller reader access keypads"
+  (with-macptrs ((err (external-call "ActivateKeypads" :address uhppote 
+                                                       :unsigned-long device-id 
+                                                       :unsigned-byte (if reader1 1 0)
+                                                       :unsigned-byte (if reader2 1 0)
+                                                       :unsigned-byte (if reader3 1 0)
+                                                       :unsigned-byte (if reader4 1 0)
+                                                       :address)))
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 

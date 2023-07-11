@@ -371,6 +371,20 @@ interlock controller door interlock mode
 Raises an Exception if the call failed.
 ```
 
+### `activate_keypads`
+```
+uhppoted.activate_keypads(ID, reader1, reader2, reader3, reader4)
+
+ID      controller serial number 
+reader1 activates/deactivates reader 1 access keypad
+reader2 activates/deactivates reader 2 access keypad
+reader3 activates/deactivates reader 3 access keypad
+reader4 activates/deactivates reader 4 access keypad
+
+
+Raises an Exception if the call failed.
+```
+
 ## Types
 
 ### `Controller`

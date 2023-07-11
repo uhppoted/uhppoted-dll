@@ -1,6 +1,6 @@
 # TODO
 
-- [x] `set-interlock`
+- [ ] `activate-keypads` (cf. https://github.com/uhppoted/uhppoted/issues/35)
       - [x] Go lib
       - [x] C
       - [x] C++
@@ -15,7 +15,6 @@
       - [x] Add to C# doc
       - [x] Add to CCL doc
 
-- [x] Reinstate github workflow
 - [ ] C++: rework to use unique_ptr
 
 ## TODO

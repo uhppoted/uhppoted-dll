@@ -413,6 +413,21 @@ Returns:
 - -1 if the call failed. The error message can be retrieved using errmsg().
 ```
 
+### `activate-keypads`
+```
+int activate-keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4);
+
+id      controller serial number 
+reader1 activate/deactivate reader 1 access keypad
+reader2 activate/deactivate reader 2 access keypad
+reader3 activate/deactivate reader 3 access keypad
+reader4 activate/deactivate reader 4 access keypad
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
 
 ## Types
 

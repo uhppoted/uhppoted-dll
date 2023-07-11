@@ -172,6 +172,11 @@ const command commands[] = {
         .help = "Sets a controller interlock mode.",
         .fn = setInterlock,
     },
+    {
+        .cmd = "activate-keypads",
+        .help = "Activates and deactivates controller reader access keypads.",
+        .fn = activateKeypads,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};
