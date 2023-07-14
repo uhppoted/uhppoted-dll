@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] `activate-keypads` (cf. https://github.com/uhppoted/uhppoted/issues/35)
+- [x] `activate-keypads` (cf. https://github.com/uhppoted/uhppoted/issues/35)
       - [x] Go lib
       - [x] C
       - [x] C++
