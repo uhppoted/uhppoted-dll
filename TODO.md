@@ -16,6 +16,7 @@
       - [x] Add to CCL doc
 
 - [ ] C++: rework to use unique_ptr
+- [ ] clang-tidy
 
 ## TODO
 
