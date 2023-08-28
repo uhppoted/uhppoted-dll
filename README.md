@@ -23,6 +23,7 @@ Supported operating systems:
 
 | *Version* | *Description*                                                                             |
 | --------- | ----------------------------------------------------------------------------------------- |
+| v0.8.6    | Added `ActivateKeypads` to bindings to enable/disable reader keypads                      |
 | v0.8.5    | Added `Setinterlock` to bindings to set controller door interlock mode                    |
 | v0.8.4    | Added `SetPCControl` to bindings and included support for card keypad PIN                 |
 | v0.8.3    | Bug fixes for Python, C++ and C# bindings                                                 |
