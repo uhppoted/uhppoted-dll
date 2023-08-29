@@ -368,8 +368,8 @@ class Uhppote:
 
         return TimeProfile(
             profile.ID, profile.linked, profile.start.decode('utf-8'), profile.end.decode('utf-8'),
-            profile.monday != 0, profile.tuesday != 0, profile.wednesday != 0,
-            profile.thursday != 0, profile.friday != 0, profile.saturday != 0, profile.sunday != 0,
+            profile.monday != 0, profile.tuesday != 0, profile.wednesday != 0, profile.thursday
+            != 0, profile.friday != 0, profile.saturday != 0, profile.sunday != 0,
             profile.segment1start.decode('utf-8'), profile.segment1end.decode('utf-8'),
             profile.segment2start.decode('utf-8'), profile.segment2end.decode('utf-8'),
             profile.segment3start.decode('utf-8'), profile.segment3end.decode('utf-8'))
