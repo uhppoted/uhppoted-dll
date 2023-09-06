@@ -246,7 +246,7 @@ card_number  card number
 from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
-PIN          optional reader keypad PIN ([0..999999], 0 for 'no PIN')
+PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
 
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
 uhppoted_exception::what() method.
