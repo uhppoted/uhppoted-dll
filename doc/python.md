@@ -212,13 +212,14 @@ Raises an Exception if the call failed.
 
 ### `put_card`
 ```
-uhppoted.put_card(ID, cardNumber, start, end, doors)
+uhppoted.put_card(ID, cardNumber, start, end, doors, PIN)
 
 ID           controller serial number 
 card_number  card number
 from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
+PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
 
 Raises an Exception if the call failed.
 ```
@@ -461,6 +462,7 @@ class Card:
     start: str
     end: str
     doors: list[int]
+    PIN: uint
 ```
 
 ### `TimeProfile`

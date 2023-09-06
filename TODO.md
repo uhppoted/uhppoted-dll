@@ -1,24 +1,17 @@
 # TODO
 
-- [x] `activate-keypads` (cf. https://github.com/uhppoted/uhppoted/issues/35)
-      - [x] Go lib
+- [x] Update bindings documentation for `put-card` PIN (cf. https://github.com/uhppoted/uhppoted-dll/issues/6)
       - [x] C
       - [x] C++
-      - [x] Python
-      - [x] C#
       - [x] CCL
+      - [x] C#
+      - [X] Python
       - [x] CHANGELOG
-      - [x] README
-      - [x] Add to C doc
-      - [x] Add to C++ doc
-      - [x] Add to Python doc
-      - [x] Add to C# doc
-      - [x] Add to CCL doc
+
+## TODO
 
 - [ ] C++: rework to use unique_ptr
 - [ ] clang-tidy
-
-## TODO
 
 - [ ] Explore building DLLs on github
       - MacOS actions

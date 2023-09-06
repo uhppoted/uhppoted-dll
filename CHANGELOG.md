@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Updated
+1. Updated bindings documentation for card PINs.
+
 
 ## [0.8.6](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.6) - 2023-08-30
 

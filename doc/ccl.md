@@ -238,13 +238,14 @@ Raises a `uhppoted-error` condition if the call failed.
 
 ### `put-card`
 ```
-(defun uhppoted-put-card (uhppote device-id card-number from to doors) ...)
+(defun uhppoted-put-card (uhppote device-id card-number from to doors PIN) ...)
 
 device-id    controller serial number 
 card-number  card number
 from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
+PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
 
 Raises a `uhppoted-error` condition if the call failed.
 ```
@@ -465,7 +466,8 @@ Container class for card information retrieved by `get_card` and `get_card_by_in
 (defstruct card card-number 
                 from
                 to
-                doors)
+                doors
+                PIN)
 ```
 
 ### `TimeProfile`
