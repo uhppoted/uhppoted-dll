@@ -1,6 +1,6 @@
 module github.com/uhppoted/uhppoted-dll
 
-go 1.20
+go 1.21
 
 require github.com/uhppoted/uhppote-core v0.8.6
 
