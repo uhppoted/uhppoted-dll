@@ -275,6 +275,11 @@
   (evaluate "activate-keypads" '()))
 
 
+(defun set-super-passwords () "" 
+  (exec #'(lambda (u) (uhppoted-set-super-passwords u TEST-DEVICE-ID TEST-DOOR 12345 999999 0 54321)))
+  (evaluate "set-super-passwords" '()))
+
+
 (defun internationalisation () "" 
   (let ((mode-normally-open              (uhppoted-lookup lookup-mode         normally-open                                ""))
         (mode-normally-closed            (uhppoted-lookup lookup-mode         normally-closed                              ""))

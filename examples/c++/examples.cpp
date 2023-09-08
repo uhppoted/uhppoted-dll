@@ -182,6 +182,11 @@ const vector<command> commands = {
         .help = "Activates/deactivates a controller reader access keypads.",
         .fn = activateKeypads,
     },
+    {
+        .cmd = "set-super-passwords",
+        .help = "Sets the super passwords for keypad only access to a door.",
+        .fn = setSuperPasswords,
+    },
 };
 
 int main(int argc, char **argv) {

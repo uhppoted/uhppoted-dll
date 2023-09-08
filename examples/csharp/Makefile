@@ -128,5 +128,9 @@ set-interlock: build
 activate-keypads: build
 	$(CMD) activate-keypads $(DEVICEID)
 
+set-super-passwords: build
+	# $(CMD) set-super-passwords $(DEVICEID) $(DOOR)
+	$(CMD) set-super-passwords --controller 423187757 --door 3
+
 debug: build
 	$(GO) && export $(DLL)/debug && mono ./examples.exe get-status --controller 12345678

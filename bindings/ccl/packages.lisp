@@ -34,6 +34,7 @@
            uhppoted-set-pc-control
            uhppoted-set-interlock
            uhppoted-activate-keypads
+           uhppoted-set-super-passwords
            uhppoted-error
            with-warning
            message

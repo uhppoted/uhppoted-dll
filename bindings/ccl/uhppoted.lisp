@@ -709,6 +709,18 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
+(defun uhppoted-set-super-passwords (uhppote device-id door password1 password2 password3 password4) "Sets the super passwords for keypad only access to a door"
+  (with-macptrs ((err (external-call "SetSuperPasswords" :address uhppote 
+                                                         :unsigned-long device-id 
+                                                         :unsigned-byte door
+                                                         :unsigned-long password1
+                                                         :unsigned-long password2
+                                                         :unsigned-long password3
+                                                         :unsigned-long password4
+                                                         :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
+
 (defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"
   (cond ((string= category lookup-mode)         (uhppoted-lookup-mode         code locale))
         ((string= category lookup-direction)    (uhppoted-lookup-direction    code locale))

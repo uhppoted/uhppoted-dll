@@ -60,6 +60,7 @@ public class Tests {
         new test("set-pc-control", SetPCControl),
         new test("set-interlock", SetInterlock),
         new test("activate-keypads", ActivateKeypads),
+        new test("set-super-passwords", SetSuperPasswords),
         new test("lookup", Internationalisation),
         new test("structs", Structs),
     };
@@ -466,6 +467,14 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("activate-keypads", resultset);
+    }
+
+    static bool SetSuperPasswords(Uhppoted u) {
+        u.SetSuperPasswords(DEVICE_ID, DOOR, 12345, 999999, 0, 54321);
+
+        result[] resultset = {};
+
+        return evaluate("set-super-passwords", resultset);
     }
 
     static bool Internationalisation(Uhppoted u) {

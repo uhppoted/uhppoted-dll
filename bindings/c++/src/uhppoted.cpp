@@ -593,6 +593,13 @@ void uhppoted::activate_keypads(uint32_t id, bool reader1, bool reader2, bool re
     }
 }
 
+void uhppoted::set_super_passwords(uint32_t id, uint8_t door, uint32_t password1, uint32_t password2, uint32_t password3, uint32_t password4) {
+    char *err = SetSuperPasswords(u, id, door, password1, password2, password3, password4);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}
+
 const map<uint8_t, string> LookupMode = {
     {NORMALLY_OPEN, ModeNormallyOpen},
     {NORMALLY_CLOSED, ModeNormallyClosed},

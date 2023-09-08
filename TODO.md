@@ -1,17 +1,21 @@
 # TODO
 
-- [x] Update bindings documentation for `put-card` PIN (cf. https://github.com/uhppoted/uhppoted-dll/issues/6)
+- [x] `set-super-passwords` (cf. https://github.com/uhppoted/uhppoted/issues/40)
+      - [x] DLL
       - [x] C
       - [x] C++
       - [x] CCL
       - [x] C#
-      - [X] Python
+      - [x] Python
       - [x] CHANGELOG
+      - [x] README
+      - [x] Bindings documentation
+
 
 ## TODO
 
 - [ ] C++: rework to use unique_ptr
-- [ ] clang-tidy
+- (?) clang-tidy
 
 - [ ] Explore building DLLs on github
       - MacOS actions

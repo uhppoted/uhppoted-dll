@@ -122,6 +122,9 @@ set-interlock: build
 activate-keypads: build
 	$(CMD) activate-keypads
 
+set-super-passwords: build
+	$(CMD) set-super-passwords
+
 lookup: build
 	$(CMD) lookup
 

@@ -169,3 +169,11 @@ bool activateKeypads(uhppoted &u) {
 
     return evaluate("activate-keypads", rs);
 }
+
+bool setSuperPasswords(uhppoted &u) {
+    u.set_super_passwords(DEVICE_ID, DOOR, 12345, 999999, 0, 54321);
+
+    vector<result> rs = {};
+
+    return evaluate("set-super-passwords", rs);
+}

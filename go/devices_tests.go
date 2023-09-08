@@ -303,11 +303,48 @@ func activateKeypads(uu uhppote.IUHPPOTE, controller uint32, reader1, reader2, r
 	}
 
 	if controller != 405419896 {
-		return fmt.Errorf("Incorrect device ID (%v)", controller)
+		return fmt.Errorf("Incorrect controller ID (%v)", controller)
 	}
 
 	if !keypads[1] || !keypads[2] || keypads[3] || !keypads[4] {
 		return fmt.Errorf("Incorrect keypads (%v%v)", keypads)
+	}
+
+	return nil
+}
+
+// Test implementation of setSuperPasswords.
+//
+// Returns an error if the arguments do not match:
+// - controller: 405419896
+// - door: 3
+// - password1: 12345
+// - password2: 999999
+// - password3: 0
+// - password4: 54321
+func setSuperPasswords(uu uhppote.IUHPPOTE, controller uint32, door uint8, password1, password2, password3, password4 uint32) error {
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect controller ID (%v)", controller)
+	}
+
+	if door != 4 {
+		return fmt.Errorf("Incorrect door (%v)", door)
+	}
+
+	if password1 != 12345 {
+		return fmt.Errorf("password1 incorrect (%v)", password1)
+	}
+
+	if password2 != 999999 {
+		return fmt.Errorf("password2 incorrect (%v)", password2)
+	}
+
+	if password3 != 0 {
+		return fmt.Errorf("password3 incorrect (%v)", password3)
+	}
+
+	if password4 != 54321 {
+		return fmt.Errorf("password4 incorrect (%v)", password4)
 	}
 
 	return nil

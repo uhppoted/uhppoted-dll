@@ -159,6 +159,10 @@ def commands():
             'help': "Activates and deactivates the controller reader access keypads",
             'fn': activate_keypads,
         },
+        'set-super-passwords': {
+            'help': "Sets the super passwords for keypad-only access to a door",
+            'fn': set_super_passwords,
+        },
     }
 
 
@@ -171,27 +175,15 @@ def main():
 
     parser.add_argument('command', type=str, help='command')
 
-    parser.add_argument('--controller',
-                        type=int,
-                        default=DEVICE_ID,
-                        help='controller serial number')
+    parser.add_argument('--controller', type=int, default=DEVICE_ID, help='controller serial number')
 
     parser.add_argument('--interlock', type=int, default=1, help='controller door interlock')
 
-    parser.add_argument('--ip-address',
-                        type=str,
-                        default='192.168.1.100',
-                        help='controller IP address')
+    parser.add_argument('--ip-address', type=str, default='192.168.1.100', help='controller IP address')
 
-    parser.add_argument('--subnet-mask',
-                        type=str,
-                        default='255.255.255.0',
-                        help='controller subnet mask')
+    parser.add_argument('--subnet-mask', type=str, default='255.255.255.0', help='controller subnet mask')
 
-    parser.add_argument('--gateway-address',
-                        type=str,
-                        default='192.168.1.5',
-                        help='controller gateway address')
+    parser.add_argument('--gateway-address', type=str, default='192.168.1.5', help='controller gateway address')
 
     parser.add_argument('--listener-address',
                         type=str,
@@ -222,8 +214,7 @@ def main():
             uhppoted.Controller(303986753, '192.168.1.100'),
         ]
 
-        u = uhppoted.Uhppote(
-            uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
+        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
 
         try:
             if cmd in commands():
@@ -613,8 +604,8 @@ def get_time_profile(u, args):
 def set_time_profile(u, args):
     device_id = args.controller
     profile_id = args.time_profile
-    profile = uhppoted.TimeProfile(profile_id, 71, "2022-02-01", "2022-06-30", True, False, True,
-                                   True, False, False, True, "08:30", "11:30", "", "", "", "18:00")
+    profile = uhppoted.TimeProfile(profile_id, 71, "2022-02-01", "2022-06-30", True, False, True, True, False, False,
+                                   True, "08:30", "11:30", "", "", "", "18:00")
 
     u.set_time_profile(device_id, profile)
 
@@ -652,8 +643,7 @@ def clear_time_profiles(u, args):
 
 def add_task(u, args):
     device_id = args.controller
-    task = uhppoted.Task(6, 4, "2022-02-01", "2022-06-30", True, False, True, True, False, False,
-                         True, "08:30", 11)
+    task = uhppoted.Task(6, 4, "2022-02-01", "2022-06-30", True, False, True, True, False, False, True, "08:30", 11)
 
     u.add_task(device_id, task)
 
@@ -734,6 +724,26 @@ def activate_keypads(u, args):
         ('reader 2', reader2),
         ('reader 3', reader3),
         ('reader 4', reader4),
+    ])
+
+
+def set_super_passwords(u, args):
+    device_id = args.controller
+    door = args.door
+    password1 = 12345
+    password2 = 54321
+    password3 = 0
+    password4 = 99999
+
+    u.set_super_passwords(device_id, door, password1, password2, password3, password4)
+
+    display('set-super-passwords', [
+        ('ID', device_id),
+        ('door', door),
+        ('password 1', password1),
+        ('password 2', password2),
+        ('password 3', password3),
+        ('password 4', password4),
     ])
 
 

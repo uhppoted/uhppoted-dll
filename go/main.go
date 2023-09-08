@@ -459,6 +459,22 @@ func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, r
 	return nil
 }
 
+// Sets the super passwords for a door managed by the controller.
+//
+// Valid passwords are in the range [1..999999] or 0 (no password) - invalid passwords will be replaced by
+// a 0 (no password).
+//
+//export SetSuperPasswords
+func SetSuperPasswords(u *C.struct_UHPPOTE, controller uint32, door uint8, password1, password2, password3, password4 uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := setSuperPasswords(uu, controller, door, password1, password2, password3, password4); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

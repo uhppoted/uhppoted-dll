@@ -214,6 +214,13 @@ extern char* SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enable
 extern char* SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock);
 extern char* ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4);
 
+// Sets the super passwords for a door managed by the controller.
+//
+// Valid passwords are in the range [1..999999] or 0 (no password) - invalid passwords will be replaced by
+// a 0 (no password).
+//
+extern char* SetSuperPasswords(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 password1, GoUint32 password2, GoUint32 password3, GoUint32 password4);
+
 #ifdef __cplusplus
 }
 #endif

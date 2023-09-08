@@ -122,6 +122,10 @@ set-interlock: build
 activate-keypads: build
 	$(CMD) activate-keypads $(DEVICEID)
 
+set-super-passwords: build
+	# $(CMD) set-super-passwords $(DEVICEID) $(DOOR)
+	$(CMD) set-super-passwords --controller 423187757 --door 3
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp
 

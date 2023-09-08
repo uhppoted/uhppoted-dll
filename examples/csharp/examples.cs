@@ -148,6 +148,9 @@ public class examples {
         new command("activate-keypads",
                     "Activates and deactivates a controller reader access keypads.",
                     ActivateKeypads),
+        new command("set-super-passwords",
+                    "Sets the super passwords for keypad only access to a door.",
+                    SetSuperPasswords),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -767,6 +770,29 @@ public class examples {
         };
 
         display("activate-keypads", fields);
+    }
+
+    static void SetSuperPasswords(Uhppoted u, string[] args) {
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        byte door = opts.door;
+        uint password1 = 12345;
+        uint password2 = 999999;
+        uint password3 = 0;
+        uint password4 = 54321;
+
+        u.SetSuperPasswords(deviceID, door, password1, password2, password3, password4);
+
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint8Field("door", door),
+            new uint32Field("password 1", password1),
+            new uint32Field("password 2", password2),
+            new uint32Field("password 3", password3),
+            new uint32Field("password 4", password4),
+        };
+
+        display("set-super-passwords", fields);
     }
 
     static options parse(string[] args) {

@@ -131,6 +131,7 @@ returns a fixed response.
 - [`SetPCControl`](#setpccontrol)
 - [`SetInterlock`](#setinterlock)
 - [`ActivateKeypads`](#activatekeypads)
+- [`SetSuperPasswords`](#setsuperpasswords)
 
 #### `GetDevices`
 
@@ -293,4 +294,9 @@ a byte value as the interlock mode, corresponding to one of the following modes:
 Activates and deactivates a controller reader access keypads. 
 
 Note that the controllers do not provide the capability for activating or deactivating individual keypads.
+
+
+#### `SetSuperPasswords`
+
+Sets up to four individual passcodes to allow keypad only access to a door.
 

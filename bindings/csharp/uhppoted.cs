@@ -461,6 +461,13 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void SetSuperPasswords(uint deviceID, byte door, uint password1, uint password2, uint password3, uint password4) {
+        string err = SetSuperPasswords(ref this.u, deviceID, door, password1, password2, password3, password4);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
     // Go FFI
 
     [DllImport("uhppoted.dll")]
@@ -552,6 +559,9 @@ public class Uhppoted : IDisposable {
 
     [DllImport("uhppoted.dll")]
     private static extern string ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4);
+
+    [DllImport("uhppoted.dll")]
+    private static extern string SetSuperPasswords(ref UHPPOTE u, uint deviceID, byte door, uint password1, uint password2, uint password3, uint password4);
 
     struct udevice {
         public uint ID;

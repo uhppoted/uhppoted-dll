@@ -240,16 +240,16 @@ void setInterlock(uhppoted &u, int argc, char **argv) {
 
 void activateKeypads(uhppoted &u, int argc, char **argv) {
     auto options = parse(argc, argv);
-    uint32_t deviceID = options.device_id;
+    uint32_t controller = options.device_id;
     bool reader1 = true;
     bool reader2 = true;
     bool reader3 = false;
     bool reader4 = true;
 
-    u.activate_keypads(deviceID, reader1, reader2, reader3, reader4);
+    u.activate_keypads(controller, reader1, reader2, reader3, reader4);
 
     vector<field> fields = {
-        field("ID", deviceID),
+        field("ID", controller),
         field("reader 1", reader1),
         field("reader 2", reader2),
         field("reader 3", reader3),
@@ -257,4 +257,27 @@ void activateKeypads(uhppoted &u, int argc, char **argv) {
     };
 
     display("activate-keypads", fields);
+}
+
+void setSuperPasswords(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t controller = options.device_id;
+    uint8_t door = options.door;
+    uint32_t password1 = 12345;
+    uint32_t password2 = 999999;
+    uint32_t password3 = 0;
+    uint32_t password4 = 54321;
+
+    u.set_super_passwords(controller, door, password1, password2, password3, password4);
+
+    vector<field> fields = {
+        field("ID", controller),
+        field("door", door),
+        field("password 1", password1),
+        field("password 2", password2),
+        field("password 3", password3),
+        field("password 4", password4),
+    };
+
+    display("set-super-passwords", fields);
 }

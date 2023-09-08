@@ -699,6 +699,16 @@ int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool
     return 0;
 }
 
+int set_super_passwords(uint32_t controller, uint8_t door, uint32_t password1, uint32_t password2, uint32_t password3, uint32_t password4) {
+    char *err = SetSuperPasswords(u, controller, door, password1, password2, password3, password4);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
+
 const char *lookup(const char *type, uint8_t code, const char *locale) {
     if (strcmp(type, LOOKUP_MODE) == 0) {
         switch (code) {

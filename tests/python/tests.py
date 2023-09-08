@@ -67,6 +67,7 @@ def tests():
         'set-pc-control': set_pc_control,
         'set-interlock': set_interlock,
         'activate-keypads': activate_keypads,
+        'set-super-passwords': set_super_passwords,
         'lookup': internationalisation,
         'structs': structs,
     }
@@ -385,6 +386,13 @@ def set_interlock(u):
 def activate_keypads(u):
     tag = 'activate-keypads'
     u.activate_keypads(DEVICE_ID, True, True, False, True)
+
+    return evaluate(tag, [])
+
+
+def set_super_passwords(u):
+    tag = 'set-super-passwords'
+    u.set_super_passwords(DEVICE_ID, DOOR, 12345, 999999, 0, 54321)
 
     return evaluate(tag, [])
 

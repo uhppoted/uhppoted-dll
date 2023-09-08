@@ -417,13 +417,30 @@ Returns:
 
 ### `activate-keypads`
 ```
-int activate-keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4);
+int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4);
 
 id      controller serial number 
 reader1 activate/deactivate reader 1 access keypad
 reader2 activate/deactivate reader 2 access keypad
 reader3 activate/deactivate reader 3 access keypad
 reader4 activate/deactivate reader 4 access keypad
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
+
+### `set-super-passwords`
+```
+int set_super_passwords(uint32_t id, uint8_t door, uint32_t password1, uint32_t password2, uint32_t password3, uint32_t password4);
+
+id        controller serial number 
+door      door ID [1..4]
+password1 passcode in the range [1..999999] or 0 (for none)
+password2 passcode in the range [1..999999] or 0 (for none)
+password3 passcode in the range [1..999999] or 0 (for none)
+password4 passcode in the range [1..999999] or 0 (for none)
 
 Returns:
 - 0  if the call succeeded. 

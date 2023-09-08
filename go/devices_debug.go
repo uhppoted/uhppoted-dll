@@ -291,3 +291,21 @@ func activateKeypads(uu uhppote.IUHPPOTE, controller uint32, reader1, reader2, r
 
 	return nil
 }
+
+// Debug implementation of setSuperPasswords.
+//
+// Prints the controller ID, door ID and passwords to the console (if DEBUG is enabled) and returns nil.
+func setSuperPasswords(uu uhppote.IUHPPOTE, controller uint32, door uint8, password1, password2, password3, password4 uint32) error {
+	if DEBUG {
+		fmt.Printf(">>> set-super-passwords\n")
+		fmt.Printf("    ID:          %v\n", controller)
+		fmt.Printf("    door:        %v\n", door)
+		fmt.Printf("    passwords 1: %v\n", password1)
+		fmt.Printf("              2: %v\n", password2)
+		fmt.Printf("              3: %v\n", password3)
+		fmt.Printf("              4: %v\n", password4)
+		fmt.Println()
+	}
+
+	return nil
+}

@@ -386,6 +386,21 @@ reader4 activates/deactivates reader 4 access keypad
 Raises an Exception if the call failed.
 ```
 
+### `set-super-passwords`
+```
+uhppoted.set_super_passwords(ID, door, password1, password2, password3, password4)
+
+ID        controller serial number 
+door      door ID [1..4]
+password1 passcode in the range [1..999999] or 0 (for none)
+password2 passcode in the range [1..999999] or 0 (for none)
+password3 passcode in the range [1..999999] or 0 (for none)
+password4 passcode in the range [1..999999] or 0 (for none)
+
+Raises an Exception if the call failed.
+```
+
+
 ## Types
 
 ### `Controller`

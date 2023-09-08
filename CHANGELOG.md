@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. `set-super-passwords` command to enable keypad only access to a door.
+
 ### Updated
 1. Updated bindings documentation for card PINs.
 
@@ -9,14 +12,12 @@
 ## [0.8.6](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.6) - 2023-08-30
 
 ### Added
-
 1. `activate-keypads` command to activate and deactivate a controller reader access keypads.
 
 
 ## [0.8.5](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.5) - 2023-06-13
 
 ### Added
-
 1. `set-interlock` command to set a controller door interlock mode.
 
 ### Updated

@@ -177,6 +177,11 @@ const command commands[] = {
         .help = "Activates and deactivates controller reader access keypads.",
         .fn = activateKeypads,
     },
+    {
+        .cmd = "set-super-passwords",
+        .help = "Sets the super passwords for keypad only access to a door.",
+        .fn = setSuperPasswords,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};
