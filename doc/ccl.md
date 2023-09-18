@@ -410,16 +410,16 @@ reader4    activates/deactivates reader 4 access keypad
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
-### `set-super-passwords`
+### `set-door-passcodes`
 ```
-(defun uhppoted-set-super-passwords (uhppote device-id door password1 password2 password3 password4) ...)
+(defun uhppoted-set-door-passcodes (uhppote device-id door passcode1 passcode2 passcode3 passcode4) ...)
 
 device-id  controller serial number 
 door       door ID [1..4]
-password1  passcode in the range [1..999999] or 0 (for none)
-password2  passcode in the range [1..999999] or 0 (for none)
-password3  passcode in the range [1..999999] or 0 (for none)
-password4  passcode in the range [1..999999] or 0 (for none)
+passcode1  PIN code in the range [1..999999] or 0 (for none)
+passcode2  PIN code in the range [1..999999] or 0 (for none)
+passcode3  PIN code in the range [1..999999] or 0 (for none)
+passcode4  PIN code in the range [1..999999] or 0 (for none)
 
 Raises a `uhppoted-error` condition if the call failed.
 ```

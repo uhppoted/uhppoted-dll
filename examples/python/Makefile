@@ -120,8 +120,8 @@ set-interlock: build
 activate-keypads: build
 	$(GO) && $(DLL) && $(CMD) activate-keypads
 
-set-super-passwords: build
-	$(GO) && $(DLL) && $(CMD) set-super-passwords  --controller 423187757 --door 1
+set-door-passcodes: build
+	$(GO) && $(DLL) && $(CMD) set-door-passcodes  --controller $(CONTROLLER) --door $(DOOR)
 
 debug: build
 	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678

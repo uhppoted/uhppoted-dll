@@ -416,9 +416,9 @@ class Uhppote:
     def activate_keypads(self, deviceID, reader1, reader2, reader3, reader4):
         self.ffi.ActivateKeypads(self._uhppote, deviceID, reader1, reader2, reader3, reader4)
 
-    def set_super_passwords(self, deviceID, door, password1, password2, password3, password4):
-        self.ffi.SetSuperPasswords(self._uhppote, deviceID, door, password1, password2, password3,
-                                   password4)
+    def set_door_passcodes(self, deviceID, door, passcode1, passcode2, passcode3, passcode4):
+        self.ffi.SetDoorPasscodes(self._uhppote, deviceID, door, passcode1, passcode2, passcode3,
+                                  passcode4)
 
 
 # lookup
@@ -612,7 +612,7 @@ class FFI:
         self.SetPCControl = ffi('SetPCControl', errcheck)
         self.SetInterlock = ffi('SetInterlock', errcheck)
         self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
-        self.SetSuperPasswords = ffi('SetSuperPasswords', errcheck)
+        self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -659,7 +659,7 @@ def libfunctions():
         'SetPCControl':        (lib.SetPCControl,        [POINTER(GoUHPPOTE), c_ulong, c_bool]),
         'SetInterlock':        (lib.SetInterlock,        [POINTER(GoUHPPOTE), c_ulong, c_ubyte]),
         'ActivateKeypads':     (lib.ActivateKeypads,     [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool]),
-        'SetSuperPasswords':   (lib.SetSuperPasswords,   [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong]),
+        'SetDoorPasscodes':    (lib.SetDoorPasscodes,    [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong]),
     }
 # yapf: enable
 

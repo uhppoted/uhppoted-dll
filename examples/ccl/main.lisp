@@ -35,7 +35,7 @@
         '("set-pc-control"        examples:set-pc-control        "Enables/disables controller remote access control.")
         '("set-interlock"         examples:set-interlock         "Sets a controller interlock mode.")
         '("activate-keypads"      examples:activate-keypads      "Activates and deactivates a controller reader access keypads.")
-        '("set-super-passwords"   examples:set-super-passwords   "Sets the super passwords for keypad only access to a door.")
+        '("set-door-passcodes"    examples:set-door-passcodes    "Sets the supervisor passcodes for keypad only access to a door.")
 ))
 
 

@@ -709,15 +709,15 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
-(defun uhppoted-set-super-passwords (uhppote device-id door password1 password2 password3 password4) "Sets the super passwords for keypad only access to a door"
-  (with-macptrs ((err (external-call "SetSuperPasswords" :address uhppote 
-                                                         :unsigned-long device-id 
-                                                         :unsigned-byte door
-                                                         :unsigned-long password1
-                                                         :unsigned-long password2
-                                                         :unsigned-long password3
-                                                         :unsigned-long password4
-                                                         :address)))
+(defun uhppoted-set-door-passcodes (uhppote device-id door passcode1 passcode2 passcode3 passcode4) "Sets the supervisor keypad passcodes for a door"
+  (with-macptrs ((err (external-call "SetDoorPasscodes" :address uhppote 
+                                                        :unsigned-long device-id 
+                                                        :unsigned-byte door
+                                                        :unsigned-long passcode1
+                                                        :unsigned-long passcode2
+                                                        :unsigned-long passcode3
+                                                        :unsigned-long passcode4
+                                                       :address)))
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 

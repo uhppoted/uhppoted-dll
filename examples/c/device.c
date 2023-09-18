@@ -346,15 +346,15 @@ int activateKeypads(int argc, char **argv) {
     return 0;
 }
 
-int setSuperPasswords(int argc, char **argv) {
+int setDoorPasscodes(int argc, char **argv) {
     uint32_t controller = parse(argc, argv).device_id;
     uint8_t door = parse(argc, argv).door;
-    uint32_t password1 = 12345;
-    uint32_t password2 = 999999;
-    uint32_t password3 = 0;
-    uint32_t password4 = 54321;
+    uint32_t passcode1 = 12345;
+    uint32_t passcode2 = 999999;
+    uint32_t passcode3 = 0;
+    uint32_t passcode4 = 54321;
 
-    if (set_super_passwords(controller, door, password1, password2, password3, password4) < 0) {
+    if (set_door_passcodes(controller, door, passcode1, passcode2, passcode3, passcode4) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -362,13 +362,13 @@ int setSuperPasswords(int argc, char **argv) {
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = controller},
         {.field = "door", .type = "uint8", .value.uint8 = door},
-        {.field = "password1", .type = "uint32", .value.uint32 = password1},
-        {.field = "password2", .type = "uint32", .value.uint32 = password2},
-        {.field = "password3", .type = "uint32", .value.uint32 = password3},
-        {.field = "password4", .type = "uint32", .value.uint32 = password4},
+        {.field = "passcode1", .type = "uint32", .value.uint32 = passcode1},
+        {.field = "passcode2", .type = "uint32", .value.uint32 = passcode2},
+        {.field = "passcode3", .type = "uint32", .value.uint32 = passcode3},
+        {.field = "passcode4", .type = "uint32", .value.uint32 = passcode4},
     };
 
-    display("set-super-passwords", sizeof(fields) / sizeof(field), fields);
+    display("set-door-passcodes", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }

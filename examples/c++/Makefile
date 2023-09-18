@@ -127,9 +127,8 @@ set-interlock: build
 activate-keypads: build
 	$(CMD) activate-keypads $(DEVICEID)
 
-set-super-passwords: build
-	# $(CMD) set-super-passwords $(DEVICEID) $(DOOR)
-	$(CMD) set-super-passwords --controller 423187757 --door 3
+set-door-passcodes: build
+	$(CMD) set-door-passcodes $(DEVICEID) $(DOOR)
 
 debug: format
 	g++ -std=c++17 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted

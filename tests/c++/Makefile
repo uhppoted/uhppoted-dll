@@ -128,8 +128,8 @@ set-interlock: build
 activate-keypads: build
 	$(CMD) activate-keypads
 
-set-super-passwords: build
-	$(CMD) set-super-passwords
+set-door-passcodes: build
+	$(CMD) set-door-passcodes
 
 lookup: build
 	$(CMD) lookup

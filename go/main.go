@@ -459,16 +459,16 @@ func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, r
 	return nil
 }
 
-// Sets the super passwords for a door managed by the controller.
+// Sets the supervisor passcodes for a door managed by the controller.
 //
-// Valid passwords are in the range [1..999999] or 0 (no password) - invalid passwords will be replaced by
-// a 0 (no password).
+// Valid passcodes are in the range [1..999999] or 0 (no code) - invalid passcodes will be replaced by
+// a 0 (no code).
 //
-//export SetSuperPasswords
-func SetSuperPasswords(u *C.struct_UHPPOTE, controller uint32, door uint8, password1, password2, password3, password4 uint32) *C.char {
+//export SetDoorPasscodes
+func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := setSuperPasswords(uu, controller, door, password1, password2, password3, password4); err != nil {
+	} else if err := setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4); err != nil {
 		return C.CString(err.Error())
 	}
 

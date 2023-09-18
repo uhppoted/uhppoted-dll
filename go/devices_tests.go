@@ -313,16 +313,16 @@ func activateKeypads(uu uhppote.IUHPPOTE, controller uint32, reader1, reader2, r
 	return nil
 }
 
-// Test implementation of setSuperPasswords.
+// Test implementation of setDoorPasscodes.
 //
 // Returns an error if the arguments do not match:
 // - controller: 405419896
 // - door: 3
-// - password1: 12345
-// - password2: 999999
-// - password3: 0
-// - password4: 54321
-func setSuperPasswords(uu uhppote.IUHPPOTE, controller uint32, door uint8, password1, password2, password3, password4 uint32) error {
+// - passcode1: 12345
+// - passcode2: 999999
+// - passcode3: 0
+// - passcode4: 54321
+func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32) error {
 	if controller != 405419896 {
 		return fmt.Errorf("Incorrect controller ID (%v)", controller)
 	}
@@ -331,20 +331,20 @@ func setSuperPasswords(uu uhppote.IUHPPOTE, controller uint32, door uint8, passw
 		return fmt.Errorf("Incorrect door (%v)", door)
 	}
 
-	if password1 != 12345 {
-		return fmt.Errorf("password1 incorrect (%v)", password1)
+	if passcode1 != 12345 {
+		return fmt.Errorf("passcode1 incorrect (%v)", passcode1)
 	}
 
-	if password2 != 999999 {
-		return fmt.Errorf("password2 incorrect (%v)", password2)
+	if passcode2 != 999999 {
+		return fmt.Errorf("passcode2 incorrect (%v)", passcode2)
 	}
 
-	if password3 != 0 {
-		return fmt.Errorf("password3 incorrect (%v)", password3)
+	if passcode3 != 0 {
+		return fmt.Errorf("passcode3 incorrect (%v)", passcode3)
 	}
 
-	if password4 != 54321 {
-		return fmt.Errorf("password4 incorrect (%v)", password4)
+	if passcode4 != 54321 {
+		return fmt.Errorf("passcode4 incorrect (%v)", passcode4)
 	}
 
 	return nil

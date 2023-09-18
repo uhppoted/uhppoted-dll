@@ -36,7 +36,7 @@
         '("set-pc-control"        tests:set-pc-control)
         '("set-interlock"         tests:set-interlock)
         '("activate-keypads"      tests:activate-keypads)
-        '("set-super-passwords"   tests:set-super-passwords)
+        '("set-door-passcodes"    tests:set-door-passcodes)
         '("lookup"                tests:internationalisation)
         '("structs"               tests:structs)
 ))

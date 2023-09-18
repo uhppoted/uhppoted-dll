@@ -275,9 +275,9 @@
   (evaluate "activate-keypads" '()))
 
 
-(defun set-super-passwords () "" 
-  (exec #'(lambda (u) (uhppoted-set-super-passwords u TEST-DEVICE-ID TEST-DOOR 12345 999999 0 54321)))
-  (evaluate "set-super-passwords" '()))
+(defun set-door-passcodes() "" 
+  (exec #'(lambda (u) (uhppoted-set-door-passcodes u TEST-DEVICE-ID TEST-DOOR 12345 999999 0 54321)))
+  (evaluate "set-door-passcodes" '()))
 
 
 (defun internationalisation () "" 

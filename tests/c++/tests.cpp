@@ -46,7 +46,7 @@ vector<test> tests = {
     {"set-pc-control", setPCControl},
     {"set-interlock", setInterlock},
     {"activate-keypads", activateKeypads},
-    {"set-super-passwords", setSuperPasswords},
+    {"set-door-passcodes", setDoorPasscodes},
     {"lookup", internationalisation},
     {"structs", structs},
 };

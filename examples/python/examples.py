@@ -159,9 +159,9 @@ def commands():
             'help': "Activates and deactivates the controller reader access keypads",
             'fn': activate_keypads,
         },
-        'set-super-passwords': {
-            'help': "Sets the super passwords for keypad-only access to a door",
-            'fn': set_super_passwords,
+        'set-door-passcodes': {
+            'help': "Sets the supervisor passcodes for keypad-only access to a door",
+            'fn': set_door_passcodes,
         },
     }
 
@@ -727,23 +727,23 @@ def activate_keypads(u, args):
     ])
 
 
-def set_super_passwords(u, args):
+def set_door_passcodes(u, args):
     device_id = args.controller
     door = args.door
-    password1 = 12345
-    password2 = 54321
-    password3 = 0
-    password4 = 99999
+    passcode1 = 12345
+    passcode2 = 54321
+    passcode3 = 0
+    passcode4 = 99999
 
-    u.set_super_passwords(device_id, door, password1, password2, password3, password4)
+    u.set_door_passcodes(device_id, door, passcode1, passcode2, passcode3, passcode4)
 
-    display('set-super-passwords', [
+    display('set-door-passcodes', [
         ('ID', device_id),
         ('door', door),
-        ('password 1', password1),
-        ('password 2', password2),
-        ('password 3', password3),
-        ('password 4', password4),
+        ('passcode 1', passcode1),
+        ('passcode 2', passcode2),
+        ('passcode 3', passcode3),
+        ('passcode 4', passcode4),
     ])
 
 

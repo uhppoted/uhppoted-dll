@@ -461,8 +461,8 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public void SetSuperPasswords(uint deviceID, byte door, uint password1, uint password2, uint password3, uint password4) {
-        string err = SetSuperPasswords(ref this.u, deviceID, door, password1, password2, password3, password4);
+    public void SetDoorPasscodes(uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4) {
+        string err = SetDoorPasscodes(ref this.u, deviceID, door, passcode1, passcode2, passcode3, passcode4);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
@@ -561,7 +561,7 @@ public class Uhppoted : IDisposable {
     private static extern string ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4);
 
     [DllImport("uhppoted.dll")]
-    private static extern string SetSuperPasswords(ref UHPPOTE u, uint deviceID, byte door, uint password1, uint password2, uint password3, uint password4);
+    private static extern string SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4);
 
     struct udevice {
         public uint ID;

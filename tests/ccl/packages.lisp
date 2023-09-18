@@ -34,7 +34,7 @@
            set-pc-control
            set-interlock
            activate-keypads
-           set-super-passwords
+           set-door-passcodes
            internationalisation
            structs
            failed

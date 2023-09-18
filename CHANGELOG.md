@@ -3,7 +3,7 @@
 ## Unreleased
 
 ### Added
-1. `set-super-passwords` command to enable keypad only access to a door.
+1. `set-door-passcodes` command to set supervisor passcodes for a door.
 
 ### Updated
 1. Updated bindings documentation for card PINs.

@@ -276,10 +276,10 @@ bool activateKeypads() {
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
-bool setSuperPasswords() {
-    const char *tag = "set-super-passwords";
+bool setDoorPasscodes() {
+    const char *tag = "set-door-passcodes";
 
-    if (set_super_passwords(DEVICE_ID, DOOR, 12345, 999999, 0, 54321) < 0) {
+    if (set_door_passcodes(DEVICE_ID, DOOR, 12345, 999999, 0, 54321) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }

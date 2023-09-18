@@ -389,16 +389,16 @@ reader4 activates/deactivates reader 4 access keypad
 Throws a UhppotedException if the call failed.
 ```
 
-### `Uhppoted::SetSuperPasswords`
+### `Uhppoted::SetDoorPasscodes`
 ```
-int SetSuperPasswords(uint ID, byte door, uint password1, uint password2, uint password3, uint password4)
+int SetDoorPasscodes(uint ID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4)
 
 ID        controller serial number 
 door      door ID [1..4]
-password1 passcode in the range [1..999999] or 0 (for none)
-password2 passcode in the range [1..999999] or 0 (for none)
-password3 passcode in the range [1..999999] or 0 (for none)
-password4 passcode in the range [1..999999] or 0 (for none)
+passcode1 PIN code in the range [1..999999] or 0 (for none)
+passcode2 PIN code in the range [1..999999] or 0 (for none)
+passcode3 PIN code in the range [1..999999] or 0 (for none)
+passcode4 PIN code in the range [1..999999] or 0 (for none)
 
 Returns:
 - 0  if the call succeeded. 

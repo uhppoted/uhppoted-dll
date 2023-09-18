@@ -699,8 +699,8 @@ int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool
     return 0;
 }
 
-int set_super_passwords(uint32_t controller, uint8_t door, uint32_t password1, uint32_t password2, uint32_t password3, uint32_t password4) {
-    char *err = SetSuperPasswords(u, controller, door, password1, password2, password3, password4);
+int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
+    char *err = SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4);
     if (err != NULL) {
         set_error(err);
         return -1;

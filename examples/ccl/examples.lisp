@@ -295,16 +295,16 @@
       (display "activate-keypads" device-id nil))))
 
 
-(defun set-super-passwords (args) "" 
+(defun set-door-passcodes (args) "" 
   (let* ((device-id (args-device-id args))
          (door      (args-door      args))
-         (password1 12345)
-         (password2 999999)
-         (password3 0)
-         (password4 54321)
-         (ok (exec #'(lambda (u) (uhppoted-set-super-passwords u device-id door password1 password2 password3 password4)))))
+         (passcode1 12345)
+         (passcode2 999999)
+         (passcode3 0)
+         (passcode4 54321)
+         (ok (exec #'(lambda (u) (uhppoted-set-door-passcodes u device-id door passcode1 passcode2 passcode3 passcode4)))))
     (when ok
-      (display "set-super-passwords" device-id nil))))
+      (display "set-door-passcodes" device-id nil))))
 
 
 (defun args-device-id (args) 

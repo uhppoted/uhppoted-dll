@@ -301,15 +301,15 @@ func activateKeypads(uu uhppote.IUHPPOTE, controller uint32, reader1, reader2, r
 	return nil
 }
 
-// Sets the super passwords for a door managed by the controller.
+// Sets the supervisor passcodes for a door managed by the controller.
 //
-// Valid passwords are in the range [1..999999] or 0 (no password) - invalid passwords will be replaced by
-// a 0 (no password).
-func setSuperPasswords(uu uhppote.IUHPPOTE, controller uint32, door uint8, password1, password2, password3, password4 uint32) error {
-	if ok, err := uu.SetSuperPasswords(controller, door, password1, password2, password3, password4); err != nil {
+// Valid passcodes are in the range [1..999999] or 0 (no code) - invalid codes will be replaced by
+// a 0 (no passcode).
+func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32) error {
+	if ok, err := uu.SetDoorPasscodes(controller, door, passcode1, passcode2, passcode3, passcode4); err != nil {
 		return err
 	} else if !ok {
-		return fmt.Errorf("%v: failed to set super passwords for door %v", controller, door)
+		return fmt.Errorf("%v: failed to set supervisor passcodes for door %v", controller, door)
 	}
 
 	return nil

@@ -70,7 +70,7 @@ extern bool clearTaskList();
 extern bool setPCControl();
 extern bool setInterlock();
 extern bool activateKeypads();
-extern bool setSuperPasswords();
+extern bool setDoorPasscodes();
 
 extern bool internationalisation();
 extern bool structs();

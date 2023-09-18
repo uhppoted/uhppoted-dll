@@ -259,25 +259,25 @@ void activateKeypads(uhppoted &u, int argc, char **argv) {
     display("activate-keypads", fields);
 }
 
-void setSuperPasswords(uhppoted &u, int argc, char **argv) {
+void setDoorPasscodes(uhppoted &u, int argc, char **argv) {
     auto options = parse(argc, argv);
     uint32_t controller = options.device_id;
     uint8_t door = options.door;
-    uint32_t password1 = 12345;
-    uint32_t password2 = 999999;
-    uint32_t password3 = 0;
-    uint32_t password4 = 54321;
+    uint32_t passcode1 = 12345;
+    uint32_t passcode2 = 999999;
+    uint32_t passcode3 = 0;
+    uint32_t passcode4 = 54321;
 
-    u.set_super_passwords(controller, door, password1, password2, password3, password4);
+    u.set_door_passcodes(controller, door, passcode1, passcode2, passcode3, passcode4);
 
     vector<field> fields = {
         field("ID", controller),
         field("door", door),
-        field("password 1", password1),
-        field("password 2", password2),
-        field("password 3", password3),
-        field("password 4", password4),
+        field("passcode 1", passcode1),
+        field("passcode 2", passcode2),
+        field("passcode 3", passcode3),
+        field("passcode 4", passcode4),
     };
 
-    display("set-super-passwords", fields);
+    display("set-door-passcodes", fields);
 }

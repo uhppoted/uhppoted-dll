@@ -148,9 +148,9 @@ public class examples {
         new command("activate-keypads",
                     "Activates and deactivates a controller reader access keypads.",
                     ActivateKeypads),
-        new command("set-super-passwords",
-                    "Sets the super passwords for keypad only access to a door.",
-                    SetSuperPasswords),
+        new command("set-door-passcodes",
+                    "Sets the supervisor passcodes for keypad only access to a door.",
+                    SetDoorPasscodes),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -772,27 +772,27 @@ public class examples {
         display("activate-keypads", fields);
     }
 
-    static void SetSuperPasswords(Uhppoted u, string[] args) {
+    static void SetDoorPasscodes(Uhppoted u, string[] args) {
         options opts = parse(args);
         uint deviceID = opts.deviceID;
         byte door = opts.door;
-        uint password1 = 12345;
-        uint password2 = 999999;
-        uint password3 = 0;
-        uint password4 = 54321;
+        uint passcode1 = 12345;
+        uint passcode2 = 999999;
+        uint passcode3 = 0;
+        uint passcode4 = 54321;
 
-        u.SetSuperPasswords(deviceID, door, password1, password2, password3, password4);
+        u.SetDoorPasscodes(deviceID, door, passcode1, passcode2, passcode3, passcode4);
 
         field[] fields = {
             new uint32Field("ID", deviceID),
             new uint8Field("door", door),
-            new uint32Field("password 1", password1),
-            new uint32Field("password 2", password2),
-            new uint32Field("password 3", password3),
-            new uint32Field("password 4", password4),
+            new uint32Field("passcode 1", passcode1),
+            new uint32Field("passcode 2", passcode2),
+            new uint32Field("passcode 3", passcode3),
+            new uint32Field("passcode 4", passcode4),
         };
 
-        display("set-super-passwords", fields);
+        display("set-door-passcodes", fields);
     }
 
     static options parse(string[] args) {

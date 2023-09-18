@@ -183,9 +183,9 @@ const vector<command> commands = {
         .fn = activateKeypads,
     },
     {
-        .cmd = "set-super-passwords",
-        .help = "Sets the super passwords for keypad only access to a door.",
-        .fn = setSuperPasswords,
+        .cmd = "set-door-passcodes",
+        .help = "Sets the supervisor passcodes for keypad only access to a door.",
+        .fn = setDoorPasscodes,
     },
 };
 
