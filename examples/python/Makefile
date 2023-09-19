@@ -121,7 +121,8 @@ activate-keypads: build
 	$(GO) && $(DLL) && $(CMD) activate-keypads
 
 set-door-passcodes: build
-	$(GO) && $(DLL) && $(CMD) set-door-passcodes  --controller $(CONTROLLER) --door $(DOOR)
+	# $(GO) && $(DLL) && $(CMD) set-door-passcodes  --controller $(CONTROLLER) --door $(DOOR)
+	$(GO) && $(DLL) && $(CMD) set-door-passcodes  --controller 423187757 --door 4
 
 debug: build
 	$(GO) && $(DLL)/debug && $(CMD) get-status --controller 12345678

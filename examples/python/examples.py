@@ -733,7 +733,7 @@ def set_door_passcodes(u, args):
     passcode1 = 12345
     passcode2 = 54321
     passcode3 = 0
-    passcode4 = 99999
+    passcode4 = 999999
 
     u.set_door_passcodes(device_id, door, passcode1, passcode2, passcode3, passcode4)
 
