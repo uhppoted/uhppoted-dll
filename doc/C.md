@@ -125,6 +125,10 @@ status  Preallocated status struct
 Returns:
 - 0  if the call succeeded. The status struct will be populated with the controller status information.
 - -1 if the call failed. The error message can be retrieved using errmsg().
+
+The controller status includes the most recently logged event but if the controller has no events
+the `Event` field will have an index of 0 and all the other fields will be invalid.
+
 ```
 
 ### `get_time`
@@ -520,6 +524,9 @@ typedef struct event {
 
 ### `status`
 Container struct for the controller status information retrieved by `get_status`
+
+The controller status includes the most recently logged event but if the controller has no events
+the `Event` field will have an index of 0 and all the other fields will be invalid.
 ```
 typedef struct status {
     uint32_t ID;

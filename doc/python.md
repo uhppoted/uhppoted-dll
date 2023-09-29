@@ -96,6 +96,9 @@ ID  controller serial number
 
 Returns a Status dataclass instance populated with the controller status information if the call succeeded.
 
+The controller status includes the most recently logged event but if the controller has no events
+the `Event` field will have an index of 0 and all the other fields will be invalid.
+
 Raises an Exception if the call failed.
 ```
 
@@ -443,6 +446,9 @@ class Event:
 
 ### `Status`
 Container class for the controller status information retrieved by `get_status`
+
+The controller status includes the most recently logged event but if the controller has no events
+the `Event` field will have an index of 0 and all the other fields will be invalid.
 ```
 @dataclass
 class Status:

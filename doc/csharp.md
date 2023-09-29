@@ -101,6 +101,9 @@ ID  controller serial number
 
 Returns a Status class with populated with the controller status information if the call succeeded.
 
+The controller status includes the most recently logged event but if the controller has no events
+the `Event` field will have an index of 0 and all the other fields will be invalid.
+
 Throws a UhppotedException if the call failed.
 ```
 
@@ -447,6 +450,9 @@ public class Event {
 
 ### `Status`
 Container class for the controller status information retrieved by `GetStatus`
+
+The controller status includes the most recently logged event but if the controller has no events
+the `Event` field will have an index of 0 and all the other fields will be invalid.
 ```
 public class Status {
     public uint ID;

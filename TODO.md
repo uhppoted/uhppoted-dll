@@ -1,6 +1,17 @@
 # TODO
 
 - [ ] https://github.com/uhppoted/uhppoted-dll/issues/7
+      - [x] Go
+      - [ ] C examples
+      - [ ] C++ examples
+      - [x] Python examples
+      - [ ] C# examples
+      - [ ] CCL examples
+      - [ ] integration tests
+      - [x] CHANGELOG
+      - [x] README
+      - [x] doc
+
 ```
 ... request
  ...          00000000  17 20 00 00 51 8d 38 19  00 00 00 00 00 00 00 00
