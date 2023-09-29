@@ -52,6 +52,9 @@ build:
 	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
 	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
 
+test:
+	cd go && make test
+
 vet: 
 	go vet ./...
 
@@ -63,7 +66,7 @@ lint:
 vuln:
 	govulncheck ./...
 
-build-all: build lint
+build-all: build test lint
 	go fmt ./go/...
 	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)

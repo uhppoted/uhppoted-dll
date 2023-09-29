@@ -134,14 +134,25 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.seqno = C.uint(response.SequenceId)
 	status.info = C.uchar(response.SpecialInfo)
 
-	status.event.timestamp = C.CString(format(response.Event.Timestamp))
-	status.event.index = C.uint(response.Event.Index)
-	status.event.eventType = C.uchar(response.Event.Type)
-	status.event.granted = cbool(response.Event.Granted)
-	status.event.door = C.uchar(response.Event.Door)
-	status.event.direction = C.uchar(response.Event.Direction)
-	status.event.card = C.uint(response.Event.CardNumber)
-	status.event.reason = C.uchar(response.Event.Reason)
+	if response.Event != nil {
+		status.event.timestamp = C.CString(format(response.Event.Timestamp))
+		status.event.index = C.uint(response.Event.Index)
+		status.event.eventType = C.uchar(response.Event.Type)
+		status.event.granted = cbool(response.Event.Granted)
+		status.event.door = C.uchar(response.Event.Door)
+		status.event.direction = C.uchar(response.Event.Direction)
+		status.event.card = C.uint(response.Event.CardNumber)
+		status.event.reason = C.uchar(response.Event.Reason)
+	} else {
+		status.event.timestamp = C.CString("")
+		status.event.index = C.uint(0)
+		status.event.eventType = C.uchar(0)
+		status.event.granted = cbool(false)
+		status.event.door = C.uchar(0)
+		status.event.direction = C.uchar(0)
+		status.event.card = C.uint(0)
+		status.event.reason = C.uchar(0)
+	}
 
 	return nil
 }

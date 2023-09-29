@@ -10,6 +10,8 @@ __pycache__
 dist
 tmp
 
+go.work
+
 examples/c/examples
 examples/c++/examples
 examples/ccl/examples

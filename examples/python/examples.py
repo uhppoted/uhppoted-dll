@@ -319,7 +319,7 @@ def get_status(u, args):
         ('error    ', '{0:#0x}'.format(status.syserror)),
         ('info     ', status.info),
         ('seq no.  ', status.seqno),
-        ('event timestamp', status.evt.timestamp),
+        ('event timestamp', '-' if status.evt.timestamp == '' else status.evt.timestamp),
         ('      index', status.evt.index),
         ('      type', lookup(LOOKUP_EVENT_TYPE, status.evt.eventType, LOCALE)),
         ('      granted', status.evt.granted),

@@ -3,11 +3,16 @@ DEBUG=devices_debug.go cards_debug.go events_debug.go time_profiles_debug.go tas
 TESTS=devices_tests.go cards_tests.go events_tests.go time_profiles_tests.go tasks_tests.go main.go 
 LIB=../lib
 
+.DEFAULT_GOAL := test
+
 format:
 	go fmt ./...
 
 build: format
 	go build -trimpath -buildmode=c-shared -o $(LIB)/libuhppoted.so $(SRC)
+
+test: build
+	go test ./...
 
 debug: format
 	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/libuhppoted.so $(DEBUG)
