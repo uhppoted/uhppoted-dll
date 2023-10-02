@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "examples.h"
@@ -92,6 +93,11 @@ int getStatus(int argc, char **argv) {
     const char *direction = lookup(LOOKUP_DIRECTION, s.evt.direction, locale);
     const char *eventType = lookup(LOOKUP_EVENT_TYPE, s.evt.eventType, locale);
     const char *reason = lookup(LOOKUP_EVENT_REASON, s.evt.reason, locale);
+    const char *timestamp = s.evt.timestamp;
+
+    if (strncmp(s.evt.timestamp, "", 0) == 0) {
+        timestamp = "-";
+    }
 
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = s.ID},
@@ -109,7 +115,7 @@ int getStatus(int argc, char **argv) {
         {.field = "error", .type = "uint8", .value.uint8 = s.syserror},
         {.field = "seq no.", .type = "uint32", .value.uint32 = s.seqno},
         {.field = "info", .type = "uint8", .value.uint8 = s.info},
-        {.field = "event timestamp", .type = "string", .value.string = s.evt.timestamp},
+        {.field = "event timestamp", .type = "string", .value.string = timestamp},
         {.field = "      index", .type = "uint32", .value.uint32 = s.evt.index},
         {.field = "      type", .type = "string", .value.string = eventType},
         {.field = "      granted", .type = "bool", .value.boolean = s.evt.granted},

@@ -133,3 +133,4 @@ set-door-passcodes: build
 
 debug: build
 	$(GO) && export $(DLL)/debug && mono ./examples.exe get-status --controller 12345678
+	$(CMD) get-status --controller 303986753

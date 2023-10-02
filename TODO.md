@@ -2,11 +2,12 @@
 
 - [ ] https://github.com/uhppoted/uhppoted-dll/issues/7
       - [x] Go
-      - [ ] C examples
-      - [ ] C++ examples
+      - [x] C examples
+      - [x] C++ examples
       - [x] Python examples
-      - [ ] C# examples
-      - [ ] CCL examples
+      - [x] C# examples
+      - [x] CCL examples
+      - [ ] Add use case to tests
       - [ ] integration tests
       - [x] CHANGELOG
       - [x] README

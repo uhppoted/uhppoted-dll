@@ -49,6 +49,9 @@
   (let* ((device-id (args-device-id args))
          (status (exec #'(lambda (u) (uhppoted-get-status u device-id)))))
     (when status 
+      (if (string= "" (event-timestamp (status-event status)))
+        (setf (event-timestamp (status-event status)) "-"))
+
       (display "get-status" device-id (as-fields status)))))
 
 

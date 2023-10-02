@@ -270,6 +270,11 @@ public class examples {
         uint deviceID = opts.deviceID;
 
         Status status = u.GetStatus(deviceID);
+        string timestamp = status.evt.timestamp;
+
+        if (timestamp == "") {
+            timestamp = "-";
+        }
 
         field[] fields = {
             new uint32Field("ID", status.ID),
@@ -287,7 +292,7 @@ public class examples {
             new uint8Field("syserror", status.syserror),
             new uint8Field("info", status.info),
             new uint32Field("seqno", status.seqno),
-            new stringField("event timestamp", status.evt.timestamp),
+            new stringField("event timestamp", timestamp),
             new uint32Field("      index", status.evt.index),
             new stringField("      type", lookup.find(lookup.LOOKUP_EVENT_TYPE, status.evt.eventType, locale)),
             new boolField("      granted", status.evt.granted),

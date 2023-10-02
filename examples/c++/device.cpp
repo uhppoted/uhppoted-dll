@@ -65,6 +65,11 @@ void getStatus(uhppoted &u, int argc, char **argv) {
 
     auto s = u.get_status(deviceID);
 
+    string timestamp = s.evt.timestamp;
+    if (s.evt.timestamp == "") {
+        timestamp = "-";
+    }
+
     vector<field> fields = {
         field("ID", s.ID),
         field("date/time", s.sysdatetime),
@@ -81,7 +86,7 @@ void getStatus(uhppoted &u, int argc, char **argv) {
         field("error", s.syserror),
         field("seq no.", s.seqno),
         field("info", s.info),
-        field("event timestamp", s.evt.timestamp),
+        field("event timestamp", timestamp),
         field("      index", s.evt.index),
         field("      type", u.lookup(LOOKUP_EVENT_TYPE, s.evt.eventType, LOCALE)),
         field("      granted", s.evt.granted),
