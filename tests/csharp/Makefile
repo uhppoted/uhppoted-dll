@@ -48,6 +48,7 @@ set-address: build
 
 get-status: build
 	$(CMD) get-status
+	$(CMD) get-status-no-event
 
 get-time: build
 	$(CMD) get-time

@@ -113,7 +113,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
 	}
 
-	if deviceID != 405419896 {
+	if deviceID != 405419896 && deviceID != 303986753 {
 		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
 
@@ -140,14 +140,27 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.info = 253
 	status.seqno = 9876
 
-	status.event.timestamp = C.CString("2022-01-02 12:34:56")
-	status.event.index = 135
-	status.event.eventType = 0x06
-	status.event.granted = 1
-	status.event.door = 3
-	status.event.direction = 1
-	status.event.card = 8100023
-	status.event.reason = 0x15
+	if deviceID == 405419896 {
+		status.event.timestamp = C.CString("2022-01-02 12:34:56")
+		status.event.index = 135
+		status.event.eventType = 0x06
+		status.event.granted = 1
+		status.event.door = 3
+		status.event.direction = 1
+		status.event.card = 8100023
+		status.event.reason = 0x15
+	}
+
+	if deviceID == 303986753 {
+		status.event.timestamp = C.CString("")
+		status.event.index = 0
+		status.event.eventType = 0x00
+		status.event.granted = 0
+		status.event.door = 0
+		status.event.direction = 0
+		status.event.card = 0
+		status.event.reason = 0x00
+	}
 
 	return nil
 }

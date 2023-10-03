@@ -10,6 +10,7 @@
         '("get-device"            tests:get-device)
         '("set-address"           tests:set-address)
         '("get-status"            tests:get-status)
+        '("get-status-no-event"   tests:get-status-no-event)
         '("get-time"              tests:get-time)
         '("set-time"              tests:set-time)
         '("get-listener"          tests:get-listener)

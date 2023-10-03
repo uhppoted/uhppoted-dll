@@ -28,6 +28,7 @@ from uhppoted import LOOKUP_EVENT_TYPE
 from uhppoted import LOOKUP_EVENT_REASON
 
 DEVICE_ID = 405419896
+DEVICE_ID2 = 303986753
 CARD_NUMBER = 8165538
 CARD_INDEX = 19
 EVENT_INDEX = 51
@@ -41,6 +42,7 @@ def tests():
         'get-device': get_device,
         'set-address': set_address,
         'get-status': get_status,
+        'get-status-no-event': get_status_no_event,
         'get-time': get_time,
         'set-time': set_time,
         'get-listener': get_listener,
@@ -166,6 +168,30 @@ def get_status(u):
         ('event direction', 1, status.evt.direction),
         ('event card', 8100023, status.evt.card),
         ('event reason', 21, status.evt.reason),
+    ])
+
+
+def get_status_no_event(u):
+    status = u.get_status(DEVICE_ID2)
+
+    return evaluate('get-status-no-event', [
+        ('device ID', 303986753, status.ID),
+        ('system date/time', '2022-03-19 15:48:32', status.sysdatetime),
+        ('doors state', [1, 0, 0, 1], [status.doors[0], status.doors[1], status.doors[2], status.doors[3]]),
+        ('buttons state', [1, 0, 1, 0], [status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]]),
+        ('relay state', 0x12, status.relays),
+        ('inputs state', 0x34, status.inputs),
+        ('system error', 0x56, status.syserror),
+        ('special info', 253, status.info),
+        ('sequence number', 9876, status.seqno),
+        ('event timestamp', '', status.evt.timestamp),
+        ('event index', 0, status.evt.index),
+        ('event type', 0, status.evt.eventType),
+        ('event granted', 0, status.evt.granted),
+        ('event door', 0, status.evt.door),
+        ('event direction', 0, status.evt.direction),
+        ('event card', 0, status.evt.card),
+        ('event reason', 0, status.evt.reason),
     ])
 
 

@@ -39,6 +39,7 @@ extern bool getDevices();
 extern bool getDevice();
 extern bool setAddress();
 extern bool getStatus();
+extern bool getStatusNoEvent();
 extern bool getTime();
 extern bool setTime();
 extern bool getListener();
@@ -76,6 +77,7 @@ extern bool internationalisation();
 extern bool structs();
 
 extern const uint32_t DEVICE_ID;
+extern const uint32_t DEVICE_ID2;
 extern const uint32_t CARD_NUMBER;
 extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;

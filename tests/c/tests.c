@@ -19,6 +19,7 @@ bool passed(const char *);
 bool failed(const char *);
 
 const uint32_t DEVICE_ID = 405419896;
+const uint32_t DEVICE_ID2 = 303986753;
 const uint32_t CARD_NUMBER = 8165538;
 const uint32_t CARD_INDEX = 19;
 const uint32_t EVENT_INDEX = 51;
@@ -30,6 +31,7 @@ const test tests[] = {
     {.name = "get-device", .fn = getDevice},
     {.name = "set-address", .fn = setAddress},
     {.name = "get-status", .fn = getStatus},
+    {.name = "get-status-no-event", .fn = getStatusNoEvent},
     {.name = "get-time", .fn = getTime},
     {.name = "set-time", .fn = setTime},
     {.name = "get-listener", .fn = getListener},

@@ -18,6 +18,7 @@ public class test {
 // Sadly, mono is only C#7 compatible. Positional records would make this a whole lot less clunky
 public class Tests {
     const uint DEVICE_ID = 405419896;
+    const uint DEVICE_ID2 = 303986753;
     const uint CARD_NUMBER = 8165538;
     const uint CARD_INDEX = 19;
     const uint EVENT_INDEX = 51;
@@ -34,6 +35,7 @@ public class Tests {
         new test("get-device", GetDevice),
         new test("set-address", SetAddress),
         new test("get-status", GetStatus),
+        new test("get-status-no-event", GetStatusNoEvent),
         new test("get-time", GetTime),
         new test("set-time", SetTime),
         new test("get-listener", GetListener),
@@ -191,6 +193,38 @@ public class Tests {
         };
 
         return evaluate("get-status", resultset);
+    }
+
+    static bool GetStatusNoEvent(Uhppoted u) {
+        Status status = u.GetStatus(DEVICE_ID2);
+
+        result[] resultset = {
+            new uint32Result("device ID", 303986753, status.ID),
+            new stringResult("system date/time", "2022-03-19 15:48:32", status.sysdatetime),
+            new boolResult("doors[1]", true, status.doors[0]),
+            new boolResult("doors[2]", false, status.doors[1]),
+            new boolResult("doors[3]", false, status.doors[2]),
+            new boolResult("doors[4]", true, status.doors[3]),
+            new boolResult("buttons[1]", true, status.buttons[0]),
+            new boolResult("buttons[2]", false, status.buttons[1]),
+            new boolResult("buttons[3]", true, status.buttons[2]),
+            new boolResult("buttons[4]", false, status.buttons[3]),
+            new uint8Result("relays state", 0x12, status.relays),
+            new uint8Result("inputs state", 0x34, status.inputs),
+            new uint8Result("system error", 0x56, status.syserror),
+            new uint8Result("special info", 253, status.info),
+            new uint32Result("sequence number", 9876, status.seqno),
+            new uint32Result("event index", 0, status.evt.index),
+            new stringResult("event timestamp", "", status.evt.timestamp),
+            new uint8Result("event type", 0, status.evt.eventType),
+            new boolResult("event granted", false, status.evt.granted),
+            new uint8Result("event door", 0, status.evt.door),
+            new uint8Result("event direction", 0, status.evt.direction),
+            new uint32Result("event card", 0, status.evt.card),
+            new uint8Result("event reason", 0, status.evt.reason),
+        };
+
+        return evaluate("get-status-no-event", resultset);
     }
 
     static bool GetTime(Uhppoted u) {

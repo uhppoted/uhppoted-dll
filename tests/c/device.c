@@ -108,6 +108,45 @@ bool getStatus() {
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
+bool getStatusNoEvent() {
+    const char *tag = "get-status-no-event";
+    struct status s;
+
+    if (get_status(DEVICE_ID2, &s) != 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    // clang-format off
+    const result resultset[] = {
+        { .field = "device ID",        .type = "uint32",  .value.uint32.expected = 303986753,             .value.uint32.value = s.ID },
+        { .field = "system date/time", .type = "string",  .value.string.expected = "2022-03-19 15:48:32", .value.string.value = s.sysdatetime },
+        { .field = "doors[1] state",   .type = "uint8",   .value.uint8.expected = 1,                      .value.uint8.value = s.doors[0] },
+        { .field = "doors[2] state",   .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.doors[1] },
+        { .field = "doors[3] state",   .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.doors[2] },
+        { .field = "doors[4] state",   .type = "uint8",   .value.uint8.expected = 1,                      .value.uint8.value = s.doors[3] },
+        { .field = "buttons[1] state", .type = "uint8",   .value.uint8.expected = 1,                      .value.uint8.value = s.buttons[0] },
+        { .field = "buttons[2] state", .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.buttons[1] },
+        { .field = "buttons[3] state", .type = "uint8",   .value.uint8.expected = 1,                      .value.uint8.value = s.buttons[2] },
+        { .field = "buttons[4] state", .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.buttons[3] },
+        { .field = "relays state",     .type = "uint8",   .value.uint8.expected = 0x12,                   .value.uint8.value = s.relays },
+        { .field = "inputs state",     .type = "uint8",   .value.uint8.expected = 0x34,                   .value.uint8.value = s.inputs },
+        { .field = "special info",     .type = "uint8",   .value.uint8.expected = 253,                    .value.uint8.value = s.info },
+        { .field = "sequence number",  .type = "uint32",  .value.uint32.expected = 9876,                  .value.uint32.value = s.seqno },
+        { .field = "event timestamp",  .type = "string",  .value.string.expected = "",                    .value.string.value  = s.evt.timestamp },
+        { .field = "event index",      .type = "uint32",  .value.uint32.expected = 0,                     .value.uint32.value = s.evt.index },
+        { .field = "event type",       .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.evt.eventType },
+        { .field = "event granted",    .type = "boolean", .value.boolean.expected = false,                .value.boolean.value = s.evt.granted },
+        { .field = "event door",       .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.evt.door },
+        { .field = "event direction",  .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.evt.direction },
+        { .field = "event card",       .type = "uint32",  .value.uint32.expected = 0,                     .value.uint32.value = s.evt.card },
+        { .field = "event reason",     .type = "uint8",   .value.uint8.expected = 0,                      .value.uint8.value = s.evt.reason },
+    };
+    // clang-format on
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}
+
 bool getTime() {
     const char *tag = "get-time";
     char *datetime;

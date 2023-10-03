@@ -7,7 +7,7 @@
       - [x] Python examples
       - [x] C# examples
       - [x] CCL examples
-      - [ ] Add use case to tests
+      - [x] Add get-status-no-event use case to tests
       - [ ] integration tests
       - [x] CHANGELOG
       - [x] README

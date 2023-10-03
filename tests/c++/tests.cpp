@@ -20,6 +20,7 @@ vector<test> tests = {
     {"get-device", getDevice},
     {"set-address", setAddress},
     {"get-status", getStatus},
+    {"get-status-no-event", getStatusNoEvent},
     {"get-time", getTime},
     {"set-time", setTime},
     {"get-listener", getListener},
@@ -52,6 +53,7 @@ vector<test> tests = {
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
+extern const uint32_t DEVICE_ID2 = 303986753;
 extern const uint32_t CARD_ID = 8165538;
 extern const uint32_t CARD_INDEX = 19;
 extern const uint32_t EVENT_INDEX = 51;

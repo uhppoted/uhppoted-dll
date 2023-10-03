@@ -79,6 +79,37 @@ bool getStatus(uhppoted &u) {
     return evaluate("get-status", rs);
 }
 
+bool getStatusNoEvent(uhppoted &u) {
+    auto s = u.get_status(DEVICE_ID2);
+
+    vector<result> rs = {
+        result("device ID", uint32_t(303986753), s.ID),
+        result("system date/time", string("2022-03-19 15:48:32"), s.sysdatetime),
+        result("doors[1]", true, s.doors[0]),
+        result("doors[2]", false, s.doors[1]),
+        result("doors[3]", false, s.doors[2]),
+        result("doors[4]", true, s.doors[3]),
+        result("buttons[1]", true, s.buttons[0]),
+        result("buttons[2]", false, s.buttons[1]),
+        result("buttons[3]", true, s.buttons[2]),
+        result("buttons[4]", false, s.buttons[3]),
+        result("relays", uint8_t(0x12), s.relays),
+        result("inputs", uint8_t(0x34), s.inputs),
+        result("system error", uint8_t(0x56), s.syserror),
+        result("special info", uint8_t(253), s.info),
+        result("sequence number", uint32_t(9876), s.seqno),
+        result("event timestamp", string(""), s.evt.timestamp),
+        result("event index", uint32_t(0), s.evt.index),
+        result("event type", uint8_t(0), s.evt.eventType),
+        result("event granted", false, s.evt.granted),
+        result("event door", uint8_t(0), s.evt.door),
+        result("event direction", uint8_t(0), s.evt.direction),
+        result("event card", uint32_t(0), s.evt.card),
+        result("event reason", uint8_t(0), s.evt.reason),
+    };
+
+    return evaluate("get-status-no-event", rs);
+}
 bool getTime(uhppoted &u) {
     string datetime = u.get_time(DEVICE_ID);
 

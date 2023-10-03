@@ -1,6 +1,7 @@
 (in-package :tests)
 
 (defconstant TEST-DEVICE-ID   405419896)
+(defconstant TEST-DEVICE-ID2  303986753)
 (defconstant TEST-CARD-NUMBER 8165538)
 (defconstant TEST-CARD-INDEX  19)
 (defconstant TEST-PIN         7531)
@@ -72,6 +73,29 @@
                     (make-result :field "event direction"   :expected 1                     :value (event-direction  event))
                     (make-result :field "event card number" :expected 8100023               :value (event-card       event))
                     (make-result :field "event reason"      :expected 21                    :value (event-reason     event))))))
+
+
+(defun get-status-no-event () "" 
+  (let* ((status (exec #'(lambda (u) (uhppoted-get-status u TEST-DEVICE-ID2))))
+         (event  (status-event status)))
+    (evaluate "get-status-no-event" 
+              (list (make-result :field "device ID"         :expected 303986753             :value (status-id        status))
+                    (make-result :field "system date/time"  :expected "2022-03-19 15:48:32" :value (status-timestamp status))
+                    (make-result :field "doors state"       :expected '(t nil nil t)        :value (status-doors     status))
+                    (make-result :field "buttons state"     :expected '(t nil t   nil)      :value (status-buttons   status))
+                    (make-result :field "relays state"      :expected 18                    :value (status-relays    status))
+                    (make-result :field "inputs state"      :expected 52                    :value (status-inputs    status))
+                    (make-result :field "system error"      :expected 86                    :value (status-syserror  status))
+                    (make-result :field "system info"       :expected 253                   :value (status-info      status))
+                    (make-result :field "sequence number"   :expected 9876                  :value (status-seqno     status))
+                    (make-result :field "event index"       :expected 0                     :value (event-index      event))
+                    (make-result :field "event timestamp"   :expected ""                    :value (event-timestamp  event))
+                    (make-result :field "event type"        :expected 0                     :value (event-event-type event))
+                    (make-result :field "event granted"     :expected 0                     :value (event-granted    event))
+                    (make-result :field "event door"        :expected 0                     :value (event-door       event))
+                    (make-result :field "event direction"   :expected 0                     :value (event-direction  event))
+                    (make-result :field "event card number" :expected 0                     :value (event-card       event))
+                    (make-result :field "event reason"      :expected 0                     :value (event-reason     event))))))
 
 
 (defun get-time () "" 

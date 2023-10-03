@@ -10,6 +10,7 @@
 typedef std::tuple<std::string, std::any, std::any> result;
 
 extern const uint32_t DEVICE_ID;
+extern const uint32_t DEVICE_ID2;
 extern const uint32_t CARD_ID;
 extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;
@@ -22,6 +23,7 @@ extern bool getDevices(uhppoted &);
 extern bool getDevice(uhppoted &);
 extern bool setAddress(uhppoted &);
 extern bool getStatus(uhppoted &);
+extern bool getStatusNoEvent(uhppoted &);
 extern bool getTime(uhppoted &);
 extern bool setTime(uhppoted &);
 extern bool getListener(uhppoted &);

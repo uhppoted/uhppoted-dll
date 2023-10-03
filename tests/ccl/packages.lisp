@@ -8,6 +8,7 @@
 		       get-device
 		       set-address
 		       get-status
+           get-status-no-event
            get-time
            set-time
            get-listener
