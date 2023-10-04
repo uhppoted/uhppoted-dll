@@ -24,6 +24,7 @@ endif
 .PHONY: ccl
 .PHONY: examples
 .PHONY: tests
+.PHONY: integration-tests
 .PHONY: update
 .PHONY: vuln
 
@@ -55,6 +56,9 @@ build:
 test:
 	cd go && make test
 
+integration-tests:
+	cd integration-tests && make test
+
 vet: 
 	go vet ./...
 
@@ -66,7 +70,7 @@ lint:
 vuln:
 	govulncheck ./...
 
-build-all: build test lint
+build-all: build test lint integration-tests
 	go fmt ./go/...
 	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)

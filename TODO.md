@@ -8,10 +8,10 @@
       - [x] C# examples
       - [x] CCL examples
       - [x] Add get-status-no-event use case to tests
-      - [ ] integration tests
       - [x] CHANGELOG
       - [x] README
       - [x] doc
+      - [ ] integration tests
 
 ```
 ... request
