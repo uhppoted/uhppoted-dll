@@ -14,7 +14,6 @@ else
 endif
 
 build:
-	# NOTHING TO DO
 
 debug: build
 	$(CMD) get-device

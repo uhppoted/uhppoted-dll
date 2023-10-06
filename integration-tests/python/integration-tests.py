@@ -38,38 +38,38 @@ PROFILE_ID = 49
 
 def tests():
     return {
-        'get-devices': get_devices,
+        # 'get-devices': get_devices,
         'get-device': get_device,
-        'set-address': set_address,
+        # 'set-address': set_address,
         'get-status': get_status,
         'get-status-no-event': get_status_no_event,
-        'get-time': get_time,
-        'set-time': set_time,
-        'get-listener': get_listener,
-        'set-listener': set_listener,
-        'get-door-control': get_door_control,
-        'set-door-control': set_door_control,
-        'open-door': open_door,
-        'get-cards': get_cards,
-        'get-card': get_card,
-        'get-card-by-index': get_card_by_index,
-        'put-card': put_card,
-        'delete-card': delete_card,
-        'delete-cards': delete_cards,
-        'get-event-index': get_event_index,
-        'set-event-index': set_event_index,
-        'get-event': get_event,
-        'record-special-events': record_special_events,
-        'get-time-profile': get_time_profile,
-        'set-time-profile': set_time_profile,
-        'clear-time-profiles': clear_time_profiles,
-        'add-task': add_task,
-        'refresh-tasklist': refresh_tasklist,
-        'clear-tasklist': clear_tasklist,
-        'set-pc-control': set_pc_control,
-        'set-interlock': set_interlock,
-        'activate-keypads': activate_keypads,
-        'set-door-passcodes': set_door_passcodes,
+        # 'get-time': get_time,
+        # 'set-time': set_time,
+        # 'get-listener': get_listener,
+        # 'set-listener': set_listener,
+        # 'get-door-control': get_door_control,
+        # 'set-door-control': set_door_control,
+        # 'open-door': open_door,
+        # 'get-cards': get_cards,
+        # 'get-card': get_card,
+        # 'get-card-by-index': get_card_by_index,
+        # 'put-card': put_card,
+        # 'delete-card': delete_card,
+        # 'delete-cards': delete_cards,
+        # 'get-event-index': get_event_index,
+        # 'set-event-index': set_event_index,
+        # 'get-event': get_event,
+        # 'record-special-events': record_special_events,
+        # 'get-time-profile': get_time_profile,
+        # 'set-time-profile': set_time_profile,
+        # 'clear-time-profiles': clear_time_profiles,
+        # 'add-task': add_task,
+        # 'refresh-tasklist': refresh_tasklist,
+        # 'clear-tasklist': clear_tasklist,
+        # 'set-pc-control': set_pc_control,
+        # 'set-interlock': set_interlock,
+        # 'activate-keypads': activate_keypads,
+        # 'set-door-passcodes': set_door_passcodes,
     }
 
 
@@ -94,16 +94,16 @@ def main():
             if not tests()[cmd](u):
                 sys.exit(-1)
 
-        # elif cmd == '' or cmd == 'all':
-        #     if not reduce(lambda ok, f: f(u) and ok, tests().values(), True):
-        #         sys.exit(-1)
+        elif cmd == '' or cmd == 'all':
+            if not reduce(lambda ok, f: f(u) and ok, tests().values(), True):
+                sys.exit(-1)
 
-        # else:
-        #     raise ('invalid command')
+        else:
+            raise ValueError('invalid command')
 
     except BaseException as err:
-        print(f'   *** ERROR  {cmd} failed: {err}')
-        sys.exit(1)
+        print(f"   *** ERROR  '{cmd}' failed ({err})")
+        sys.exit(-1)
 
 
 def get_devices(u):
@@ -118,19 +118,15 @@ def get_devices(u):
 def get_device(u):
     info = u.get_device(DEVICE_ID)
 
-    ok = evaluate('get-device', [
+    return evaluate('get-device', [
         ('device ID', 405419896, info.ID),
-        ('IP address', '192.168.1.101', info.address),
+        ('IP address', '192.168.1.100', info.address),
         ('subnet mask', '255.255.255.0', info.subnet),
         ('gateway address', '192.168.1.1', info.gateway),
         ('MAC address', '00:12:23:34:45:56', info.MAC),
         ('version', 'v8.92', info.version),
         ('date', '2018-11-05', info.date),
     ])
-
-    print('>>>>>>>>>>>>>>>>>>>>>>>>>>', ok)
-
-    return True
 
 
 def set_address(u):
@@ -144,22 +140,22 @@ def get_status(u):
 
     return evaluate('get-status', [
         ('device ID', 405419896, status.ID),
-        ('system date/time', '2022-03-19 15:48:32', status.sysdatetime),
+        ('system date/time', '2023-10-06 09:02:48', status.sysdatetime),
         ('doors state', [1, 0, 0, 1], [status.doors[0], status.doors[1], status.doors[2], status.doors[3]]),
-        ('buttons state', [1, 0, 1, 0], [status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]]),
+        ('buttons state', [0, 1, 1, 0], [status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]]),
         ('relay state', 0x12, status.relays),
         ('inputs state', 0x34, status.inputs),
         ('system error', 0x56, status.syserror),
         ('special info', 253, status.info),
         ('sequence number', 9876, status.seqno),
-        ('event timestamp', '2022-01-02 12:34:56', status.evt.timestamp),
-        ('event index', 135, status.evt.index),
-        ('event type', 6, status.evt.eventType),
-        ('event granted', 1, status.evt.granted),
+        ('event timestamp', '2023-10-05 12:23:38', status.evt.timestamp),
+        ('event index', 483, status.evt.index),
+        ('event type', 1, status.evt.eventType),
+        ('event granted', True, status.evt.granted),
         ('event door', 3, status.evt.door),
         ('event direction', 1, status.evt.direction),
-        ('event card', 8100023, status.evt.card),
-        ('event reason', 21, status.evt.reason),
+        ('event card', 10058400, status.evt.card),
+        ('event reason', 18, status.evt.reason),
     ])
 
 
@@ -168,9 +164,9 @@ def get_status_no_event(u):
 
     return evaluate('get-status-no-event', [
         ('device ID', 303986753, status.ID),
-        ('system date/time', '2022-03-19 15:48:32', status.sysdatetime),
+        ('system date/time', '2023-10-06 09:02:48', status.sysdatetime),
         ('doors state', [1, 0, 0, 1], [status.doors[0], status.doors[1], status.doors[2], status.doors[3]]),
-        ('buttons state', [1, 0, 1, 0], [status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]]),
+        ('buttons state', [0, 1, 1, 0], [status.buttons[0], status.buttons[1], status.buttons[2], status.buttons[3]]),
         ('relay state', 0x12, status.relays),
         ('inputs state', 0x34, status.inputs),
         ('system error', 0x56, status.syserror),

@@ -60,22 +60,11 @@ func teardown(socket *net.UDPConn) {
 	socket.Close()
 }
 
-// func TestCLI(t *testing.T) {
-// 	cmd := exec.Command("../../uhppote-cli/bin/uhppote-cli", "get-device", "405419896")
-// 	out, err := cmd.CombinedOutput()
-// 	if err != nil {
-// 		t.Fatalf("Error executing CLI get-device (%v)", err)
-// 	} else if string(out) != "Alpha  405419896  192.168.1.100   255.255.255.0   192.168.1.1     00:12:23:34:45:56 v8.92 2018-11-05\n" {
-// 		t.Errorf("   > %v", string(out))
-// 	}
-// }
-
 func TestPython(t *testing.T) {
-	cmd := exec.Command("/bin/sh", "-c", "cd python && make debug")
+	cmd := exec.Command("/bin/sh", "-c", "cd python && make all")
 
 	if out, err := cmd.CombinedOutput(); err != nil {
+		t.Errorf("%v", string(out))
 		t.Fatalf("Error executing Python get-device (%v)", err)
-	} else {
-		t.Errorf(">>>>>>>>>>>>>> %v", string(out))
 	}
 }
