@@ -70,7 +70,7 @@ lint:
 vuln:
 	govulncheck ./...
 
-build-all: build test lint
+build-all: build test lint integration-tests
 	go fmt ./go/...
 	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
