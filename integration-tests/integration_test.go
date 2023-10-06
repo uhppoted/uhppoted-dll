@@ -60,11 +60,20 @@ func teardown(socket *net.UDPConn) {
 	socket.Close()
 }
 
+func TestC(t *testing.T) {
+	cmd := exec.Command("/bin/sh", "-c", "cd c && make all")
+
+	if out, err := cmd.CombinedOutput(); err != nil {
+		t.Errorf("%v", string(out))
+		t.Fatalf("Error executing C integration tests (%v)", err)
+	}
+}
+
 func TestPython(t *testing.T) {
 	cmd := exec.Command("/bin/sh", "-c", "cd python && make all")
 
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Errorf("%v", string(out))
-		t.Fatalf("Error executing Python get-device (%v)", err)
+		t.Fatalf("Error executing Python integration tests (%v)", err)
 	}
 }

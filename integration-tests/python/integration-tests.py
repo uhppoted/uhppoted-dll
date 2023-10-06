@@ -150,12 +150,12 @@ def get_status(u):
         ('sequence number', 9876, status.seqno),
         ('event timestamp', '2023-10-05 12:23:38', status.evt.timestamp),
         ('event index', 483, status.evt.index),
-        ('event type', 1, status.evt.eventType),
+        ('event type', 6, status.evt.eventType),
         ('event granted', True, status.evt.granted),
         ('event door', 3, status.evt.door),
         ('event direction', 1, status.evt.direction),
         ('event card', 10058400, status.evt.card),
-        ('event reason', 18, status.evt.reason),
+        ('event reason', 21, status.evt.reason),
     ])
 
 

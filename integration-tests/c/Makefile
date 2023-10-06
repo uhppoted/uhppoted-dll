@@ -1,6 +1,7 @@
 LIB=../../lib
+BINDINGS=../../bindings/c
 GO=GODEBUG=cgocheck=2
-CMD=$(GO) && $(DLL) && python3 integration-tests.py 
+SRC=tests.c device.c cards.c events.c time_profiles.c tasks.c
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -13,15 +14,22 @@ else
     endif
 endif
 
-format:
-	yapf -ri python
+CMD=$(GO) && $(DLL) && ./tests
+
+.PHONY: tests
+
+format: $(SRC)
+	clang-format -i *.c
+	clang-format -i $(BINDINGS)/src/*.c
+	clang-format -i $(BINDINGS)/include/*.h
 
 build: format
+	gcc -Wall -o tests $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
 
 get-devices: 
 	$(CMD) get-devices
 
-get-device:
+get-device: 
 	$(CMD) get-device
 
 set-address: 
