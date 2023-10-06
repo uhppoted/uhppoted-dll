@@ -20,8 +20,6 @@ CMD=$(GO) && $(DLL) && ./tests
 
 format: $(SRC)
 	clang-format -i *.c
-	clang-format -i $(BINDINGS)/src/*.c
-	clang-format -i $(BINDINGS)/include/*.h
 
 build: format
 	gcc -Wall -o tests $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB) -L$(LIB) -luhppoted
