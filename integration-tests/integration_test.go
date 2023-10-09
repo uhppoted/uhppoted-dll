@@ -78,11 +78,29 @@ func TestCPP(t *testing.T) {
 	}
 }
 
+func TestCSharp(t *testing.T) {
+	cmd := exec.Command("/bin/sh", "-c", "cd csharp && make all")
+
+	if out, err := cmd.CombinedOutput(); err != nil {
+		t.Errorf("%v", string(out))
+		t.Fatalf("Error executing C# integration tests (%v)", err)
+	}
+}
+
 func TestPython(t *testing.T) {
 	cmd := exec.Command("/bin/sh", "-c", "cd python && make all")
 
 	if out, err := cmd.CombinedOutput(); err != nil {
 		t.Errorf("%v", string(out))
 		t.Fatalf("Error executing Python integration tests (%v)", err)
+	}
+}
+
+func TestCCL(t *testing.T) {
+	cmd := exec.Command("/bin/sh", "-c", "cd ccl && make all")
+
+	if out, err := cmd.CombinedOutput(); err != nil {
+		t.Errorf("%v", string(out))
+		t.Fatalf("Error executing CCL integration tests (%v)", err)
 	}
 }
