@@ -8,6 +8,7 @@
 ### Updated
 1. Updated bindings documentation for card PINs.
 2. Fixed handling for `get-status` response without a valid event (cf. https://github.com/uhppoted/uhppoted-dll/issues/7)
+3. Replaced `nil` event pointer in `get-status` with zero value.
 
 
 ## [0.8.6](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.6) - 2023-08-30

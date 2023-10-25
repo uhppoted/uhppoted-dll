@@ -1,35 +1,9 @@
 # TODO
 
-- [ ] https://github.com/uhppoted/uhppoted-dll/issues/7
-      - [x] Go
-      - [x] C examples
-      - [x] C++ examples
-      - [x] Python examples
-      - [x] C# examples
-      - [x] CCL examples
-      - [x] Add get-status-no-event use case to tests
-      - [x] CHANGELOG
-      - [x] README
-      - [x] doc
-      - [ ] integration tests
-
-```
-... request
- ...          00000000  17 20 00 00 51 8d 38 19  00 00 00 00 00 00 00 00
- ...          00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
- ...          00000020  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
- ...          00000030  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
- ...
-
- ... received 64 bytes from 192.168.1.100:60000
- ... response
- ...          00000000  17 20 00 00 51 8d 38 19  00 00 00 00 00 00 00 00
- ...          00000010  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00
- ...          00000020  00 00 00 00 83 11 16 20  00 00 00 00 00 00 00 00
- ...          00000030  00 00 00 23 09 29 00 00  00 00 00 00 00 00 00 00
-```
-
+- [x] https://github.com/uhppoted/uhppoted-dll/issues/7
 - [x] `set-door-passcodes` (cf. https://github.com/uhppoted/uhppoted/issues/40)
+- [x] Replace Event pointer in GetStatusResponse with zero value (cf. https://github.com/uhppoted/uhppote-core/issues/18)
+      - [x] CHANGELOG
 
 
 ## TODO

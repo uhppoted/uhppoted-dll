@@ -103,16 +103,12 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("%v: no response to get-status", deviceID)
 	}
 
-	format := func(t *types.DateTime) string {
-		if t != nil {
-			return time.Time(*t).Format("2006-01-02 15:04:05")
-		}
-
-		return ""
+	format := func(t types.DateTime) string {
+		return time.Time(t).Format("2006-01-02 15:04:05")
 	}
 
 	status.ID = C.uint(response.SerialNumber)
-	status.sysdatetime = C.CString(format(&response.SystemDateTime))
+	status.sysdatetime = C.CString(format(response.SystemDateTime))
 
 	doors := unsafe.Slice(status.doors, 4)
 	buttons := unsafe.Slice(status.buttons, 4)
@@ -134,16 +130,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.seqno = C.uint(response.SequenceId)
 	status.info = C.uchar(response.SpecialInfo)
 
-	if response.Event != nil {
-		status.event.timestamp = C.CString(format(response.Event.Timestamp))
-		status.event.index = C.uint(response.Event.Index)
-		status.event.eventType = C.uchar(response.Event.Type)
-		status.event.granted = cbool(response.Event.Granted)
-		status.event.door = C.uchar(response.Event.Door)
-		status.event.direction = C.uchar(response.Event.Direction)
-		status.event.card = C.uint(response.Event.CardNumber)
-		status.event.reason = C.uchar(response.Event.Reason)
-	} else {
+	if response.Event.IsZero() {
 		status.event.timestamp = C.CString("")
 		status.event.index = C.uint(0)
 		status.event.eventType = C.uchar(0)
@@ -152,6 +139,15 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		status.event.direction = C.uchar(0)
 		status.event.card = C.uint(0)
 		status.event.reason = C.uchar(0)
+	} else {
+		status.event.timestamp = C.CString(format(response.Event.Timestamp))
+		status.event.index = C.uint(response.Event.Index)
+		status.event.eventType = C.uchar(response.Event.Type)
+		status.event.granted = cbool(response.Event.Granted)
+		status.event.door = C.uchar(response.Event.Door)
+		status.event.direction = C.uchar(response.Event.Direction)
+		status.event.card = C.uint(response.Event.CardNumber)
+		status.event.reason = C.uchar(response.Event.Reason)
 	}
 
 	return nil
