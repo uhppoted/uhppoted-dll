@@ -7,6 +7,9 @@
 - [ ] Visual Studio project (cf. https://github.com/uhppoted/uhppoted-dll/issues/9)
       - [x] VisualStudio for Mac
       - [ ] VisualStudio for Windows
+      - [ ] README
+            - [ ] Requires mingw for Windows
+
       - https://forum.golangbridge.org/t/calling-go-function-from-c/29296/2
       - https://stackoverflow.com/questions/65304131/is-it-possible-to-load-a-go-dll-in-c-dll-on-windows
       - https://medium.com/@shantanukhande/red-team-how-to-embed-golang-tools-in-c-e269bf33876a
