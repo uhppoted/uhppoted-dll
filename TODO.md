@@ -5,16 +5,21 @@
 - [x] Replace Event pointer in GetStatusResponse with zero value (cf. https://github.com/uhppoted/uhppote-core/issues/18)
 
 - [ ] Visual Studio project (cf. https://github.com/uhppoted/uhppoted-dll/issues/9)
-      - [x] VisualStudio for Mac
-      - [ ] VisualStudio for Windows
-      - [ ] README
-            - [ ] Requires mingw for Windows
+      - [ ] VisualStudio for Mac
+            - [x] Proof of concept
+            - [ ] Full example
+            - [ ] Build notes
 
-      - https://forum.golangbridge.org/t/calling-go-function-from-c/29296/2
-      - https://stackoverflow.com/questions/65304131/is-it-possible-to-load-a-go-dll-in-c-dll-on-windows
-      - https://medium.com/@shantanukhande/red-team-how-to-embed-golang-tools-in-c-e269bf33876a
-      - https://stackoverflow.com/questions/65651662/calling-a-go-dll-from-a-c-dll?rq=4
-      - https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7
+      - [ ] VisualStudio for Windows
+            - [x] Proof of concept
+            - [ ] Full example
+            - [ ] Build notes
+
+      - [ ] README
+            - [ ] Build notes
+                  - mingw (Windows)
+                  - Visual Studio
+
 
 ## TODO
 

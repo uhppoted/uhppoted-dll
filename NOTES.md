@@ -26,3 +26,8 @@
 
 1. http://www.swig.org/Doc2.0/Go.html
 2. https://stackoverflow.com/questions/8437791/c-malloc-array-in-function-and-then-access-array-from-outside
+3. https://forum.golangbridge.org/t/calling-go-function-from-c/29296/2
+4. https://stackoverflow.com/questions/65304131/is-it-possible-to-load-a-go-dll-in-c-dll-on-windows
+5. https://stackoverflow.com/questions/65651662/calling-a-go-dll-from-a-c-dll?rq=4
+6. https://stackoverflow.com/questions/40573401/building-a-dll-with-go-1-7
+
