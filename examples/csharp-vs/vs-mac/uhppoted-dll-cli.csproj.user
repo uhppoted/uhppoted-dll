@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Project</StartAction>
-    <StartArguments>get-controllers</StartArguments>
+    <StartArguments>get-card-by-index --controller 303986753 --index 1</StartArguments>
     <StartWorkingDirectory>.</StartWorkingDirectory>
     <ExternalConsole>true</ExternalConsole>
     <EnvironmentVariables>
