@@ -2,7 +2,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Project</StartAction>
-    <StartArguments>record-special-events --controller 303986753 --disabled</StartArguments>
+    <StartArguments>get-time-profile --controller 303986753 --profile 29</StartArguments>
     <StartWorkingDirectory>.</StartWorkingDirectory>
     <ExternalConsole>true</ExternalConsole>
     <EnvironmentVariables>

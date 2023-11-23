@@ -30,6 +30,9 @@ class UhppotedDLLCLI
     const string CARD_TO = "2024-12-31";
     const uint CARD_PIN = 0;
     const uint EVENT_INDEX = 1;
+    const byte TIME_PROFILE_ID = 2;
+    const string TIME_PROFILE_START = "2023-01-01";
+    const string TIME_PROFILE_END = "2023-12-31";
     const string LOCALE = "";
 
     static void Main(string[] args)
@@ -159,12 +162,14 @@ class UhppotedDLLCLI
                     "Enables/disables recording additional events for a controller.",
                     RecordSpecialEvents),
 
-        //new command("get-time-profile",
-        //            "Retrieves a time profile from a controller.",
-        //            GetTimeProfile),
-        //new command("set-time-profile",
-        //            "Adds or updates a time profile on a controller.",
-        //            SetTimeProfile),
+        new command("get-time-profile",
+                    "Retrieves a time profile from a controller.",
+                    GetTimeProfile),
+
+        new command("set-time-profile",
+                    "Adds or updates a time profile on a controller.",
+                    SetTimeProfile),
+
         //new command("clear-time-profiles",
         //            "Deletes all time profiles from a controller.",
         //            ClearTimeProfiles),
@@ -437,7 +442,8 @@ class UhppotedDLLCLI
         MatchCollection matches = re.Matches(v);
 
         foreach (Match match in matches)
-        { if (match.Groups[1].Success)
+        {
+            if (match.Groups[1].Success)
             {
                 int door = Convert.ToInt16(match.Groups[1].Value);
                 int ix = door - 1;
@@ -445,7 +451,7 @@ class UhppotedDLLCLI
                 if (match.Groups[3].Success)
                 {
                     byte profile = Convert.ToByte(match.Groups[3].Value);
-                    if (profile > 0 && profile < 255)
+                    if (profile > 1 && profile < 255)
                     {
                         doors[ix] = profile;
                     }
@@ -538,6 +544,122 @@ class UhppotedDLLCLI
 
         WriteLine(Format("record-special-events ({0})", controller));
         WriteLine(Format("   ok"));
+    }
+
+    static void GetTimeProfile(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        byte profileID = ParseArgs(args, "--profile", TIME_PROFILE_ID);
+
+        TimeProfile profile = u.GetTimeProfile(controller, profileID);
+
+        WriteLine(Format("get-time-profile ({0})", controller));
+        WriteLine(Format("   profile ID           {0}", profileID));
+        WriteLine(Format("   linked profile       {0}", profile.linked));
+        WriteLine(Format("   enabled from         {0}", profile.from));
+        WriteLine(Format("           until        {0}", profile.to));
+        WriteLine(Format("   enabled on Monday    {0}", profile.monday));
+        WriteLine(Format("              Tuesday   {0}", profile.tuesday));
+        WriteLine(Format("              Wednesday {0}", profile.wednesday));
+        WriteLine(Format("              Thursday  {0}", profile.thursday));
+        WriteLine(Format("              Friday    {0}", profile.friday));
+        WriteLine(Format("              Saturday  {0}", profile.saturday));
+        WriteLine(Format("              Sunday    {0}", profile.sunday));
+        WriteLine(Format("   segment 1  start     {0}", profile.segment1start));
+        WriteLine(Format("              end       {0}", profile.segment1end));
+        WriteLine(Format("   segment 2  start     {0}", profile.segment2start));
+        WriteLine(Format("              end       {0}", profile.segment2end));
+        WriteLine(Format("   segment 3  start     {0}", profile.segment3start));
+        WriteLine(Format("              end       {0}", profile.segment3end));
+    }
+
+    static void SetTimeProfile(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        byte profileID = ParseArgs(args, "--profile", TIME_PROFILE_ID);
+        byte linkedProfile = ParseArgs(args, "--linked", 0);
+        string startDate = ParseArgs(args, "--start", TIME_PROFILE_START);
+        string endDate = ParseArgs(args, "--end", TIME_PROFILE_END);
+        bool monday = false;
+        bool tuesday = false;
+        bool wednesday = false;
+        bool thursday = false;
+        bool friday = false;
+        bool saturday = false;
+        bool sunday = false;
+        string segment1Start = "08:30";
+        string segment1End = "11:30";
+        string segment2Start = "";
+        string segment2End = "";
+        string segment3Start = "";
+        string segment3End = "";
+
+        Regex re = new Regex(@"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)*", RegexOptions.ECMAScript);
+        string v = ParseArgs(args, "--weekdays", "");
+        MatchCollection matches = re.Matches(v);
+
+        foreach (Match match in matches)
+        {
+            if (match.Groups[1].Success)
+            {
+                string weekday = match.Groups[1].Value;
+                if (weekday == "Mon")
+                {
+                    monday = true;
+                }
+                else if (weekday == "Tue")
+                {
+                    tuesday = true;
+                }
+                else if (weekday == "Wed")
+                {
+                    wednesday = true;
+                }
+                else if (weekday == "Thu")
+                {
+                    thursday = true;
+                }
+                else if (weekday == "Fri")
+                {
+                    friday = true;
+                }
+                else if (weekday == "Sat")
+                {
+                    saturday = true;
+                }
+                else if (weekday == "Sun")
+                {
+                    sunday = true;
+                }
+            }
+        }
+
+        TimeProfile profile = new TimeProfile(profileID, linkedProfile, startDate, endDate,
+                                              monday, tuesday, wednesday, thursday, friday, saturday, sunday,
+                                              segment1Start, segment1End,
+                                              segment2Start, segment2End,
+                                              segment3Start, segment3End);
+
+        u.SetTimeProfile(controller, profile);
+
+        WriteLine(Format("set-time-profile ({0})", controller));
+        WriteLine(Format("   profile ID           {0}", profileID));
+        WriteLine(Format("   linked profile       {0}", profile.linked));
+        WriteLine(Format("   enabled from         {0}", profile.from));
+        WriteLine(Format("           until        {0}", profile.to));
+        WriteLine(Format("   enabled on Monday    {0}", profile.monday));
+        WriteLine(Format("              Tuesday   {0}", profile.tuesday));
+        WriteLine(Format("              Wednesday {0}", profile.wednesday));
+        WriteLine(Format("              Thursday  {0}", profile.thursday));
+        WriteLine(Format("              Friday    {0}", profile.friday));
+        WriteLine(Format("              Saturday  {0}", profile.saturday));
+        WriteLine(Format("              Sunday    {0}", profile.sunday));
+        WriteLine(Format("   segment 1  start     {0}", profile.segment1start));
+        WriteLine(Format("              end       {0}", profile.segment1end));
+        WriteLine(Format("   segment 2  start     {0}", profile.segment2start));
+        WriteLine(Format("              end       {0}", profile.segment2end));
+        WriteLine(Format("   segment 3  start     {0}", profile.segment3start));
+        WriteLine(Format("              end       {0}", profile.segment3end));
     }
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
