@@ -1,12 +1,8 @@
 ﻿using static System.Console;
 using static System.String;
-using uhppoted;
-using System.Net;
-using System.Net.NetworkInformation;
-using System;
-using System.Reflection;
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
+
+using uhppoted;
 
 public class command
 {
@@ -33,6 +29,7 @@ class UhppotedDLLCLI
     const string CARD_FROM = "2023-01-01";
     const string CARD_TO = "2024-12-31";
     const uint CARD_PIN = 0;
+    const uint EVENT_INDEX = 1;
     const string LOCALE = "";
 
     static void Main(string[] args)
@@ -134,27 +131,34 @@ class UhppotedDLLCLI
                     "Retrieves the card detail for the card stored at an index on a controller.",
                     GetCardByIndex),
 
-        //new command("put-card",
-        //            "Adds or updates the card detail for card number stored on a controller.",
-        //            PutCard),
-        //new command("delete-card",
-        //            "Deletes a card from a controller.",
-        //            DeleteCard),
-        //new command("delete-cards",
-        //            "Deletes all cards from a controller.",
-        //            DeleteCards),
-        //new command("get-event-index",
-        //            "Retrieves the current event index from a controller.",
-        //            GetEventIndex),
-        //new command("set-event-index",
-        //            "Sets the current event index on a controller.",
-        //            SetEventIndex),
-        //new command("get-event",
-        //            "Retrieves the event at the index from a controller.",
-        //            GetEvent),
-        //new command("record-special-events",
-        //            "Enables/disables recording additional events for a controller.",
-        //            RecordSpecialEvents),
+        new command("put-card",
+                    "Adds or updates the card detail for card number stored on a controller.",
+                    PutCard),
+
+        new command("delete-card",
+                    "Deletes a card from a controller.",
+                    DeleteCard),
+
+        new command("delete-all-cards",
+                    "Deletes all cards from a controller.",
+                    DeleteAllCards),
+
+        new command("get-event-index",
+                    "Retrieves the current event index from a controller.",
+                    GetEventIndex),
+
+        new command("set-event-index",
+                    "Sets the current event index on a controller.",
+                    SetEventIndex),
+
+        new command("get-event",
+                    "Retrieves the event at the index from a controller.",
+                    GetEvent),
+
+        new command("record-special-events",
+                    "Enables/disables recording additional events for a controller.",
+                    RecordSpecialEvents),
+
         //new command("get-time-profile",
         //            "Retrieves a time profile from a controller.",
         //            GetTimeProfile),
@@ -419,55 +423,122 @@ class UhppotedDLLCLI
         WriteLine(Format("   PIN         {0}", card.PIN));
     }
 
-    //static void PutCard(Uhppoted u, string[] args)
-    //{
-    //    uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
-    //    uint cardNumber = ParseArgs(args, "--card", CARD_NUMBER);
-    //    string from = ParseArgs(args, "--from", CARD_FROM);
-    //    string to = ParseArgs(args, "--from", CARD_TO);
-    //    uint PIN = ParseArgs(args, "--card", CARD_PIN);
-    //    byte[] doors = { 0, 0, 0, 0 };
-    //
-    //    Regex re = new Regex(@"([1-4])(:[0-9]{3})?");
-    //    string[] tokens = ParseArgs(args, "--doors", "").Split(',');
-    //    foreach (var v in tokens)
-    //    {
-    //        MatchCollection matches = re.Matches(v);
-    //
-    //        WriteLine(">>>>>>>>>>>>>>> {0}", matches);
-    //        if (matches.Count > 0)
-    //        { 
-    //        }
-    //        //if (v == "1")
-    //        //{
-    //        //    doors[0] = 1;
-    //        //}
-    //        //else if (v == "2'")
-    //        //{
-    //        //    doors[1] = 1;
-    //        //}
-    //        //else if (v == "3")
-    //        //{
-    //        //    doors[2] = 1;
-    //        //}
-    //        //else if (v == "4")
-    //        //{
-    //        //    doors[3] = 1;
-    //        //}
-    //    }
-    //
-    //    u.PutCard(controller, cardNumber, from, to, doors, PIN);
-    //
-    //    WriteLine(Format("put-card ({0})", controller));
-    //    WriteLine(Format("   card number {0}", cardNumber));
-    //    WriteLine(Format("   from        {0}", from));
-    //    WriteLine(Format("   to          {0}", to));
-    //    WriteLine(Format("   door[1]     {0}", doors[0]));
-    //    WriteLine(Format("   door[2]     {0}", doors[1]));
-    //    WriteLine(Format("   door[3]     {0}", doors[2]));
-    //    WriteLine(Format("   door[4]     {0}", doors[3]));
-    //    WriteLine(Format("   PIN         {0}", PIN));
-    //}
+    static void PutCard(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        uint cardNumber = ParseArgs(args, "--card", CARD_NUMBER);
+        string start = ParseArgs(args, "--start", CARD_FROM);
+        string end = ParseArgs(args, "--end", CARD_TO);
+        uint PIN = ParseArgs(args, "--PIN", CARD_PIN);
+        byte[] doors = { 0, 0, 0, 0 };
+
+        Regex re = new Regex(@"([1-4])(:([0-9]{1,3}))?", RegexOptions.ECMAScript);
+        string v = ParseArgs(args, "--doors", "");
+        MatchCollection matches = re.Matches(v);
+
+        foreach (Match match in matches)
+        { if (match.Groups[1].Success)
+            {
+                int door = Convert.ToInt16(match.Groups[1].Value);
+                int ix = door - 1;
+
+                if (match.Groups[3].Success)
+                {
+                    byte profile = Convert.ToByte(match.Groups[3].Value);
+                    if (profile > 0 && profile < 255)
+                    {
+                        doors[ix] = profile;
+                    }
+                }
+                else
+                {
+                    doors[ix] = 1;
+                }
+            }
+        }
+
+        u.PutCard(controller, cardNumber, start, end, doors, PIN);
+
+        WriteLine(Format("put-card ({0})", controller));
+        WriteLine(Format("   card number {0}", cardNumber));
+        WriteLine(Format("   start date  {0}", start));
+        WriteLine(Format("   end date    {0}", end));
+        WriteLine(Format("   door[1]     {0}", doors[0]));
+        WriteLine(Format("   door[2]     {0}", doors[1]));
+        WriteLine(Format("   door[3]     {0}", doors[2]));
+        WriteLine(Format("   door[4]     {0}", doors[3]));
+        WriteLine(Format("   PIN         {0}", PIN));
+    }
+
+    static void DeleteCard(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        uint cardNumber = ParseArgs(args, "--card", CARD_NUMBER);
+
+        u.DeleteCard(controller, cardNumber);
+
+        WriteLine(Format("delete-card ({0})", controller));
+        WriteLine(Format("   card number {0}", cardNumber));
+    }
+
+    static void DeleteAllCards(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+
+        u.DeleteCards(controller);
+
+        WriteLine(Format("delete-cards ({0})", controller));
+        WriteLine(Format("   ok"));
+    }
+
+    static void GetEventIndex(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        uint index = u.GetEventIndex(controller);
+
+        WriteLine(Format("get-event-index ({0})", controller));
+        WriteLine(Format("   index {0}", index));
+    }
+
+    static void SetEventIndex(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        uint index = ParseArgs(args, "--index", EVENT_INDEX);
+
+        u.SetEventIndex(controller, index);
+
+        WriteLine(Format("set-event-index ({0})", controller));
+        WriteLine(Format("   index {0}", index));
+    }
+
+    static void GetEvent(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        uint index = ParseArgs(args, "--index", EVENT_INDEX);
+
+        Event evt = u.GetEvent(controller, index);
+
+        WriteLine(Format("get-event ({0})", controller));
+        WriteLine(Format("   event index {0}", evt.index));
+        WriteLine(Format("   timestamp   {0}", evt.timestamp));
+        WriteLine(Format("   type        {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, evt.eventType, LOCALE)));
+        WriteLine(Format("   granted     {0}", evt.granted));
+        WriteLine(Format("   door        {0}", evt.door));
+        WriteLine(Format("   direction   {0}", lookup.find(lookup.LOOKUP_DIRECTION, evt.direction, LOCALE)));
+        WriteLine(Format("   card number {0}", evt.card));
+        WriteLine(Format("   reason      {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, evt.reason, LOCALE)));
+    }
+
+    static void RecordSpecialEvents(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        bool disable = ParseArgs(args, "--disabled", false);
+
+        u.RecordSpecialEvents(controller, !disable);
+
+        WriteLine(Format("record-special-events ({0})", controller));
+        WriteLine(Format("   ok"));
+    }
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
     {
@@ -511,6 +582,22 @@ class UhppotedDLLCLI
             if (arg == option && ix < args.Length)
             {
                 return args[ix++];
+            }
+        }
+
+        return defval;
+    }
+
+    static bool ParseArgs(string[] args, string option, bool defval)
+    {
+        int ix = 1;
+        while (ix < args.Length)
+        {
+            string arg = args[ix++];
+
+            if (arg == option)
+            {
+                return true;
             }
         }
 
