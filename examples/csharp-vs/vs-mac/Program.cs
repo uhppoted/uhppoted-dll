@@ -3,6 +3,8 @@ using static System.String;
 using System.Text.RegularExpressions;
 
 using uhppoted;
+using System;
+using System.Threading.Tasks;
 
 public class command
 {
@@ -33,6 +35,7 @@ class UhppotedDLLCLI
     const byte TIME_PROFILE_ID = 2;
     const string TIME_PROFILE_START = "2023-01-01";
     const string TIME_PROFILE_END = "2023-12-31";
+    const string TASK_AT = "00:00";
     const string LOCALE = "";
 
     static void Main(string[] args)
@@ -170,21 +173,26 @@ class UhppotedDLLCLI
                     "Adds or updates a time profile on a controller.",
                     SetTimeProfile),
 
-        //new command("clear-time-profiles",
-        //            "Deletes all time profiles from a controller.",
-        //            ClearTimeProfiles),
-        //new command("add-task",
-        //            "Adds a scheduled task to a controller.",
-        //            AddTask),
-        //new command("refresh-tasklist",
-        //            "Refreshes a controller task list to activate added tasks.",
-        //            RefreshTaskList),
-        //new command("clear-tasklist",
-        //            "Clears a controller task list.",
-        //            ClearTaskList),
-        //new command("set-pc-control",
-        //            "Enables/disables controller remote access control.",
-        //            SetPCControl),
+        new command("clear-time-profiles",
+                    "Deletes all time profiles from a controller.",
+                    ClearTimeProfiles),
+
+        new command("add-task",
+                    "Adds a scheduled task to a controller.",
+                    AddTask),
+
+        new command("refresh-tasklist",
+                    "Refreshes a controller task list to activate added tasks.",
+                    RefreshTaskList),
+
+        new command("clear-tasklist",
+                    "Clears a controller task list.",
+                    ClearTaskList),
+
+        new command("set-pc-control",
+                    "Enables/disables controller remote access control.",
+                    SetPCControl),
+
         //new command("set-interlock",
         //            "Set a controller interlock mode.",
         //            SetInterlock),
@@ -587,12 +595,7 @@ class UhppotedDLLCLI
         bool friday = false;
         bool saturday = false;
         bool sunday = false;
-        string segment1Start = "08:30";
-        string segment1End = "11:30";
-        string segment2Start = "";
-        string segment2End = "";
-        string segment3Start = "";
-        string segment3End = "";
+        string[,] segments = { { "", "" }, { "", "" }, { "", "" } };
 
         Regex re = new Regex(@"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)*", RegexOptions.ECMAScript);
         string v = ParseArgs(args, "--weekdays", "");
@@ -603,42 +606,40 @@ class UhppotedDLLCLI
             if (match.Groups[1].Success)
             {
                 string weekday = match.Groups[1].Value;
-                if (weekday == "Mon")
+                switch (weekday)
                 {
-                    monday = true;
-                }
-                else if (weekday == "Tue")
-                {
-                    tuesday = true;
-                }
-                else if (weekday == "Wed")
-                {
-                    wednesday = true;
-                }
-                else if (weekday == "Thu")
-                {
-                    thursday = true;
-                }
-                else if (weekday == "Fri")
-                {
-                    friday = true;
-                }
-                else if (weekday == "Sat")
-                {
-                    saturday = true;
-                }
-                else if (weekday == "Sun")
-                {
-                    sunday = true;
+                    case "Mon": monday = true; break;
+                    case "Tue": tuesday = true; break;
+                    case "Wed": wednesday = true; break;
+                    case "Thu": thursday = true; break;
+                    case "Fri": friday = true; break;
+                    case "Sat": saturday = true; break;
+                    case "Sun": sunday = true; break;
                 }
             }
         }
 
+        re = new Regex(@"([0-9]{1,2}:[0-9]{2})-([0-9]{1,2}:[0-9]{2})", RegexOptions.ECMAScript);
+        v = ParseArgs(args, "--segments", "");
+        matches = re.Matches(v);
+
+        int ix = 0;
+        foreach (Match match in matches)
+        {
+            if (ix < 3)
+            {
+                segments[ix, 0] = match.Groups[1].Value;
+                segments[ix, 1] = match.Groups[2].Value;
+                ix++;
+            }
+        }
+
+
         TimeProfile profile = new TimeProfile(profileID, linkedProfile, startDate, endDate,
-                                              monday, tuesday, wednesday, thursday, friday, saturday, sunday,
-                                              segment1Start, segment1End,
-                                              segment2Start, segment2End,
-                                              segment3Start, segment3End);
+                                          monday, tuesday, wednesday, thursday, friday, saturday, sunday,
+                                          segments[0, 0], segments[0, 1],
+                                          segments[1, 0], segments[1, 1],
+                                          segments[2, 0], segments[2, 1]);
 
         u.SetTimeProfile(controller, profile);
 
@@ -660,6 +661,127 @@ class UhppotedDLLCLI
         WriteLine(Format("              end       {0}", profile.segment2end));
         WriteLine(Format("   segment 3  start     {0}", profile.segment3start));
         WriteLine(Format("              end       {0}", profile.segment3end));
+    }
+
+    static void ClearTimeProfiles(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+
+        u.ClearTimeProfiles(controller);
+
+        WriteLine(Format("clear-time-profiles ({0})", controller));
+        WriteLine(Format("   ok"));
+    }
+
+    static void AddTask(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        byte door = ParseArgs(args, "--door", DOOR);
+        string startDate = ParseArgs(args, "--start", TIME_PROFILE_START);
+        string endDate = ParseArgs(args, "--end", TIME_PROFILE_END);
+        bool monday = false;
+        bool tuesday = false;
+        bool wednesday = false;
+        bool thursday = false;
+        bool friday = false;
+        bool saturday = false;
+        bool sunday = false;
+        string at = ParseArgs(args, "--at", TASK_AT);
+        byte moreCards = ParseArgs(args, "--more-cards", 0);
+        string taskName = ParseArgs(args, "--task", "");
+        byte taskID = 0;
+
+        switch (taskName)
+        {
+            case "control door": taskID = 0; break;
+            case "unlock door": taskID = 1; break;
+            case "lock door": taskID = 2; break;
+            case "disable time profile": taskID = 3; break;
+            case "enable time profile": taskID = 4; break;
+            case "enable card, no password": taskID = 5; break;
+            case "enable card+in password": taskID = 6; break;
+            case "enable card+password": taskID = 7; break;
+            case "enable more cards": taskID = 8; break;
+            case "disable more cards": taskID = 9; break;
+            case "trigger once": taskID = 10; break;
+            case "disable push button": taskID = 11; break;
+            case "enable push button": taskID = 12; break;
+            default: throw new ArgumentException(Format("Unknown task {0}", taskName));
+        }
+
+        Regex re = new Regex(@"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)*", RegexOptions.ECMAScript);
+        string v = ParseArgs(args, "--weekdays", "");
+        MatchCollection matches = re.Matches(v);
+
+        foreach (Match match in matches)
+        {
+            if (match.Groups[1].Success)
+            {
+                string weekday = match.Groups[1].Value;
+                switch (weekday)
+                {
+                    case "Mon": monday = true; break;
+                    case "Tue": tuesday = true; break;
+                    case "Wed": wednesday = true; break;
+                    case "Thu": thursday = true; break;
+                    case "Fri": friday = true; break;
+                    case "Sat": saturday = true; break;
+                    case "Sun": sunday = true; break;
+                }
+            }
+        }
+
+        uhppoted.Task task = new uhppoted.Task(taskID, door, startDate, endDate,
+                             monday, tuesday, wednesday, thursday, friday, saturday, sunday,
+                             at, moreCards);
+
+        u.AddTask(controller, task);
+
+        WriteLine(Format("add-task ({0})", controller));
+        WriteLine(Format("   task                 {0}", task.task));
+        WriteLine(Format("   door                 {0}", task.door));
+        WriteLine(Format("   enabled from         {0}", task.from));
+        WriteLine(Format("           until        {0}", task.to));
+        WriteLine(Format("   enabled on Monday    {0}", task.monday));
+        WriteLine(Format("              Tuesday   {0}", task.tuesday));
+        WriteLine(Format("              Wednesday {0}", task.wednesday));
+        WriteLine(Format("              Thursday  {0}", task.thursday));
+        WriteLine(Format("              Friday    {0}", task.friday));
+        WriteLine(Format("              Saturday  {0}", task.saturday));
+        WriteLine(Format("              Sunday    {0}", task.sunday));
+        WriteLine(Format("   at                   {0}", task.at));
+        WriteLine(Format("   cards                {0}", task.cards));
+    }
+
+    static void RefreshTaskList(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+
+        u.RefreshTaskList(controller);
+
+        WriteLine(Format("refresh-tasklist ({0})", controller));
+        WriteLine(Format("   ok"));
+    }
+
+    static void ClearTaskList(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+
+        u.ClearTaskList(controller);
+
+        WriteLine(Format("clear-tasklist ({0})", controller));
+        WriteLine(Format("   ok"));
+    }
+
+    static void SetPCControl(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        bool disable = ParseArgs(args, "--disabled", false);
+
+        u.SetPCControl(controller, !disable);
+
+        WriteLine(Format("set-pc-control ({0})", controller));
+        WriteLine(Format("   enabled {0}", !disable));
     }
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
