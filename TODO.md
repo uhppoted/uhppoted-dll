@@ -5,10 +5,11 @@
 - [x] Replace Event pointer in GetStatusResponse with zero value (cf. https://github.com/uhppoted/uhppote-core/issues/18)
 
 - [ ] Visual Studio project (cf. https://github.com/uhppoted/uhppoted-dll/issues/9)
-      - [ ] VisualStudio for Mac
+      - [x] VisualStudio for Mac
             - [x] Proof of concept
-            - [ ] Full example
-            - [ ] Build notes
+            - [x] Full example
+            - [x] Build notes
+            - [x] Makefile commands
 
       - [ ] VisualStudio for Windows
             - [x] Proof of concept

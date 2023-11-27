@@ -3,8 +3,6 @@ using static System.String;
 using System.Text.RegularExpressions;
 
 using uhppoted;
-using System;
-using System.Threading.Tasks;
 
 public class command
 {
@@ -24,7 +22,7 @@ class UhppotedDLLCLI
 {
     const uint CONTROLLER_ID = 405419896;
     const byte DOOR = 1;
-    const byte DOOR_MODE = DoorMode.NormallyOpen;
+    const string DOOR_MODE = "controlled";
     const byte DOOR_DELAY = 5;
     const uint CARD_NUMBER = 10058399;
     const uint CARD_INDEX = 1;
@@ -193,15 +191,17 @@ class UhppotedDLLCLI
                     "Enables/disables controller remote access control.",
                     SetPCControl),
 
-        //new command("set-interlock",
-        //            "Set a controller interlock mode.",
-        //            SetInterlock),
-        //new command("activate-keypads",
-        //            "Activates and deactivates a controller reader access keypads.",
-        //            ActivateKeypads),
-        //new command("set-door-passcodes",
-        //            "Sets the supervisor passcodes for keypad only access to a door.",
-        //            SetDoorPasscodes),
+        new command("set-interlock",
+                    "Set a controller interlock mode.",
+                    SetInterlock),
+
+        new command("activate-keypads",
+                    "Activates and deactivates a controller reader access keypads.",
+                    ActivateKeypads),
+
+        new command("set-door-passcodes",
+                    "Sets the supervisor passcodes for keypad only access to a door.",
+                    SetDoorPasscodes),
     };
 
     static void usage()
@@ -370,14 +370,20 @@ class UhppotedDLLCLI
     {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         byte door = ParseArgs(args, "--door", DOOR);
-        byte mode = ParseArgs(args, "--mode", DOOR_MODE);
+        string mode = ParseArgs(args, "--mode", DOOR_MODE);
         byte delay = ParseArgs(args, "--delay", DOOR_DELAY);
 
-        u.SetDoorControl(controller, door, mode, delay);
+        switch (mode)
+        {
+            case "controlled": u.SetDoorControl(controller, door, DoorMode.Controlled, delay); break;
+            case "normally-open": u.SetDoorControl(controller, door, DoorMode.NormallyOpen, delay); break;
+            case "normally-closed": u.SetDoorControl(controller, door, DoorMode.NormallyClosed, delay); break;
+            default: throw new ArgumentException(Format("Unknown door mode {0}", mode));
+        }
 
         WriteLine(Format("set-door-control ({0})", controller));
         WriteLine(Format("   door  {0}", door));
-        WriteLine(Format("   mode  {0}", lookup.find(lookup.LOOKUP_MODE, mode, LOCALE)));
+        WriteLine(Format("   mode  {0}", mode));
         WriteLine(Format("   delay {0}", delay));
     }
 
@@ -782,6 +788,99 @@ class UhppotedDLLCLI
 
         WriteLine(Format("set-pc-control ({0})", controller));
         WriteLine(Format("   enabled {0}", !disable));
+    }
+
+    static void SetInterlock(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        string interlock = ParseArgs(args, "--interlock", "");
+
+        switch (interlock)
+        {
+            case "none": u.SetInterlock(controller, 0); break;
+            case "1&2": u.SetInterlock(controller, 1); break;
+            case "3&4": u.SetInterlock(controller, 2); break;
+            case "1&2,3&4": u.SetInterlock(controller, 3); break;
+            case "1&2&3": u.SetInterlock(controller, 4); break;
+            case "1&2&3&4": u.SetInterlock(controller, 8); break;
+            default: throw new ArgumentException(Format("Invalid interlock {0}", interlock));
+        }
+
+        WriteLine(Format("set-interlock ({0})", controller));
+        WriteLine(Format("   interlock {0}", interlock));
+    }
+
+    static void ActivateKeypads(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        bool reader1 = false;
+        bool reader2 = false;
+        bool reader3 = false;
+        bool reader4 = false;
+
+        Regex re = new Regex(@"([1-4])*", RegexOptions.ECMAScript);
+        string keypads = ParseArgs(args, "--keypads", "");
+        MatchCollection matches = re.Matches(keypads);
+
+        foreach (Match match in matches)
+        {
+            if (match.Groups[1].Success)
+            {
+                string reader = match.Groups[1].Value;
+                switch (reader)
+                {
+                    case "1": reader1 = true; break;
+                    case "2": reader2 = true; break;
+                    case "3": reader3 = true; break;
+                    case "4": reader4 = true; break;
+                }
+            }
+        }
+
+        u.ActivateKeypads(controller, reader1, reader2, reader3, reader4);
+
+        WriteLine(Format("activate-keypads ({0})", controller));
+        WriteLine(Format("   reader 1 {0}", reader1));
+        WriteLine(Format("   reader 2 {0}", reader2));
+        WriteLine(Format("   reader 3 {0}", reader3));
+        WriteLine(Format("   reader 4 {0}", reader4));
+    }
+
+    static void SetDoorPasscodes(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        byte door = ParseArgs(args, "--door", DOOR);
+        string[] passcodes = ParseArgs(args, "--passcodes", "").Split(",");
+        uint passcode1 = 0;
+        uint passcode2 = 0;
+        uint passcode3 = 0;
+        uint passcode4 = 0;
+
+        int ix = 1;
+        foreach (string passcode in passcodes)
+        {
+            uint v = Convert.ToUInt32(passcode);
+
+            if (v >= 1 && v <= 999999)
+            {
+                switch (ix++)
+                {
+                    case 1: passcode1 = v; break;
+                    case 2: passcode2 = v; break;
+                    case 3: passcode3 = v; break;
+                    case 4: passcode4 = v; break;
+                }
+            }
+        }
+
+        u.SetDoorPasscodes(controller, door, passcode1, passcode2, passcode3, passcode4);
+
+        WriteLine(Format("set-door-passcodes ({0})", controller));
+        WriteLine(Format("   door     {0}", door));
+        WriteLine(Format("   passcode 1 {0}", passcode1));
+        WriteLine(Format("   passcode 2 {0}", passcode2));
+        WriteLine(Format("   passcode 3 {0}", passcode3));
+        WriteLine(Format("   passcode 4 {0}", passcode4));
     }
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)

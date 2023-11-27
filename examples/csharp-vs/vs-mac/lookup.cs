@@ -3,18 +3,21 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text;
 
-public class DoorMode {
+public class DoorMode
+{
     public const byte NormallyOpen = 1;
     public const byte NormallyClosed = 2;
     public const byte Controlled = 3;
 }
 
-public class Direction {
+public class Direction
+{
     public const byte In = 1;
     public const byte Out = 2;
 }
 
-public class EventType {
+public class EventType
+{
     public const byte None = 0;
     public const byte Swipe = 1;
     public const byte Door = 2;
@@ -22,7 +25,8 @@ public class EventType {
     public const byte Overwritten = 255;
 }
 
-public class EventReason {
+public class EventReason
+{
     public const byte None = 0;
     public const byte Swipe = 1;
     public const byte SwipeOpen = 2;
