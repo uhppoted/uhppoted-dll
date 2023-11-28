@@ -4,6 +4,7 @@
 
 ### Added
 1. `set-door-passcodes` command to set supervisor passcodes for a door.
+2. Visual Studio examples for C#
 
 ### Updated
 1. Updated bindings documentation for card PINs.
