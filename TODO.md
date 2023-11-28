@@ -4,7 +4,7 @@
 - [x] `set-door-passcodes` (cf. https://github.com/uhppoted/uhppoted/issues/40)
 - [x] Replace Event pointer in GetStatusResponse with zero value (cf. https://github.com/uhppoted/uhppote-core/issues/18)
 
-- [ ] Visual Studio project (cf. https://github.com/uhppoted/uhppoted-dll/issues/9)
+- [x] Visual Studio project (cf. https://github.com/uhppoted/uhppoted-dll/issues/9)
       - [x] VisualStudio for Mac
             - [x] Proof of concept
             - [x] Full example
@@ -13,14 +13,12 @@
 
       - [ ] VisualStudio for Windows
             - [x] Proof of concept
-            - [ ] Full example
-            - [ ] Build notes
+            - [x] Full example
+            - [x] Build notes
 
-      - [ ] README
-            - [ ] Build notes
+      - [x] README
+            - [x] Build notes
                   - mingw (Windows)
-                  - Visual Studio
-
 
 ## TODO
 

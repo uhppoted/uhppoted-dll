@@ -21,17 +21,6 @@ Supported operating systems:
 
 ## Releases
 
-| *Version* | *Description*                                                                             |
-| --------- | ----------------------------------------------------------------------------------------- |
-| v0.8.6    | Added `ActivateKeypads` to bindings to enable/disable reader keypads                      |
-| v0.8.5    | Added `Setinterlock` to bindings to set controller door interlock mode                    |
-| v0.8.4    | Added `SetPCControl` to bindings and included support for card keypad PIN                 |
-| v0.8.3    | Bug fixes for Python, C++ and C# bindings                                                 |
-| v0.8.2    | Fixed runtime crash (concurrent writes) and added _swipe open_ and _swipe close_ events   |
-| v0.8.1    | Maintenance release to update dependencies on `uhppote-core` and `uhppoted-lib`           |
-| v0.8.0    | Maintenance release to update dependencies on `uhppote-core` and `uhppoted-lib`           |
-| v0.7.3    | Initial release                                                                           |
-
 The releases do not include binaries - cross-compiling a DLL/shared-lib is not straightforward because
 the _cgo_ compiler links in a platfrom specific version of _glibc_. Building the DLL/shared-lib 
 is straightforward (see below) and only requires that _go_ and _cgo_ are installed on the system.
@@ -40,7 +29,12 @@ is straightforward (see below) and only requires that _go_ and _cgo_ are install
 
 ### Installation
 
-The DLL/shared lib/dylib has to be built from source and requires `Go`:
+Requirements:
+- Go v1.21+
+- (Windows only) _mingw_
+- (optional) make
+
+The DLL/shared lib/dylib has to be built from source:
 
 ```
 git clone https://github.com/uhppoted/uhppoted-dll.git

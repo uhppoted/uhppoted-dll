@@ -47,8 +47,7 @@ regen:
 format:
 	go fmt ./go/...
 
-build: 
-	go fmt ./go/...
+build: format
 	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
 	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
 	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
