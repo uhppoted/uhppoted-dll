@@ -76,16 +76,16 @@ build-all: build test lint
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
 
-	make -C ./tests/c         -f Makefile tests
-	make -C ./tests/c++       -f Makefile tests
-	make -C ./tests/csharp    -f Makefile tests
-	make -C ./tests/python    -f Makefile tests
-	make -C ./tests/ccl       -f Makefile tests
-	make -C ./examples/c      -f Makefile build
-	make -C ./examples/c++    -f Makefile build
-	make -C ./examples/csharp -f Makefile build
-	make -C ./examples/python -f Makefile build
-	make -C ./examples/ccl    -f Makefile build
+	make -C ./tests/c              -f Makefile tests
+	make -C ./tests/c++            -f Makefile tests
+	make -C ./tests/csharp         -f Makefile tests
+	make -C ./tests/python         -f Makefile tests
+	make -C ./tests/ccl            -f Makefile tests
+	make -C ./examples/c           -f Makefile build
+	make -C ./examples/c++         -f Makefile build
+	make -C ./examples/csharp/mono -f Makefile build
+	make -C ./examples/python      -f Makefile build
+	make -C ./examples/ccl         -f Makefile build
 
 build-debug: build
 	make -C ./tests/c++       -f Makefile tests
@@ -109,8 +109,8 @@ cpp:
 	make -C ./tests/c++    -f Makefile build
 
 csharp: 
-	make -C ./examples/csharp -f Makefile build
-	make -C ./tests/csharp    -f Makefile build
+	make -C ./examples/csharp/mono -f Makefile build
+	make -C ./tests/csharp         -f Makefile build
 
 python: 
 	make -C ./examples/python -f Makefile build
@@ -119,11 +119,11 @@ ccl:
 	make -C ./examples/ccl -f Makefile build
 
 examples:
-	make -C ./examples/c      -f Makefile build
-	make -C ./examples/c++    -f Makefile build
-	make -C ./examples/csharp -f Makefile build
-	make -C ./examples/python -f Makefile build
-	make -C ./examples/ccl    -f Makefile build
+	make -C ./examples/c           -f Makefile build
+	make -C ./examples/c++         -f Makefile build
+	make -C ./examples/csharp/mono -f Makefile build
+	make -C ./examples/python      -f Makefile build
+	make -C ./examples/ccl         -f Makefile build
 
 tests: 
 	make -C ./tests/c      -f Makefile tests
