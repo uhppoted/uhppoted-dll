@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [0.8.7](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.7) - 2023-12-01
 
 ### Added
 1. `set-door-passcodes` command to set supervisor passcodes for a door.
