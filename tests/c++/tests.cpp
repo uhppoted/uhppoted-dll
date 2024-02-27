@@ -48,6 +48,7 @@ vector<test> tests = {
     {"set-interlock", setInterlock},
     {"activate-keypads", activateKeypads},
     {"set-door-passcodes", setDoorPasscodes},
+    {"restore-default-parameters", restoreDefaultParameters},
     {"lookup", internationalisation},
     {"structs", structs},
 };
@@ -137,7 +138,7 @@ extern bool evaluate(const std::string &tag, const std::vector<result> &resultse
             auto p = any_cast<uint8_t>(expected);
             auto q = any_cast<uint8_t>(value);
             if (p != q) {
-                cout << setw(21) << tag << " incorrect " << field << " (expected:" << static_cast<int>(p) << ", got:" << static_cast<int>(q) << ")" << endl;
+                cout << setw(26) << tag << " incorrect " << field << " (expected:" << static_cast<int>(p) << ", got:" << static_cast<int>(q) << ")" << endl;
                 ok = false;
             }
         } else if (type == typeid(uint32_t).name()) {
@@ -145,7 +146,7 @@ extern bool evaluate(const std::string &tag, const std::vector<result> &resultse
             auto q = any_cast<uint32_t>(value);
 
             if (p != q) {
-                cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
+                cout << setw(26) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
                 ok = false;
             }
         } else if (type == typeid(bool).name()) {
@@ -153,7 +154,7 @@ extern bool evaluate(const std::string &tag, const std::vector<result> &resultse
             auto q = any_cast<bool>(value);
 
             if (p != q) {
-                cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
+                cout << setw(26) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
                 ok = false;
             }
         } else if (type == typeid(string).name()) {
@@ -161,7 +162,7 @@ extern bool evaluate(const std::string &tag, const std::vector<result> &resultse
             auto q = any_cast<string>(value);
 
             if (p != q) {
-                cout << setw(21) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
+                cout << setw(26) << tag << " incorrect " << field << " (expected:" << p << ", got:" << q << ")" << endl;
                 ok = false;
             }
         } else {
@@ -178,13 +179,13 @@ extern bool evaluate(const std::string &tag, const std::vector<result> &resultse
 }
 
 extern bool passed(const string &tag) {
-    cout << setw(21) << left << tag << " ok" << endl;
+    cout << setw(26) << left << tag << " ok" << endl;
 
     return true;
 }
 
 extern bool failed(const string &tag) {
-    cout << setw(21) << left << tag << " failed" << endl;
+    cout << setw(26) << left << tag << " failed" << endl;
 
     return false;
 }

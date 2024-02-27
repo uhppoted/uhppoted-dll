@@ -202,6 +202,10 @@ class UhppotedDLLCLI
         new command("set-door-passcodes",
                     "Sets the supervisor passcodes for keypad only access to a door.",
                     SetDoorPasscodes),
+
+        new command("restore-default-parameters",
+                    "Resets a controller to the manufacturer default configuration.",
+                    RestoreDefaultParameters),
     };
 
     static void usage()
@@ -881,6 +885,15 @@ class UhppotedDLLCLI
         WriteLine(Format("   passcode 2 {0}", passcode2));
         WriteLine(Format("   passcode 3 {0}", passcode3));
         WriteLine(Format("   passcode 4 {0}", passcode4));
+    }
+
+    static void RestoreDefaultParameters(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+
+        u.RestoreDefaultParameters(controller);
+
+        WriteLine(Format("restore-default-parameters ({0})", controller));
     }
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)

@@ -1,24 +1,23 @@
 # TODO
 
-- [x] https://github.com/uhppoted/uhppoted-dll/issues/7
-- [x] `set-door-passcodes` (cf. https://github.com/uhppoted/uhppoted/issues/40)
-- [x] Replace Event pointer in GetStatusResponse with zero value (cf. https://github.com/uhppoted/uhppote-core/issues/18)
-
-- [x] Visual Studio project (cf. https://github.com/uhppoted/uhppoted-dll/issues/9)
-      - [x] VisualStudio for Mac
-            - [x] Proof of concept
-            - [x] Full example
-            - [x] Build notes
-            - [x] Makefile commands
-
-      - [ ] VisualStudio for Windows
-            - [x] Proof of concept
-            - [x] Full example
-            - [x] Build notes
-
+- [ ] [`restore-default-parameters`](https://github.com/uhppoted/uhppoted/issues/48)
+      - [x] API
+      - [x] C
+      - [x] C++
+      - [ ] C#
+            - [x] mono
+            - [ ] VS (Mac)
+            - [ ] VS (Windows)
+      - [ ] CCL
+      - [ ] Python
+      - [x] CHANGELOG
       - [x] README
-            - [x] Build notes
-                  - mingw (Windows)
+      - [ ] doc
+            - [x] C
+            - [x] C++
+            - [x] C#
+            - [ ] CCL
+            - [ ] Python
 
 ## TODO
 

@@ -221,6 +221,10 @@ extern char* ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 rea
 //
 extern char* SetDoorPasscodes(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 passcode1, GoUint32 passcode2, GoUint32 passcode3, GoUint32 passcode4);
 
+// Resets a controller to the manufacturer default configuration.
+//
+extern char* RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller);
+
 #ifdef __cplusplus
 }
 #endif

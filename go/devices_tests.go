@@ -363,6 +363,18 @@ func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passco
 	return nil
 }
 
+// Test implementation of restoreDefaultParameters
+//
+// Returns an error if the arguments do not match:
+// - controller: 405419896
+func restoreDefaultParameters(uu uhppote.IUHPPOTE, controller uint32) error {
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect controller ID (%v)", controller)
+	}
+
+	return nil
+}
+
 func unpack(u uhppote.IUHPPOTE, field string) any {
 	type U struct {
 		BindAddr      string         `json:"bind"`

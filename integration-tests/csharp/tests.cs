@@ -63,6 +63,7 @@ public class Tests {
         // new test("set-interlock", SetInterlock),
         // new test("activate-keypads", ActivateKeypads),
         // new test("set-door-passcodes", SetDoorPasscodes),
+        // new test("restore-default-parameters", RestoreDefaultParamaters),
     };
 
     public static void Main(string[] args) {
@@ -507,6 +508,14 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("set-door-passcodes", resultset);
+    }
+
+    static bool RestoreDefaultParamaters(Uhppoted u) {
+        u.RestoreDefaultParamaters(DEVICE_ID);
+
+        result[] resultset = {};
+
+        return evaluate("restore-default-parameters", resultset);
     }
 
     static bool evaluate(string tag, result[] resultset) {

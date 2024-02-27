@@ -328,3 +328,16 @@ bool setDoorPasscodes() {
 
   return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
+
+bool restoreDefaultParameters() {
+  const char *tag = "restore-default-parameters";
+
+  if (restore_default_parameters(DEVICE_ID) < 0) {
+    printf("ERROR %s\n", errmsg());
+    return false;
+  }
+
+  const result resultset[] = {};
+
+  return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}

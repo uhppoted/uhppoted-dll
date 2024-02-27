@@ -151,6 +151,9 @@ public class examples {
         new command("set-door-passcodes",
                     "Sets the supervisor passcodes for keypad only access to a door.",
                     SetDoorPasscodes),
+        new command("restore-default-parameters",
+                    "Resets a controller to the manufacturer default configuration.",
+                    RestoreDefaultParameters),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -728,13 +731,13 @@ public class examples {
 
     static void SetPCControl(Uhppoted u, string[] args) {
         options opts = parse(args);
-        uint deviceID = opts.deviceID;
+        uint controller = opts.deviceID;
         bool enabled = true;
 
-        u.SetPCControl(deviceID, enabled);
+        u.SetPCControl(controller, enabled);
 
         field[] fields = {
-            new uint32Field("ID", deviceID),
+            new uint32Field("ID", controller),
             new boolField("enabled", enabled),
         };
 
@@ -743,13 +746,13 @@ public class examples {
 
     static void SetInterlock(Uhppoted u, string[] args) {
         options opts = parse(args);
-        uint deviceID = opts.deviceID;
+        uint controller = opts.deviceID;
         byte interlock = 1;
 
-        u.SetInterlock(deviceID, interlock);
+        u.SetInterlock(controller, interlock);
 
         field[] fields = {
-            new uint32Field("ID", deviceID),
+            new uint32Field("ID", controller),
             new uint8Field("interlock", interlock),
         };
 
@@ -758,16 +761,16 @@ public class examples {
 
     static void ActivateKeypads(Uhppoted u, string[] args) {
         options opts = parse(args);
-        uint deviceID = opts.deviceID;
+        uint controller = opts.deviceID;
         bool reader1 = true;
         bool reader2 = true;
         bool reader3 = false;
         bool reader4 = true;
 
-        u.ActivateKeypads(deviceID, reader1, reader2, reader3, reader4);
+        u.ActivateKeypads(controller, reader1, reader2, reader3, reader4);
 
         field[] fields = {
-            new uint32Field("ID", deviceID),
+            new uint32Field("ID", controller),
             new boolField("reader 1", reader1),
             new boolField("reader 2", reader2),
             new boolField("reader 3", reader3),
@@ -779,17 +782,17 @@ public class examples {
 
     static void SetDoorPasscodes(Uhppoted u, string[] args) {
         options opts = parse(args);
-        uint deviceID = opts.deviceID;
+        uint controller = opts.deviceID;
         byte door = opts.door;
         uint passcode1 = 12345;
         uint passcode2 = 999999;
         uint passcode3 = 0;
         uint passcode4 = 54321;
 
-        u.SetDoorPasscodes(deviceID, door, passcode1, passcode2, passcode3, passcode4);
+        u.SetDoorPasscodes(controller, door, passcode1, passcode2, passcode3, passcode4);
 
         field[] fields = {
-            new uint32Field("ID", deviceID),
+            new uint32Field("ID", controller),
             new uint8Field("door", door),
             new uint32Field("passcode 1", passcode1),
             new uint32Field("passcode 2", passcode2),
@@ -798,6 +801,19 @@ public class examples {
         };
 
         display("set-door-passcodes", fields);
+    }
+
+    static void RestoreDefaultParameters(Uhppoted u, string[] args) {
+        options opts = parse(args);
+        uint controller = opts.deviceID;
+
+        u.RestoreDefaultParameters(controller);
+
+        field[] fields = {
+            new uint32Field("ID", controller),
+        };
+
+        display("restore-default-parameters", fields);
     }
 
     static options parse(string[] args) {

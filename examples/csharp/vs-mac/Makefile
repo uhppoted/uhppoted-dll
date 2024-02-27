@@ -95,3 +95,5 @@ activate-keypads:
 set-door-passcodes:
 	$(CLI) set-door-passcodes --controller $(CONTROLLER) --door 4 --passcodes 12345,7531
 
+restore-default-parameters:
+	$(CLI) restore-default-parameters --controller $(CONTROLLER)

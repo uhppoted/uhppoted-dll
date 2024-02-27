@@ -134,6 +134,7 @@ returns a fixed response.
 - [`SetInterlock`](#setinterlock)
 - [`ActivateKeypads`](#activatekeypads)
 - [`SetDoorPasscodes`](#setdoorpasscodes)
+- [`RestoreDefaultParameters`](#restoredefaultparameters)
 
 #### `GetDevices`
 
@@ -304,4 +305,9 @@ Note that the controllers do not provide the capability for activating or deacti
 #### `SetDoorPasscodes`
 
 Sets up to four supervisor passcodes to allow keypad only access to a door.
+
+
+#### `RestoreDefaultParameters`
+
+Resets a controller to the manufacturer default configuration.
 

@@ -119,5 +119,8 @@ activate-keypads:
 set-door-passcodes: 
 	$(CMD) set-door-passcodes
 
+restore-default-parameters: 
+	$(CMD) restore-default-parameters
+
 all: 
 	$(CMD) all

@@ -390,10 +390,10 @@ uhppoted_exception::what() method.
 
 ### `set_pc_control`
 ```
-int set_pc_control(uint32_t id, bool enabled);
+int set_pc_control(uint32_t controller, bool enabled);
 
-id      controller serial number 
-enabled enables/disables PC control
+controller  controller serial number 
+enabled     enables/disables PC control
 
 Returns:
 - 0  if the call succeeded. 
@@ -402,16 +402,16 @@ Returns:
 
 ### `set_interlock`
 ```
-int set_interlock(uint32_t id, uint8_t interlock);
+int set_interlock(uint32_t controller, uint8_t interlock);
 
-id        controller serial number 
-interlock controller door interlock mode
-          0: no interlock
-          1: doors 1&2
-          2: doors 3&4
-          3: doors 1&2,3&4
-          4: doors 1&2&3
-          8: doors 1&2&3&4
+controller  controller serial number 
+interlock   controller door interlock mode
+            0: no interlock
+            1: doors 1&2
+            2: doors 3&4
+            3: doors 1&2,3&4
+            4: doors 1&2&3
+            8: doors 1&2&3&4
 
 Returns:
 - 0  if the call succeeded. 
@@ -420,13 +420,13 @@ Returns:
 
 ### `activate-keypads`
 ```
-int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4);
+int activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4);
 
-id      controller serial number 
-reader1 activate/deactivate reader 1 access keypad
-reader2 activate/deactivate reader 2 access keypad
-reader3 activate/deactivate reader 3 access keypad
-reader4 activate/deactivate reader 4 access keypad
+controller  controller serial number 
+reader1     activate/deactivate reader 1 access keypad
+reader2     activate/deactivate reader 2 access keypad
+reader3     activate/deactivate reader 3 access keypad
+reader4     activate/deactivate reader 4 access keypad
 
 Returns:
 - 0  if the call succeeded. 
@@ -436,14 +436,26 @@ Returns:
 
 ### `set-door-passcodes`
 ```
-int set_door_passcodes(uint32_t id, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
+int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
 
-id        controller serial number 
-door      door ID [1..4]
-passcode1 PIN code in the range [1..999999] or 0 (for none)
-passcode2 PIN code in the range [1..999999] or 0 (for none)
-passcode3 PIN code in the range [1..999999] or 0 (for none)
-passcode4 PIN code in the range [1..999999] or 0 (for none)
+controller  controller serial number 
+door        door ID [1..4]
+passcode1   PIN code in the range [1..999999] or 0 (for none)
+passcode2   PIN code in the range [1..999999] or 0 (for none)
+passcode3   PIN code in the range [1..999999] or 0 (for none)
+passcode4   PIN code in the range [1..999999] or 0 (for none)
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
+
+### `restore-default-parameters`
+```
+int restore_default_parameters(uint32_t controller);
+
+controller  controller serial number 
 
 Returns:
 - 0  if the call succeeded. 

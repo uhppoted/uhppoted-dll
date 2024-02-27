@@ -59,6 +59,7 @@ const test tests[] = {
     {.name = "set-interlock", .fn = setInterlock},
     {.name = "activate-keypads", .fn = activateKeypads},
     {.name = "set-door-passcodes", .fn = setDoorPasscodes},
+    {.name = "restore-default-parameters", .fn = restoreDefaultParameters},
     {.name = "lookup", .fn = internationalisation},
     {.name = "structs", .fn = structs},
 };
@@ -137,22 +138,22 @@ bool evaluate(const char *tag, int N, const result *resultset) {
         result r = resultset[i];
         if (strcmp(r.type, "uint8") == 0) {
             if (r.value.uint8.value != r.value.uint8.expected) {
-                printf("%-21s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint8.expected, r.value.uint8.value);
+                printf("%-26s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint8.expected, r.value.uint8.value);
                 ok = false;
             }
         } else if (strcmp(r.type, "uint32") == 0) {
             if (r.value.uint32.value != r.value.uint32.expected) {
-                printf("%-21s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint32.expected, r.value.uint32.value);
+                printf("%-26s incorrect %s (expected:%u, got:%u)\n", tag, r.field, r.value.uint32.expected, r.value.uint32.value);
                 ok = false;
             }
         } else if (strcmp(r.type, "boolean") == 0) {
             if (r.value.boolean.value != r.value.boolean.expected) {
-                printf("%-21s incorrect %s (expected:%d, got:%d)\n", tag, r.field, r.value.boolean.expected, r.value.boolean.value);
+                printf("%-26s incorrect %s (expected:%d, got:%d)\n", tag, r.field, r.value.boolean.expected, r.value.boolean.value);
                 ok = false;
             }
         } else if (strcmp(r.type, "string") == 0) {
             if (strcmp(r.value.string.value, r.value.string.expected) != 0) {
-                printf("%-21s incorrect %s (expected:%s, got:%s)\n", tag, r.field, r.value.string.expected, r.value.string.value);
+                printf("%-26s incorrect %s (expected:%s, got:%s)\n", tag, r.field, r.value.string.expected, r.value.string.value);
                 ok = false;
             }
         } else {
@@ -169,13 +170,13 @@ bool evaluate(const char *tag, int N, const result *resultset) {
 }
 
 bool passed(const char *tag) {
-    printf("%-21s ok\n", tag);
+    printf("%-26s ok\n", tag);
 
     return true;
 }
 
 bool failed(const char *tag) {
-    printf("%-21s failed\n", tag);
+    printf("%-26s failed\n", tag);
 
     return false;
 }

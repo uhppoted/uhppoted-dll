@@ -182,6 +182,11 @@ const command commands[] = {
         .help = "Sets the supervisor passcodes for keypad only access to a door.",
         .fn = setDoorPasscodes,
     },
+    {
+        .cmd = "restore-default-parameters",
+        .help = "Resets a controller to the manufacturer default configuration.",
+        .fn = restoreDefaultParameters,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

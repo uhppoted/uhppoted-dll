@@ -72,6 +72,7 @@ extern bool setPCControl();
 extern bool setInterlock();
 extern bool activateKeypads();
 extern bool setDoorPasscodes();
+extern bool restoreDefaultParameters();
 
 extern const uint32_t DEVICE_ID;
 extern const uint32_t DEVICE_ID2;

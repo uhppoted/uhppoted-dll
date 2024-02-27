@@ -286,3 +286,16 @@ void setDoorPasscodes(uhppoted &u, int argc, char **argv) {
 
     display("set-door-passcodes", fields);
 }
+
+void restoreDefaultParameters(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t controller = options.device_id;
+
+    u.restore_default_parameters(controller);
+
+    vector<field> fields = {
+        field("ID", controller),
+    };
+
+    display("restore-default-parameters", fields);
+}

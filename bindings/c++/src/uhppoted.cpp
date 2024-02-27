@@ -572,29 +572,36 @@ void uhppoted::clear_tasklist(uint32_t id) {
     }
 }
 
-void uhppoted::set_pc_control(uint32_t id, bool enabled) {
-    char *err = SetPCControl(u, id, enabled);
+void uhppoted::set_pc_control(uint32_t controller, bool enabled) {
+    char *err = SetPCControl(u, controller, enabled);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }
 }
 
-void uhppoted::set_interlock(uint32_t id, uint8_t interlock) {
-    char *err = SetInterlock(u, id, interlock);
+void uhppoted::set_interlock(uint32_t controller, uint8_t interlock) {
+    char *err = SetInterlock(u, controller, interlock);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }
 }
 
-void uhppoted::activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4) {
-    char *err = ActivateKeypads(u, id, reader1, reader2, reader3, reader4);
+void uhppoted::activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4) {
+    char *err = ActivateKeypads(u, controller, reader1, reader2, reader3, reader4);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }
 }
 
-void uhppoted::set_door_passcodes(uint32_t id, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
-    char *err = SetDoorPasscodes(u, id, door, passcode1, passcode2, passcode3, passcode4);
+void uhppoted::set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
+    char *err = SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4);
+    if (err != NULL) {
+        throw uhppoted_exception(err);
+    }
+}
+
+void uhppoted::restore_default_parameters(uint32_t controller) {
+    char *err = RestoreDefaultParameters(u, controller);
     if (err != NULL) {
         throw uhppoted_exception(err);
     }

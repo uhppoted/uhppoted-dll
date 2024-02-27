@@ -131,6 +131,9 @@ activate-keypads: build
 set-door-passcodes: build
 	$(CMD) set-door-passcodes
 
+restore-default-parameters: build
+	$(CMD) restore-default-parameters
+
 lookup: build
 	$(CMD) lookup
 

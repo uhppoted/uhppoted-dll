@@ -475,6 +475,19 @@ func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passco
 	return nil
 }
 
+// Resets a controller to the manufacturer default configuration.
+//
+//export RestoreDefaultParameters
+func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := restoreDefaultParameters(uu, controller); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr{IP: []byte{0, 0, 0, 0}, Port: 0}
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}

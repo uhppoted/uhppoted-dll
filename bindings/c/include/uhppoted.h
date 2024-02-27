@@ -136,7 +136,8 @@ int add_task(uint32_t id, task *task);
 int refresh_tasklist(uint32_t id);
 int clear_tasklist(uint32_t id);
 
-int set_pc_control(uint32_t id, bool enabled);
-int set_interlock(uint32_t id, uint8_t interlock);
-int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4);
-int set_door_passcodes(uint32_t id, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
+int set_pc_control(uint32_t controller, bool enabled);
+int set_interlock(uint32_t controller, uint8_t interlock);
+int activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4);
+int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
+int restore_default_parameters(uint32_t controller);

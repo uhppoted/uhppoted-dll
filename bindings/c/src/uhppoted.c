@@ -709,6 +709,16 @@ int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, ui
     return 0;
 }
 
+int restore_default_parameters(uint32_t controller) {
+    char *err = RestoreDefaultParameters(u, controller);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
+
 const char *lookup(const char *type, uint8_t code, const char *locale) {
     if (strcmp(type, LOOKUP_MODE) == 0) {
         switch (code) {

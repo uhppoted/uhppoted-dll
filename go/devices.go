@@ -321,3 +321,15 @@ func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passco
 
 	return nil
 }
+
+// Resets a controller to the manufacturer default configuration.
+func restoreDefaultParameters(uu uhppote.IUHPPOTE, controller uint32) error {
+	ok, err := uu.RestoreDefaultParameters(controller)
+	if err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: failed to reset controller", controller)
+	}
+
+	return nil
+}

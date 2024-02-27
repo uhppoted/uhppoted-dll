@@ -63,6 +63,7 @@ public class Tests {
         new test("set-interlock", SetInterlock),
         new test("activate-keypads", ActivateKeypads),
         new test("set-door-passcodes", SetDoorPasscodes),
+        new test("restore-default-parameters", RestoreDefaultParameters),
         new test("lookup", Internationalisation),
         new test("structs", Structs),
     };
@@ -511,6 +512,14 @@ public class Tests {
         return evaluate("set-door-passcodes", resultset);
     }
 
+    static bool RestoreDefaultParameters(Uhppoted u) {
+        u.RestoreDefaultParameters(DEVICE_ID);
+
+        result[] resultset = {};
+
+        return evaluate("restore-default-parameters", resultset);
+    }
+
     static bool Internationalisation(Uhppoted u) {
         string normally_open = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyOpen, "");
         string normally_closed = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyClosed, "");
@@ -628,28 +637,28 @@ public class Tests {
             switch (r) {
             case uint32Result v:
                 if (v.expected != v.value) {
-                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
                     ok = false;
                 }
                 break;
 
             case uint8Result v:
                 if (v.expected != v.value) {
-                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
                     ok = false;
                 }
                 break;
 
             case boolResult v:
                 if (v.expected != v.value) {
-                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
                     ok = false;
                 }
                 break;
 
             case stringResult v:
                 if (v.expected != v.value) {
-                    WriteLine(Format("{0, -21} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
                     ok = false;
                 }
                 break;
@@ -667,13 +676,13 @@ public class Tests {
     }
 
     static bool passed(string tag) {
-        WriteLine(Format("{0, -21} {1}", tag, "ok"));
+        WriteLine(Format("{0, -26} {1}", tag, "ok"));
 
         return true;
     }
 
     static bool failed(string tag) {
-        WriteLine(Format("{0, -21} {1}", tag, "failed"));
+        WriteLine(Format("{0, -26} {1}", tag, "failed"));
 
         return false;
     }

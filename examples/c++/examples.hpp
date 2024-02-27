@@ -60,6 +60,7 @@ void setPCControl(uhppoted &u, int argc, char **argv);
 void setInterlock(uhppoted &u, int argc, char **argv);
 void activateKeypads(uhppoted &u, int argc, char **argv);
 void setDoorPasscodes(uhppoted &u, int argc, char **argv);
+void restoreDefaultParameters(uhppoted &u, int argc, char **argv);
 
 options parse(int argc, char **argv);
 void display(const std::string &, const std::vector<field> &);

@@ -208,3 +208,11 @@ bool setDoorPasscodes(uhppoted &u) {
 
     return evaluate("set-door-passcodes", rs);
 }
+
+bool restoreDefaultParameters(uhppoted &u) {
+    u.restore_default_parameters(DEVICE_ID);
+
+    vector<result> rs = {};
+
+    return evaluate("restore-default-parameters", rs);
+}

@@ -309,3 +309,16 @@ func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passco
 
 	return nil
 }
+
+// Debug implementation of restoreDefaultParameters
+//
+// Prints the controller ID to the console (if DEBUG is enabled) and returns nil.
+func restoreDefaultParameters(uu uhppote.IUHPPOTE, controller uint32) error {
+	if DEBUG {
+		fmt.Printf(">>> restore-default-parameters\n")
+		fmt.Printf("    controller: %v\n", controller)
+		fmt.Println()
+	}
+
+	return nil
+}

@@ -440,29 +440,36 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public void SetPCControl(uint deviceID, bool enabled) {
-        string err = SetPCControl(ref this.u, deviceID, enabled);
+    public void SetPCControl(uint controller, bool enabled) {
+        string err = SetPCControl(ref this.u, controller, enabled);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
     }
 
-    public void SetInterlock(uint deviceID, byte interlock) {
-        string err = SetInterlock(ref this.u, deviceID, interlock);
+    public void SetInterlock(uint controller, byte interlock) {
+        string err = SetInterlock(ref this.u, controller, interlock);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
     }
 
-    public void ActivateKeypads(uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4) {
-        string err = ActivateKeypads(ref this.u, deviceID, reader1, reader2, reader3, reader4);
+    public void ActivateKeypads(uint controller, bool reader1, bool reader2, bool reader3, bool reader4) {
+        string err = ActivateKeypads(ref this.u, controller, reader1, reader2, reader3, reader4);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
     }
 
-    public void SetDoorPasscodes(uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4) {
-        string err = SetDoorPasscodes(ref this.u, deviceID, door, passcode1, passcode2, passcode3, passcode4);
+    public void SetDoorPasscodes(uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4) {
+        string err = SetDoorPasscodes(ref this.u, controller, door, passcode1, passcode2, passcode3, passcode4);
+        if (err != null && err != "") {
+            throw new UhppotedException(err);
+        }
+    }
+
+    public void RestoreDefaultParameters(uint controller) {
+        string err = RestoreDefaultParameters(ref this.u, controller);
         if (err != null && err != "") {
             throw new UhppotedException(err);
         }
@@ -552,16 +559,19 @@ public class Uhppoted : IDisposable {
     private static extern string ClearTaskList(ref UHPPOTE u, uint deviceID);
 
     [DllImport("uhppoted.dll")]
-    private static extern string SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled);
+    private static extern string SetPCControl(ref UHPPOTE u, uint controller, bool enabled);
 
     [DllImport("uhppoted.dll")]
-    private static extern string SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock);
+    private static extern string SetInterlock(ref UHPPOTE u, uint controller, byte interlock);
 
     [DllImport("uhppoted.dll")]
-    private static extern string ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4);
+    private static extern string ActivateKeypads(ref UHPPOTE u, uint controller, bool reader1, bool reader2, bool reader3, bool reader4);
 
     [DllImport("uhppoted.dll")]
-    private static extern string SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4);
+    private static extern string SetDoorPasscodes(ref UHPPOTE u, uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4);
+
+    [DllImport("uhppoted.dll")]
+    private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
 
     struct udevice {
         public uint ID;

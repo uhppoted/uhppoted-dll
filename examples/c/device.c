@@ -378,3 +378,20 @@ int setDoorPasscodes(int argc, char **argv) {
 
     return 0;
 }
+
+int restoreDefaultParameters(int argc, char **argv) {
+    uint32_t controller = parse(argc, argv).device_id;
+
+    if (restore_default_parameters(controller) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = controller},
+    };
+
+    display("restore-default-parameters", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}

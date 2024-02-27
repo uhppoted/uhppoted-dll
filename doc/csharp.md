@@ -355,53 +355,64 @@ Throws a UhppotedException if the call failed.
 
 ### `Uhppoted::SetPCControl`
 ```
-public void SetPCControl(uint ID, bool enabled)
+public void SetPCControl(uint controller, bool enabled)
 
-ID      controller serial number 
-enabled enables/disables host control
+controller  controller serial number 
+enabled     enables/disables host control
 
 Throws a UhppotedException if the call failed.
 ```
 
 ### `Uhppoted::SetInterlock`
 ```
-public void SetInterlock(uint ID, byte interlock)
+public void SetInterlock(uint controller, byte interlock)
 
-ID        controller serial number 
-interlock controller door interlock mode
-          0: no interlock
-          1: doors 1&2
-          2: doors 3&4
-          3: doors 1&2,3&4
-          4: doors 1&2&3
-          8: doors 1&2&3&4
+controller  controller serial number 
+interlock   controller door interlock mode
+            0: no interlock
+            1: doors 1&2
+            2: doors 3&4
+            3: doors 1&2,3&4
+            4: doors 1&2&3
+            8: doors 1&2&3&4
 
 Throws a UhppotedException if the call failed.
 ```
 
 ### `Uhppoted::ActivateKeypads`
 ```
-public void ActivateKeypads(uint ID, bool reader1, bool reader2, bool reader3, bool reader4)
+public void ActivateKeypads(uint controller, bool reader1, bool reader2, bool reader3, bool reader4)
 
-ID      controller serial number 
-reader1 activates/deactivates reader 1 access keypad
-reader2 activates/deactivates reader 2 access keypad
-reader3 activates/deactivates reader 3 access keypad
-reader4 activates/deactivates reader 4 access keypad
+controller  controller serial number 
+reader1     activates/deactivates reader 1 access keypad
+reader2     activates/deactivates reader 2 access keypad
+reader3     activates/deactivates reader 3 access keypad
+reader4     activates/deactivates reader 4 access keypad
 
 Throws a UhppotedException if the call failed.
 ```
 
 ### `Uhppoted::SetDoorPasscodes`
 ```
-int SetDoorPasscodes(uint ID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4)
+int SetDoorPasscodes(uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4)
 
-ID        controller serial number 
-door      door ID [1..4]
-passcode1 PIN code in the range [1..999999] or 0 (for none)
-passcode2 PIN code in the range [1..999999] or 0 (for none)
-passcode3 PIN code in the range [1..999999] or 0 (for none)
-passcode4 PIN code in the range [1..999999] or 0 (for none)
+controller  controller serial number 
+door        door ID [1..4]
+passcode1   PIN code in the range [1..999999] or 0 (for none)
+passcode2   PIN code in the range [1..999999] or 0 (for none)
+passcode3   PIN code in the range [1..999999] or 0 (for none)
+passcode4   PIN code in the range [1..999999] or 0 (for none)
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+
+
+### `Uhppoted::RestoreDefaultParameters`
+```
+int RestoreDefaultParameters(uint controller)
+
+controller  controller serial number 
 
 Returns:
 - 0  if the call succeeded. 

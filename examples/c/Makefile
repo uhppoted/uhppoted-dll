@@ -130,6 +130,9 @@ activate-keypads: build
 set-door-passcodes: build
 	$(CMD) set-door-passcodes $(DEVICEID) $(DOOR)
 
+restore-default-parameters: build
+	$(CMD) restore-default-parameters $(DEVICEID)
+
 debug: format
 	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
 	$(CMD) get-status --controller 303986753
