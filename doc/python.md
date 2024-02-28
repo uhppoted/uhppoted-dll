@@ -403,6 +403,15 @@ passcode4 PIN code in the range [1..999999] or 0 (for none)
 Raises an Exception if the call failed.
 ```
 
+### `restore-default-parameters`
+```
+uhppoted.restore_default_parameters(ID)
+
+ID        controller serial number 
+
+Raises an Exception if the call failed.
+```
+
 
 ## Types
 

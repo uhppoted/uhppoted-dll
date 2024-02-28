@@ -8,17 +8,17 @@
             - [x] mono
             - [ ] VS (Mac)
             - [ ] VS (Windows)
-      - [ ] CCL
-      - [ ] Python
+      - [x] CCL
+      - [x] Python
       - [x] CHANGELOG
       - [x] README
-      - [ ] doc
-            - [x] C
-            - [x] C++
-            - [x] C#
-            - [x] CCL
-            - [ ] Python
+      - [x] doc
       - [ ] integration tests
+            - [ ] C
+            - [ ] C++
+            - [ ] C#
+            - [ ] CCL
+            - [ ] Python
 
 ## TODO
 

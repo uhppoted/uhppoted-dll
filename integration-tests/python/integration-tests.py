@@ -70,6 +70,7 @@ def tests():
         # 'set-interlock': set_interlock,
         # 'activate-keypads': activate_keypads,
         # 'set-door-passcodes': set_door_passcodes,
+        # 'restore-default-parameters': restore_default_parameters,
     }
 
 
@@ -410,6 +411,11 @@ def set_door_passcodes(u):
 
     return evaluate(tag, [])
 
+def restore_default_parameters(u):
+    tag = 'restore-default-parameters'
+    u.restore_default_parameters(DEVICE_ID)
+
+    return evaluate(tag, [])
 
 def evaluate(tag, resultset):
     ok = True

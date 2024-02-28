@@ -70,6 +70,7 @@ def tests():
         'set-interlock': set_interlock,
         'activate-keypads': activate_keypads,
         'set-door-passcodes': set_door_passcodes,
+        'restore-default-parameters': restore_default_parameters,
         'lookup': internationalisation,
         'structs': structs,
     }
@@ -423,6 +424,13 @@ def set_door_passcodes(u):
     return evaluate(tag, [])
 
 
+def restore_default_parameters(u):
+    tag = 'restore-default-parameters'
+    u.restore_default_parameters(DEVICE_ID)
+
+    return evaluate(tag, [])
+
+
 def internationalisation(u):
     normally_open = lookup(LOOKUP_MODE, uhppoted.NORMALLY_OPEN, '')
     normally_closed = lookup(LOOKUP_MODE, uhppoted.NORMALLY_CLOSED, '')
@@ -543,19 +551,19 @@ def evaluate(tag, resultset):
     for row in resultset:
         field, expected, actual = row
         if actual != expected:
-            print(f'{tag:<21} incorrect {field} (expected:{expected}, got:{actual})')
+            print(f'{tag:<26} incorrect {field} (expected:{expected}, got:{actual})')
             ok = False
 
     return passed(tag) if ok else failed(tag)
 
 
 def passed(tag):
-    print(f'{tag:<21} ok')
+    print(f'{tag:<26} ok')
     return True
 
 
 def failed(tag):
-    print(f'{tag:<21} failed')
+    print(f'{tag:<26} failed')
     return False
 
 

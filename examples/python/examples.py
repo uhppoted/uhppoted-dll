@@ -163,6 +163,10 @@ def commands():
             'help': "Sets the supervisor passcodes for keypad-only access to a door",
             'fn': set_door_passcodes,
         },
+        'restore-default-parameters': {
+            'help': "Resets a controller to the manufacturer default configuration",
+            'fn': restore_default_parameters,
+        },
     }
 
 
@@ -686,40 +690,40 @@ def clear_tasklist(u, args):
 
 
 def set_pc_control(u, args):
-    device_id = args.controller
+    controller = args.controller
     enabled = True
 
-    u.set_pc_control(device_id, enabled)
+    u.set_pc_control(controller, enabled)
 
     display('set-pc-control', [
-        ('ID', device_id),
+        ('ID', controller),
         ('enabled', enabled),
     ])
 
 
 def set_interlock(u, args):
-    device_id = args.controller
+    controller = args.controller
     interlock = args.interlock
 
-    u.set_interlock(device_id, interlock)
+    u.set_interlock(controller, interlock)
 
     display('set-interlock', [
-        ('ID', device_id),
+        ('ID', controller),
         ('interlock', interlock),
     ])
 
 
 def activate_keypads(u, args):
-    device_id = args.controller
+    controller = args.controller
     reader1 = True
     reader2 = True
     reader3 = False
     reader4 = True
 
-    u.activate_keypads(device_id, reader1, reader2, reader3, reader4)
+    u.activate_keypads(controller, reader1, reader2, reader3, reader4)
 
     display('activate-keypads', [
-        ('ID', device_id),
+        ('ID', controller),
         ('reader 1', reader1),
         ('reader 2', reader2),
         ('reader 3', reader3),
@@ -728,22 +732,32 @@ def activate_keypads(u, args):
 
 
 def set_door_passcodes(u, args):
-    device_id = args.controller
+    controller = args.controller
     door = args.door
     passcode1 = 12345
     passcode2 = 54321
     passcode3 = 0
     passcode4 = 999999
 
-    u.set_door_passcodes(device_id, door, passcode1, passcode2, passcode3, passcode4)
+    u.set_door_passcodes(controller, door, passcode1, passcode2, passcode3, passcode4)
 
     display('set-door-passcodes', [
-        ('ID', device_id),
+        ('ID', controller),
         ('door', door),
         ('passcode 1', passcode1),
         ('passcode 2', passcode2),
         ('passcode 3', passcode3),
         ('passcode 4', passcode4),
+    ])
+
+
+def restore_default_parameters(u, args):
+    controller = args.controller
+
+    u.restore_default_parameters(controller)
+
+    display('restore-default-parameters', [
+        ('ID', controller),
     ])
 
 
