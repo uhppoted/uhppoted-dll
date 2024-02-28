@@ -35,6 +35,7 @@
            uhppoted-set-interlock
            uhppoted-activate-keypads
            uhppoted-set-door-passcodes
+           uhppoted-restore-default-parameters
            uhppoted-error
            with-warning
            message

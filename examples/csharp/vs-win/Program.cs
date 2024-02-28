@@ -893,7 +893,7 @@ class UhppotedDLLCLI
 
         u.RestoreDefaultParameters(controller);
 
-        WriteLine(Format("set-door-passcodes ({0})", controller));
+        WriteLine(Format("restore-default-parameters ({0})", controller));
     }
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)

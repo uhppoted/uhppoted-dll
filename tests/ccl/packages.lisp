@@ -36,6 +36,7 @@
            set-interlock
            activate-keypads
            set-door-passcodes
+           restore-default-parameters
            internationalisation
            structs
            failed

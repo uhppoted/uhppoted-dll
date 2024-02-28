@@ -16,8 +16,9 @@
             - [x] C
             - [x] C++
             - [x] C#
-            - [ ] CCL
+            - [x] CCL
             - [ ] Python
+      - [ ] integration tests
 
 ## TODO
 

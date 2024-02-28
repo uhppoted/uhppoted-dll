@@ -304,6 +304,11 @@
   (evaluate "set-door-passcodes" '()))
 
 
+(defun restore-default-parameters() "" 
+  (exec #'(lambda (u) (uhppoted-restore-default-parameters u TEST-DEVICE-ID)))
+  (evaluate "restore-default-parameters" '()))
+
+
 (defun internationalisation () "" 
   (let ((mode-normally-open              (uhppoted-lookup lookup-mode         normally-open                                ""))
         (mode-normally-closed            (uhppoted-lookup lookup-mode         normally-closed                              ""))
@@ -423,7 +428,7 @@
       do (unless (equal (result-expected v) (result-value v)) 
                  (progn
                    (setf ok nil)
-                   (format t "~21a incorrect ~a (expected:~a, got:~a)~%" 
+                   (format t "~26a incorrect ~a (expected:~a, got:~a)~%" 
                              tag 
                              (result-field v) 
                              (result-expected v) 
@@ -432,8 +437,8 @@
 
 
 (defun passed (tag) ""
-  (format t "~21a ok~%" tag))
+  (format t "~26a ok~%" tag))
 
 (defun failed (tag) ""
-  (format t "~21a failed~%" tag))
-; (error 'failed :message  "get-event    FAILED"))))
+  (format t "~26a failed~%" tag))
+

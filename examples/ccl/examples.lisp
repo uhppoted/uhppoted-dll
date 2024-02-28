@@ -310,6 +310,13 @@
       (display "set-door-passcodes" device-id nil))))
 
 
+(defun restore-default-parameters (args) "" 
+  (let* ((device-id (args-device-id args))
+         (ok        (exec #'(lambda (u) (uhppoted-restore-default-parameters u device-id)))))
+    (when ok
+      (display "restore-default-parameters" device-id nil))))
+
+
 (defun args-device-id (args) 
   (parse-integer (parse-args args "--controller" "405419896")))
 

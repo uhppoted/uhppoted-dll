@@ -303,6 +303,10 @@
   (exec #'(lambda (u) (uhppoted-set-door-passcodes u TEST-DEVICE-ID TEST-DOOR 12345 999999 0 54321)))
   (evaluate "set-door-passcodes" '()))
 
+(defun restore-default-parameters() "" 
+  (exec #'(lambda (u) (uhppoted-restore-default-parameters u TEST-DEVICE-ID)))
+  (evaluate "restore-default-parameters" '()))
+
 (defun evaluate (tag results)
   (let ((ok t))
     (loop for v in results

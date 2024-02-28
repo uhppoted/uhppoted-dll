@@ -34,5 +34,6 @@
            set-pc-control
            set-interlock
            activate-keypads
-           set-door-passcodes))
+           set-door-passcodes
+           restore-default-parameters))
 

@@ -427,6 +427,15 @@ passcode4  PIN code in the range [1..999999] or 0 (for none)
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
+### `restore-default-parameters`
+```
+(defun uhppoted-restore-default-parameters (uhppote device-id) ...)
+
+device-id  controller serial number 
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
 
 ## Types
 

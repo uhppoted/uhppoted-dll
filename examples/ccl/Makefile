@@ -125,6 +125,9 @@ activate-keypads: build
 set-door-passcodes: build
 	$(CMD) set-door-passcodes $(DEVICEID) $(DOOR)
 
+restore-default-parameters: build
+	$(CMD) restore-default-parameters $(DEVICEID)
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp
 

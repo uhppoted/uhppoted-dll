@@ -717,7 +717,14 @@
                                                         :unsigned-long passcode2
                                                         :unsigned-long passcode3
                                                         :unsigned-long passcode4
-                                                       :address)))
+                                                        :address)))
+    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+    t))
+
+(defun uhppoted-restore-default-parameters (uhppote device-id) "Resets a controller to the manufacturer default configuration"
+  (with-macptrs ((err (external-call "RestoreDefaultParameters" :address uhppote 
+                                                                :unsigned-long device-id 
+                                                                :address)))
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
