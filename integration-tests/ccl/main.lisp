@@ -39,7 +39,7 @@
         ; '("set-interlock"              tests:set-interlock)
         ; '("activate-keypads"           tests:activate-keypads)
         ; '("set-door-passcodes"         tests:set-door-passcodes)
-        ; '("restore-default-parameters" tests:restore-default-parameters)
+        '("restore-default-parameters" tests:restore-default-parameters)
 ))
 
 

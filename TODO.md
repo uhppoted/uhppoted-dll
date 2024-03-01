@@ -6,19 +6,19 @@
       - [x] C++
       - [ ] C#
             - [x] mono
-            - [ ] VS (Mac)
+            - [x] VS (Mac)
             - [ ] VS (Windows)
       - [x] CCL
       - [x] Python
       - [x] CHANGELOG
       - [x] README
       - [x] doc
-      - [ ] integration tests
-            - [ ] C
-            - [ ] C++
-            - [ ] C#
-            - [ ] CCL
-            - [ ] Python
+      - [x] integration tests
+            - [x] C
+            - [x] C++
+            - [x] C#
+            - [x] CCL
+            - [x] Python
 
 ## TODO
 

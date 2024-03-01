@@ -59,7 +59,7 @@ const test tests[] = {
     // {.name = "set-interlock", .fn = setInterlock},
     // {.name = "activate-keypads", .fn = activateKeypads},
     // {.name = "set-door-passcodes", .fn = setDoorPasscodes},
-    // {.name = "restore-default-parameters", .fn = restoreDefaultParameters},
+    {.name = "restore-default-parameters", .fn = restoreDefaultParameters},
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

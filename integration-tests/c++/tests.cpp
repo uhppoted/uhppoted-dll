@@ -48,7 +48,7 @@ vector<test> tests = {
     // {"set-interlock", setInterlock},
     // {"activate-keypads", activateKeypads},
     // {"set-door-passcodes", setDoorPasscodes},
-    // {"restore-default-parameters", restoreDefaultParameters},
+    {"restore-default-parameters", restoreDefaultParameters},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;
