@@ -1,13 +1,13 @@
 # TODO
 
-- [ ] [`restore-default-parameters`](https://github.com/uhppoted/uhppoted/issues/48)
+- [x] [`restore-default-parameters`](https://github.com/uhppoted/uhppoted/issues/48)
       - [x] API
       - [x] C
       - [x] C++
-      - [ ] C#
+      - [x] C#
             - [x] mono
             - [x] VS (Mac)
-            - [ ] VS (Windows)
+            - [x] VS (Windows)
       - [x] CCL
       - [x] Python
       - [x] CHANGELOG

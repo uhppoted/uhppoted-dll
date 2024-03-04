@@ -570,6 +570,9 @@ public class Uhppoted : IDisposable {
     [DllImport("uhppoted.dll")]
     private static extern string SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4);
 
+    [DllImport("uhppoted.dll")]
+    private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint deviceID);
+
     struct udevice {
         public uint ID;
         public string address;
