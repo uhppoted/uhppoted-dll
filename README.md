@@ -27,13 +27,11 @@ is straightforward (see below) and only requires that _go_ and _cgo_ are install
 
 ### Current Release
 
-**[v0.8.7](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.7) - 2023-12-01**
+**[v0.8.8](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.8) - 2024-03-27**
 
-1. `set-door-passcodes` command to set supervisor passcodes for a door.
-2. Visual Studio examples for C#
-3. Updated bindings documentation for card PINs.
-4. Fixed handling for `get-status` response without a valid event (cf. https://github.com/uhppoted/uhppoted-dll/issues/7)
-5. Replaced `nil` event pointer in `get-status` with zero value.
+1. Implemented `restore-default-parameters` function to reset a controller to the manufacturer default configuration.
+2. Bumped Go version to 1.22.
+
 
 ## Installation
 
