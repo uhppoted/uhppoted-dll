@@ -111,7 +111,6 @@ import "C"
 
 import (
 	"fmt"
-	"net"
 	"time"
 	"unsafe"
 
@@ -531,15 +530,15 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 			list := unsafe.Slice(u.devices.devices, u.devices.N)
 			for _, d := range list {
 				if d.id != 0 {
-					addr, err := types.ResolveAddr(C.GoString(d.address))
-					if err != nil {
+					if addr, err := types.ResolveAddr(C.GoString(d.address)); err != nil {
 						return nil, err
+					} else {
+						devices = append(devices, uhppote.Device{
+							DeviceID: uint32(d.id),
+							Address:  addr.AddrPort(),
+							Protocol: "udp",
+						})
 					}
-
-					devices = append(devices, uhppote.Device{
-						DeviceID: uint32(d.id),
-						Address:  (*net.UDPAddr)(addr),
-					})
 				}
 			}
 		}
