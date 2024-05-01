@@ -1,24 +1,6 @@
 # TODO
 
-- [x] [`restore-default-parameters`](https://github.com/uhppoted/uhppoted/issues/48)
-      - [x] API
-      - [x] C
-      - [x] C++
-      - [x] C#
-            - [x] mono
-            - [x] VS (Mac)
-            - [x] VS (Windows)
-      - [x] CCL
-      - [x] Python
-      - [x] CHANGELOG
-      - [x] README
-      - [x] doc
-      - [x] integration tests
-            - [x] C
-            - [x] C++
-            - [x] C#
-            - [x] CCL
-            - [x] Python
+- [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 
 ## TODO
 

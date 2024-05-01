@@ -30,7 +30,7 @@ endif
 
 update:
 	go get -u github.com/uhppoted/uhppote-core@master
-	go get -u github.com/uhppoted/uhppoted-lib@master
+	go get -u github.com/uhppoted/uhppoted-lib@main
 
 update-release:
 	go get -u github.com/uhppoted/uhppote-core
