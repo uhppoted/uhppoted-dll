@@ -29,7 +29,7 @@ endif
 .PHONY: vuln
 
 update:
-	go get -u github.com/uhppoted/uhppote-core@master
+	go get -u github.com/uhppoted/uhppote-core@main
 	go get -u github.com/uhppoted/uhppoted-lib@main
 
 update-release:
