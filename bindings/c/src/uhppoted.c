@@ -719,6 +719,16 @@ int restore_default_parameters(uint32_t controller) {
     return 0;
 }
 
+int listen_events() {
+    char *err = Listen(u);
+    if (err != NULL) {
+        set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
+
 const char *lookup(const char *type, uint8_t code, const char *locale) {
     if (strcmp(type, LOOKUP_MODE) == 0) {
         switch (code) {

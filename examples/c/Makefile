@@ -133,6 +133,9 @@ set-door-passcodes: build
 restore-default-parameters: build
 	$(CMD) restore-default-parameters $(DEVICEID)
 
+listen: build
+	$(CMD) listen
+
 debug: format
 	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
 	$(CMD) get-status --controller 303986753

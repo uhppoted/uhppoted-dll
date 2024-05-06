@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -90,6 +91,40 @@ int recordSpecialEvents(int argc, char **argv) {
     };
 
     display("record-special-events", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}
+
+static void onSignal(int signum) {
+    if (signum == SIGUSR1) {
+        printf(">>> SIGUSR1!\n");
+    }
+}
+
+int listen(int argc, char **argv) {
+    sigset_t mask, oldmask;
+
+    if (listen_events() < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    printf(">>>> listening...\n");
+
+    signal(SIGUSR1, onSignal);
+
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGUSR1);
+    sigprocmask(SIG_BLOCK, &mask, &oldmask);
+
+    while (true) {
+        sigsuspend(&oldmask);
+        printf(">>>> gotcha ...\n");
+    }
+
+    sigprocmask(SIG_UNBLOCK, &mask, NULL);
+
+    printf(">>>> listened...\n");
 
     return 0;
 }

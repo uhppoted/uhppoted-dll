@@ -5,7 +5,11 @@ package main
 import (
 	"C"
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
+	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
@@ -70,4 +74,38 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	}
 
 	return nil
+}
+
+func listen(uu uhppote.IUHPPOTE) error {
+	go func() {
+		l := listener{}
+		q := make(chan os.Signal, 1)
+
+		defer close(q)
+
+		signal.Notify(q, os.Interrupt)
+
+		uu.Listen(&l, q)
+	}()
+
+	return nil
+}
+
+type listener struct {
+}
+
+func (l *listener) OnConnected() {
+}
+
+func (l *listener) OnEvent(status *types.Status) {
+	if process, err := os.FindProcess(os.Getpid()); err != nil {
+		fmt.Printf(">>>>>>>>>>>>>>>>>> ERROR %v\n", err)
+	} else {
+		fmt.Printf(">>>>>>>>>>>>>>>>>> EVENT %v\n", status.Event.Index)
+		process.Signal(syscall.SIGUSR1)
+	}
+}
+
+func (l *listener) OnError(err error) bool {
+	return false
 }

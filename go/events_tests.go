@@ -71,3 +71,7 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 
 	return nil
 }
+
+func listen(uu uhppote.IUHPPOTE) error {
+	return nil
+}

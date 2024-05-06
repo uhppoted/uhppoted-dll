@@ -488,6 +488,19 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 	return nil
 }
 
+// Listens for events and invokes a callback function.
+//
+//export Listen
+func Listen(u *C.struct_UHPPOTE) *C.char {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := listen(uu); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddr(netip.AddrPortFrom(netip.IPv4Unspecified(), 0))
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}
