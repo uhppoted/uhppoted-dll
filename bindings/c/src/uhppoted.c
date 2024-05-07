@@ -1,10 +1,12 @@
 #include "../include/uhppoted.h"
 #include "libuhppoted.h"
 
+#include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 __thread char *err = NULL;
 __thread UHPPOTE *u = NULL;
@@ -67,6 +69,9 @@ const char *EventReasonRemoteOpenDoorUSBReader = "remote open door (USB reader)"
 const char *EventReasonUnknown = "unknown";
 
 const char *errmsg() { return err; }
+
+void unpack(uint8_t *, int, struct status *);
+uint32_t unpack_uint32(uint8_t *, int);
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
@@ -719,14 +724,55 @@ int restore_default_parameters(uint32_t controller) {
     return 0;
 }
 
-int listen_events() {
-    char *err = Listen(u);
+int listen_events(const char *pipe, void (*callback)(const status *)) {
+    char *err = Listen(u, (char *)pipe);
     if (err != NULL) {
         set_error(err);
         return -1;
     }
 
+    int fd, N;
+    uint8_t buffer[2048];
+
+    if ((fd = open(pipe, O_RDONLY)) < 0) {
+        set_error("error opening named pipe");
+    }
+
+    while ((N = read(fd, buffer, 2048)) > 0) {
+        struct status status;
+
+        unpack(buffer, N, &status);
+        callback(&status);
+    }
+
+    close(fd);
+
     return 0;
+}
+
+void unpack(uint8_t *buffer, int N, struct status *status) {
+    status->ID = unpack_uint32(buffer, 0);
+
+    status->doors[0] = buffer[4];
+    status->doors[1] = buffer[5];
+    status->doors[2] = buffer[6];
+    status->doors[3] = buffer[7];
+
+    printf("-- READ %d\n", N);
+}
+
+uint32_t unpack_uint32(uint8_t *buffer, int index) {
+    uint32_t v = 0;
+
+    v = buffer[index + 3];
+    v <<= 8;
+    v |= buffer[index + 2];
+    v <<= 8;
+    v |= buffer[index + 1];
+    v <<= 8;
+    v |= buffer[index];
+
+    return v;
 }
 
 const char *lookup(const char *type, uint8_t code, const char *locale) {

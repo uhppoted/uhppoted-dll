@@ -1,6 +1,4 @@
-#include <signal.h>
 #include <stdio.h>
-#include <stdlib.h>
 
 #include "examples.h"
 #include "uhppoted.h"
@@ -95,36 +93,17 @@ int recordSpecialEvents(int argc, char **argv) {
     return 0;
 }
 
-static void onSignal(int signum) {
-    if (signum == SIGUSR1) {
-        printf(">>> SIGUSR1!\n");
-    }
+void callback(const status *status) {
+    printf(">>> event\n");
+    printf("      controller: %u\n", status->ID);
+    printf("      doors:      %u %u %u %u\n", status->doors[0], status->doors[1], status->doors[2], status->doors[3]);
 }
 
 int listen(int argc, char **argv) {
-    sigset_t mask, oldmask;
-
-    if (listen_events() < 0) {
+    if (listen_events("/tmp/uhppoted.pipe", callback) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
-
-    printf(">>>> listening...\n");
-
-    signal(SIGUSR1, onSignal);
-
-    sigemptyset(&mask);
-    sigaddset(&mask, SIGUSR1);
-    sigprocmask(SIG_BLOCK, &mask, &oldmask);
-
-    while (true) {
-        sigsuspend(&oldmask);
-        printf(">>>> gotcha ...\n");
-    }
-
-    sigprocmask(SIG_UNBLOCK, &mask, NULL);
-
-    printf(">>>> listened...\n");
 
     return 0;
 }

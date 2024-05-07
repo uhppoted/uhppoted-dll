@@ -4,6 +4,8 @@ package main
 
 import (
 	"C"
+	"bytes"
+	"encoding/binary"
 	"fmt"
 	"os"
 	"os/signal"
@@ -76,36 +78,75 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	return nil
 }
 
-func listen(uu uhppote.IUHPPOTE) error {
-	go func() {
-		l := listener{}
-		q := make(chan os.Signal, 1)
+func listen(uu uhppote.IUHPPOTE, file string) error {
+	os.Remove(file)
 
-		defer close(q)
+	if err := syscall.Mkfifo(file, 0666); err != nil {
+		return err
+	}
 
-		signal.Notify(q, os.Interrupt)
+	if pipe, err := os.OpenFile(file, os.O_RDWR|os.O_CREATE|os.O_APPEND, os.ModeNamedPipe); err != nil {
+		return err
+	} else {
+		go func() {
+			l := listener{
+				pipe: pipe,
+			}
 
-		uu.Listen(&l, q)
-	}()
+			q := make(chan os.Signal, 1)
 
-	return nil
+			defer close(q)
+			defer l.pipe.Close()
+
+			signal.Notify(q, os.Interrupt)
+
+			uu.Listen(&l, q)
+		}()
+
+		return nil
+	}
+
 }
 
 type listener struct {
+	pipe *os.File
 }
 
 func (l *listener) OnConnected() {
 }
 
 func (l *listener) OnEvent(status *types.Status) {
-	if process, err := os.FindProcess(os.Getpid()); err != nil {
-		fmt.Printf(">>>>>>>>>>>>>>>>>> ERROR %v\n", err)
-	} else {
-		fmt.Printf(">>>>>>>>>>>>>>>>>> EVENT %v\n", status.Event.Index)
-		process.Signal(syscall.SIGUSR1)
+	if status != nil {
+		if event, err := l.pack(*status); err != nil {
+			fmt.Printf(">>> ERROR:%v\n", err)
+		} else if _, err := l.pipe.Write(event); err != nil {
+			fmt.Printf(">>> ERROR:%v\n", err)
+		}
 	}
 }
 
 func (l *listener) OnError(err error) bool {
 	return false
+}
+
+func (l *listener) pack(status types.Status) ([]byte, error) {
+	var b bytes.Buffer
+
+	if err := binary.Write(&b, binary.LittleEndian, status.SerialNumber); err != nil {
+		return nil, err
+	}
+
+	for _, k := range []uint8{1, 2, 3, 4} {
+		if v, ok := status.DoorState[k]; ok {
+			if err := binary.Write(&b, binary.LittleEndian, v); err != nil {
+				return nil, err
+			}
+		} else {
+			if err := binary.Write(&b, binary.LittleEndian, 0); err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	return b.Bytes(), nil
 }

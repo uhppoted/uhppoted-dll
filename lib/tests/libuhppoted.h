@@ -227,7 +227,7 @@ extern char* RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller);
 
 // Listens for events and invokes a callback function.
 //
-extern char* Listen(struct UHPPOTE* u);
+extern char* Listen(struct UHPPOTE* u, char* pipe);
 
 #ifdef __cplusplus
 }
