@@ -502,7 +502,7 @@ func Listen(u *C.struct_UHPPOTE) *C.char {
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
-	bind := types.BindAddr(netip.AddrPortFrom(netip.IPv4Unspecified(), 0))
+	bind := types.BindAddrFrom(netip.IPv4Unspecified(), 0)
 	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}
 	listen := types.ListenAddr{IP: []byte{0, 0, 0, 0}, Port: 60001}
 	timeout := 5 * time.Second
