@@ -142,7 +142,7 @@ func (l *listener) pack(status types.Status) ([]byte, error) {
 				return nil, err
 			}
 		} else {
-			if err := binary.Write(&b, binary.LittleEndian, 0); err != nil {
+			if err := binary.Write(&b, binary.LittleEndian, byte(0)); err != nil {
 				return nil, err
 			}
 		}

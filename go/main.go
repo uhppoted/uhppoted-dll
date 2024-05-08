@@ -120,6 +120,8 @@ import (
 )
 
 var DEBUG bool
+var INADDR_ANY = netip.AddrFrom4([4]byte{0, 0, 0, 0})
+var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
 
 func main() {}
 
@@ -502,8 +504,8 @@ func Listen(u *C.struct_UHPPOTE, pipe *C.char) *C.char {
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
-	bind := types.BindAddrFrom(netip.IPv4Unspecified(), 0)
-	broadcast := types.BroadcastAddr{IP: []byte{255, 255, 255, 255}, Port: 60000}
+	bind := types.BindAddrFrom(INADDR_ANY, 0)
+	broadcast := types.BroadcastAddrFrom(BROADCAST, 60000)
 	listen := types.ListenAddr{IP: []byte{0, 0, 0, 0}, Port: 60001}
 	timeout := 5 * time.Second
 	devices := []uhppote.Device{}
@@ -521,8 +523,8 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		if s := C.GoString(u.broadcast); s != "" {
 			if addr, err := types.ResolveBroadcastAddr(s); err != nil {
 				return nil, err
-			} else if addr != nil {
-				broadcast = *addr
+			} else if addr.IsValid() {
+				broadcast = addr
 			}
 		}
 
