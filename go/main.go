@@ -500,7 +500,7 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 
 	if u != nil {
 		if s := C.GoString(u.bind); s != "" {
-			if addr, err := types.ResolveBindAddr(s); err != nil {
+			if addr, err := types.ParseBindAddr(s); err != nil {
 				return nil, err
 			} else if addr.IsValid() {
 				bind = addr
@@ -508,7 +508,7 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		}
 
 		if s := C.GoString(u.broadcast); s != "" {
-			if addr, err := types.ResolveBroadcastAddr(s); err != nil {
+			if addr, err := types.ParseBroadcastAddr(s); err != nil {
 				return nil, err
 			} else if addr.IsValid() {
 				broadcast = addr
