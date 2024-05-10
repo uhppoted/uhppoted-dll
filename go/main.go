@@ -493,7 +493,7 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddrFrom(INADDR_ANY, 0)
 	broadcast := types.BroadcastAddrFrom(BROADCAST, 60000)
-	listen := types.ListenAddr{IP: []byte{0, 0, 0, 0}, Port: 60001}
+	listen := types.ListenAddrFrom(INADDR_ANY, 60001)
 	timeout := 5 * time.Second
 	devices := []uhppote.Device{}
 	debug := false
@@ -516,10 +516,10 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		}
 
 		if s := C.GoString(u.listen); s != "" {
-			if addr, err := types.ResolveListenAddr(s); err != nil {
+			if addr, err := types.ParseListenAddr(s); err != nil {
 				return nil, err
-			} else if addr != nil {
-				listen = *addr
+			} else if addr.IsValid() {
+				listen = addr
 			}
 		}
 
