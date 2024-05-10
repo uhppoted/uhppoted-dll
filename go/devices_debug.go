@@ -95,54 +95,67 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
+	fmt.Println("get-status:debug ltsc.0")
+
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	if status.event == nil {
-		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
-	}
-
-	if DEBUG {
-		fmt.Printf(">>> get-status\n")
-		fmt.Printf("    ID: %v\n", deviceID)
-		fmt.Println()
-	}
-
-	status.ID = C.uint(405419896)
-	status.sysdatetime = C.CString("2022-03-19 15:48:32")
-
-	doors := unsafe.Slice(status.doors, 4)
-	buttons := unsafe.Slice(status.buttons, 4)
-
-	doors[0] = 1
-	doors[1] = 0
-	doors[2] = 0
-	doors[3] = 1
-
-	buttons[0] = 1
-	buttons[1] = 0
-	buttons[2] = 1
-	buttons[3] = 0
-
-	status.relays = 0x12
-	status.inputs = 0x34
-
-	status.syserror = 0x56
-	status.info = 253
-	status.seqno = 9876
-
-	status.event.timestamp = C.CString("2022-01-02 12:34:56")
-	status.event.index = 135
-	status.event.eventType = 0x06
-	status.event.granted = 1
-	status.event.door = 3
-	status.event.direction = 1
-	status.event.card = 8100023
-	status.event.reason = 0x15
+	status.ID = C.uint(12345678)
+	status.sysdatetime = C.CString("2024-05-10")
 
 	return nil
 }
+
+// func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
+// 	if status == nil {
+// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
+// 	}
+//
+// 	if status.event == nil {
+// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
+// 	}
+//
+// 	if DEBUG {
+// 		fmt.Printf(">>> get-status\n")
+// 		fmt.Printf("    ID: %v\n", deviceID)
+// 		fmt.Println()
+// 	}
+//
+// 	status.ID = C.uint(405419896)
+// 	status.sysdatetime = C.CString("2022-03-19 15:48:32")
+//
+// 	doors := unsafe.Slice(status.doors, 4)
+// 	buttons := unsafe.Slice(status.buttons, 4)
+//
+// 	doors[0] = 1
+// 	doors[1] = 0
+// 	doors[2] = 0
+// 	doors[3] = 1
+//
+// 	buttons[0] = 1
+// 	buttons[1] = 0
+// 	buttons[2] = 1
+// 	buttons[3] = 0
+//
+// 	status.relays = 0x12
+// 	status.inputs = 0x34
+//
+// 	status.syserror = 0x56
+// 	status.info = 253
+// 	status.seqno = 9876
+//
+// 	status.event.timestamp = C.CString("2022-01-02 12:34:56")
+// 	status.event.index = 135
+// 	status.event.eventType = 0x06
+// 	status.event.granted = 1
+// 	status.event.door = 3
+// 	status.event.direction = 1
+// 	status.event.card = 8100023
+// 	status.event.reason = 0x15
+//
+// 	return nil
+// }
 
 func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 	if datetime == nil {

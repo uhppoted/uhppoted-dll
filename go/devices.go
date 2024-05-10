@@ -92,66 +92,79 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
+	fmt.Println("get-status:dll ltsc.0")
+
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	response, err := uu.GetStatus(deviceID)
-	if err != nil {
-		return err
-	} else if response == nil {
-		return fmt.Errorf("%v: no response to get-status", deviceID)
-	}
-
-	format := func(t types.DateTime) string {
-		return time.Time(t).Format("2006-01-02 15:04:05")
-	}
-
-	status.ID = C.uint(response.SerialNumber)
-	status.sysdatetime = C.CString(format(response.SystemDateTime))
-
-	doors := unsafe.Slice(status.doors, 4)
-	buttons := unsafe.Slice(status.buttons, 4)
-
-	doors[0] = cbool(response.DoorState[1])
-	doors[1] = cbool(response.DoorState[2])
-	doors[2] = cbool(response.DoorState[3])
-	doors[3] = cbool(response.DoorState[4])
-
-	buttons[0] = cbool(response.DoorButton[1])
-	buttons[1] = cbool(response.DoorButton[2])
-	buttons[2] = cbool(response.DoorButton[3])
-	buttons[3] = cbool(response.DoorButton[4])
-
-	status.relays = C.uchar(response.RelayState)
-	status.inputs = C.uchar(response.InputState)
-
-	status.syserror = C.uchar(response.SystemError)
-	status.seqno = C.uint(response.SequenceId)
-	status.info = C.uchar(response.SpecialInfo)
-
-	if response.Event.IsZero() {
-		status.event.timestamp = C.CString("")
-		status.event.index = C.uint(0)
-		status.event.eventType = C.uchar(0)
-		status.event.granted = cbool(false)
-		status.event.door = C.uchar(0)
-		status.event.direction = C.uchar(0)
-		status.event.card = C.uint(0)
-		status.event.reason = C.uchar(0)
-	} else {
-		status.event.timestamp = C.CString(format(response.Event.Timestamp))
-		status.event.index = C.uint(response.Event.Index)
-		status.event.eventType = C.uchar(response.Event.Type)
-		status.event.granted = cbool(response.Event.Granted)
-		status.event.door = C.uchar(response.Event.Door)
-		status.event.direction = C.uchar(response.Event.Direction)
-		status.event.card = C.uint(response.Event.CardNumber)
-		status.event.reason = C.uchar(response.Event.Reason)
-	}
+	status.ID = C.uint(12345678)
+	status.sysdatetime = C.CString("2024-05-10")
 
 	return nil
 }
+
+// func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
+// 	if status == nil {
+// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
+// 	}
+//
+// 	response, err := uu.GetStatus(deviceID)
+// 	if err != nil {
+// 		return err
+// 	} else if response == nil {
+// 		return fmt.Errorf("%v: no response to get-status", deviceID)
+// 	}
+//
+// 	format := func(t types.DateTime) string {
+// 		return time.Time(t).Format("2006-01-02 15:04:05")
+// 	}
+//
+// 	status.ID = C.uint(response.SerialNumber)
+// 	status.sysdatetime = C.CString(format(response.SystemDateTime))
+//
+// 	doors := unsafe.Slice(status.doors, 4)
+// 	buttons := unsafe.Slice(status.buttons, 4)
+//
+// 	doors[0] = cbool(response.DoorState[1])
+// 	doors[1] = cbool(response.DoorState[2])
+// 	doors[2] = cbool(response.DoorState[3])
+// 	doors[3] = cbool(response.DoorState[4])
+//
+// 	buttons[0] = cbool(response.DoorButton[1])
+// 	buttons[1] = cbool(response.DoorButton[2])
+// 	buttons[2] = cbool(response.DoorButton[3])
+// 	buttons[3] = cbool(response.DoorButton[4])
+//
+// 	status.relays = C.uchar(response.RelayState)
+// 	status.inputs = C.uchar(response.InputState)
+//
+// 	status.syserror = C.uchar(response.SystemError)
+// 	status.seqno = C.uint(response.SequenceId)
+// 	status.info = C.uchar(response.SpecialInfo)
+//
+// 	if response.Event.IsZero() {
+// 		status.event.timestamp = C.CString("")
+// 		status.event.index = C.uint(0)
+// 		status.event.eventType = C.uchar(0)
+// 		status.event.granted = cbool(false)
+// 		status.event.door = C.uchar(0)
+// 		status.event.direction = C.uchar(0)
+// 		status.event.card = C.uint(0)
+// 		status.event.reason = C.uchar(0)
+// 	} else {
+// 		status.event.timestamp = C.CString(format(response.Event.Timestamp))
+// 		status.event.index = C.uint(response.Event.Index)
+// 		status.event.eventType = C.uchar(response.Event.Type)
+// 		status.event.granted = cbool(response.Event.Granted)
+// 		status.event.door = C.uchar(response.Event.Door)
+// 		status.event.direction = C.uchar(response.Event.Direction)
+// 		status.event.card = C.uint(response.Event.CardNumber)
+// 		status.event.reason = C.uchar(response.Event.Reason)
+// 	}
+//
+// 	return nil
+// }
 
 func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 	if datetime == nil {

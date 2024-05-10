@@ -114,60 +114,71 @@ public class Uhppoted : IDisposable {
     public Status GetStatus(uint deviceID) {
         GoStatus status = new GoStatus();
 
-        status.doors = Marshal.AllocHGlobal(4);
-        status.buttons = Marshal.AllocHGlobal(4);
-        status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
-
         string err = GetStatus(ref this.u, ref status, deviceID);
         if (err != null && err != "") {
-            Marshal.FreeHGlobal(status.doors);
-            Marshal.FreeHGlobal(status.buttons);
-            Marshal.FreeHGlobal(status.evt);
-
             throw new UhppotedException(err);
         }
 
-        byte[] doors = new byte[4];
-        byte[] buttons = new byte[4];
-        GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
-
-        Marshal.Copy(status.doors, doors, 0, 4);
-        Marshal.Copy(status.buttons, buttons, 0, 4);
-
-        Event e = new Event(evt.timestamp,
-                            evt.index,
-                            evt.eventType,
-                            evt.granted != 0,
-                            evt.door,
-                            evt.direction,
-                            evt.card,
-                            evt.reason);
-
-        Marshal.FreeHGlobal(status.doors);
-        Marshal.FreeHGlobal(status.buttons);
-        Marshal.FreeHGlobal(status.evt);
-
-        return new Status(status.ID,
-                          status.sysdatetime,
-                          new bool[] {
-                              doors[0] == 1,
-                              doors[1] == 1,
-                              doors[2] == 1,
-                              doors[3] == 1,
-                          },
-                          new bool[] {
-                              buttons[0] == 1,
-                              buttons[1] == 1,
-                              buttons[2] == 1,
-                              buttons[3] == 1,
-                          },
-                          status.relays,
-                          status.inputs,
-                          status.syserror,
-                          status.info,
-                          status.seqno,
-                          e);
+        return new Status(status.ID, status.sysdatetime);
     }
+
+//    public Status GetStatus(uint deviceID) {
+//        GoStatus status = new GoStatus();
+//
+//        status.doors = Marshal.AllocHGlobal(4);
+//        status.buttons = Marshal.AllocHGlobal(4);
+//        status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
+//
+//        string err = GetStatus(ref this.u, ref status, deviceID);
+//        if (err != null && err != "") {
+//            Marshal.FreeHGlobal(status.doors);
+//            Marshal.FreeHGlobal(status.buttons);
+//            Marshal.FreeHGlobal(status.evt);
+//
+//            throw new UhppotedException(err);
+//        }
+//
+//        byte[] doors = new byte[4];
+//        byte[] buttons = new byte[4];
+//        GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
+//
+//        Marshal.Copy(status.doors, doors, 0, 4);
+//        Marshal.Copy(status.buttons, buttons, 0, 4);
+//
+//        Event e = new Event(evt.timestamp,
+//                            evt.index,
+//                            evt.eventType,
+//                            evt.granted != 0,
+//                            evt.door,
+//                            evt.direction,
+//                            evt.card,
+//                            evt.reason);
+//
+//        Marshal.FreeHGlobal(status.doors);
+//        Marshal.FreeHGlobal(status.buttons);
+//        Marshal.FreeHGlobal(status.evt);
+//
+//        return new Status(status.ID,
+//                          status.sysdatetime,
+//                          new bool[] {
+//                              doors[0] == 1,
+//                              doors[1] == 1,
+//                              doors[2] == 1,
+//                              doors[3] == 1,
+//                          },
+//                          new bool[] {
+//                              buttons[0] == 1,
+//                              buttons[1] == 1,
+//                              buttons[2] == 1,
+//                              buttons[3] == 1,
+//                          },
+//                          status.relays,
+//                          status.inputs,
+//                          status.syserror,
+//                          status.info,
+//                          status.seqno,
+//                          e);
+//    }
 
     public string GetTime(uint deviceID) {
         string datetime = "";
@@ -617,15 +628,20 @@ public class Uhppoted : IDisposable {
     struct GoStatus {
         public uint ID;
         public string sysdatetime;
-        public IntPtr doors;
-        public IntPtr buttons;
-        public byte relays;
-        public byte inputs;
-        public byte syserror;
-        public byte info;
-        public uint seqno;
-        public IntPtr evt;
     }
+    
+//    struct GoStatus {
+//        public uint ID;
+//        public string sysdatetime;
+//        public IntPtr doors;
+//        public IntPtr buttons;
+//        public byte relays;
+//        public byte inputs;
+//        public byte syserror;
+//        public byte info;
+//        public uint seqno;
+//        public IntPtr evt;
+//    }
 
     struct GoDoorControl {
         public byte control;
@@ -738,30 +754,40 @@ public class Event {
 public class Status {
     public uint ID;
     public string sysdatetime;
-    public bool[] doors;
-    public bool[] buttons;
-    public byte relays;
-    public byte inputs;
-    public byte syserror;
-    public byte info;
-    public uint seqno;
-    public Event evt;
 
-    public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons,
-                  byte relays, byte inputs, byte syserror, byte info, uint seqno,
-                  Event evt) {
+    public Status(uint ID, string sysdatetime) {
         this.ID = ID;
         this.sysdatetime = sysdatetime;
-        this.doors = doors;
-        this.buttons = buttons;
-        this.relays = relays;
-        this.inputs = inputs;
-        this.syserror = syserror;
-        this.info = info;
-        this.seqno = seqno;
-        this.evt = evt;
     }
 }
+
+// public class Status {
+//     public uint ID;
+//     public string sysdatetime;
+//     public bool[] doors;
+//     public bool[] buttons;
+//     public byte relays;
+//     public byte inputs;
+//     public byte syserror;
+//     public byte info;
+//     public uint seqno;
+//     public Event evt;
+// 
+//     public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons,
+//                   byte relays, byte inputs, byte syserror, byte info, uint seqno,
+//                   Event evt) {
+//         this.ID = ID;
+//         this.sysdatetime = sysdatetime;
+//         this.doors = doors;
+//         this.buttons = buttons;
+//         this.relays = relays;
+//         this.inputs = inputs;
+//         this.syserror = syserror;
+//         this.info = info;
+//         this.seqno = seqno;
+//         this.evt = evt;
+//     }
+// }
 
 public class DoorControl {
     public byte mode;

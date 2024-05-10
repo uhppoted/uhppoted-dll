@@ -47,15 +47,20 @@ typedef struct Event {
 typedef struct Status {
     uint32_t ID;
 	char *sysdatetime;
-	uint8_t  *doors;   // uint_8[4]
-	uint8_t  *buttons; // uint_8[4]
-	uint8_t relays;
-	uint8_t inputs;
-	uint8_t syserror;
-	uint8_t info;
-	uint32_t seqno;
-	Event *event;
 } Status;
+
+// typedef struct Status {
+//     uint32_t ID;
+// 	   char *sysdatetime;
+// 	   uint8_t  *doors;   // uint_8[4]
+// 	   uint8_t  *buttons; // uint_8[4]
+// 	   uint8_t relays;
+// 	   uint8_t inputs;
+// 	   uint8_t syserror;
+// 	   uint8_t info;
+// 	   uint32_t seqno;
+// 	   Event *event;
+// } Status;
 
 typedef struct DoorControl {
     uint8_t mode;
