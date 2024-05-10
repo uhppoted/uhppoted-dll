@@ -1,6 +1,13 @@
 DLL = ..\..\..\lib
 CLI = PATH=$(DLL) && .\bin\Debug\net8.0\uhppoted-dll-cli
+DEBUG = PATH=$(DLL)\debug && .\bin\Debug\net8.0\uhppoted-dll-cli
+TEST = PATH=$(DLL)\test && .\bin\Debug\net8.0\uhppoted-dll-cli
 CONTROLLER = 405419896
+
+ltsc:
+	$(CLI)   get-status --controller 423155481
+	$(DEBUG) get-status --controller 423155481
+	$(TEST)  get-status --controller 423155481
 
 get-controllers:
 	$(CLI) get-controllers

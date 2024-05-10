@@ -293,7 +293,7 @@ class UhppotedDLLCLI
 
         WriteLine(Format("get-status ({0})", controller));
         WriteLine(Format("   ID              {0}", status.ID));
-        WriteLine(Format("   timestamp       {0}", status.sysdatetime));
+//        WriteLine(Format("   timestamp       {0}", status.sysdatetime));
 //        WriteLine(Format("   doors[1]        {0}", status.doors[0]));
 //        WriteLine(Format("   doors[2]        {0}", status.doors[1]));
 //        WriteLine(Format("   doors[3]        {0}", status.doors[2]));

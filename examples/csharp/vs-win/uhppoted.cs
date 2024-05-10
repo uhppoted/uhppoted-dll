@@ -119,7 +119,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new Status(status.ID, status.sysdatetime);
+        return new Status(status.ID);
     }
 
 //    public Status GetStatus(uint deviceID) {
@@ -627,7 +627,6 @@ public class Uhppoted : IDisposable {
 
     struct GoStatus {
         public uint ID;
-        public string sysdatetime;
     }
     
 //    struct GoStatus {
@@ -753,11 +752,9 @@ public class Event {
 
 public class Status {
     public uint ID;
-    public string sysdatetime;
 
-    public Status(uint ID, string sysdatetime) {
+    public Status(uint ID) {
         this.ID = ID;
-        this.sysdatetime = sysdatetime;
     }
 }
 

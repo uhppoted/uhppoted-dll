@@ -98,8 +98,12 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
+	fmt.Println("get-status:dll ltsc.0#1")
+
 	status.ID = C.uint(12345678)
-	status.sysdatetime = C.CString("2024-05-10")
+	// status.sysdatetime = C.CString("2024-05-10")
+
+	fmt.Println("get-status:dll ltsc.0#2")
 
 	return nil
 }

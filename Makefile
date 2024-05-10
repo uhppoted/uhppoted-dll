@@ -4,6 +4,14 @@ SRC=go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/ma
 DEBUG=go/devices_debug.go go/cards_debug.go go/events_debug.go go/time_profiles_debug.go go/tasks_debug.go go/main.go 
 TESTS=go/devices_tests.go go/cards_tests.go go/events_tests.go go/time_profiles_tests.go go/tasks_tests.go go/main.go 
 LIB=./lib
+LTSC=examples/csharp/vs-win
+
+ifneq ($(OS),Windows_NT)
+    UNAME = $(shell uname -s)
+    ifeq ($(UNAME),Darwin)
+        LTSC=examples/csharp/vs-mac
+    endif
+endif
 
 ifeq ($(OS),Windows_NT)
     DLL = uhppoted.dll
@@ -27,6 +35,9 @@ endif
 .PHONY: integration-tests
 .PHONY: update
 .PHONY: vuln
+
+ltsc:
+	cd $(LTSC) && make ltsc
 
 update:
 	go get -u github.com/uhppoted/uhppote-core@main
