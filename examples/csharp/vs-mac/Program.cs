@@ -52,7 +52,7 @@ class UhppotedDLLCLI
             Uhppoted u = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, true);
             string cmd = args[0] ?? "";
 
-            WriteLine("uhppoted-dll Visual Studio C# Example (Windows)");
+            WriteLine("uhppoted-dll Visual Studio C# Example (MacOS)");
 
             try
             {
