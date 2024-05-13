@@ -46,7 +46,7 @@ typedef struct Event {
 
 typedef struct Status {
     uint32_t ID;
- 	char *sysdatetime;
+ 	uint32_t sysdatetime;
 } Status;
 
 // typedef struct Status {

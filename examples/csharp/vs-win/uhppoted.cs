@@ -115,7 +115,7 @@ public class Uhppoted : IDisposable {
     }
 
     public Status GetStatus(uint deviceID) {
-        WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.1"));
+        WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.2"));
 
         GoStatus status = new GoStatus();
 
@@ -632,7 +632,7 @@ public class Uhppoted : IDisposable {
 
     struct GoStatus {
         public uint ID;
-        public string sysdatetime;
+        public uint sysdatetime;
     }
     
 //    struct GoStatus {
@@ -758,9 +758,9 @@ public class Event {
 
 public class Status {
     public uint ID;
-    public string sysdatetime;
+    public uint sysdatetime;
 
-    public Status(uint ID, string sysdatetime) {
+    public Status(uint ID, uint sysdatetime) {
         this.ID = ID;
         this.sysdatetime = sysdatetime;
     }
