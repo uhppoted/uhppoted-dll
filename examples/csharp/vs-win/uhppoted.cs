@@ -115,16 +115,25 @@ public class Uhppoted : IDisposable {
     }
 
     public Status GetStatus(uint deviceID) {
-        WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.2"));
+        WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.3"));
 
         GoStatus status = new GoStatus();
+        status.sysdatetime = Marshal.AllocHGlobal(11);
 
         string err = GetStatus(ref this.u, ref status, deviceID);
         if (err != null && err != "") {
+            Marshal.FreeHGlobal(status.sysdatetime);
+
             throw new UhppotedException(err);
         }
 
-        return new Status(status.ID, status.sysdatetime);
+        byte[] sysdatetime = new byte[11];
+
+        Marshal.Copy(status.sysdatetime, sysdatetime, 0, 11);
+
+        Marshal.FreeHGlobal(status.sysdatetime);
+
+        return new Status(status.ID, sysdatetime);
     }
 
 //    public Status GetStatus(uint deviceID) {
@@ -632,7 +641,7 @@ public class Uhppoted : IDisposable {
 
     struct GoStatus {
         public uint ID;
-        public uint sysdatetime;
+        public IntPtr sysdatetime;
     }
     
 //    struct GoStatus {
@@ -760,9 +769,9 @@ public class Status {
     public uint ID;
     public uint sysdatetime;
 
-    public Status(uint ID, uint sysdatetime) {
+    public Status(uint ID, byte[] sysdatetime) {
         this.ID = ID;
-        this.sysdatetime = sysdatetime;
+        this.sysdatetime = System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length);
     }
 }
 

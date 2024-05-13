@@ -92,18 +92,30 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-	fmt.Println("get-status:dll ltsc.2")
+	fmt.Println("get-status:dll ltsc.3")
 
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	fmt.Println("get-status:dll ltsc.2#1")
+	fmt.Println("get-status:dll ltsc.3#1")
 
 	status.ID = C.uint(12345678)
-	status.sysdatetime = C.uint(98765432)
 
-	fmt.Println("get-status:dll ltsc.2#2")
+	sysdatetime := unsafe.Slice(status.sysdatetime, 11)
+	sysdatetime[0] = '2'
+	sysdatetime[1] = '0'
+	sysdatetime[2] = '2'
+	sysdatetime[3] = '4'
+	sysdatetime[4] = '-'
+	sysdatetime[5] = '0'
+	sysdatetime[6] = '5'
+	sysdatetime[7] = '-'
+	sysdatetime[8] = '1'
+	sysdatetime[9] = '3'
+	sysdatetime[10] = 0
+
+	fmt.Println("get-status:dll ltsc.3#2")
 
 	return nil
 }
