@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text;
 
+using static System.Console;
+using static System.String;
+
 namespace uhppoted {
 
 public class Uhppoted : IDisposable {
@@ -112,6 +115,8 @@ public class Uhppoted : IDisposable {
     }
 
     public Status GetStatus(uint deviceID) {
+        WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.1"));
+
         GoStatus status = new GoStatus();
 
         string err = GetStatus(ref this.u, ref status, deviceID);
@@ -119,7 +124,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new Status(status.ID);
+        return new Status(status.ID, status.sysdatetime);
     }
 
 //    public Status GetStatus(uint deviceID) {
@@ -627,6 +632,7 @@ public class Uhppoted : IDisposable {
 
     struct GoStatus {
         public uint ID;
+        public string sysdatetime;
     }
     
 //    struct GoStatus {
@@ -752,9 +758,11 @@ public class Event {
 
 public class Status {
     public uint ID;
+    public string sysdatetime;
 
-    public Status(uint ID) {
+    public Status(uint ID, string sysdatetime) {
         this.ID = ID;
+        this.sysdatetime = sysdatetime;
     }
 }
 

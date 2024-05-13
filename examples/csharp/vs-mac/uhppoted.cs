@@ -3,6 +3,9 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using System.Text;
 
+using static System.Console;
+using static System.String;
+
 namespace uhppoted
 {
 
@@ -127,6 +130,8 @@ namespace uhppoted
         }
 
         public Status GetStatus(uint deviceID) {
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.1"));
+
             GoStatus status = new GoStatus();
 
             string err = GetStatus(ref this.u, ref status, deviceID);
@@ -134,7 +139,7 @@ namespace uhppoted
                 throw new UhppotedException(err);
             }
 
-            return new Status(status.ID);
+            return new Status(status.ID, status.sysdatetime);
         }
 
 //    public Status GetStatus(uint deviceID) {
@@ -703,6 +708,7 @@ namespace uhppoted
 
     struct GoStatus {
         public uint ID;
+        public string sysdatetime;
     }
     
 //    struct GoStatus {
@@ -838,9 +844,11 @@ namespace uhppoted
 
     public class Status {
         public uint ID;
+        public string sysdatetime;
 
-        public Status(uint ID) {
+        public Status(uint ID, string sysdatetime) {
             this.ID = ID;
+            this.sysdatetime = sysdatetime;
         }
     }
 

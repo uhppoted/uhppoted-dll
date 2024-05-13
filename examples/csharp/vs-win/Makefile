@@ -1,7 +1,7 @@
-DLL = ..\..\..\lib
-CLI = PATH=$(DLL) && .\bin\Debug\net8.0\uhppoted-dll-cli
-DEBUG = PATH=$(DLL)\debug && .\bin\Debug\net8.0\uhppoted-dll-cli
-TEST = PATH=$(DLL)\test && .\bin\Debug\net8.0\uhppoted-dll-cli
+DLL = ..\\..\\..\\lib
+CLI = PATH=$(DLL) && .\\bin\\Debug\\net8.0\\uhppoted-dll-cli
+DEBUG = PATH=$(DLL)\\debug && .\\bin\\Debug\\net8.0\\uhppoted-dll-cli
+TEST = PATH=$(DLL)\\test && .\\bin\Debug\\net8.0\\uhppoted-dll-cli
 CONTROLLER = 405419896
 
 ltsc:
