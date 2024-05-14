@@ -131,7 +131,7 @@ namespace uhppoted
 
         public Status GetStatus(uint deviceID) 
         {
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.5"));
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.6"));
 
             GoStatus status = new GoStatus();
             status.sysdatetime = Marshal.AllocHGlobal(20);
