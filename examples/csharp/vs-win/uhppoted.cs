@@ -118,7 +118,7 @@ public class Uhppoted : IDisposable {
             WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.6"));
 
             GoStatus status = new GoStatus();
-            status.sysdatetime = Marshal.AllocHGlobal(11);
+            status.sysdatetime = Marshal.AllocHGlobal(20);
             status.doors = Marshal.AllocHGlobal(4);
             status.buttons = Marshal.AllocHGlobal(4);
             status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
@@ -139,7 +139,7 @@ public class Uhppoted : IDisposable {
 
             GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
 
-            Marshal.Copy(status.sysdatetime, sysdatetime, 0, 11);
+            Marshal.Copy(status.sysdatetime, sysdatetime, 0, 20);
             Marshal.Copy(status.doors, doors, 0, 4);
             Marshal.Copy(status.buttons, buttons, 0, 4);
 
