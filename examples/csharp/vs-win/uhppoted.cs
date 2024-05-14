@@ -814,12 +814,28 @@ public class Status {
     public string sysdatetime;
     public bool[] doors;
     public bool[] buttons;
+    public byte relays;
+    public byte inputs;
+    public byte syserror;
+    public byte info;
+    public uint seqno;
+    public Event evt;
 
-    public Status(uint ID, byte[] sysdatetime, bool[] doorss, bool[] buttons) {
+    public Status(uint ID, 
+                  byte[] sysdatetime, 
+                  bool[] doors, bool[] buttons, byte relays, byte inputs, 
+                  byte syserror, byte info, uint seqno,
+                  Event evt) {
         this.ID = ID;
         this.sysdatetime = System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length);
         this.doors = doors;
         this.buttons = buttons;
+        this.relays = relays;
+        this.inputs = inputs;
+        this.syserror = syserror;
+        this.info = info;
+        this.seqno = seqno;
+        this.evt = evt;
     }
 }
 
