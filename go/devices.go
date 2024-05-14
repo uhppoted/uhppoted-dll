@@ -92,39 +92,63 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-	fmt.Println("get-status:dll ltsc.4")
+	fmt.Println("get-status:dll ltsc.5")
 
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	fmt.Println("get-status:dll ltsc.4#1")
+	// 	if status.event == nil {
+	// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
+	// 	}
 
-	status.ID = C.uint(12345678)
+	fmt.Println("get-status:dll ltsc.5#1")
+
+	response, err := uu.GetStatus(deviceID)
+	if err != nil {
+		return err
+	} else if response == nil {
+		return fmt.Errorf("%v: no response to get-status", deviceID)
+	}
+
+	status.ID = C.uint(response.SerialNumber)
 
 	sysdatetime := unsafe.Slice(status.sysdatetime, 11)
 	doors := unsafe.Slice(status.doors, 4)
+	buttons := unsafe.Slice(status.buttons, 4)
 
-	sysdatetime[0] = '2'
-	sysdatetime[1] = '0'
-	sysdatetime[2] = '2'
-	sysdatetime[3] = '4'
-	sysdatetime[4] = '-'
-	sysdatetime[5] = '0'
-	sysdatetime[6] = '5'
-	sysdatetime[7] = '-'
-	sysdatetime[8] = '1'
-	sysdatetime[9] = '3'
-	sysdatetime[10] = 0
+	{
+		s := time.Time(response.SystemDateTime).Format("2006-01-02 15:04:05")
+		v := []byte(s)
 
-	fmt.Println("get-status:dll ltsc.4#2")
+		sysdatetime[0] = C.uchar(v[0])
+		sysdatetime[1] = C.uchar(v[1])
+		sysdatetime[2] = C.uchar(v[2])
+		sysdatetime[3] = C.uchar(v[3])
+		sysdatetime[4] = C.uchar(v[4])
+		sysdatetime[5] = C.uchar(v[5])
+		sysdatetime[6] = C.uchar(v[6])
+		sysdatetime[7] = C.uchar(v[7])
+		sysdatetime[8] = C.uchar(v[8])
+		sysdatetime[9] = C.uchar(v[9])
+		sysdatetime[10] = C.uchar(0)
 
-	doors[0] = cbool(true)
-	doors[1] = cbool(false)
-	doors[2] = cbool(false)
-	doors[3] = cbool(true)
+		fmt.Println("get-status:dll ltsc.5#2")
+	}
 
-	fmt.Println("get-status:dll ltsc.4#3")
+	doors[0] = cbool(response.DoorState[1])
+	doors[1] = cbool(response.DoorState[2])
+	doors[2] = cbool(response.DoorState[3])
+	doors[3] = cbool(response.DoorState[4])
+
+	fmt.Println("get-status:dll ltsc.5#3")
+
+	buttons[0] = cbool(response.DoorButton[1])
+	buttons[1] = cbool(response.DoorButton[2])
+	buttons[2] = cbool(response.DoorButton[3])
+	buttons[3] = cbool(response.DoorButton[4])
+
+	fmt.Println("get-status:dll ltsc.5#4")
 
 	return nil
 }

@@ -5,9 +5,9 @@ TEST = export DYLD_LIBRARY_PATH=$(DLL)/tests && ./bin/Debug/net7.0/uhppoted-dll-
 CONTROLLER = 405419896
 
 ltsc:
-	$(CLI)   get-status --controller 423155481
-	$(DEBUG) get-status --controller 423155481
-	$(TEST)  get-status --controller 423155481
+	$(CLI)   get-status --controller 405419896
+	$(DEBUG) get-status --controller 405419896
+	$(TEST)  get-status --controller 405419896
 
 get-controllers:
 	$(CLI) get-controllers

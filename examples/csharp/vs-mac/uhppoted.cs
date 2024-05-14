@@ -131,28 +131,33 @@ namespace uhppoted
 
         public Status GetStatus(uint deviceID) 
         {
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.4"));
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.5"));
 
             GoStatus status = new GoStatus();
             status.sysdatetime = Marshal.AllocHGlobal(11);
             status.doors = Marshal.AllocHGlobal(4);
+            status.buttons = Marshal.AllocHGlobal(4);
 
             string err = GetStatus(ref this.u, ref status, deviceID);
             if (err != null && err != "") {
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
+                Marshal.FreeHGlobal(status.buttons);
 
                 throw new UhppotedException(err);
             }
 
             byte[] sysdatetime = new byte[11];
-           byte[] doors = new byte[4];
+            byte[] doors = new byte[4];
+            byte[] buttons = new byte[4];
 
             Marshal.Copy(status.sysdatetime, sysdatetime, 0, 11);
             Marshal.Copy(status.doors, doors, 0, 4);
+            Marshal.Copy(status.buttons, buttons, 0, 4);
 
             Marshal.FreeHGlobal(status.sysdatetime);
             Marshal.FreeHGlobal(status.doors);
+            Marshal.FreeHGlobal(status.buttons);
 
             return new Status(status.ID, 
                               sysdatetime,
@@ -161,6 +166,12 @@ namespace uhppoted
                                   doors[1] == 1,
                                   doors[2] == 1,
                                   doors[3] == 1,
+                              },
+                              new bool[] {
+                                  buttons[0] == 1,
+                                  buttons[1] == 1,
+                                  buttons[2] == 1,
+                                  buttons[3] == 1,
                               }
                         );
         }
@@ -733,6 +744,7 @@ namespace uhppoted
         public uint ID;
         public IntPtr sysdatetime;
         public IntPtr doors;
+        public IntPtr buttons;
     }
     
 //    struct GoStatus {
@@ -870,11 +882,13 @@ namespace uhppoted
         public uint ID;
         public string sysdatetime;
         public bool[] doors;
+        public bool[] buttons;
 
-        public Status(uint ID, byte[] sysdatetime, bool[] doors) {
+        public Status(uint ID, byte[] sysdatetime, bool[] doors, bool[] buttons) {
             this.ID = ID;
             this.sysdatetime = System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length);
             this.doors = doors;
+            this.buttons = buttons;
         }
     }
 

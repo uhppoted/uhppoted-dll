@@ -95,39 +95,62 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-	fmt.Println("get-status:debug ltsc.4")
+	fmt.Println("get-status:debug ltsc.5")
 
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	fmt.Println("get-status:debug ltsc.4#1")
+	// 	if status.event == nil {
+	// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
+	// 	}
 
-	status.ID = C.uint(12345678)
+	fmt.Println("get-status:debug ltsc.5#1")
+
+	if DEBUG {
+		fmt.Printf(">>> get-status\n")
+		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Println()
+	}
 
 	sysdatetime := unsafe.Slice(status.sysdatetime, 11)
 	doors := unsafe.Slice(status.doors, 4)
+	buttons := unsafe.Slice(status.buttons, 4)
 
-	sysdatetime[0] = '2'
-	sysdatetime[1] = '0'
-	sysdatetime[2] = '2'
-	sysdatetime[3] = '4'
-	sysdatetime[4] = '-'
-	sysdatetime[5] = '0'
-	sysdatetime[6] = '5'
-	sysdatetime[7] = 0
-	sysdatetime[8] = 0
-	sysdatetime[9] = 0
-	sysdatetime[10] = 0
+	status.ID = C.uint(405419896)
 
-	fmt.Println("get-status:debug ltsc.4#2")
+	{
+		s := "2022-03-19 15:48:32"
+		v := []byte(s)
+
+		sysdatetime[0] = C.uchar(v[0])
+		sysdatetime[1] = C.uchar(v[1])
+		sysdatetime[2] = C.uchar(v[2])
+		sysdatetime[3] = C.uchar(v[3])
+		sysdatetime[4] = C.uchar(v[4])
+		sysdatetime[5] = C.uchar(v[5])
+		sysdatetime[6] = C.uchar(v[6])
+		sysdatetime[7] = C.uchar(v[7])
+		sysdatetime[8] = C.uchar(v[8])
+		sysdatetime[9] = C.uchar(v[9])
+		sysdatetime[10] = C.uchar(0)
+
+		fmt.Println("get-status:debug ltsc.5#2")
+	}
 
 	doors[0] = 1
 	doors[1] = 0
 	doors[2] = 0
 	doors[3] = 1
 
-	fmt.Println("get-status:debug ltsc.4#3")
+	fmt.Println("get-status:debug ltsc.5#3")
+
+	buttons[0] = 1
+	buttons[1] = 0
+	buttons[2] = 1
+	buttons[3] = 0
+
+	fmt.Println("get-status:debug ltsc.5#3")
 
 	return nil
 }

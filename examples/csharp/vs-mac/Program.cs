@@ -298,10 +298,10 @@ class UhppotedDLLCLI
         WriteLine(Format("   doors[2]        {0}", status.doors[1]));
         WriteLine(Format("   doors[3]        {0}", status.doors[2]));
         WriteLine(Format("   doors[4]        {0}", status.doors[3]));
-//        WriteLine(Format("   buttons[1]      {0}", status.buttons[0]));
-//        WriteLine(Format("   buttons[2]      {0}", status.buttons[1]));
-//        WriteLine(Format("   buttons[3]      {0}", status.buttons[2]));
-//        WriteLine(Format("   buttons[4]      {0}", status.buttons[3]));
+        WriteLine(Format("   buttons[1]      {0}", status.buttons[0]));
+        WriteLine(Format("   buttons[2]      {0}", status.buttons[1]));
+        WriteLine(Format("   buttons[3]      {0}", status.buttons[2]));
+        WriteLine(Format("   buttons[4]      {0}", status.buttons[3]));
 //        WriteLine(Format("   relays          {0}", status.relays));
 //        WriteLine(Format("   inputs          {0}", status.inputs));
 //        WriteLine(Format("   syserror        {0}", status.syserror));

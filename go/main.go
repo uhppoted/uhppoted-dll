@@ -46,8 +46,9 @@ typedef struct Event {
 
 typedef struct Status {
     uint32_t ID;
- 	uint8_t *sysdatetime;
- 	uint8_t *doors;   // uint_8[4]
+ 	uint8_t  *sysdatetime;
+ 	uint8_t  *doors;   // uint_8[4]
+ 	uint8_t  *buttons; // uint_8[4]
 } Status;
 
 // typedef struct Status {
