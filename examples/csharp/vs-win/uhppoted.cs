@@ -115,7 +115,7 @@ public class Uhppoted : IDisposable {
     }
 
     public Status GetStatus(uint deviceID) {
-        WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.3"));
+        WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.4"));
 
         GoStatus status = new GoStatus();
         status.sysdatetime = Marshal.AllocHGlobal(11);
@@ -767,7 +767,7 @@ public class Event {
 
 public class Status {
     public uint ID;
-    public uint sysdatetime;
+    public string sysdatetime;
 
     public Status(uint ID, byte[] sysdatetime) {
         this.ID = ID;
