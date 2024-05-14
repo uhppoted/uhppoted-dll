@@ -302,19 +302,19 @@ class UhppotedDLLCLI
         WriteLine(Format("   buttons[2]      {0}", status.buttons[1]));
         WriteLine(Format("   buttons[3]      {0}", status.buttons[2]));
         WriteLine(Format("   buttons[4]      {0}", status.buttons[3]));
-//        WriteLine(Format("   relays          {0}", status.relays));
-//        WriteLine(Format("   inputs          {0}", status.inputs));
-//        WriteLine(Format("   syserror        {0}", status.syserror));
-//        WriteLine(Format("   info            {0}", status.info));
-//        WriteLine(Format("   seqno           {0}", status.seqno));
-//        WriteLine(Format("   event timestamp {0}", timestamp));
-//        WriteLine(Format("         index     {0}", status.evt.index));
-//        WriteLine(Format("         type      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, status.evt.eventType, LOCALE)));
-//        WriteLine(Format("         granted   {0}", status.evt.granted));
-//        WriteLine(Format("         door      {0}", status.evt.door));
-//        WriteLine(Format("         direction {0}", lookup.find(lookup.LOOKUP_DIRECTION, status.evt.direction, LOCALE)));
-//        WriteLine(Format("         card      {0}", status.evt.card));
-//        WriteLine(Format("         reason    {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, status.evt.reason, LOCALE)));
+        WriteLine(Format("   relays          {0}", status.relays));
+        WriteLine(Format("   inputs          {0}", status.inputs));
+        WriteLine(Format("   syserror        {0}", status.syserror));
+        WriteLine(Format("   info            {0}", status.info));
+        WriteLine(Format("   seqno           {0}", status.seqno));
+        // WriteLine(Format("   event timestamp {0}", timestamp));
+        WriteLine(Format("   event index     {0}", status.evt.index));
+        WriteLine(Format("         type      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, status.evt.eventType, LOCALE)));
+        WriteLine(Format("         granted   {0}", status.evt.granted));
+        WriteLine(Format("         door      {0}", status.evt.door));
+        WriteLine(Format("         direction {0}", lookup.find(lookup.LOOKUP_DIRECTION, status.evt.direction, LOCALE)));
+        WriteLine(Format("         card      {0}", status.evt.card));
+        WriteLine(Format("         reason    {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, status.evt.reason, LOCALE)));
     }
 
     static void GetTime(Uhppoted u, string[] args)
@@ -544,7 +544,7 @@ class UhppotedDLLCLI
 
         WriteLine(Format("get-event ({0})", controller));
         WriteLine(Format("   event index {0}", evt.index));
-        WriteLine(Format("   timestamp   {0}", evt.timestamp));
+        // WriteLine(Format("   timestamp   {0}", evt.timestamp));
         WriteLine(Format("   type        {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, evt.eventType, LOCALE)));
         WriteLine(Format("   granted     {0}", evt.granted));
         WriteLine(Format("   door        {0}", evt.door));

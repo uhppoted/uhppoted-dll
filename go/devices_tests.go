@@ -105,27 +105,28 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-	fmt.Println("get-status:test ltsc.5")
+	fmt.Println("get-status:test ltsc.6")
 
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	// 	if status.event == nil {
-	// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
-	// 	}
+	if status.event == nil {
+		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
+	}
 
-	// 	if deviceID != 405419896 && deviceID != 303986753 {
-	// 		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
-	// 	}
+	if deviceID != 405419896 && deviceID != 303986753 {
+		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	}
 
-	fmt.Println("get-status:test ltsc.4#1")
+	fmt.Println("get-status:test ltsc.6#1")
 
 	status.ID = C.uint(12345678)
 
-	sysdatetime := unsafe.Slice(status.sysdatetime, 11)
+	sysdatetime := unsafe.Slice(status.sysdatetime, 20)
 	doors := unsafe.Slice(status.doors, 4)
 	buttons := unsafe.Slice(status.buttons, 4)
+	// timestamp := unsafe.Slice(status.event.timestamp, 20)
 
 	{
 		s := "2022-03-19 15:48:32"
@@ -141,9 +142,18 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		sysdatetime[7] = C.uchar(v[7])
 		sysdatetime[8] = C.uchar(v[8])
 		sysdatetime[9] = C.uchar(v[9])
-		sysdatetime[10] = C.uchar(0)
+		sysdatetime[10] = C.uchar(v[10])
+		sysdatetime[11] = C.uchar(v[10])
+		sysdatetime[12] = C.uchar(v[10])
+		sysdatetime[13] = C.uchar(v[10])
+		sysdatetime[14] = C.uchar(v[10])
+		sysdatetime[15] = C.uchar(v[10])
+		sysdatetime[16] = C.uchar(v[10])
+		sysdatetime[17] = C.uchar(v[10])
+		sysdatetime[18] = C.uchar(v[18])
+		sysdatetime[19] = C.uchar(0)
 
-		fmt.Println("get-status:test ltsc.5#2")
+		fmt.Println("get-status:test ltsc.6#2")
 	}
 
 	doors[0] = 1
@@ -151,14 +161,95 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	doors[2] = 0
 	doors[3] = 1
 
-	fmt.Println("get-status:test ltsc.5#3")
+	fmt.Println("get-status:test ltsc.6#3")
 
 	buttons[0] = 1
 	buttons[1] = 0
 	buttons[2] = 1
 	buttons[3] = 0
 
-	fmt.Println("get-status:test ltsc.5#4")
+	fmt.Println("get-status:test ltsc.6#4")
+
+	status.relays = 0x12
+	status.inputs = 0x34
+
+	status.syserror = 0x56
+	status.info = 253
+	status.seqno = 9876
+
+	fmt.Println("get-status:test ltsc.6#5")
+
+	if deviceID == 405419896 {
+		fmt.Println("get-status:test ltsc.6#6")
+		// s := "2022-01-02 12:34:56"
+		// v := []byte(s)
+		//
+		// timestamp[0] = C.uchar(v[0])
+		// timestamp[1] = C.uchar(v[1])
+		// timestamp[2] = C.uchar(v[2])
+		// timestamp[3] = C.uchar(v[3])
+		// timestamp[4] = C.uchar(v[4])
+		// timestamp[5] = C.uchar(v[5])
+		// timestamp[6] = C.uchar(v[6])
+		// timestamp[7] = C.uchar(v[7])
+		// timestamp[8] = C.uchar(v[8])
+		// timestamp[9] = C.uchar(v[9])
+		// timestamp[10] = C.uchar(v[10])
+		// timestamp[11] = C.uchar(v[11])
+		// timestamp[12] = C.uchar(v[12])
+		// timestamp[13] = C.uchar(v[13])
+		// timestamp[14] = C.uchar(v[14])
+		// timestamp[15] = C.uchar(v[15])
+		// timestamp[16] = C.uchar(v[16])
+		// timestamp[17] = C.uchar(v[17])
+		// timestamp[18] = C.uchar(v[18])
+		// timestamp[19] = C.uchar(0)
+
+		status.event.index = 135
+		status.event.eventType = 0x06
+		status.event.granted = 1
+		status.event.door = 3
+		status.event.direction = 1
+		status.event.card = 8100023
+		status.event.reason = 0x15
+	}
+
+	if deviceID == 303986753 {
+		fmt.Println("get-status:test ltsc.6#7")
+		// s := ""
+		// v := []byte(s)
+		//
+		// timestamp[0] = C.uchar(v[0])
+		// timestamp[1] = C.uchar(v[1])
+		// timestamp[2] = C.uchar(v[2])
+		// timestamp[3] = C.uchar(v[3])
+		// timestamp[4] = C.uchar(v[4])
+		// timestamp[5] = C.uchar(v[5])
+		// timestamp[6] = C.uchar(v[6])
+		// timestamp[7] = C.uchar(v[7])
+		// timestamp[8] = C.uchar(v[8])
+		// timestamp[9] = C.uchar(v[9])
+		// timestamp[10] = C.uchar(v[10])
+		// timestamp[11] = C.uchar(v[11])
+		// timestamp[12] = C.uchar(v[12])
+		// timestamp[13] = C.uchar(v[13])
+		// timestamp[14] = C.uchar(v[14])
+		// timestamp[15] = C.uchar(v[15])
+		// timestamp[16] = C.uchar(v[16])
+		// timestamp[17] = C.uchar(v[17])
+		// timestamp[18] = C.uchar(v[18])
+		// timestamp[19] = C.uchar(0)
+
+		status.event.index = 0
+		status.event.eventType = 0x00
+		status.event.granted = 0
+		status.event.door = 0
+		status.event.direction = 0
+		status.event.card = 0
+		status.event.reason = 0x00
+	}
+
+	fmt.Println("get-status:test ltsc.6#8")
 
 	return nil
 }

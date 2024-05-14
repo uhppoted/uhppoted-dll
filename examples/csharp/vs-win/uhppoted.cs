@@ -121,12 +121,14 @@ public class Uhppoted : IDisposable {
             status.sysdatetime = Marshal.AllocHGlobal(11);
             status.doors = Marshal.AllocHGlobal(4);
             status.buttons = Marshal.AllocHGlobal(4);
+            status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
 
             string err = GetStatus(ref this.u, ref status, deviceID);
             if (err != null && err != "") {
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
+                Marshal.FreeHGlobal(status.evt);
 
                 throw new UhppotedException(err);
             }
@@ -135,13 +137,24 @@ public class Uhppoted : IDisposable {
             byte[] doors = new byte[4];
             byte[] buttons = new byte[4];
 
+            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
+
             Marshal.Copy(status.sysdatetime, sysdatetime, 0, 11);
             Marshal.Copy(status.doors, doors, 0, 4);
             Marshal.Copy(status.buttons, buttons, 0, 4);
 
+            Event e = new Event(evt.index,
+                                evt.eventType,
+                                evt.granted != 0,
+                                evt.door,
+                                evt.direction,
+                                evt.card,
+                                evt.reason);
+
             Marshal.FreeHGlobal(status.sysdatetime);
             Marshal.FreeHGlobal(status.doors);
             Marshal.FreeHGlobal(status.buttons);
+            Marshal.FreeHGlobal(status.evt);
 
             return new Status(status.ID, 
                               sysdatetime,
@@ -156,7 +169,13 @@ public class Uhppoted : IDisposable {
                                   buttons[1] == 1,
                                   buttons[2] == 1,
                                   buttons[3] == 1,
-                              }
+                              },
+                              status.relays,
+                              status.inputs,
+                              status.syserror,
+                              status.info,
+                              status.seqno,
+                              e);
                         );
     }
 
@@ -377,8 +396,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new Event(evt.timestamp,
-                         evt.index,
+        return new Event(evt.index,
                          evt.eventType,
                          evt.granted == 1,
                          evt.door,
@@ -653,7 +671,7 @@ public class Uhppoted : IDisposable {
     }
 
     struct GoEvent {
-        public string timestamp;
+        // public string timestamp;
         public uint index;
         public byte eventType;
         public byte granted;
@@ -769,7 +787,7 @@ public class Device {
 }
 
 public class Event {
-    public string timestamp;
+    // public string timestamp;
     public uint index;
     public byte eventType;
     public bool granted;
@@ -778,9 +796,9 @@ public class Event {
     public uint card;
     public byte reason;
 
-    public Event(string timestamp, uint index, byte eventType, bool granted,
+    public Event(uint index, byte eventType, bool granted,
                  byte door, byte direction, uint card, byte reason) {
-        this.timestamp = timestamp;
+        // this.timestamp = timestamp;
         this.index = index;
         this.eventType = eventType;
         this.granted = granted;

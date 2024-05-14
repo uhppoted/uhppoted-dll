@@ -134,30 +134,43 @@ namespace uhppoted
             WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.5"));
 
             GoStatus status = new GoStatus();
-            status.sysdatetime = Marshal.AllocHGlobal(11);
+            status.sysdatetime = Marshal.AllocHGlobal(20);
             status.doors = Marshal.AllocHGlobal(4);
             status.buttons = Marshal.AllocHGlobal(4);
+            status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
 
             string err = GetStatus(ref this.u, ref status, deviceID);
             if (err != null && err != "") {
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
+                Marshal.FreeHGlobal(status.evt);
 
                 throw new UhppotedException(err);
             }
 
-            byte[] sysdatetime = new byte[11];
+            byte[] sysdatetime = new byte[20];
             byte[] doors = new byte[4];
             byte[] buttons = new byte[4];
 
-            Marshal.Copy(status.sysdatetime, sysdatetime, 0, 11);
+            Marshal.Copy(status.sysdatetime, sysdatetime, 0, 20);
             Marshal.Copy(status.doors, doors, 0, 4);
             Marshal.Copy(status.buttons, buttons, 0, 4);
+            
+            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
+
+            Event e = new Event(evt.index,
+                                evt.eventType,
+                                evt.granted != 0,
+                                evt.door,
+                                evt.direction,
+                                evt.card,
+                                evt.reason);
 
             Marshal.FreeHGlobal(status.sysdatetime);
             Marshal.FreeHGlobal(status.doors);
             Marshal.FreeHGlobal(status.buttons);
+            Marshal.FreeHGlobal(status.evt);
 
             return new Status(status.ID, 
                               sysdatetime,
@@ -172,8 +185,13 @@ namespace uhppoted
                                   buttons[1] == 1,
                                   buttons[2] == 1,
                                   buttons[3] == 1,
-                              }
-                        );
+                              },
+                              status.relays,
+                              status.inputs,
+                              status.syserror,
+                              status.info,
+                              status.seqno,
+                              e);
         }
 
 //    public Status GetStatus(uint deviceID) {
@@ -425,8 +443,7 @@ namespace uhppoted
                 throw new UhppotedException(err);
             }
 
-            return new Event(evt.timestamp,
-                             evt.index,
+            return new Event(evt.index,
                              evt.eventType,
                              evt.granted == 1,
                              evt.door,
@@ -730,7 +747,7 @@ namespace uhppoted
 
         struct GoEvent
         {
-            public string timestamp;
+            // public IntPtr timestamp;
             public uint index;
             public byte eventType;
             public byte granted;
@@ -745,6 +762,12 @@ namespace uhppoted
         public IntPtr sysdatetime;
         public IntPtr doors;
         public IntPtr buttons;
+        public byte relays;
+        public byte inputs;
+        public byte syserror;
+        public byte info;
+        public uint seqno;
+        public IntPtr evt;
     }
     
 //    struct GoStatus {
@@ -855,7 +878,7 @@ namespace uhppoted
 
     public class Event
     {
-        public string timestamp;
+        // public string timestamp;
         public uint index;
         public byte eventType;
         public bool granted;
@@ -864,10 +887,10 @@ namespace uhppoted
         public uint card;
         public byte reason;
 
-        public Event(string timestamp, uint index, byte eventType, bool granted,
+        public Event(uint index, byte eventType, bool granted,
                      byte door, byte direction, uint card, byte reason)
         {
-            this.timestamp = timestamp;
+            // this.timestamp = timestamp;
             this.index = index;
             this.eventType = eventType;
             this.granted = granted;
@@ -883,12 +906,28 @@ namespace uhppoted
         public string sysdatetime;
         public bool[] doors;
         public bool[] buttons;
+        public byte relays;
+        public byte inputs;
+        public byte syserror;
+        public byte info;
+        public uint seqno;
+        public Event evt;
 
-        public Status(uint ID, byte[] sysdatetime, bool[] doors, bool[] buttons) {
+        public Status(uint ID, 
+                      byte[] sysdatetime, 
+                      bool[] doors, bool[] buttons, byte relays, byte inputs, 
+                      byte syserror, byte info, uint seqno,
+                      Event evt) {
             this.ID = ID;
             this.sysdatetime = System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length);
             this.doors = doors;
             this.buttons = buttons;
+            this.relays = relays;
+            this.inputs = inputs;
+            this.syserror = syserror;
+            this.info = info;
+            this.seqno = seqno;
+            this.evt = evt;
         }
     }
 

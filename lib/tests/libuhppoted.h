@@ -54,7 +54,7 @@ typedef struct Device {
 } Device;
 
 typedef struct Event {
-	char  *timestamp;
+//	uint8_t  *timestamp;
     uint32_t index;
 	uint8_t eventType;
 	uint8_t granted;
@@ -69,6 +69,12 @@ typedef struct Status {
  	uint8_t  *sysdatetime;
  	uint8_t  *doors;   // uint_8[4]
  	uint8_t  *buttons; // uint_8[4]
+ 	uint8_t relays;
+ 	uint8_t inputs;
+ 	uint8_t syserror;
+ 	uint8_t info;
+	uint32_t seqno;
+ 	Event *event;
 } Status;
 
 // typedef struct Status {
@@ -209,7 +215,7 @@ extern char* DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumbe
 extern char* DeleteCards(struct UHPPOTE* u, GoUint32 deviceID);
 extern char* GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID);
 extern char* SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index);
-extern char* GetEvent(struct UHPPOTE* u, struct Event* event, GoUint32 deviceID, GoUint32 index);
+extern char* GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index);
 extern char* RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled);
 extern char* GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID);
 extern char* SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile);

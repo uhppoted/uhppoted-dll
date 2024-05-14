@@ -48,7 +48,7 @@ func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index
 		return fmt.Errorf("Incorrect event index (%v)", index)
 	}
 
-	event.timestamp = C.CString("2022-04-15 12:29:15")
+	// event.timestamp = C.CString("2022-04-15 12:29:15")
 	event.index = C.uint(index)
 	event.eventType = C.uchar(0x06)
 	event.granted = cbool(true)

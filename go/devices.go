@@ -92,17 +92,17 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-	fmt.Println("get-status:dll ltsc.5")
+	fmt.Println("get-status:dll ltsc.6")
 
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
-	// 	if status.event == nil {
-	// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
-	// 	}
+	if status.event == nil {
+		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
+	}
 
-	fmt.Println("get-status:dll ltsc.5#1")
+	fmt.Println("get-status:dll ltsc.6#1")
 
 	response, err := uu.GetStatus(deviceID)
 	if err != nil {
@@ -113,9 +113,10 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 
 	status.ID = C.uint(response.SerialNumber)
 
-	sysdatetime := unsafe.Slice(status.sysdatetime, 11)
+	sysdatetime := unsafe.Slice(status.sysdatetime, 20)
 	doors := unsafe.Slice(status.doors, 4)
 	buttons := unsafe.Slice(status.buttons, 4)
+	// timestamp := unsafe.Slice(status.event.timestamp, 20)
 
 	{
 		s := time.Time(response.SystemDateTime).Format("2006-01-02 15:04:05")
@@ -131,9 +132,18 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		sysdatetime[7] = C.uchar(v[7])
 		sysdatetime[8] = C.uchar(v[8])
 		sysdatetime[9] = C.uchar(v[9])
-		sysdatetime[10] = C.uchar(0)
+		sysdatetime[10] = C.uchar(v[10])
+		sysdatetime[11] = C.uchar(v[11])
+		sysdatetime[12] = C.uchar(v[12])
+		sysdatetime[13] = C.uchar(v[13])
+		sysdatetime[14] = C.uchar(v[14])
+		sysdatetime[15] = C.uchar(v[15])
+		sysdatetime[16] = C.uchar(v[16])
+		sysdatetime[17] = C.uchar(v[17])
+		sysdatetime[18] = C.uchar(v[18])
+		sysdatetime[19] = C.uchar(0)
 
-		fmt.Println("get-status:dll ltsc.5#2")
+		fmt.Println("get-status:dll ltsc.6#2")
 	}
 
 	doors[0] = cbool(response.DoorState[1])
@@ -141,14 +151,93 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	doors[2] = cbool(response.DoorState[3])
 	doors[3] = cbool(response.DoorState[4])
 
-	fmt.Println("get-status:dll ltsc.5#3")
+	fmt.Println("get-status:dll ltsc.6#3")
 
 	buttons[0] = cbool(response.DoorButton[1])
 	buttons[1] = cbool(response.DoorButton[2])
 	buttons[2] = cbool(response.DoorButton[3])
 	buttons[3] = cbool(response.DoorButton[4])
 
-	fmt.Println("get-status:dll ltsc.5#4")
+	fmt.Println("get-status:dll ltsc.6#4")
+
+	status.relays = C.uchar(response.RelayState)
+	status.inputs = C.uchar(response.InputState)
+
+	status.syserror = C.uchar(response.SystemError)
+	status.seqno = C.uint(response.SequenceId)
+	status.info = C.uchar(response.SpecialInfo)
+
+	fmt.Println("get-status:dll ltsc.6#5")
+
+	if response.Event.IsZero() {
+		fmt.Println("get-status:dll ltsc.6#7")
+		// s := ""
+		// v := []byte(s)
+		//
+		// timestamp[0] = C.uchar(v[0])
+		// timestamp[1] = C.uchar(v[1])
+		// timestamp[2] = C.uchar(v[2])
+		// timestamp[3] = C.uchar(v[3])
+		// timestamp[4] = C.uchar(v[4])
+		// timestamp[5] = C.uchar(v[5])
+		// timestamp[6] = C.uchar(v[6])
+		// timestamp[7] = C.uchar(v[7])
+		// timestamp[8] = C.uchar(v[8])
+		// timestamp[9] = C.uchar(v[9])
+		// timestamp[10] = C.uchar(v[10])
+		// timestamp[11] = C.uchar(v[11])
+		// timestamp[12] = C.uchar(v[12])
+		// timestamp[13] = C.uchar(v[13])
+		// timestamp[14] = C.uchar(v[14])
+		// timestamp[15] = C.uchar(v[15])
+		// timestamp[16] = C.uchar(v[16])
+		// timestamp[17] = C.uchar(v[17])
+		// timestamp[18] = C.uchar(v[18])
+		// timestamp[19] = C.uchar(0)
+
+		status.event.index = C.uint(0)
+		status.event.eventType = C.uchar(0)
+		status.event.granted = cbool(false)
+		status.event.door = C.uchar(0)
+		status.event.direction = C.uchar(0)
+		status.event.card = C.uint(0)
+		status.event.reason = C.uchar(0)
+	} else {
+		fmt.Println("get-status:dll ltsc.6#8")
+		// s := time.Time(response.Event.Timestamp).Format("2006-01-02 15:04:05")
+		// v := []byte(s)
+		//
+		// timestamp[0] = C.uchar(v[0])
+		// timestamp[1] = C.uchar(v[1])
+		// timestamp[2] = C.uchar(v[2])
+		// timestamp[3] = C.uchar(v[3])
+		// timestamp[4] = C.uchar(v[4])
+		// timestamp[5] = C.uchar(v[5])
+		// timestamp[6] = C.uchar(v[6])
+		// timestamp[7] = C.uchar(v[7])
+		// timestamp[8] = C.uchar(v[8])
+		// timestamp[9] = C.uchar(v[9])
+		// timestamp[10] = C.uchar(v[10])
+		// timestamp[11] = C.uchar(v[11])
+		// timestamp[12] = C.uchar(v[12])
+		// timestamp[13] = C.uchar(v[13])
+		// timestamp[14] = C.uchar(v[14])
+		// timestamp[15] = C.uchar(v[15])
+		// timestamp[16] = C.uchar(v[16])
+		// timestamp[17] = C.uchar(v[17])
+		// timestamp[18] = C.uchar(v[18])
+		// timestamp[19] = C.uchar(0)
+
+		status.event.index = C.uint(response.Event.Index)
+		status.event.eventType = C.uchar(response.Event.Type)
+		status.event.granted = cbool(response.Event.Granted)
+		status.event.door = C.uchar(response.Event.Door)
+		status.event.direction = C.uchar(response.Event.Direction)
+		status.event.card = C.uint(response.Event.CardNumber)
+		status.event.reason = C.uchar(response.Event.Reason)
+	}
+
+	fmt.Println("get-status:dll ltsc.6#9")
 
 	return nil
 }

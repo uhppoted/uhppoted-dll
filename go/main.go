@@ -34,7 +34,7 @@ typedef struct Device {
 } Device;
 
 typedef struct Event {
-	char  *timestamp;
+//	uint8_t  *timestamp;
     uint32_t index;
 	uint8_t eventType;
 	uint8_t granted;
@@ -49,6 +49,12 @@ typedef struct Status {
  	uint8_t  *sysdatetime;
  	uint8_t  *doors;   // uint_8[4]
  	uint8_t  *buttons; // uint_8[4]
+ 	uint8_t relays;
+ 	uint8_t inputs;
+ 	uint8_t syserror;
+ 	uint8_t info;
+	uint32_t seqno;
+ 	Event *event;
 } Status;
 
 // typedef struct Status {
