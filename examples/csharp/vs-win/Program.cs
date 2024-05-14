@@ -294,10 +294,10 @@ class UhppotedDLLCLI
         WriteLine(Format("get-status ({0})", controller));
         WriteLine(Format("   ID              {0}", status.ID));
         WriteLine(Format("   timestamp       {0}", status.sysdatetime));
-//        WriteLine(Format("   doors[1]        {0}", status.doors[0]));
-//        WriteLine(Format("   doors[2]        {0}", status.doors[1]));
-//        WriteLine(Format("   doors[3]        {0}", status.doors[2]));
-//        WriteLine(Format("   doors[4]        {0}", status.doors[3]));
+        WriteLine(Format("   doors[1]        {0}", status.doors[0]));
+        WriteLine(Format("   doors[2]        {0}", status.doors[1]));
+        WriteLine(Format("   doors[3]        {0}", status.doors[2]));
+        WriteLine(Format("   doors[4]        {0}", status.doors[3]));
 //        WriteLine(Format("   buttons[1]      {0}", status.buttons[0]));
 //        WriteLine(Format("   buttons[2]      {0}", status.buttons[1]));
 //        WriteLine(Format("   buttons[3]      {0}", status.buttons[2]));

@@ -116,6 +116,8 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.ID = C.uint(12345678)
 
 	sysdatetime := unsafe.Slice(status.sysdatetime, 11)
+	doors := unsafe.Slice(status.doors, 4)
+
 	sysdatetime[0] = 0
 	sysdatetime[1] = 0
 	sysdatetime[2] = 0
@@ -127,6 +129,13 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	sysdatetime[8] = 0
 	sysdatetime[9] = 0
 	sysdatetime[10] = 0
+
+	fmt.Println("get-status:test ltsc.4#2")
+
+	doors[0] = 1
+	doors[1] = 0
+	doors[2] = 0
+	doors[3] = 1
 
 	fmt.Println("get-status:test ltsc.4#2")
 

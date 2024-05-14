@@ -119,19 +119,24 @@ public class Uhppoted : IDisposable {
 
         GoStatus status = new GoStatus();
         status.sysdatetime = Marshal.AllocHGlobal(11);
+        status.doors = Marshal.AllocHGlobal(4);
 
         string err = GetStatus(ref this.u, ref status, deviceID);
         if (err != null && err != "") {
             Marshal.FreeHGlobal(status.sysdatetime);
+            Marshal.FreeHGlobal(status.doors);
 
             throw new UhppotedException(err);
         }
 
         byte[] sysdatetime = new byte[11];
+        byte[] doors = new byte[4];
 
         Marshal.Copy(status.sysdatetime, sysdatetime, 0, 11);
+        Marshal.Copy(status.doors, doors, 0, 4);
 
         Marshal.FreeHGlobal(status.sysdatetime);
+        Marshal.FreeHGlobal(status.doors);
 
         return new Status(status.ID, sysdatetime);
     }
@@ -642,6 +647,7 @@ public class Uhppoted : IDisposable {
     struct GoStatus {
         public uint ID;
         public IntPtr sysdatetime;
+        public IntPtr doors;
     }
     
 //    struct GoStatus {
@@ -768,10 +774,12 @@ public class Event {
 public class Status {
     public uint ID;
     public string sysdatetime;
+    public bool[] doors;
 
-    public Status(uint ID, byte[] sysdatetime) {
+    public Status(uint ID, byte[] sysdatetime, bool[] doors) {
         this.ID = ID;
         this.sysdatetime = System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length);
+        this.doors = doors;
     }
 }
 
