@@ -13,7 +13,7 @@ import (
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-const DEBUG_TAG = "get-status:dll ltsc.7"
+const DEBUG_TAG = "get-status:dll ltsc.8"
 
 func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	if N == nil {
@@ -237,7 +237,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		status.eventReason = C.uchar(response.Event.Reason)
 	}
 
-	fmt.Println("get-status:dll DEBUG_TAG#9\n", DEBUG_TAG)
+	fmt.Printf("%v#9\n", DEBUG_TAG)
 
 	return nil
 }

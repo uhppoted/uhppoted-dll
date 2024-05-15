@@ -13,7 +13,7 @@ import (
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-const DEBUG_TAG = "get-status:debug ltsc.7"
+const DEBUG_TAG = "get-status:debug ltsc.8"
 
 func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	if N == nil {

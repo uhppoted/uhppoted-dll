@@ -14,7 +14,7 @@ import (
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-const DEBUG_TAG = "get-status:test ltsc.7"
+const DEBUG_TAG = "get-status:test ltsc.8"
 
 func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	if N == nil {
@@ -117,139 +117,141 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
 
-	fmt.Printf("%v#1\n", DEBUG_TAG)
+	return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 
-	status.ID = C.uint(12345678)
-
-	sysdatetime := unsafe.Slice(status.sysdatetime, 20)
-	doors := unsafe.Slice(status.doors, 4)
-	buttons := unsafe.Slice(status.buttons, 4)
-	timestamp := unsafe.Slice(status.eventTimestamp, 20)
-
-	{
-		s := "2022-03-19 15:48:32"
-		v := []byte(s)
-
-		sysdatetime[0] = C.uchar(v[0])
-		sysdatetime[1] = C.uchar(v[1])
-		sysdatetime[2] = C.uchar(v[2])
-		sysdatetime[3] = C.uchar(v[3])
-		sysdatetime[4] = C.uchar(v[4])
-		sysdatetime[5] = C.uchar(v[5])
-		sysdatetime[6] = C.uchar(v[6])
-		sysdatetime[7] = C.uchar(v[7])
-		sysdatetime[8] = C.uchar(v[8])
-		sysdatetime[9] = C.uchar(v[9])
-		sysdatetime[10] = C.uchar(v[10])
-		sysdatetime[11] = C.uchar(v[10])
-		sysdatetime[12] = C.uchar(v[10])
-		sysdatetime[13] = C.uchar(v[10])
-		sysdatetime[14] = C.uchar(v[10])
-		sysdatetime[15] = C.uchar(v[10])
-		sysdatetime[16] = C.uchar(v[10])
-		sysdatetime[17] = C.uchar(v[10])
-		sysdatetime[18] = C.uchar(v[18])
-		sysdatetime[19] = C.uchar(0)
-
-		fmt.Printf("%v#2\n", DEBUG_TAG)
-	}
-
-	doors[0] = 1
-	doors[1] = 0
-	doors[2] = 0
-	doors[3] = 1
-
-	fmt.Printf("%v#3\n", DEBUG_TAG)
-
-	buttons[0] = 1
-	buttons[1] = 0
-	buttons[2] = 1
-	buttons[3] = 0
-
-	fmt.Printf("%v#4\n", DEBUG_TAG)
-
-	status.relays = 0x12
-	status.inputs = 0x34
-
-	status.syserror = 0x56
-	status.info = 253
-	status.seqno = 9876
-
-	fmt.Printf("%v#5\n", DEBUG_TAG)
-
-	if deviceID == 405419896 {
-		fmt.Printf("%v#6\n", DEBUG_TAG)
-		s := "2022-01-02 12:34:56"
-		v := []byte(s)
-
-		timestamp[0] = C.uchar(v[0])
-		timestamp[1] = C.uchar(v[1])
-		timestamp[2] = C.uchar(v[2])
-		timestamp[3] = C.uchar(v[3])
-		timestamp[4] = C.uchar(v[4])
-		timestamp[5] = C.uchar(v[5])
-		timestamp[6] = C.uchar(v[6])
-		timestamp[7] = C.uchar(v[7])
-		timestamp[8] = C.uchar(v[8])
-		timestamp[9] = C.uchar(v[9])
-		timestamp[10] = C.uchar(v[10])
-		timestamp[11] = C.uchar(v[11])
-		timestamp[12] = C.uchar(v[12])
-		timestamp[13] = C.uchar(v[13])
-		timestamp[14] = C.uchar(v[14])
-		timestamp[15] = C.uchar(v[15])
-		timestamp[16] = C.uchar(v[16])
-		timestamp[17] = C.uchar(v[17])
-		timestamp[18] = C.uchar(v[18])
-		timestamp[19] = C.uchar(0)
-
-		status.eventIndex = 135
-		status.eventType = 0x06
-		status.eventGranted = 1
-		status.eventDoor = 3
-		status.eventDirection = 1
-		status.eventCard = 8100023
-		status.eventReason = 0x15
-	}
-
-	if deviceID == 303986753 {
-		fmt.Printf("%v#7\n", DEBUG_TAG)
-		s := ""
-		v := []byte(s)
-
-		timestamp[0] = C.uchar(v[0])
-		timestamp[1] = C.uchar(v[1])
-		timestamp[2] = C.uchar(v[2])
-		timestamp[3] = C.uchar(v[3])
-		timestamp[4] = C.uchar(v[4])
-		timestamp[5] = C.uchar(v[5])
-		timestamp[6] = C.uchar(v[6])
-		timestamp[7] = C.uchar(v[7])
-		timestamp[8] = C.uchar(v[8])
-		timestamp[9] = C.uchar(v[9])
-		timestamp[10] = C.uchar(v[10])
-		timestamp[11] = C.uchar(v[11])
-		timestamp[12] = C.uchar(v[12])
-		timestamp[13] = C.uchar(v[13])
-		timestamp[14] = C.uchar(v[14])
-		timestamp[15] = C.uchar(v[15])
-		timestamp[16] = C.uchar(v[16])
-		timestamp[17] = C.uchar(v[17])
-		timestamp[18] = C.uchar(v[18])
-		timestamp[19] = C.uchar(0)
-
-		status.eventIndex = 0
-		status.eventType = 0x00
-		status.eventGranted = 0
-		status.eventDoor = 0
-		status.eventDirection = 0
-		status.eventCard = 0
-		status.eventReason = 0x00
-	}
-
-	fmt.Printf("%v#8\n", DEBUG_TAG)
-
-	return nil
+	// fmt.Printf("%v#1\n", DEBUG_TAG)
+	//
+	// status.ID = C.uint(12345678)
+	//
+	// sysdatetime := unsafe.Slice(status.sysdatetime, 20)
+	// doors := unsafe.Slice(status.doors, 4)
+	// buttons := unsafe.Slice(status.buttons, 4)
+	// timestamp := unsafe.Slice(status.eventTimestamp, 20)
+	//
+	// {
+	// 	s := "2022-03-19 15:48:32"
+	// 	v := []byte(s)
+	//
+	// 	sysdatetime[0] = C.uchar(v[0])
+	// 	sysdatetime[1] = C.uchar(v[1])
+	// 	sysdatetime[2] = C.uchar(v[2])
+	// 	sysdatetime[3] = C.uchar(v[3])
+	// 	sysdatetime[4] = C.uchar(v[4])
+	// 	sysdatetime[5] = C.uchar(v[5])
+	// 	sysdatetime[6] = C.uchar(v[6])
+	// 	sysdatetime[7] = C.uchar(v[7])
+	// 	sysdatetime[8] = C.uchar(v[8])
+	// 	sysdatetime[9] = C.uchar(v[9])
+	// 	sysdatetime[10] = C.uchar(v[10])
+	// 	sysdatetime[11] = C.uchar(v[10])
+	// 	sysdatetime[12] = C.uchar(v[10])
+	// 	sysdatetime[13] = C.uchar(v[10])
+	// 	sysdatetime[14] = C.uchar(v[10])
+	// 	sysdatetime[15] = C.uchar(v[10])
+	// 	sysdatetime[16] = C.uchar(v[10])
+	// 	sysdatetime[17] = C.uchar(v[10])
+	// 	sysdatetime[18] = C.uchar(v[18])
+	// 	sysdatetime[19] = C.uchar(0)
+	//
+	// 	fmt.Printf("%v#2\n", DEBUG_TAG)
+	// }
+	//
+	// doors[0] = 1
+	// doors[1] = 0
+	// doors[2] = 0
+	// doors[3] = 1
+	//
+	// fmt.Printf("%v#3\n", DEBUG_TAG)
+	//
+	// buttons[0] = 1
+	// buttons[1] = 0
+	// buttons[2] = 1
+	// buttons[3] = 0
+	//
+	// fmt.Printf("%v#4\n", DEBUG_TAG)
+	//
+	// status.relays = 0x12
+	// status.inputs = 0x34
+	//
+	// status.syserror = 0x56
+	// status.info = 253
+	// status.seqno = 9876
+	//
+	// fmt.Printf("%v#5\n", DEBUG_TAG)
+	//
+	// if deviceID == 405419896 {
+	// 	fmt.Printf("%v#6\n", DEBUG_TAG)
+	// 	s := "2022-01-02 12:34:56"
+	// 	v := []byte(s)
+	//
+	// 	timestamp[0] = C.uchar(v[0])
+	// 	timestamp[1] = C.uchar(v[1])
+	// 	timestamp[2] = C.uchar(v[2])
+	// 	timestamp[3] = C.uchar(v[3])
+	// 	timestamp[4] = C.uchar(v[4])
+	// 	timestamp[5] = C.uchar(v[5])
+	// 	timestamp[6] = C.uchar(v[6])
+	// 	timestamp[7] = C.uchar(v[7])
+	// 	timestamp[8] = C.uchar(v[8])
+	// 	timestamp[9] = C.uchar(v[9])
+	// 	timestamp[10] = C.uchar(v[10])
+	// 	timestamp[11] = C.uchar(v[11])
+	// 	timestamp[12] = C.uchar(v[12])
+	// 	timestamp[13] = C.uchar(v[13])
+	// 	timestamp[14] = C.uchar(v[14])
+	// 	timestamp[15] = C.uchar(v[15])
+	// 	timestamp[16] = C.uchar(v[16])
+	// 	timestamp[17] = C.uchar(v[17])
+	// 	timestamp[18] = C.uchar(v[18])
+	// 	timestamp[19] = C.uchar(0)
+	//
+	// 	status.eventIndex = 135
+	// 	status.eventType = 0x06
+	// 	status.eventGranted = 1
+	// 	status.eventDoor = 3
+	// 	status.eventDirection = 1
+	// 	status.eventCard = 8100023
+	// 	status.eventReason = 0x15
+	// }
+	//
+	// if deviceID == 303986753 {
+	// 	fmt.Printf("%v#7\n", DEBUG_TAG)
+	// 	s := ""
+	// 	v := []byte(s)
+	//
+	// 	timestamp[0] = C.uchar(v[0])
+	// 	timestamp[1] = C.uchar(v[1])
+	// 	timestamp[2] = C.uchar(v[2])
+	// 	timestamp[3] = C.uchar(v[3])
+	// 	timestamp[4] = C.uchar(v[4])
+	// 	timestamp[5] = C.uchar(v[5])
+	// 	timestamp[6] = C.uchar(v[6])
+	// 	timestamp[7] = C.uchar(v[7])
+	// 	timestamp[8] = C.uchar(v[8])
+	// 	timestamp[9] = C.uchar(v[9])
+	// 	timestamp[10] = C.uchar(v[10])
+	// 	timestamp[11] = C.uchar(v[11])
+	// 	timestamp[12] = C.uchar(v[12])
+	// 	timestamp[13] = C.uchar(v[13])
+	// 	timestamp[14] = C.uchar(v[14])
+	// 	timestamp[15] = C.uchar(v[15])
+	// 	timestamp[16] = C.uchar(v[16])
+	// 	timestamp[17] = C.uchar(v[17])
+	// 	timestamp[18] = C.uchar(v[18])
+	// 	timestamp[19] = C.uchar(0)
+	//
+	// 	status.eventIndex = 0
+	// 	status.eventType = 0x00
+	// 	status.eventGranted = 0
+	// 	status.eventDoor = 0
+	// 	status.eventDirection = 0
+	// 	status.eventCard = 0
+	// 	status.eventReason = 0x00
+	// }
+	//
+	// fmt.Printf("%v#8\n", DEBUG_TAG)
+	//
+	// return nil
 }
 
 // func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {

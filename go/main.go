@@ -180,14 +180,23 @@ func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.c
 }
 
 //export GetStatus
-func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getStatus(uu, status, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, err *uint8) {
+	errx := unsafe.Slice(err, 257)
+
+	for i := 0; i < 257; i++ {
+		errx[i] = 0
 	}
 
-	return nil
+	if uu, err := makeUHPPOTE(u); err != nil {
+		N := copy(errx, []byte(err.Error()))
+		errx[N] = 0
+	} else if err := getStatus(uu, status, deviceID); err != nil {
+		N := copy(errx, []byte(err.Error()))
+		errx[N] = 0
+	} else {
+		N := copy(errx, []byte(""))
+		errx[N] = 0
+	}
 }
 
 //export GetTime

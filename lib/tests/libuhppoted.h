@@ -207,7 +207,7 @@ extern "C" {
 extern char* GetDevices(struct UHPPOTE* u, int* N, unsigned int* list);
 extern char* GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID);
 extern char* SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway);
-extern char* GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID);
+extern void GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, GoUint8* err);
 extern char* GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID);
 extern char* SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime);
 extern char* GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID);

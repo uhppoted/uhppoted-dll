@@ -131,25 +131,33 @@ namespace uhppoted
 
         public Status GetStatus(uint deviceID) 
         {
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7"));
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.8"));
 
+            IntPtr err = Marshal.AllocHGlobal(257);
             GoStatus status = new GoStatus();
             status.sysdatetime = Marshal.AllocHGlobal(20);
             status.doors = Marshal.AllocHGlobal(4);
             status.buttons = Marshal.AllocHGlobal(4);
             status.eventTimestamp = Marshal.AllocHGlobal(20);
 
-            string err = GetStatus(ref this.u, ref status, deviceID);
-            if (err != null && err != "") {
+            GetStatus(ref this.u, ref status, deviceID,err);
+
+            byte[] errx = new byte[257];
+            Marshal.Copy(err, errx, 0, 257);
+
+            if (errx[0] != 0) {
+            string error = System.Text.Encoding.UTF8.GetString(errx, 0, errx.Length);
+
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
                 Marshal.FreeHGlobal(status.eventTimestamp);
+                Marshal.FreeHGlobal(err);
 
-                throw new UhppotedException(err);
+                throw new UhppotedException(error);
             }
 
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#1"));
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.8#1"));
 
             byte[] sysdatetime = new byte[20];
             byte[] doors = new byte[4];
@@ -178,19 +186,9 @@ namespace uhppoted
             Marshal.FreeHGlobal(status.doors);
             Marshal.FreeHGlobal(status.buttons);
             Marshal.FreeHGlobal(status.eventTimestamp);
+            Marshal.FreeHGlobal(err);
 
             WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4"));
-
-            byte relays = status.relays;
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.1"));
-            byte inputs = status.inputs;
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.2"));
-            byte syserror = status.syserror;
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.3"));
-            byte info = status.info;
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.4"));
-            uint seqno = status.seqno;
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.5"));
 
             return new Status(status.ID, 
                               System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length),
@@ -206,11 +204,11 @@ namespace uhppoted
                                   buttons[2] == 1,
                                   buttons[3] == 1,
                               },
-                              relays,
-                              inputs,
-                              syserror,
-                              info,
-                              seqno,
+                              status.relays,
+                              status.inputs,
+                              status.syserror,
+                              status.info,
+                              status.seqno,
                               e);
         }
 
@@ -646,7 +644,7 @@ namespace uhppoted
         private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
+        private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err);
 
         [DllImport("libuhppoted.dylib")]
         private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
