@@ -115,49 +115,69 @@ public class Uhppoted : IDisposable {
     }
 
     public Status GetStatus(uint deviceID) {
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.6"));
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7"));
 
             GoStatus status = new GoStatus();
             status.sysdatetime = Marshal.AllocHGlobal(20);
             status.doors = Marshal.AllocHGlobal(4);
             status.buttons = Marshal.AllocHGlobal(4);
-            status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
+            status.eventTimestamp = Marshal.AllocHGlobal(20);
 
             string err = GetStatus(ref this.u, ref status, deviceID);
             if (err != null && err != "") {
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
-                Marshal.FreeHGlobal(status.evt);
+                Marshal.FreeHGlobal(status.eventTimestamp);
 
                 throw new UhppotedException(err);
             }
 
-            byte[] sysdatetime = new byte[11];
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#1"));
+
+            byte[] sysdatetime = new byte[20];
             byte[] doors = new byte[4];
             byte[] buttons = new byte[4];
-
-            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
+            byte[] timestamp = new byte[20];
 
             Marshal.Copy(status.sysdatetime, sysdatetime, 0, 20);
             Marshal.Copy(status.doors, doors, 0, 4);
             Marshal.Copy(status.buttons, buttons, 0, 4);
+            Marshal.Copy(status.sysdatetime, timestamp, 0, 20);
 
-            Event e = new Event(evt.index,
-                                evt.eventType,
-                                evt.granted != 0,
-                                evt.door,
-                                evt.direction,
-                                evt.card,
-                                evt.reason);
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#2"));
+            
+            Event e = new Event(System.Text.Encoding.UTF8.GetString(timestamp, 0, timestamp.Length),
+                                status.eventIndex,
+                                status.eventType,
+                                status.eventGranted != 0,
+                                status.eventDoor,
+                                status.eventDirection,
+                                status.eventCard,
+                                status.eventReason);
+
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#3"));
 
             Marshal.FreeHGlobal(status.sysdatetime);
             Marshal.FreeHGlobal(status.doors);
             Marshal.FreeHGlobal(status.buttons);
-            Marshal.FreeHGlobal(status.evt);
+            Marshal.FreeHGlobal(status.eventTimestamp);
+
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4"));
+
+            byte relays = status.relays;
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.1"));
+            byte inputs = status.inputs;
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.2"));
+            byte syserror = status.syserror;
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.3"));
+            byte info = status.info;
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.4"));
+            uint seqno = status.seqno;
+            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4.5"));
 
             return new Status(status.ID, 
-                              sysdatetime,
+                              System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length),
                               new bool[] {
                                   doors[0] == 1,
                                   doors[1] == 1,
@@ -170,13 +190,12 @@ public class Uhppoted : IDisposable {
                                   buttons[2] == 1,
                                   buttons[3] == 1,
                               },
-                              status.relays,
-                              status.inputs,
-                              status.syserror,
-                              status.info,
-                              status.seqno,
+                              relays,
+                              inputs,
+                              syserror,
+                              info,
+                              seqno,
                               e);
-                        );
     }
 
 //    public Status GetStatus(uint deviceID) {
@@ -396,7 +415,8 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new Event(evt.index,
+        return new Event(evt.timestamp,
+                         evt.index,
                          evt.eventType,
                          evt.granted == 1,
                          evt.door,
@@ -671,7 +691,7 @@ public class Uhppoted : IDisposable {
     }
 
     struct GoEvent {
-        // public string timestamp;
+        public string timestamp;
         public uint index;
         public byte eventType;
         public byte granted;
@@ -686,6 +706,19 @@ public class Uhppoted : IDisposable {
         public IntPtr sysdatetime;
         public IntPtr doors;
         public IntPtr buttons;
+        public byte   relays;
+        public byte   inputs;
+        public byte   syserror;
+        public byte   info;
+        public uint   seqno;
+        public IntPtr eventTimestamp;
+        public uint   eventIndex;
+        public byte   eventType;
+        public byte   eventGranted;
+        public byte   eventDoor;
+        public byte   eventDirection;
+        public uint   eventCard;
+        public byte   eventReason;
     }
     
 //    struct GoStatus {
@@ -787,7 +820,7 @@ public class Device {
 }
 
 public class Event {
-    // public string timestamp;
+    public string timestamp;
     public uint index;
     public byte eventType;
     public bool granted;
@@ -796,9 +829,9 @@ public class Event {
     public uint card;
     public byte reason;
 
-    public Event(uint index, byte eventType, bool granted,
+    public Event(string timestamp, uint index, byte eventType, bool granted,
                  byte door, byte direction, uint card, byte reason) {
-        // this.timestamp = timestamp;
+        this.timestamp = timestamp;
         this.index = index;
         this.eventType = eventType;
         this.granted = granted;
@@ -822,12 +855,12 @@ public class Status {
     public Event evt;
 
     public Status(uint ID, 
-                  byte[] sysdatetime, 
+                  string sysdatetime, 
                   bool[] doors, bool[] buttons, byte relays, byte inputs, 
                   byte syserror, byte info, uint seqno,
                   Event evt) {
         this.ID = ID;
-        this.sysdatetime = System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length);
+        this.sysdatetime = sysdatetime;
         this.doors = doors;
         this.buttons = buttons;
         this.relays = relays;
