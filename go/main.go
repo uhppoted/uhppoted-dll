@@ -538,7 +538,7 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 					} else {
 						devices = append(devices, uhppote.Device{
 							DeviceID: uint32(d.id),
-							Address:  &addr.AddrPort,
+							Address:  addr.AddrPort,
 							Protocol: "udp",
 						})
 					}
