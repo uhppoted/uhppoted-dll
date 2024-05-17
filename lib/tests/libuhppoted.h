@@ -193,8 +193,8 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errx);
-extern char* GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID);
+extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg);
+extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg);
 extern char* SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway);
 extern void GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, GoUint8* err);
 extern char* GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID);

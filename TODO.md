@@ -3,6 +3,7 @@
 - [ ] Rework to use preallocated strings and errors (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
       - [x] cerror
       - [x] get-devices
+      - [ ] `possible null reference`
 
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)

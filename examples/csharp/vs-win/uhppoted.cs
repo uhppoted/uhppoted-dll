@@ -76,43 +76,45 @@ public class Uhppoted : IDisposable {
             int count = N;
             uint[] slice;
 
-            do {
-                N += 16;
-                count = N;
-                slice = new uint[N];
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                do {
+                    N += 16;
+                    count = N;
+                    slice = new uint[N];
                 
-                IntPtr errmsg = Marshal.AllocHGlobal(256);
-                int errno = GetDevices(ref this.u, ref count, slice, errmsg);
+                    if (GetDevices(ref this.u, ref count, slice, errmsg) != 0) {
+                        throw new UhppotedException(Marshal.PtrToStringAnsi(errmsg));
+                    }
+                } while (N < count);
 
-                if (errno != 0) {
-                    string error = Marshal.PtrToStringAnsi(errmsg);
+                uint[] list = new uint[count];
 
-                    Marshal.FreeHGlobal(errmsg);
-                    
-                    throw new UhppotedException(error);
+                Array.Copy(slice, list, list.Length);
+
+                return list;
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
+        }
+
+        public Device GetDevice(uint deviceID) {
+            GoDevice device = new GoDevice();
+
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (GetDevice(ref this.u, ref device, deviceID, errmsg) != 0) {
+                    throw new UhppotedException(Marshal.PtrToStringAnsi(errmsg));
                 }
 
-                Marshal.FreeHGlobal(errmsg);
-            } while (N < count);
+                return new Device(device.ID, device.address, device.subnet, device.gateway, device.MAC, device.version, device.date);
 
-            uint[] list = new uint[count];
-
-            Array.Copy(slice, list, list.Length);
-
-            return list;
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
         }
-
-    public Device GetDevice(uint deviceID) {
-        GoDevice device = new GoDevice();
-
-        string err = GetDevice(ref this.u, ref device, deviceID);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
-        }
-
-        return new Device(device.ID, device.address, device.subnet, device.gateway,
-                          device.MAC, device.version, device.date);
-    }
 
     public void SetAddress(uint deviceID, string address, string subnet,
                            string gateway) {
@@ -203,64 +205,6 @@ public class Uhppoted : IDisposable {
                               status.seqno,
                               e);
     }
-
-//    public Status GetStatus(uint deviceID) {
-//        GoStatus status = new GoStatus();
-//
-//        status.doors = Marshal.AllocHGlobal(4);
-//        status.buttons = Marshal.AllocHGlobal(4);
-//        status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
-//
-//        string err = GetStatus(ref this.u, ref status, deviceID);
-//        if (err != null && err != "") {
-//            Marshal.FreeHGlobal(status.doors);
-//            Marshal.FreeHGlobal(status.buttons);
-//            Marshal.FreeHGlobal(status.evt);
-//
-//            throw new UhppotedException(err);
-//        }
-//
-//        byte[] doors = new byte[4];
-//        byte[] buttons = new byte[4];
-//        GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
-//
-//        Marshal.Copy(status.doors, doors, 0, 4);
-//        Marshal.Copy(status.buttons, buttons, 0, 4);
-//
-//        Event e = new Event(evt.timestamp,
-//                            evt.index,
-//                            evt.eventType,
-//                            evt.granted != 0,
-//                            evt.door,
-//                            evt.direction,
-//                            evt.card,
-//                            evt.reason);
-//
-//        Marshal.FreeHGlobal(status.doors);
-//        Marshal.FreeHGlobal(status.buttons);
-//        Marshal.FreeHGlobal(status.evt);
-//
-//        return new Status(status.ID,
-//                          status.sysdatetime,
-//                          new bool[] {
-//                              doors[0] == 1,
-//                              doors[1] == 1,
-//                              doors[2] == 1,
-//                              doors[3] == 1,
-//                          },
-//                          new bool[] {
-//                              buttons[0] == 1,
-//                              buttons[1] == 1,
-//                              buttons[2] == 1,
-//                              buttons[3] == 1,
-//                          },
-//                          status.relays,
-//                          status.inputs,
-//                          status.syserror,
-//                          status.info,
-//                          status.seqno,
-//                          e);
-//    }
 
     public string GetTime(uint deviceID) {
         string datetime = "";
@@ -574,7 +518,7 @@ public class Uhppoted : IDisposable {
     private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr errmsg);
 
     [DllImport("uhppoted.dll")]
-    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
+    private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr errmsg);
 
     [DllImport("uhppoted.dll")]
     private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
@@ -727,19 +671,6 @@ public class Uhppoted : IDisposable {
         public byte   eventReason;
     }
     
-//    struct GoStatus {
-//        public uint ID;
-//        public string sysdatetime;
-//        public IntPtr doors;
-//        public IntPtr buttons;
-//        public byte relays;
-//        public byte inputs;
-//        public byte syserror;
-//        public byte info;
-//        public uint seqno;
-//        public IntPtr evt;
-//    }
-
     struct GoDoorControl {
         public byte control;
         public byte delay;

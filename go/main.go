@@ -136,25 +136,25 @@ var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
 func main() {}
 
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errx *C.char) C.int {
+func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errmsg *C.char) C.int {
 	if uu, err := makeUHPPOTE(u); err != nil {
-		return cerror(1001, err, errx)
+		return cerror(1001, err, errmsg)
 	} else if err := getDevices(uu, N, list); err != nil {
-		return cerror(2002, err, errx)
-	} else {
-		return cerror(0, nil, errx)
+		return cerror(2002, err, errmsg)
 	}
+
+	return cerror(0, nil, errmsg)
 }
 
 //export GetDevice
-func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32) *C.char {
+func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, errmsg *C.char) C.int {
 	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
+		return cerror(1001, err, errmsg)
 	} else if err := getDevice(uu, device, deviceID); err != nil {
-		return C.CString(err.Error())
+		return cerror(2002, err, errmsg)
 	}
 
-	return nil
+	return cerror(0, nil, errmsg)
 }
 
 //export SetAddress
@@ -679,13 +679,17 @@ func makeTask(task *C.struct_Task) (*types.Task, error) {
 	return &t, nil
 }
 
-func cerror(errno int, err error, errx *C.char) C.int {
-	if errx != nil && err != nil {
+func cerror(errno int, err error, errmsg *C.char) C.int {
+	if errmsg != nil && err != nil {
+		if s := err.Error(); len(s) > 250 {
+			s = s[:250]
+		}
+
 		v := C.CString(err.Error())
 
 		defer C.free(unsafe.Pointer(v))
 
-		C.strcpy(errx, v)
+		C.strncpy(errmsg, v, 255)
 	}
 
 	return C.int(errno)

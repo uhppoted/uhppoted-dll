@@ -84,44 +84,44 @@ namespace uhppoted
             int count = N;
             uint[] slice;
 
-            do {
-                N += 16;
-                count = N;
-                slice = new uint[N];
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                do {
+                    N += 16;
+                    count = N;
+                    slice = new uint[N];
                 
-                IntPtr errmsg = Marshal.AllocHGlobal(256);
-                int errno = GetDevices(ref this.u, ref count, slice, errmsg);
+                    if (GetDevices(ref this.u, ref count, slice, errmsg) != 0) {
+                        throw new UhppotedException(Marshal.PtrToStringAnsi(errmsg));
+                    }
+                } while (N < count);
 
-                if (errno != 0) {
-                    string error = Marshal.PtrToStringAnsi(errmsg);
+                uint[] list = new uint[count];
 
-                    Marshal.FreeHGlobal(errmsg);
-                    
-                    throw new UhppotedException(error);
-                }
+                Array.Copy(slice, list, list.Length);
 
-                Marshal.FreeHGlobal(errmsg);
-            } while (N < count);
-
-            uint[] list = new uint[count];
-
-            Array.Copy(slice, list, list.Length);
-
-            return list;
+                return list;
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
         }
 
-        public Device GetDevice(uint deviceID)
-        {
+        public Device GetDevice(uint deviceID) {
             GoDevice device = new GoDevice();
 
-            string err = GetDevice(ref this.u, ref device, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
 
-            return new Device(device.ID, device.address, device.subnet, device.gateway,
-                              device.MAC, device.version, device.date);
+            try {
+                if (GetDevice(ref this.u, ref device, deviceID, errmsg) != 0) {
+                    throw new UhppotedException(Marshal.PtrToStringAnsi(errmsg));
+                }
+
+                return new Device(device.ID, device.address, device.subnet, device.gateway, device.MAC, device.version, device.date);
+
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
         }
 
         public void SetAddress(uint deviceID, string address, string subnet,
@@ -581,10 +581,10 @@ namespace uhppoted
         // Go FFI
 
         [DllImport("libuhppoted.dylib")]
-        private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err);
+        private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
+        private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
         private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
@@ -890,36 +890,6 @@ namespace uhppoted
             this.evt = evt;
         }
     }
-
-//    public class Status
-//    {
-//        public uint ID;
-//        public string sysdatetime;
-//        public bool[] doors;
-//        public bool[] buttons;
-//        public byte relays;
-//        public byte inputs;
-//        public byte syserror;
-//        public byte info;
-//        public uint seqno;
-//        public Event evt;
-//
-//        public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons,
-//                      byte relays, byte inputs, byte syserror, byte info, uint seqno,
-//                      Event evt)
-//        {
-//            this.ID = ID;
-//            this.sysdatetime = sysdatetime;
-//            this.doors = doors;
-//            this.buttons = buttons;
-//            this.relays = relays;
-//            this.inputs = inputs;
-//            this.syserror = syserror;
-//            this.info = info;
-//            this.seqno = seqno;
-//            this.evt = evt;
-//        }
-//    }
 
     public class DoorControl
     {
