@@ -71,28 +71,36 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public uint[] GetDevices() {
-        int N = 0;
-        int count = N;
-        uint[] slice;
+        public uint[] GetDevices() {
+            int N = 0;
+            int count = N;
+            uint[] slice;
 
-        do {
-            N += 16;
-            count = N;
-            slice = new uint[N];
+            do {
+                N += 16;
+                count = N;
+                slice = new uint[N];
+                
+                IntPtr errmsg = Marshal.AllocHGlobal(256);
+                int errno = GetDevices(ref this.u, ref count, slice, errmsg);
 
-            string err = GetDevices(ref this.u, ref count, slice);
-            if (err != null && err != "") {
-                throw new UhppotedException(err);
-            }
-        } while (N < count);
+                if (errno != 0) {
+                    string error = Marshal.PtrToStringAnsi(errmsg);
 
-        uint[] list = new uint[count];
+                    Marshal.FreeHGlobal(errmsg);
+                    
+                    throw new UhppotedException(error);
+                }
 
-        Array.Copy(slice, list, list.Length);
+                Marshal.FreeHGlobal(errmsg);
+            } while (N < count);
 
-        return list;
-    }
+            uint[] list = new uint[count];
+
+            Array.Copy(slice, list, list.Length);
+
+            return list;
+        }
 
     public Device GetDevice(uint deviceID) {
         GoDevice device = new GoDevice();
@@ -563,7 +571,7 @@ public class Uhppoted : IDisposable {
     // Go FFI
 
     [DllImport("uhppoted.dll")]
-    private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
+    private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr errmsg);
 
     [DllImport("uhppoted.dll")]
     private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);

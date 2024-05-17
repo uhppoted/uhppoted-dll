@@ -1,5 +1,10 @@
 # TODO
 
+- [ ] Rework to use preallocated strings and errors (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
+      - [x] cerror
+      - [x] get-devices
+
+
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)

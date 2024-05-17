@@ -1,8 +1,10 @@
 package main
 
 /*
+#include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 typedef struct udevice {
 	uint32_t    id;
@@ -64,19 +66,6 @@ typedef struct Status {
 	uint32_t  eventCard;
 	uint8_t   eventReason;
 } Status;
-
-// typedef struct Status {
-//     uint32_t ID;
-// 	   char *sysdatetime;
-// 	   uint8_t  *doors;   // uint_8[4]
-// 	   uint8_t  *buttons; // uint_8[4]
-// 	   uint8_t relays;
-// 	   uint8_t inputs;
-// 	   uint8_t syserror;
-// 	   uint8_t info;
-// 	   uint32_t seqno;
-// 	   Event *event;
-// } Status;
 
 typedef struct DoorControl {
     uint8_t mode;
@@ -147,14 +136,14 @@ var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
 func main() {}
 
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
+func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errx *C.char) C.int {
 	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
+		return cerror(1001, err, errx)
 	} else if err := getDevices(uu, N, list); err != nil {
-		return C.CString(err.Error())
+		return cerror(2002, err, errx)
+	} else {
+		return cerror(0, nil, errx)
 	}
-
-	return nil
 }
 
 //export GetDevice
@@ -688,6 +677,18 @@ func makeTask(task *C.struct_Task) (*types.Task, error) {
 	}
 
 	return &t, nil
+}
+
+func cerror(errno int, err error, errx *C.char) C.int {
+	if errx != nil && err != nil {
+		v := C.CString(err.Error())
+
+		defer C.free(unsafe.Pointer(v))
+
+		C.strcpy(errx, v)
+	}
+
+	return C.int(errno)
 }
 
 func cbool(b bool) C.uchar {

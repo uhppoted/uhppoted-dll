@@ -79,23 +79,28 @@ namespace uhppoted
             }
         }
 
-        public uint[] GetDevices()
-        {
+        public uint[] GetDevices() {
             int N = 0;
             int count = N;
             uint[] slice;
 
-            do
-            {
+            do {
                 N += 16;
                 count = N;
                 slice = new uint[N];
+                
+                IntPtr errmsg = Marshal.AllocHGlobal(256);
+                int errno = GetDevices(ref this.u, ref count, slice, errmsg);
 
-                string err = GetDevices(ref this.u, ref count, slice);
-                if (err != null && err != "")
-                {
-                    throw new UhppotedException(err);
+                if (errno != 0) {
+                    string error = Marshal.PtrToStringAnsi(errmsg);
+
+                    Marshal.FreeHGlobal(errmsg);
+                    
+                    throw new UhppotedException(error);
                 }
+
+                Marshal.FreeHGlobal(errmsg);
             } while (N < count);
 
             uint[] list = new uint[count];
@@ -212,66 +217,7 @@ namespace uhppoted
                               e);
         }
 
-//    public Status GetStatus(uint deviceID) {
-//        GoStatus status = new GoStatus();
-//
-//        status.doors = Marshal.AllocHGlobal(4);
-//        status.buttons = Marshal.AllocHGlobal(4);
-//        status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
-//
-//        string err = GetStatus(ref this.u, ref status, deviceID);
-//        if (err != null && err != "") {
-//            Marshal.FreeHGlobal(status.doors);
-//            Marshal.FreeHGlobal(status.buttons);
-//            Marshal.FreeHGlobal(status.evt);
-//
-//            throw new UhppotedException(err);
-//        }
-//
-//        byte[] doors = new byte[4];
-//        byte[] buttons = new byte[4];
-//        GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
-//
-//        Marshal.Copy(status.doors, doors, 0, 4);
-//        Marshal.Copy(status.buttons, buttons, 0, 4);
-//
-//        Event e = new Event(evt.timestamp,
-//                            evt.index,
-//                            evt.eventType,
-//                            evt.granted != 0,
-//                            evt.door,
-//                            evt.direction,
-//                            evt.card,
-//                            evt.reason);
-//
-//        Marshal.FreeHGlobal(status.doors);
-//        Marshal.FreeHGlobal(status.buttons);
-//        Marshal.FreeHGlobal(status.evt);
-//
-//        return new Status(status.ID,
-//                          status.sysdatetime,
-//                          new bool[] {
-//                              doors[0] == 1,
-//                              doors[1] == 1,
-//                              doors[2] == 1,
-//                              doors[3] == 1,
-//                          },
-//                          new bool[] {
-//                              buttons[0] == 1,
-//                              buttons[1] == 1,
-//                              buttons[2] == 1,
-//                              buttons[3] == 1,
-//                          },
-//                          status.relays,
-//                          status.inputs,
-//                          status.syserror,
-//                          status.info,
-//                          status.seqno,
-//                          e);
-//    }
-
-        public string GetTime(uint deviceID)
-        {
+        public string GetTime(uint deviceID) {
             string datetime = "";
 
             string err = GetTime(ref this.u, ref datetime, deviceID);
@@ -635,7 +581,7 @@ namespace uhppoted
         // Go FFI
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
+        private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err);
 
         [DllImport("libuhppoted.dylib")]
         private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
@@ -796,18 +742,6 @@ namespace uhppoted
             public byte   eventReason;
       }
     
-//    struct GoStatus {
-//        public uint ID;
-//        public string sysdatetime;
-//        public IntPtr doors;
-//        public IntPtr buttons;
-//        public byte relays;
-//        public byte inputs;
-//        public byte syserror;
-//        public byte info;
-//        public uint seqno;
-//        public IntPtr evt;
-//    }
         struct GoDoorControl
         {
             public byte control;

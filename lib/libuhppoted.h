@@ -21,8 +21,10 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 #line 3 "main.go"
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 
 typedef struct udevice {
 	uint32_t    id;
@@ -84,19 +86,6 @@ typedef struct Status {
 	uint32_t  eventCard;
 	uint8_t   eventReason;
 } Status;
-
-// typedef struct Status {
-//     uint32_t ID;
-// 	   char *sysdatetime;
-// 	   uint8_t  *doors;   // uint_8[4]
-// 	   uint8_t  *buttons; // uint_8[4]
-// 	   uint8_t relays;
-// 	   uint8_t inputs;
-// 	   uint8_t syserror;
-// 	   uint8_t info;
-// 	   uint32_t seqno;
-// 	   Event *event;
-// } Status;
 
 typedef struct DoorControl {
     uint8_t mode;
@@ -204,7 +193,7 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern char* GetDevices(struct UHPPOTE* u, int* N, unsigned int* list);
+extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errx);
 extern char* GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID);
 extern char* SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway);
 extern void GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, GoUint8* err);
