@@ -135,349 +135,305 @@ var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
 
 func main() {}
 
-//export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errmsg *C.char) C.int {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return cerror(1001, err, errmsg)
-	} else if err := getDevices(uu, N, list); err != nil {
-		return cerror(2002, err, errmsg)
+func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, errmsg *C.char) C.int {
+	g := func() error {
+		if uu, err := makeUHPPOTE(u); err != nil {
+			return err
+		} else if err := f(uu); err != nil {
+			return err
+		} else {
+			return nil
+		}
 	}
 
-	return cerror(0, nil, errmsg)
+	if err := g(); err != nil {
+		s := C.CString(ellipsize(err))
+
+		C.strncpy(errmsg, s, 256)
+		C.free(unsafe.Pointer(s))
+
+		return -1
+	}
+
+	return 0
+}
+
+func ellipsize(err error) string {
+	if s := err.Error(); len(s) > 255 {
+		return s[:255]
+	} else {
+		return s
+	}
+}
+
+//export GetDevices
+func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getDevices(uu, N, list)
+	}
+
+	return exec(u, f, errmsg)
 }
 
 //export GetDevice
 func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, errmsg *C.char) C.int {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return cerror(1001, err, errmsg)
-	} else if err := getDevice(uu, device, deviceID); err != nil {
-		return cerror(2002, err, errmsg)
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getDevice(uu, device, deviceID)
 	}
 
-	return cerror(0, nil, errmsg)
+	return exec(u, f, errmsg)
 }
 
 //export SetAddress
-func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.char) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setAddress(uu, deviceID, addr, subnet, gateway); err != nil {
-		return C.CString(err.Error())
+func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.char, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setAddress(uu, deviceID, addr, subnet, gateway)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetStatus
-func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, err *uint8) {
-	errx := unsafe.Slice(err, 257)
-
-	for i := 0; i < 257; i++ {
-		errx[i] = 0
+func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getStatus(uu, status, deviceID)
 	}
 
-	if uu, err := makeUHPPOTE(u); err != nil {
-		N := copy(errx, []byte(err.Error()))
-		errx[N] = 0
-	} else if err := getStatus(uu, status, deviceID); err != nil {
-		N := copy(errx, []byte(err.Error()))
-		errx[N] = 0
-	} else {
-		N := copy(errx, []byte(""))
-		errx[N] = 0
-	}
+	return exec(u, f, errmsg)
 }
 
 //export GetTime
-func GetTime(u *C.struct_UHPPOTE, datetime **C.char, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getTime(uu, datetime, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetTime(u *C.struct_UHPPOTE, datetime **C.char, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getTime(uu, datetime, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export SetTime
-func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.char) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setTime(uu, deviceID, datetime); err != nil {
-		return C.CString(err.Error())
+func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.char, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setTime(uu, deviceID, datetime)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetListener
-func GetListener(u *C.struct_UHPPOTE, address **C.char, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getListener(uu, address, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetListener(u *C.struct_UHPPOTE, address **C.char, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getListener(uu, address, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export SetListener
-func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.char) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setListener(uu, deviceID, listener); err != nil {
-		return C.CString(err.Error())
+func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.char, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setListener(uu, deviceID, listener)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetDoorControl
-func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getDoorControl(uu, control, deviceID, door); err != nil {
-		return C.CString(err.Error())
+func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getDoorControl(uu, control, deviceID, door)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export SetDoorControl
-func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8, delay uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setDoorControl(uu, deviceID, door, types.ControlState(mode), delay); err != nil {
-		return C.CString(err.Error())
+func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8, delay uint8, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setDoorControl(uu, deviceID, door, types.ControlState(mode), delay)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export OpenDoor
-func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := openDoor(uu, deviceID, door); err != nil {
-		return C.CString(err.Error())
+func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return openDoor(uu, deviceID, door)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetCards
-func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getCards(uu, N, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getCards(uu, N, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetCard
-func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getCard(uu, card, deviceID, cardNumber); err != nil {
-		return C.CString(err.Error())
+func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getCard(uu, card, deviceID, cardNumber)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetCardByIndex
-func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getCardByIndex(uu, card, deviceID, index); err != nil {
-		return C.CString(err.Error())
+func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getCardByIndex(uu, card, deviceID, index)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export PutCard
-func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := putCard(uu, deviceID, cardNumber, from, to, doors, PIN); err != nil {
-		return C.CString(err.Error())
+func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return putCard(uu, deviceID, cardNumber, from, to, doors, PIN)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export DeleteCard
-func DeleteCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := deleteCard(uu, deviceID, cardNumber); err != nil {
-		return C.CString(err.Error())
+func DeleteCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return deleteCard(uu, deviceID, cardNumber)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export DeleteCards
-func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := deleteCards(uu, deviceID); err != nil {
-		return C.CString(err.Error())
+func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return deleteCards(uu, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetEventIndex
-func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getEventIndex(uu, index, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getEventIndex(uu, index, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export SetEventIndex
-func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setEventIndex(uu, deviceID, index); err != nil {
-		return C.CString(err.Error())
+func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setEventIndex(uu, deviceID, index)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetEvent
-func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getEvent(uu, event, deviceID, index); err != nil {
-		return C.CString(err.Error())
+func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getEvent(uu, event, deviceID, index)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export RecordSpecialEvents
-func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := recordSpecialEvents(uu, deviceID, enabled); err != nil {
-		return C.CString(err.Error())
+func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return recordSpecialEvents(uu, deviceID, enabled)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export GetTimeProfile
-func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getTimeProfile(uu, profile, deviceID, profileID); err != nil {
-		return C.CString(err.Error())
+func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getTimeProfile(uu, profile, deviceID, profileID)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export SetTimeProfile
-func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setTimeProfile(uu, deviceID, profile); err != nil {
-		return C.CString(err.Error())
+func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setTimeProfile(uu, deviceID, profile)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export ClearTimeProfiles
-func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := clearTimeProfiles(uu, deviceID); err != nil {
-		return C.CString(err.Error())
+func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return clearTimeProfiles(uu, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export AddTask
-func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := addTask(uu, deviceID, task); err != nil {
-		return C.CString(err.Error())
+func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return addTask(uu, deviceID, task)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export RefreshTaskList
-func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
-		return C.CString(err.Error())
+func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return refreshTaskList(uu, deviceID)
 	}
 
-	if err := refreshTaskList(uu, deviceID); err != nil {
-		return C.CString(err.Error())
-	}
-
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export ClearTaskList
-func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
-		return C.CString(err.Error())
+func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return clearTaskList(uu, deviceID)
 	}
 
-	if err := clearTaskList(uu, deviceID); err != nil {
-		return C.CString(err.Error())
-	}
-
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export SetPCControl
-func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setPCControl(uu, controller, enabled); err != nil {
-		return C.CString(err.Error())
+func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setPCControl(uu, controller, enabled)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export SetInterlock
-func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setInterlock(uu, controller, interlock); err != nil {
-		return C.CString(err.Error())
+func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setInterlock(uu, controller, interlock)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 //export ActivateKeypads
-func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := activateKeypads(uu, controller, reader1, reader2, reader3, reader4); err != nil {
-		return C.CString(err.Error())
+func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return activateKeypads(uu, controller, reader1, reader2, reader3, reader4)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 // Sets the supervisor passcodes for a door managed by the controller.
@@ -486,27 +442,23 @@ func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, r
 // a 0 (no code).
 //
 //export SetDoorPasscodes
-func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4); err != nil {
-		return C.CString(err.Error())
+func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 // Resets a controller to the manufacturer default configuration.
 //
 //export RestoreDefaultParameters
-func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := restoreDefaultParameters(uu, controller); err != nil {
-		return C.CString(err.Error())
+func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32, errmsg *C.char) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return restoreDefaultParameters(uu, controller)
 	}
 
-	return nil
+	return exec(u, f, errmsg)
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
@@ -677,22 +629,6 @@ func makeTask(task *C.struct_Task) (*types.Task, error) {
 	}
 
 	return &t, nil
-}
-
-func cerror(errno int, err error, errmsg *C.char) C.int {
-	if errmsg != nil && err != nil {
-		if s := err.Error(); len(s) > 250 {
-			s = s[:250]
-		}
-
-		v := C.CString(err.Error())
-
-		defer C.free(unsafe.Pointer(v))
-
-		C.strncpy(errmsg, v, 255)
-	}
-
-	return C.int(errno)
 }
 
 func cbool(b bool) C.uchar {

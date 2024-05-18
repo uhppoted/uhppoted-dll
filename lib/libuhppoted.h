@@ -195,45 +195,45 @@ extern "C" {
 
 extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg);
 extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg);
-extern char* SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway);
-extern void GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, GoUint8* err);
-extern char* GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID);
-extern char* SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime);
-extern char* GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID);
-extern char* SetListener(struct UHPPOTE* u, GoUint32 deviceID, char* listener);
-extern char* GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door);
-extern char* SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay);
-extern char* OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door);
-extern char* GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID);
-extern char* GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber);
-extern char* GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index);
-extern char* PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, char* from, char* to, GoUint8* doors, GoUint32 PIN);
-extern char* DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber);
-extern char* DeleteCards(struct UHPPOTE* u, GoUint32 deviceID);
-extern char* GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID);
-extern char* SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index);
-extern char* GetEvent(struct UHPPOTE* u, struct Event* event, GoUint32 deviceID, GoUint32 index);
-extern char* RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled);
-extern char* GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID);
-extern char* SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile);
-extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);
-extern char* AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task);
-extern char* RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID);
-extern char* ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID);
-extern char* SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled);
-extern char* SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock);
-extern char* ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4);
+extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway, char* errmsg);
+extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, char* errmsg);
+extern int GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID, char* errmsg);
+extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime, char* errmsg);
+extern int GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID, char* errmsg);
+extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, char* listener, char* errmsg);
+extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door, char* errmsg);
+extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, char* errmsg);
+extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, char* errmsg);
+extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, char* errmsg);
+extern int GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber, char* errmsg);
+extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index, char* errmsg);
+extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, char* from, char* to, GoUint8* doors, GoUint32 PIN, char* errmsg);
+extern int DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, char* errmsg);
+extern int DeleteCards(struct UHPPOTE* u, GoUint32 deviceID, char* errmsg);
+extern int GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID, char* errmsg);
+extern int SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, char* errmsg);
+extern int GetEvent(struct UHPPOTE* u, struct Event* event, GoUint32 deviceID, GoUint32 index, char* errmsg);
+extern int RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled, char* errmsg);
+extern int GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID, char* errmsg);
+extern int SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile, char* errmsg);
+extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, char* errmsg);
+extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, char* errmsg);
+extern int RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID, char* errmsg);
+extern int ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID, char* errmsg);
+extern int SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled, char* errmsg);
+extern int SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock, char* errmsg);
+extern int ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4, char* errmsg);
 
 // Sets the supervisor passcodes for a door managed by the controller.
 //
 // Valid passcodes are in the range [1..999999] or 0 (no code) - invalid passcodes will be replaced by
 // a 0 (no code).
 //
-extern char* SetDoorPasscodes(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 passcode1, GoUint32 passcode2, GoUint32 passcode3, GoUint32 passcode4);
+extern int SetDoorPasscodes(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 passcode1, GoUint32 passcode2, GoUint32 passcode3, GoUint32 passcode4, char* errmsg);
 
 // Resets a controller to the manufacturer default configuration.
 //
-extern char* RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller);
+extern int RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller, char* errmsg);
 
 #ifdef __cplusplus
 }
