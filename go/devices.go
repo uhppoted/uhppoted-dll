@@ -13,7 +13,7 @@ import (
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-const DEBUG_TAG = "get-status:dll ltsc.8"
+// const DEBUG_TAG = "get-status:dll ltsc.8"
 
 func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	if N == nil {
@@ -94,13 +94,9 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-	fmt.Printf("%v\n", DEBUG_TAG)
-
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
-
-	fmt.Printf("%v#1\n", DEBUG_TAG)
 
 	response, err := uu.GetStatus(deviceID)
 	if err != nil {
@@ -140,8 +136,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		sysdatetime[17] = C.uchar(v[17])
 		sysdatetime[18] = C.uchar(v[18])
 		sysdatetime[19] = C.uchar(0)
-
-		fmt.Printf("%v#2\n", DEBUG_TAG)
 	}
 
 	doors[0] = cbool(response.DoorState[1])
@@ -149,14 +143,10 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	doors[2] = cbool(response.DoorState[3])
 	doors[3] = cbool(response.DoorState[4])
 
-	fmt.Println("get-status:dll %v#3\n", DEBUG_TAG)
-
 	buttons[0] = cbool(response.DoorButton[1])
 	buttons[1] = cbool(response.DoorButton[2])
 	buttons[2] = cbool(response.DoorButton[3])
 	buttons[3] = cbool(response.DoorButton[4])
-
-	fmt.Println("get-status:dll %v#4\n", DEBUG_TAG)
 
 	status.relays = C.uchar(response.RelayState)
 	status.inputs = C.uchar(response.InputState)
@@ -165,11 +155,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.seqno = C.uint(response.SequenceId)
 	status.info = C.uchar(response.SpecialInfo)
 
-	fmt.Println("get-status:dll %v#5\n", DEBUG_TAG)
-
 	if response.Event.IsZero() {
-		fmt.Printf("%v#7\n", DEBUG_TAG)
-
 		s := ""
 		v := []byte(s)
 
@@ -202,8 +188,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		status.eventCard = C.uint(0)
 		status.eventReason = C.uchar(0)
 	} else {
-		fmt.Println("get-status:dll %v#8\n", DEBUG_TAG)
-
 		s := time.Time(response.Event.Timestamp).Format("2006-01-02 15:04:05")
 		v := []byte(s)
 
@@ -236,8 +220,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		status.eventCard = C.uint(response.Event.CardNumber)
 		status.eventReason = C.uchar(response.Event.Reason)
 	}
-
-	fmt.Printf("%v#9\n", DEBUG_TAG)
 
 	return nil
 }

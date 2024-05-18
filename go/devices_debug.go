@@ -13,7 +13,7 @@ import (
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
-const DEBUG_TAG = "get-status:debug ltsc.8"
+// const DEBUG_TAG = "get-status:debug ltsc.8"
 
 func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	if N == nil {
@@ -97,13 +97,9 @@ func setAddress(uu uhppote.IUHPPOTE, deviceID uint32, address, subnet, gateway *
 }
 
 func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-	fmt.Printf("%v\n", DEBUG_TAG)
-
 	if status == nil {
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
-
-	fmt.Printf("%v#1\n", DEBUG_TAG)
 
 	if DEBUG {
 		fmt.Printf(">>> get-status\n")
@@ -142,8 +138,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		sysdatetime[17] = C.uchar(v[17])
 		sysdatetime[18] = C.uchar(v[18])
 		sysdatetime[19] = C.uchar(0)
-
-		fmt.Printf("%v#2\n", DEBUG_TAG)
 	}
 
 	doors[0] = 1
@@ -151,14 +145,10 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	doors[2] = 0
 	doors[3] = 1
 
-	fmt.Printf("%v#3\n", DEBUG_TAG)
-
 	buttons[0] = 1
 	buttons[1] = 0
 	buttons[2] = 1
 	buttons[3] = 0
-
-	fmt.Printf("%v#3\n", DEBUG_TAG)
 
 	status.relays = 0x12
 	status.inputs = 0x34
@@ -166,8 +156,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.syserror = 0x56
 	status.info = 253
 	status.seqno = 9876
-
-	fmt.Printf("%v#4\n", DEBUG_TAG)
 
 	{
 		s := "2022-01-02 12:34:56"
@@ -193,8 +181,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		timestamp[17] = C.uchar(v[17])
 		timestamp[18] = C.uchar(v[18])
 		timestamp[19] = C.uchar(0)
-
-		fmt.Printf("%v#5\n", DEBUG_TAG)
 	}
 
 	status.eventIndex = 135
@@ -204,8 +190,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.eventDirection = 1
 	status.eventCard = 8100023
 	status.eventReason = 0x15
-
-	fmt.Printf("%v#6\n", DEBUG_TAG)
 
 	return nil
 }

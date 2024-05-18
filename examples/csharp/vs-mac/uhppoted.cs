@@ -6,18 +6,15 @@ using System.Text;
 using static System.Console;
 using static System.String;
 
-namespace uhppoted
-{
+namespace uhppoted {
 
-    public class Uhppoted : IDisposable
-    {
+    public class Uhppoted : IDisposable {
         private UHPPOTE u = new UHPPOTE();
 
-        public Uhppoted() { }
+        public Uhppoted() { 
+        }
 
-        public Uhppoted(string bind, string broadcast, string listen, int timeout,
-                        Controller[] controllers, bool debug)
-        {
+        public Uhppoted(string bind, string broadcast, string listen, int timeout, Controller[] controllers, bool debug) {
             this.u.bind = bind;
             this.u.broadcast = broadcast;
             this.u.listen = listen;
@@ -28,8 +25,7 @@ namespace uhppoted
             uint N = (uint)controllers.Length;
             udevice[] list = new udevice[N];
 
-            for (int ix = 0; ix < controllers.Length; ix++)
-            {
+            for (int ix = 0; ix < controllers.Length; ix++) {
                 Controller c = controllers[ix];
 
                 list[ix].ID = c.ID;
@@ -39,8 +35,7 @@ namespace uhppoted
             int sz = Marshal.SizeOf(typeof(udevice));
             IntPtr p = Marshal.AllocHGlobal((int)N * sz);
 
-            for (int ix = 0; ix < list.Length; ix++)
-            {
+            for (int ix = 0; ix < list.Length; ix++) {
                 udevice d = list[ix];
                 IntPtr q = p + ix * sz;
 
@@ -57,20 +52,19 @@ namespace uhppoted
             this.u.devices = r;
         }
 
-        ~Uhppoted() { dispose(); }
+        ~Uhppoted() { 
+            dispose(); 
+        }
 
-        public void Dispose()
-        {
+        public void Dispose() {
             dispose();
             GC.SuppressFinalize(this);
         }
 
-        private void dispose()
-        {
+        private void dispose() {
             IntPtr p = this.u.devices;
 
-            if (p != IntPtr.Zero)
-            {
+            if (p != IntPtr.Zero) {
                 udevices devices = (udevices)Marshal.PtrToStructure(p, typeof(udevices))!;
                 IntPtr q = devices.devices;
 
@@ -93,7 +87,7 @@ namespace uhppoted
                     slice = new uint[N];
                 
                     if (GetDevices(ref this.u, ref count, slice, errmsg) != 0) {
-                        throw new UhppotedException(Marshal.PtrToStringAnsi(errmsg));
+                        raise(errmsg);
                     }
                 } while (N < count);
 
@@ -108,13 +102,12 @@ namespace uhppoted
         }
 
         public Device GetDevice(uint deviceID) {
-            GoDevice device = new GoDevice();
-
             IntPtr errmsg = Marshal.AllocHGlobal(256);
+            GoDevice device = new GoDevice();
 
             try {
                 if (GetDevice(ref this.u, ref device, deviceID, errmsg) != 0) {
-                    throw new UhppotedException(Marshal.PtrToStringAnsi(errmsg));
+                        raise(errmsg);
                 }
 
                 return new Device(device.ID, device.address, device.subnet, device.gateway, device.MAC, device.version, device.date);
@@ -124,336 +117,361 @@ namespace uhppoted
             }
         }
 
-        public void SetAddress(uint deviceID, string address, string subnet,
-                               string gateway)
-        {
-            string err = SetAddress(ref this.u, deviceID, address, subnet, gateway);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void SetAddress(uint deviceID, string address, string subnet, string gateway) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetAddress(ref this.u, deviceID, address, subnet, gateway, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public Status GetStatus(uint deviceID) 
-        {
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.8"));
-
-            IntPtr err = Marshal.AllocHGlobal(257);
+        public Status GetStatus(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoStatus status = new GoStatus();
+
             status.sysdatetime = Marshal.AllocHGlobal(20);
             status.doors = Marshal.AllocHGlobal(4);
             status.buttons = Marshal.AllocHGlobal(4);
             status.eventTimestamp = Marshal.AllocHGlobal(20);
 
-            GetStatus(ref this.u, ref status, deviceID,err);
+            try {
+                if (GetStatus(ref this.u, ref status, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
 
-            byte[] errx = new byte[257];
-            Marshal.Copy(err, errx, 0, 257);
+                byte[] sysdatetime = new byte[20];
+                byte[] doors = new byte[4];
+                byte[] buttons = new byte[4];
+                byte[] timestamp = new byte[20];
 
-            if (errx[0] != 0) {
-            string error = System.Text.Encoding.UTF8.GetString(errx, 0, errx.Length);
+                Marshal.Copy(status.sysdatetime, sysdatetime, 0, 20);
+                Marshal.Copy(status.doors, doors, 0, 4);
+                Marshal.Copy(status.buttons, buttons, 0, 4);
+                Marshal.Copy(status.sysdatetime, timestamp, 0, 20);
 
+                Event e = new Event(System.Text.Encoding.UTF8.GetString(timestamp, 0, timestamp.Length),
+                                    status.eventIndex,
+                                    status.eventType,
+                                    status.eventGranted != 0,
+                                    status.eventDoor,
+                                    status.eventDirection,
+                                    status.eventCard,
+                                    status.eventReason);
+
+                return new Status(status.ID, 
+                                  System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length),
+                                  new bool[] {
+                                    doors[0] == 1,
+                                    doors[1] == 1,
+                                    doors[2] == 1,
+                                    doors[3] == 1,
+                                  },
+                                  new bool[] {
+                                    buttons[0] == 1,
+                                    buttons[1] == 1,
+                                    buttons[2] == 1,
+                                    buttons[3] == 1,
+                                  },
+                                  status.relays,
+                                  status.inputs,
+                                  status.syserror,
+                                  status.info,
+                                  status.seqno,
+                                  e);
+            } finally {
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
                 Marshal.FreeHGlobal(status.eventTimestamp);
-                Marshal.FreeHGlobal(err);
 
-                throw new UhppotedException(error);
+                Marshal.FreeHGlobal(errmsg);                
             }
-
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.8#1"));
-
-            byte[] sysdatetime = new byte[20];
-            byte[] doors = new byte[4];
-            byte[] buttons = new byte[4];
-            byte[] timestamp = new byte[20];
-
-            Marshal.Copy(status.sysdatetime, sysdatetime, 0, 20);
-            Marshal.Copy(status.doors, doors, 0, 4);
-            Marshal.Copy(status.buttons, buttons, 0, 4);
-            Marshal.Copy(status.sysdatetime, timestamp, 0, 20);
-
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#2"));
-            
-            Event e = new Event(System.Text.Encoding.UTF8.GetString(timestamp, 0, timestamp.Length),
-                                status.eventIndex,
-                                status.eventType,
-                                status.eventGranted != 0,
-                                status.eventDoor,
-                                status.eventDirection,
-                                status.eventCard,
-                                status.eventReason);
-
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#3"));
-
-            Marshal.FreeHGlobal(status.sysdatetime);
-            Marshal.FreeHGlobal(status.doors);
-            Marshal.FreeHGlobal(status.buttons);
-            Marshal.FreeHGlobal(status.eventTimestamp);
-            Marshal.FreeHGlobal(err);
-
-            WriteLine(Format("uhpppoted.cs::GetStatus::LTSC.7#4"));
-
-            return new Status(status.ID, 
-                              System.Text.Encoding.UTF8.GetString(sysdatetime, 0, sysdatetime.Length),
-                              new bool[] {
-                                  doors[0] == 1,
-                                  doors[1] == 1,
-                                  doors[2] == 1,
-                                  doors[3] == 1,
-                              },
-                              new bool[] {
-                                  buttons[0] == 1,
-                                  buttons[1] == 1,
-                                  buttons[2] == 1,
-                                  buttons[3] == 1,
-                              },
-                              status.relays,
-                              status.inputs,
-                              status.syserror,
-                              status.info,
-                              status.seqno,
-                              e);
         }
 
         public string GetTime(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             string datetime = "";
 
-            string err = GetTime(ref this.u, ref datetime, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
+            try {
+                if (GetTime(ref this.u, ref datetime, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
 
-            return datetime;
-        }
-
-        public void SetTime(uint deviceID, string datetime)
-        {
-            string err = SetTime(ref this.u, deviceID, datetime);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+                return datetime;
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public string GetListener(uint deviceID)
-        {
+        public void SetTime(uint deviceID, string datetime) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetTime(ref this.u, deviceID, datetime, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
+        }
+
+        public string GetListener(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             string listener = "";
 
-            string err = GetListener(ref this.u, ref listener, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
+            try {
+                if (GetListener(ref this.u, ref listener, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
 
-            return listener;
-        }
-
-        public void SetListener(uint deviceID, string listener)
-        {
-            string err = SetListener(ref this.u, deviceID, listener);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+                return listener;
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public DoorControl GetDoorControl(uint deviceID, byte door)
-        {
-            GoDoorControl control = new GoDoorControl();
+        public void SetListener(uint deviceID, string listener) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
 
-            string err = GetDoorControl(ref this.u, ref control, deviceID, door);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
-
-            return new DoorControl(control.control, control.delay);
-        }
-
-        public void SetDoorControl(uint deviceID, byte door, byte mode, byte delay)
-        {
-            string err = SetDoorControl(ref this.u, deviceID, door, mode, delay);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+            try {
+                if (SetListener(ref this.u, deviceID, listener, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void OpenDoor(uint deviceID, byte door)
-        {
-            string err = OpenDoor(ref this.u, deviceID, door);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public DoorControl GetDoorControl(uint deviceID, byte door) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                GoDoorControl control = new GoDoorControl();
+
+                if (GetDoorControl(ref this.u, ref control, deviceID, door, errmsg) != 0) {
+                    raise(errmsg);
+                }
+
+                return new DoorControl(control.control, control.delay);
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public uint GetCards(uint deviceID)
-        {
+        public void SetDoorControl(uint deviceID, byte door, byte mode, byte delay) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetDoorControl(ref this.u, deviceID, door, mode, delay, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
+        }
+
+        public void OpenDoor(uint deviceID, byte door) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (OpenDoor(ref this.u, deviceID, door, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
+        }
+
+        public uint GetCards(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             uint N = 0;
 
-            string err = GetCards(ref this.u, ref N, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
+            try {
+                if (GetCards(ref this.u, ref N, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
 
-            return N;
+                return N;
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
         }
 
-        public Card GetCard(uint deviceID, uint cardNumber)
-        {
+        public Card GetCard(uint deviceID, uint cardNumber) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoCard card = new GoCard();
 
             card.doors = Marshal.AllocHGlobal(4);
 
-            string err = GetCard(ref this.u, ref card, deviceID, cardNumber);
-            if (err != null && err != "")
-            {
+            try {
+                if (GetCard(ref this.u, ref card, deviceID, cardNumber, errmsg) != 0) {
+                    raise(errmsg);
+                }
+
+                byte[] doors = new byte[4];
+
+                Marshal.Copy(card.doors, doors, 0, 4);
+
+                return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
+            } finally {
                 Marshal.FreeHGlobal(card.doors);
-
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(errmsg);                
             }
-
-            byte[] doors = new byte[4];
-
-            Marshal.Copy(card.doors, doors, 0, 4);
-            Marshal.FreeHGlobal(card.doors);
-
-            return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
         }
 
-        public Card GetCardByIndex(uint deviceID, uint index)
-        {
+        public Card GetCardByIndex(uint deviceID, uint index) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoCard card = new GoCard();
 
             card.doors = Marshal.AllocHGlobal(4);
 
-            string err = GetCardByIndex(ref this.u, ref card, deviceID, index);
-            if (err != null && err != "")
-            {
+            try {
+                if (GetCardByIndex(ref this.u, ref card, deviceID, index, errmsg) != 0) {
+                    raise(errmsg);
+                }
+
+                byte[] doors = new byte[4];
+
+                Marshal.Copy(card.doors, doors, 0, 4);
+
+                return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
+            } finally {
                 Marshal.FreeHGlobal(card.doors);
-
-                throw new UhppotedException(err);
-            }
-
-            byte[] doors = new byte[4];
-
-            Marshal.Copy(card.doors, doors, 0, 4);
-            Marshal.FreeHGlobal(card.doors);
-
-            return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
-        }
-
-        public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN)
-        {
-            string err = PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void DeleteCard(uint deviceID, uint cardNumber)
-        {
-            string err = DeleteCard(ref this.u, deviceID, cardNumber);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void DeleteCards(uint deviceID)
-        {
-            string err = DeleteCards(ref this.u, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void DeleteCard(uint deviceID, uint cardNumber) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (DeleteCard(ref this.u, deviceID, cardNumber, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public uint GetEventIndex(uint deviceID)
-        {
+        public void DeleteCards(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (DeleteCards(ref this.u, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
+        }
+
+        public uint GetEventIndex(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             uint index = 0;
 
-            string err = GetEventIndex(ref this.u, ref index, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
+            try {
+                if (GetEventIndex(ref this.u, ref index, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
 
-            return index;
-        }
-
-        public void SetEventIndex(uint deviceID, uint index)
-        {
-            string err = SetEventIndex(ref this.u, deviceID, index);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+                return index;
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public Event GetEvent(uint deviceID, uint index)
-        {
+        public void SetEventIndex(uint deviceID, uint index) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetEventIndex(ref this.u, deviceID, index, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
+        }
+
+        public Event GetEvent(uint deviceID, uint index) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoEvent evt = new GoEvent();
 
-            string err = GetEvent(ref this.u, ref evt, deviceID, index);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
+            try {
+                if (GetEvent(ref this.u, ref evt, deviceID, index, errmsg) != 0) {
+                     raise(errmsg);
+               }
 
-            return new Event(evt.timestamp,
-                             evt.index,
-                             evt.eventType,
-                             evt.granted == 1,
-                             evt.door,
-                             evt.direction,
-                             evt.card,
-                             evt.reason);
-        }
-
-        public void RecordSpecialEvents(uint deviceID, bool enabled)
-        {
-            string err = RecordSpecialEvents(ref this.u, deviceID, enabled);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+                return new Event(evt.timestamp,
+                                 evt.index,
+                                 evt.eventType,
+                                 evt.granted == 1,
+                                 evt.door,
+                                 evt.direction,
+                                 evt.card,
+                                 evt.reason);
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public TimeProfile GetTimeProfile(uint deviceID, byte profileID)
-        {
+        public void RecordSpecialEvents(uint deviceID, bool enabled) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (RecordSpecialEvents(ref this.u, deviceID, enabled, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
+        }
+
+        public TimeProfile GetTimeProfile(uint deviceID, byte profileID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoTimeProfile profile = new GoTimeProfile();
 
-            string err = GetTimeProfile(ref this.u, ref profile, deviceID, profileID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
-            }
+            try {
+                if (GetTimeProfile(ref this.u, ref profile, deviceID, profileID, errmsg) != 0) {
+                    raise(errmsg);
+                }
 
-            return new TimeProfile(profile.ID,
-                                   profile.linked,
-                                   profile.from,
-                                   profile.to,
-                                   profile.monday != 0,
-                                   profile.tuesday != 0,
-                                   profile.wednesday != 0,
-                                   profile.thursday != 0,
-                                   profile.friday != 0,
-                                   profile.saturday != 0,
-                                   profile.sunday != 0,
-                                   profile.segment1start, profile.segment1end,
-                                   profile.segment2start, profile.segment2end,
-                                   profile.segment3start, profile.segment3end);
+                return new TimeProfile(profile.ID,
+                                       profile.linked,
+                                       profile.from,
+                                       profile.to,
+                                       profile.monday != 0,
+                                       profile.tuesday != 0,
+                                       profile.wednesday != 0,
+                                       profile.thursday != 0,
+                                       profile.friday != 0,
+                                       profile.saturday != 0,
+                                       profile.sunday != 0,
+                                       profile.segment1start, profile.segment1end,
+                                       profile.segment2start, profile.segment2end,
+                                       profile.segment3start, profile.segment3end);
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
+            }
         }
 
-        public void SetTimeProfile(uint deviceID, TimeProfile p)
-        {
+        public void SetTimeProfile(uint deviceID, TimeProfile p) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoTimeProfile profile = new GoTimeProfile();
 
             profile.ID = p.ID;
@@ -474,24 +492,29 @@ namespace uhppoted
             profile.segment3start = p.segment3start;
             profile.segment3end = p.segment3end;
 
-            string err = SetTimeProfile(ref this.u, deviceID, ref profile);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+            try {
+                if (SetTimeProfile(ref this.u, deviceID, ref profile, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void ClearTimeProfiles(uint deviceID)
-        {
-            string err = ClearTimeProfiles(ref this.u, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void ClearTimeProfiles(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (ClearTimeProfiles(ref this.u, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void AddTask(uint deviceID, Task t)
-        {
+        public void AddTask(uint deviceID, Task t) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoTask task = new GoTask();
 
             task.task = t.task;
@@ -508,74 +531,110 @@ namespace uhppoted
             task.at = t.at;
             task.cards = t.cards;
 
-            string err = AddTask(ref this.u, deviceID, ref task);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+            try {
+                if (AddTask(ref this.u, deviceID, ref task, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void RefreshTaskList(uint deviceID)
-        {
-            string err = RefreshTaskList(ref this.u, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void RefreshTaskList(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (RefreshTaskList(ref this.u, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void ClearTaskList(uint deviceID)
-        {
-            string err = ClearTaskList(ref this.u, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void ClearTaskList(uint deviceID) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (ClearTaskList(ref this.u, deviceID, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void SetPCControl(uint controller, bool enabled)
-        {
-            string err = SetPCControl(ref this.u, controller, enabled);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void SetPCControl(uint controller, bool enabled) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetPCControl(ref this.u, controller, enabled, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void SetInterlock(uint controller, byte interlock)
-        {
-            string err = SetInterlock(ref this.u, controller, interlock);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void SetInterlock(uint controller, byte interlock) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetInterlock(ref this.u, controller, interlock, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void ActivateKeypads(uint controller, bool reader1, bool reader2, bool reader3, bool reader4)
-        {
-            string err = ActivateKeypads(ref this.u, controller, reader1, reader2, reader3, reader4);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void ActivateKeypads(uint controller, bool reader1, bool reader2, bool reader3, bool reader4) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (ActivateKeypads(ref this.u, controller, reader1, reader2, reader3, reader4, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void SetDoorPasscodes(uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4)
-        {
-            string err = SetDoorPasscodes(ref this.u, controller, door, passcode1, passcode2, passcode3, passcode4);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void SetDoorPasscodes(uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetDoorPasscodes(ref this.u, controller, door, passcode1, passcode2, passcode3, passcode4, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
         }
 
-        public void RestoreDefaultParameters(uint controller)
-        {
-            string err = RestoreDefaultParameters(ref this.u, controller);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+        public void RestoreDefaultParameters(uint controller) {
+            IntPtr errmsg = Marshal.AllocHGlobal(256);
+
+            try {
+                if (RestoreDefaultParameters(ref this.u, controller, errmsg) != 0) {
+                    raise(errmsg);
+                }
+            } finally {
+                Marshal.FreeHGlobal(errmsg);                
             }
+        }
+
+        private void raise(IntPtr errmsg) {
+            if (errmsg == IntPtr.Zero) {
+                throw new UhppotedException("unknown error");
+            } 
+            
+            string? msg = Marshal.PtrToStringAnsi(errmsg);
+            if (msg == null){
+                throw new UhppotedException("unknown error");
+            } 
+              
+            throw new UhppotedException(msg);                    
         }
 
         // Go FFI
@@ -587,109 +646,106 @@ namespace uhppoted
         private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
+        private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err);
+        private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
+        private static extern int GetTime(ref UHPPOTE u, ref string datetime, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetTime(ref UHPPOTE u, uint deviceID, string datetime);
+        private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetListener(ref UHPPOTE u, ref string listener, uint deviceID);
+        private static extern int GetListener(ref UHPPOTE u, ref string listener, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);
+        private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);
+        private static extern int GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
+        private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);
+        private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetCards(ref UHPPOTE u, ref uint N, uint deviceID);
+        private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
+        private static extern int GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
+        private static extern int GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN);
+        private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber);
+        private static extern int DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string DeleteCards(ref UHPPOTE u, uint deviceID);
+        private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID);
+        private static extern int GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetEventIndex(ref UHPPOTE u, uint deviceID, uint index);
+        private static extern int SetEventIndex(ref UHPPOTE u, uint deviceID, uint index, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index);
+        private static extern int GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled);
+        private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID);
+        private static extern int GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile);
+        private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string ClearTimeProfiles(ref UHPPOTE u, uint deviceID);
+        private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task);
+        private static extern int AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string RefreshTaskList(ref UHPPOTE u, uint deviceID);
+        private static extern int RefreshTaskList(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string ClearTaskList(ref UHPPOTE u, uint deviceID);
+        private static extern int ClearTaskList(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled);
+        private static extern int SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock);
+        private static extern int SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4);
+        private static extern int ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4);
+        private static extern int SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
+        private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, IntPtr errmsg);
 
-        struct udevice
-        {
+    struct udevice {
             public uint ID;
             public string address;
         }
 
-        struct udevices
-        {
+    struct udevices {
             public uint N;
             public IntPtr devices; // array of udevice *
         }
 
-        struct UHPPOTE
-        {
+    struct UHPPOTE {
             public string bind;
             public string broadcast;
             public string listen;
@@ -699,8 +755,7 @@ namespace uhppoted
             public bool debug;
         }
 
-        struct GoDevice
-        {
+    struct GoDevice {
             public uint ID;
             public string address;
             public string subnet;
@@ -710,8 +765,7 @@ namespace uhppoted
             public string date;
         }
 
-        struct GoEvent
-        {
+    struct GoEvent {
             public string timestamp;
             public uint index;
             public byte eventType;
@@ -742,14 +796,12 @@ namespace uhppoted
             public byte   eventReason;
       }
     
-        struct GoDoorControl
-        {
+    struct GoDoorControl {
             public byte control;
             public byte delay;
         }
 
-        struct GoCard
-        {
+    struct GoCard {
             public uint cardNumber;
             public string from;
             public string to;
@@ -757,8 +809,7 @@ namespace uhppoted
             public uint PIN;
         }
 
-        struct GoTimeProfile
-        {
+    struct GoTimeProfile {
             public byte ID;
             public byte linked;
             public string from;
@@ -778,8 +829,7 @@ namespace uhppoted
             public string segment3end;
         }
 
-        struct GoTask
-        {
+    struct GoTask {
             public byte task;
             public byte door;
             public string from;
@@ -796,25 +846,21 @@ namespace uhppoted
         }
     }
 
-    public class Controller
-    {
+public class Controller {
         public uint ID;
         public string address;
 
-        public Controller(uint ID, string address)
-        {
+    public Controller(uint ID, string address) {
             this.ID = ID;
             this.address = address;
         }
     }
 
-    public class UhppotedException : Exception
-    {
+public class UhppotedException : Exception {
         public UhppotedException(string message) : base(message) { }
     }
 
-    public class Device
-    {
+public class Device {
         public uint ID;
         public string address;
         public string subnet;
@@ -824,8 +870,7 @@ namespace uhppoted
         public string date;
 
         public Device(uint ID, string address, string subnet, string gateway,
-                      string MAC, string version, string date)
-        {
+                  string MAC, string version, string date) {
             this.ID = ID;
             this.address = address;
             this.subnet = subnet;
@@ -836,8 +881,7 @@ namespace uhppoted
         }
     }
 
-    public class Event
-    {
+public class Event {
         public string timestamp;
         public uint index;
         public byte eventType;
@@ -848,8 +892,7 @@ namespace uhppoted
         public byte reason;
 
         public Event(string timestamp, uint index, byte eventType, bool granted,
-                     byte door, byte direction, uint card, byte reason)
-        {
+                 byte door, byte direction, uint card, byte reason) {
             this.timestamp = timestamp;
             this.index = index;
             this.eventType = eventType;
@@ -891,28 +934,24 @@ namespace uhppoted
         }
     }
 
-    public class DoorControl
-    {
+public class DoorControl {
         public byte mode;
         public byte delay;
 
-        public DoorControl(byte mode, byte delay)
-        {
+    public DoorControl(byte mode, byte delay) {
             this.mode = mode;
             this.delay = delay;
         }
     }
 
-    public class Card
-    {
+public class Card {
         public uint cardNumber;
         public string from;
         public string to;
         public byte[] doors;
         public uint PIN;
 
-        public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN)
-        {
+    public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN) {
             this.cardNumber = cardNumber;
             this.from = from;
             this.to = to;
@@ -921,8 +960,7 @@ namespace uhppoted
         }
     }
 
-    public class TimeProfile
-    {
+public class TimeProfile {
         public byte ID;
         public byte linked;
         public string from;
@@ -945,8 +983,7 @@ namespace uhppoted
                            bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
                            string segment1start, string segment1end,
                            string segment2start, string segment2end,
-                           string segment3start, string segment3end)
-        {
+                       string segment3start, string segment3end) {
             this.ID = ID;
             this.linked = linked;
             this.from = from;
@@ -969,8 +1006,7 @@ namespace uhppoted
         }
     }
 
-    public class Task
-    {
+public class Task {
         public byte task;
         public byte door;
         public string from;
@@ -988,8 +1024,7 @@ namespace uhppoted
         public Task(byte task, byte door, string from, string to,
                     bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
                     string at,
-                    byte cards)
-        {
+                byte cards) {
             this.task = task;
             this.door = door;
             this.from = from;
@@ -1008,8 +1043,7 @@ namespace uhppoted
         }
     }
 
-    public class lookup
-    {
+public class lookup {
         public const string LOOKUP_MODE = "door.mode";
         public const string LOOKUP_DIRECTION = "event.direction";
         public const string LOOKUP_EVENT_TYPE = "event.type";
@@ -1137,15 +1171,12 @@ namespace uhppoted
         { LOOKUP_EVENT_REASON, EventReasonUnknown },
     };
 
-        public static string find(string category, uint code, string locale)
-        {
-            Dictionary<uint, string>? dictionary;
-            string? s;
+    public static string find(string category, uint code, string locale) {
+        Dictionary<uint, string>? dictionary;
+        string? s;
 
-            if (dictionaries.TryGetValue(category, out dictionary))
-            {
-                if (dictionary.TryGetValue(code, out s))
-                {
+        if (dictionaries.TryGetValue(category, out dictionary)) {
+            if (dictionary.TryGetValue(code, out s)) {
                     return s;
                 }
 
