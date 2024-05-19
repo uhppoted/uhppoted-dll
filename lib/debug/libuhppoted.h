@@ -197,7 +197,7 @@ extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errms
 extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg);
 extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway, char* errmsg);
 extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, char* errmsg);
-extern int GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID, char* errmsg);
+extern int GetTime(struct UHPPOTE* u, char* datetime, GoUint32 deviceID, char* errmsg);
 extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime, char* errmsg);
 extern int GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID, char* errmsg);
 extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, char* listener, char* errmsg);

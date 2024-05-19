@@ -8,8 +8,8 @@
       - [x] get-device
       - [x] set-address
       - [x] get-status
-      - [ ] get-time
-      - [ ] set-time
+      - [x] get-time
+      - [x] set-time
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 

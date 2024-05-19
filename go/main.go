@@ -191,7 +191,7 @@ func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, er
 }
 
 //export GetTime
-func GetTime(u *C.struct_UHPPOTE, datetime **C.char, deviceID uint32, errmsg *C.char) C.int {
+func GetTime(u *C.struct_UHPPOTE, datetime *C.char, deviceID uint32, errmsg *C.char) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getTime(uu, datetime, deviceID)
 	}

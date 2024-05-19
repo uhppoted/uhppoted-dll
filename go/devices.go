@@ -152,7 +152,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	return nil
 }
 
-func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
+func getTime(uu uhppote.IUHPPOTE, datetime *C.char, deviceID uint32) error {
 	if datetime == nil {
 		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
 	}
@@ -164,7 +164,7 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 		return fmt.Errorf("%v: no response to get-time", deviceID)
 	}
 
-	*datetime = C.CString(fmt.Sprintf("%v", response.DateTime))
+	cstring(response.DateTime, datetime, 20)
 
 	return nil
 }
