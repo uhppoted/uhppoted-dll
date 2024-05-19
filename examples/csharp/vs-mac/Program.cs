@@ -256,12 +256,12 @@ class UhppotedDLLCLI
         Device device = u.GetDevice(controller);
 
         WriteLine(Format("get-controller ({0})", controller));
-        WriteLine(Format("   address {0}", device.address));
+        WriteLine(Format("   address     {0}", device.address));
         WriteLine(Format("   subnet mask {0}", device.subnet));
-        WriteLine(Format("   gateway address {0}", device.gateway));
-        WriteLine(Format("   MAC {0}", device.MAC));
-        WriteLine(Format("   version {0}", device.version));
-        WriteLine(Format("   released {0}", device.date));
+        WriteLine(Format("   gateway     {0}", device.gateway));
+        WriteLine(Format("   MAC         {0}", device.MAC));
+        WriteLine(Format("   version     {0}", device.version));
+        WriteLine(Format("   released    {0}", device.date));
     }
 
     static void SetAddress(Uhppoted u, string[] args)

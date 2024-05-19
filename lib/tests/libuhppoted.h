@@ -47,12 +47,12 @@ typedef struct UHPPOTE {
 
 typedef struct Device {
     uint32_t ID;
-	char *address;
-	char *subnet;
-	char *gateway;
-	char *MAC;
-	char *version;
-	char *date;
+	char *address;   // char[16]
+	char *subnet;    // char[16]
+	char *gateway;   // char[16]
+	char *MAC;       // char[18]
+	char *version;   // char[6]
+	char *date;      // char[11]
 } Device;
 
 typedef struct Event {

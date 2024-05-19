@@ -58,12 +58,12 @@ func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) er
 	}
 
 	device.ID = C.uint(deviceID)
-	device.address = C.CString("192.168.1.101")
-	device.subnet = C.CString("255.255.255.0")
-	device.gateway = C.CString("192.168.1.1")
-	device.MAC = C.CString("00:12:23:34:45:56")
-	device.version = C.CString("v8.92")
-	device.date = C.CString("2018-11-05")
+	cstring("192.168.1.101", device.address, 16)
+	cstring("255.255.255.0", device.subnet, 16)
+	cstring("192.168.1.1", device.gateway, 16)
+	cstring("00:12:23:34:45:56", device.MAC, 18)
+	cstring("v8.92", device.version, 6)
+	cstring("2018-11-05", device.date, 11)
 
 	return nil
 }

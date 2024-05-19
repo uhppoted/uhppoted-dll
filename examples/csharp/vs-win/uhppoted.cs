@@ -105,14 +105,49 @@ namespace uhppoted {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoDevice device = new GoDevice();
 
+            device.address = Marshal.AllocHGlobal(16);
+            device.subnet = Marshal.AllocHGlobal(16);
+            device.gateway = Marshal.AllocHGlobal(16);
+            device.MAC = Marshal.AllocHGlobal(18);
+            device.version = Marshal.AllocHGlobal(5);
+            device.date = Marshal.AllocHGlobal(11);
+
             try {
                 if (GetDevice(ref this.u, ref device, deviceID, errmsg) != 0) {
                         raise(errmsg);
                 }
 
-                return new Device(device.ID, device.address, device.subnet, device.gateway, device.MAC, device.version, device.date);
+                byte[] address = new byte[16];
+                byte[] subnet = new byte[16];
+                byte[] gateway = new byte[16];
+                byte[] MAC = new byte[18];
+                byte[] version = new byte[6];
+                byte[] date = new byte[11];
+
+                Marshal.Copy(device.address, address, 0, 16);
+                Marshal.Copy(device.subnet, subnet, 0, 16);
+                Marshal.Copy(device.gateway, gateway, 0, 16);
+                Marshal.Copy(device.MAC, MAC, 0, 18);
+                Marshal.Copy(device.version, version, 0, 6);
+                Marshal.Copy(device.date, date, 0, 11);
+
+                return new Device(
+                    device.ID, 
+                    System.Text.Encoding.UTF8.GetString(address, 0, address.Length),
+                    System.Text.Encoding.UTF8.GetString(subnet, 0, subnet.Length),
+                    System.Text.Encoding.UTF8.GetString(gateway, 0, gateway.Length),
+                    System.Text.Encoding.UTF8.GetString(MAC, 0, MAC.Length),
+                    System.Text.Encoding.UTF8.GetString(version, 0, version.Length),
+                    System.Text.Encoding.UTF8.GetString(date, 0, date.Length));
 
             } finally {
+                Marshal.FreeHGlobal(device.address);
+                Marshal.FreeHGlobal(device.subnet);
+                Marshal.FreeHGlobal(device.gateway);
+                Marshal.FreeHGlobal(device.MAC);
+                Marshal.FreeHGlobal(device.version);
+                Marshal.FreeHGlobal(device.date);
+
                 Marshal.FreeHGlobal(errmsg);                
             }
         }
@@ -757,12 +792,12 @@ namespace uhppoted {
 
     struct GoDevice {
             public uint ID;
-            public string address;
-            public string subnet;
-            public string gateway;
-            public string MAC;
-            public string version;
-            public string date;
+            public IntPtr address;
+            public IntPtr subnet;
+            public IntPtr gateway;
+            public IntPtr MAC;
+            public IntPtr version;
+            public IntPtr date;
         }
 
     struct GoEvent {

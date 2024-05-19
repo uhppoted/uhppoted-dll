@@ -4,9 +4,12 @@
       - [x] error handling
       - [x] cstring
       - [x] `possible null reference`
-      - [ ] get-devices
-      - [ ] get-device
+      - [x] get-devices
+      - [x] get-device
+      - [ ] set-address
       - [x] get-status
+      - [ ] get-time
+      - [ ] set-time
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 
