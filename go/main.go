@@ -630,7 +630,7 @@ func cbool(b bool) C.uchar {
 func cstring(v any, c *C.char, N uint32) {
 	if c != nil {
 		s := C.CString(ellipsize(v, N))
-		l := C.ulong(N)
+		l := C.size_t(N)
 
 		C.strncpy(c, s, l)
 		C.free(unsafe.Pointer(s))
