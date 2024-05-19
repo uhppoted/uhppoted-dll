@@ -10,6 +10,8 @@
       - [x] get-status
       - [x] get-time
       - [x] set-time
+      - [x] get-listener
+      - [x] set-listener
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 

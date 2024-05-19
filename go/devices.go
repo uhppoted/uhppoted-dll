@@ -188,8 +188,8 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	}
 }
 
-func getListener(uu uhppote.IUHPPOTE, listener **C.char, deviceID uint32) error {
-	if listener == nil {
+func getListener(uu uhppote.IUHPPOTE, address *C.char, deviceID uint32) error {
+	if address == nil {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
 	}
 
@@ -200,7 +200,7 @@ func getListener(uu uhppote.IUHPPOTE, listener **C.char, deviceID uint32) error 
 		return fmt.Errorf("%v: no response to get-listener", deviceID)
 	}
 
-	*listener = C.CString(fmt.Sprintf("%v:%v", response.Address.IP, response.Address.Port))
+	cstring(fmt.Sprintf("%v:%v", response.Address.IP, response.Address.Port), address, 22)
 
 	return nil
 }
@@ -214,12 +214,10 @@ func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
 		return err
 	} else if address == nil || address.IP.To4() == nil {
 		return fmt.Errorf("invalid UDP address: %v", listener)
-	} else {
-		if response, err := uu.SetListener(deviceID, *address); err != nil {
-			return err
-		} else if response == nil {
-			return fmt.Errorf("%v: no response to set-listener", deviceID)
-		}
+	} else if response, err := uu.SetListener(deviceID, *address); err != nil {
+		return err
+	} else if response == nil {
+		return fmt.Errorf("%v: no response to set-listener", deviceID)
 	}
 
 	return nil

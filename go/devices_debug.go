@@ -178,7 +178,7 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	}
 }
 
-func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {
+func getListener(uu uhppote.IUHPPOTE, address *C.char, deviceID uint32) error {
 	if address == nil {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
 	}
@@ -189,7 +189,7 @@ func getListener(uu uhppote.IUHPPOTE, address **C.char, deviceID uint32) error {
 		fmt.Println()
 	}
 
-	*address = C.CString("192.168.1.100:60001")
+	cstring("192.168.1.100:60001", address, 22)
 
 	return nil
 }

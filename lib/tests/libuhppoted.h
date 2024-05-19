@@ -199,7 +199,7 @@ extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* su
 extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, char* errmsg);
 extern int GetTime(struct UHPPOTE* u, char* datetime, GoUint32 deviceID, char* errmsg);
 extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime, char* errmsg);
-extern int GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID, char* errmsg);
+extern int GetListener(struct UHPPOTE* u, char* address, GoUint32 deviceID, char* errmsg);
 extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, char* listener, char* errmsg);
 extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door, char* errmsg);
 extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, char* errmsg);

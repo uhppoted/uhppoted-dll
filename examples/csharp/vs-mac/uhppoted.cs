@@ -261,15 +261,20 @@ namespace uhppoted {
 
         public string GetListener(uint deviceID) {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
-            string listener = "";
+            IntPtr addr = Marshal.AllocHGlobal(22);
 
             try {
-                if (GetListener(ref this.u, ref listener, deviceID, errmsg) != 0) {
+                if (GetListener(ref this.u, addr, deviceID, errmsg) != 0) {
                     raise(errmsg);
                 }
 
-                return listener;
+                byte[] addrport = new byte[22];
+
+                Marshal.Copy(addr, addrport, 0, 22);
+                
+                return System.Text.Encoding.UTF8.GetString(addrport, 0, addrport.Length);
             } finally {
+                Marshal.FreeHGlobal(addr);
                 Marshal.FreeHGlobal(errmsg);                
             }
         }
@@ -698,7 +703,7 @@ namespace uhppoted {
         private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern int GetListener(ref UHPPOTE u, ref string listener, uint deviceID, IntPtr errmsg);
+        private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, IntPtr errmsg);
 
         [DllImport("libuhppoted.dylib")]
         private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, IntPtr errmsg);
