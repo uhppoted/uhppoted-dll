@@ -274,9 +274,9 @@ class UhppotedDLLCLI
         u.SetAddress(controller, address, netmask, gateway);
 
         WriteLine(Format("set-address ({0})", controller));
-        WriteLine(Format("   address {0}", address));
+        WriteLine(Format("   address     {0}", address));
         WriteLine(Format("   subnet mask {0}", netmask));
-        WriteLine(Format("   gateway address {0}", gateway));
+        WriteLine(Format("   gateway     {0}", gateway));
     }
 
     static void GetStatus(Uhppoted u, string[] args)

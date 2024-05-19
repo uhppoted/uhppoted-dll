@@ -6,7 +6,7 @@
       - [x] `possible null reference`
       - [x] get-devices
       - [x] get-device
-      - [ ] set-address
+      - [x] set-address
       - [x] get-status
       - [ ] get-time
       - [ ] set-time
