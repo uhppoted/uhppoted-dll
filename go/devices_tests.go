@@ -117,36 +117,10 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 
 	status.ID = C.uint(12345678)
 
-	sysdatetime := unsafe.Slice(status.sysdatetime, 20)
 	doors := unsafe.Slice(status.doors, 4)
 	buttons := unsafe.Slice(status.buttons, 4)
-	timestamp := unsafe.Slice(status.eventTimestamp, 20)
 
-	{
-		s := "2022-03-19 15:48:32"
-		v := []byte(s)
-
-		sysdatetime[0] = C.uchar(v[0])
-		sysdatetime[1] = C.uchar(v[1])
-		sysdatetime[2] = C.uchar(v[2])
-		sysdatetime[3] = C.uchar(v[3])
-		sysdatetime[4] = C.uchar(v[4])
-		sysdatetime[5] = C.uchar(v[5])
-		sysdatetime[6] = C.uchar(v[6])
-		sysdatetime[7] = C.uchar(v[7])
-		sysdatetime[8] = C.uchar(v[8])
-		sysdatetime[9] = C.uchar(v[9])
-		sysdatetime[10] = C.uchar(v[10])
-		sysdatetime[11] = C.uchar(v[10])
-		sysdatetime[12] = C.uchar(v[10])
-		sysdatetime[13] = C.uchar(v[10])
-		sysdatetime[14] = C.uchar(v[10])
-		sysdatetime[15] = C.uchar(v[10])
-		sysdatetime[16] = C.uchar(v[10])
-		sysdatetime[17] = C.uchar(v[10])
-		sysdatetime[18] = C.uchar(v[18])
-		sysdatetime[19] = C.uchar(0)
-	}
+	cstring("2022-03-19 15:48:32", status.sysdatetime, 20)
 
 	doors[0] = 1
 	doors[1] = 0
@@ -166,30 +140,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.seqno = 9876
 
 	if deviceID == 405419896 {
-		s := "2022-01-02 12:34:56"
-		v := []byte(s)
-
-		timestamp[0] = C.uchar(v[0])
-		timestamp[1] = C.uchar(v[1])
-		timestamp[2] = C.uchar(v[2])
-		timestamp[3] = C.uchar(v[3])
-		timestamp[4] = C.uchar(v[4])
-		timestamp[5] = C.uchar(v[5])
-		timestamp[6] = C.uchar(v[6])
-		timestamp[7] = C.uchar(v[7])
-		timestamp[8] = C.uchar(v[8])
-		timestamp[9] = C.uchar(v[9])
-		timestamp[10] = C.uchar(v[10])
-		timestamp[11] = C.uchar(v[11])
-		timestamp[12] = C.uchar(v[12])
-		timestamp[13] = C.uchar(v[13])
-		timestamp[14] = C.uchar(v[14])
-		timestamp[15] = C.uchar(v[15])
-		timestamp[16] = C.uchar(v[16])
-		timestamp[17] = C.uchar(v[17])
-		timestamp[18] = C.uchar(v[18])
-		timestamp[19] = C.uchar(0)
-
+		cstring("2022-01-02 12:34:56", status.eventTimestamp, 20)
 		status.eventIndex = 135
 		status.eventType = 0x06
 		status.eventGranted = 1
@@ -200,30 +151,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	}
 
 	if deviceID == 303986753 {
-		s := ""
-		v := []byte(s)
-
-		timestamp[0] = C.uchar(v[0])
-		timestamp[1] = C.uchar(v[1])
-		timestamp[2] = C.uchar(v[2])
-		timestamp[3] = C.uchar(v[3])
-		timestamp[4] = C.uchar(v[4])
-		timestamp[5] = C.uchar(v[5])
-		timestamp[6] = C.uchar(v[6])
-		timestamp[7] = C.uchar(v[7])
-		timestamp[8] = C.uchar(v[8])
-		timestamp[9] = C.uchar(v[9])
-		timestamp[10] = C.uchar(v[10])
-		timestamp[11] = C.uchar(v[11])
-		timestamp[12] = C.uchar(v[12])
-		timestamp[13] = C.uchar(v[13])
-		timestamp[14] = C.uchar(v[14])
-		timestamp[15] = C.uchar(v[15])
-		timestamp[16] = C.uchar(v[16])
-		timestamp[17] = C.uchar(v[17])
-		timestamp[18] = C.uchar(v[18])
-		timestamp[19] = C.uchar(0)
-
+		cstring("", status.eventTimestamp, 20)
 		status.eventIndex = 0
 		status.eventType = 0x00
 		status.eventGranted = 0
@@ -235,67 +163,6 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 
 	return nil
 }
-
-// func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) error {
-// 	if status == nil {
-// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
-// 	}
-//
-// 	if status.event == nil {
-// 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
-// 	}
-//
-// 	if deviceID != 405419896 && deviceID != 303986753 {
-// 		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
-// 	}
-//
-// 	status.ID = C.uint(deviceID)
-// 	status.sysdatetime = C.CString("2022-03-19 15:48:32")
-//
-// 	doors := unsafe.Slice(status.doors, 4)
-// 	buttons := unsafe.Slice(status.buttons, 4)
-//
-// 	doors[0] = 1
-// 	doors[1] = 0
-// 	doors[2] = 0
-// 	doors[3] = 1
-//
-// 	buttons[0] = 1
-// 	buttons[1] = 0
-// 	buttons[2] = 1
-// 	buttons[3] = 0
-//
-// 	status.relays = 0x12
-// 	status.inputs = 0x34
-//
-// 	status.syserror = 0x56
-// 	status.info = 253
-// 	status.seqno = 9876
-//
-// 	if deviceID == 405419896 {
-// 		status.event.timestamp = C.CString("2022-01-02 12:34:56")
-// 		status.event.index = 135
-// 		status.event.eventType = 0x06
-// 		status.event.granted = 1
-// 		status.event.door = 3
-// 		status.event.direction = 1
-// 		status.event.card = 8100023
-// 		status.event.reason = 0x15
-// 	}
-//
-// 	if deviceID == 303986753 {
-// 		status.event.timestamp = C.CString("")
-// 		status.event.index = 0
-// 		status.event.eventType = 0x00
-// 		status.event.granted = 0
-// 		status.event.door = 0
-// 		status.event.direction = 0
-// 		status.event.card = 0
-// 		status.event.reason = 0x00
-// 	}
-//
-// 	return nil
-// }
 
 func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 	if datetime == nil {

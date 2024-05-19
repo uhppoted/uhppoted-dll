@@ -151,7 +151,7 @@ namespace uhppoted {
                 Marshal.Copy(status.sysdatetime, sysdatetime, 0, 20);
                 Marshal.Copy(status.doors, doors, 0, 4);
                 Marshal.Copy(status.buttons, buttons, 0, 4);
-                Marshal.Copy(status.sysdatetime, timestamp, 0, 20);
+                Marshal.Copy(status.eventTimestamp, timestamp, 0, 20);
 
                 Event e = new Event(System.Text.Encoding.UTF8.GetString(timestamp, 0, timestamp.Length),
                                     status.eventIndex,

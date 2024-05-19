@@ -48,16 +48,16 @@ typedef struct Event {
 
 typedef struct Status {
     uint32_t ID;
- 	uint8_t  *sysdatetime;
- 	uint8_t  *doors;   // uint_8[4]
- 	uint8_t  *buttons; // uint_8[4]
- 	uint8_t relays;
- 	uint8_t inputs;
- 	uint8_t syserror;
- 	uint8_t info;
+ 	char    *sysdatetime;      // char[20]
+ 	uint8_t *doors;            // uint_8[4]
+ 	uint8_t *buttons;          // uint_8[4]
+ 	uint8_t  relays;
+ 	uint8_t  inputs;
+ 	uint8_t  syserror;
+ 	uint8_t  info;
 	uint32_t seqno;
 
-	uint8_t  *eventTimestamp;
+	char     *eventTimestamp;  // char[20]
     uint32_t  eventIndex;
 	uint8_t   eventType;
 	uint8_t   eventGranted;
@@ -147,23 +147,11 @@ func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, errmsg *C.char
 	}
 
 	if err := g(); err != nil {
-		s := C.CString(ellipsize(err))
-
-		C.strncpy(errmsg, s, 256)
-		C.free(unsafe.Pointer(s))
-
+		cstring(err, errmsg, 256)
 		return -1
 	}
 
 	return 0
-}
-
-func ellipsize(err error) string {
-	if s := err.Error(); len(s) > 255 {
-		return s[:255]
-	} else {
-		return s
-	}
 }
 
 //export GetDevices
@@ -636,5 +624,24 @@ func cbool(b bool) C.uchar {
 		return 1
 	} else {
 		return 0
+	}
+}
+
+func cstring(v any, c *C.char, N uint32) {
+	if c != nil {
+		s := C.CString(ellipsize(v, N))
+
+		C.strncpy(c, s, C.ulong(N))
+		C.free(unsafe.Pointer(s))
+	}
+}
+
+func ellipsize(v any, N uint32) string {
+	s := fmt.Sprintf("%v", v)
+
+	if uint32(len(s)) < N {
+		return s
+	} else {
+		return s[:N-3] + `…`
 	}
 }

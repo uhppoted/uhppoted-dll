@@ -68,16 +68,16 @@ typedef struct Event {
 
 typedef struct Status {
     uint32_t ID;
- 	uint8_t  *sysdatetime;
- 	uint8_t  *doors;   // uint_8[4]
- 	uint8_t  *buttons; // uint_8[4]
- 	uint8_t relays;
- 	uint8_t inputs;
- 	uint8_t syserror;
- 	uint8_t info;
+ 	char    *sysdatetime;      // char[20]
+ 	uint8_t *doors;            // uint_8[4]
+ 	uint8_t *buttons;          // uint_8[4]
+ 	uint8_t  relays;
+ 	uint8_t  inputs;
+ 	uint8_t  syserror;
+ 	uint8_t  info;
 	uint32_t seqno;
 
-	uint8_t  *eventTimestamp;
+	char     *eventTimestamp;  // char[20]
     uint32_t  eventIndex;
 	uint8_t   eventType;
 	uint8_t   eventGranted;

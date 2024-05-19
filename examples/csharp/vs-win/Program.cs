@@ -284,12 +284,11 @@ class UhppotedDLLCLI
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
 
         Status status = u.GetStatus(controller);
-//        string timestamp = status.evt.timestamp;
-//
-//        if (timestamp == "")
-//        {
-//            timestamp = "-";
-//        }
+        string timestamp = status.evt.timestamp;
+
+        if (timestamp == "") {
+           timestamp = "-";
+        }
 
         WriteLine(Format("get-status ({0})", controller));
         WriteLine(Format("   ID              {0}", status.ID));
@@ -307,8 +306,8 @@ class UhppotedDLLCLI
         WriteLine(Format("   syserror        {0}", status.syserror));
         WriteLine(Format("   info            {0}", status.info));
         WriteLine(Format("   seqno           {0}", status.seqno));
-        // WriteLine(Format("   event timestamp {0}", timestamp));
-        WriteLine(Format("   event index     {0}", status.evt.index));
+        WriteLine(Format("   event timestamp {0}", timestamp));
+        WriteLine(Format("         index     {0}", status.evt.index));
         WriteLine(Format("         type      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, status.evt.eventType, LOCALE)));
         WriteLine(Format("         granted   {0}", status.evt.granted));
         WriteLine(Format("         door      {0}", status.evt.door));
