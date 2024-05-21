@@ -350,6 +350,8 @@ namespace uhppoted {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoCard card = new GoCard();
 
+            card.from = Marshal.AllocHGlobal(11);
+            card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
 
             try {
@@ -357,12 +359,23 @@ namespace uhppoted {
                     raise(errmsg);
                 }
 
+                byte[] from = new byte[11];
+                byte[] to = new byte[11];
                 byte[] doors = new byte[4];
 
+                Marshal.Copy(card.from, from, 0, 11);
+                Marshal.Copy(card.to, to, 0, 11);
                 Marshal.Copy(card.doors, doors, 0, 4);
 
-                return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
+                return new Card(
+                    card.cardNumber, 
+                    System.Text.Encoding.UTF8.GetString(from, 0, from.Length),
+                    System.Text.Encoding.UTF8.GetString(to, 0, to.Length),
+                    doors, 
+                    card.PIN);
             } finally {
+                Marshal.FreeHGlobal(card.from);
+                Marshal.FreeHGlobal(card.to);
                 Marshal.FreeHGlobal(card.doors);
                 Marshal.FreeHGlobal(errmsg);                
             }
@@ -372,6 +385,8 @@ namespace uhppoted {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoCard card = new GoCard();
 
+            card.from = Marshal.AllocHGlobal(11);
+            card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
 
             try {
@@ -379,12 +394,23 @@ namespace uhppoted {
                     raise(errmsg);
                 }
 
+                byte[] from = new byte[11];
+                byte[] to = new byte[11];
                 byte[] doors = new byte[4];
 
+                Marshal.Copy(card.from, from, 0, 11);
+                Marshal.Copy(card.to, to, 0, 11);
                 Marshal.Copy(card.doors, doors, 0, 4);
 
-                return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
+                return new Card(
+                    card.cardNumber, 
+                    System.Text.Encoding.UTF8.GetString(from, 0, from.Length),
+                    System.Text.Encoding.UTF8.GetString(to, 0, to.Length),
+                    doors, 
+                    card.PIN);
             } finally {
+                Marshal.FreeHGlobal(card.from);
+                Marshal.FreeHGlobal(card.to);
                 Marshal.FreeHGlobal(card.doors);
                 Marshal.FreeHGlobal(errmsg);                
             }
@@ -848,8 +874,8 @@ namespace uhppoted {
 
     struct GoCard {
             public uint cardNumber;
-            public string from;
-            public string to;
+            public IntPtr from;
+            public IntPtr to;
             public IntPtr doors;
             public uint PIN;
         }

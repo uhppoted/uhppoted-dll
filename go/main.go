@@ -74,8 +74,8 @@ typedef struct DoorControl {
 
 typedef struct Card {
     uint32_t card_number;
-    char* from;
-    char* to;
+    char    *from;  // char[11]
+    char    *to;    // char[11]
 	uint8_t *doors; // uint_8[4]
     uint32_t PIN;
 } Card;

@@ -12,6 +12,16 @@
       - [x] set-time
       - [x] get-listener
       - [x] set-listener
+      - [x] get-door-control
+      - [x] set-door-control
+      - [x] open-door
+      - [x] get-cards
+      - [x] get-card
+      - [x] get-card-by-index
+      - [x] put-card
+      - [x] delete-card
+      - [x] delete-cards
+      - [x] set-pc-control
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 
