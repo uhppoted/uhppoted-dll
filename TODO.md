@@ -21,7 +21,21 @@
       - [x] put-card
       - [x] delete-card
       - [x] delete-cards
+      - [x] get-event-index
+      - [x] set-event-index
+      - [x] get-event
+      - [x] record-special-events
+      - [ ] get-time-profile
+      - [ ] set-time-profile
+      - [ ] clear-time-profiles
+      - [ ] add-task
+      - [ ] refresh-tasklist
+      - [ ] clear-tasklist
       - [x] set-pc-control
+      - [x] set-interlock
+      - [x] activate-keypads
+      - [x] set-door-passcodes
+      - [x] restore-default-parameters
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 

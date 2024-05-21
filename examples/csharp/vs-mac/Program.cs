@@ -543,7 +543,7 @@ class UhppotedDLLCLI
 
         WriteLine(Format("get-event ({0})", controller));
         WriteLine(Format("   event index {0}", evt.index));
-        // WriteLine(Format("   timestamp   {0}", evt.timestamp));
+        WriteLine(Format("   timestamp   {0}", evt.timestamp));
         WriteLine(Format("   type        {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, evt.eventType, LOCALE)));
         WriteLine(Format("   granted     {0}", evt.granted));
         WriteLine(Format("   door        {0}", evt.door));

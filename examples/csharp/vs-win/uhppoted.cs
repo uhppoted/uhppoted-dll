@@ -483,12 +483,18 @@ namespace uhppoted {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoEvent evt = new GoEvent();
 
+            evt.timestamp = Marshal.AllocHGlobal(20);
+
             try {
                 if (GetEvent(ref this.u, ref evt, deviceID, index, errmsg) != 0) {
                      raise(errmsg);
-               }
+                }
 
-                return new Event(evt.timestamp,
+                byte[] timestamp = new byte[20];
+
+                Marshal.Copy(evt.timestamp, timestamp, 0, 20);
+
+                return new Event(System.Text.Encoding.UTF8.GetString(timestamp, 0, timestamp.Length),
                                  evt.index,
                                  evt.eventType,
                                  evt.granted == 1,
@@ -497,6 +503,7 @@ namespace uhppoted {
                                  evt.card,
                                  evt.reason);
             } finally {
+                Marshal.FreeHGlobal(evt.timestamp);                
                 Marshal.FreeHGlobal(errmsg);                
             }
         }
@@ -837,7 +844,7 @@ namespace uhppoted {
         }
 
     struct GoEvent {
-            public string timestamp;
+            public IntPtr timestamp;
             public uint index;
             public byte eventType;
             public byte granted;

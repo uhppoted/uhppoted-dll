@@ -48,7 +48,7 @@ func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index
 		fmt.Println()
 	}
 
-	event.timestamp = C.CString("2022-04-15 12:29:15")
+	cstring("2022-04-15 12:29:15", event.timestamp, 20)
 	event.index = C.uint(index)
 	event.eventType = C.uchar(1)
 	event.granted = cbool(true)
