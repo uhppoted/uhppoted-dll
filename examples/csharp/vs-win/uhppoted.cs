@@ -522,17 +522,44 @@ namespace uhppoted {
 
         public TimeProfile GetTimeProfile(uint deviceID, byte profileID) {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
-            GoTimeProfile profile = new GoTimeProfile();
+            GoGetTimeProfile profile = new GoGetTimeProfile();
+
+            profile.from = Marshal.AllocHGlobal(11);
+            profile.to = Marshal.AllocHGlobal(11);
+            profile.segment1start = Marshal.AllocHGlobal(6);
+            profile.segment1end = Marshal.AllocHGlobal(6);
+            profile.segment2start = Marshal.AllocHGlobal(6);
+            profile.segment2end = Marshal.AllocHGlobal(6);
+            profile.segment3start = Marshal.AllocHGlobal(6);
+            profile.segment3end = Marshal.AllocHGlobal(6);
 
             try {
                 if (GetTimeProfile(ref this.u, ref profile, deviceID, profileID, errmsg) != 0) {
                     raise(errmsg);
                 }
 
+                byte[] from = new byte[11];
+                byte[] to = new byte[11];
+                byte[] segment1start = new byte[6];
+                byte[] segment1end   = new byte[6];
+                byte[] segment2start = new byte[6];
+                byte[] segment2end   = new byte[6];
+                byte[] segment3start = new byte[6];
+                byte[] segment3end   = new byte[6];
+
+                Marshal.Copy(profile.from,          from,         0, 11);
+                Marshal.Copy(profile.to,            to,           0, 11);
+                Marshal.Copy(profile.segment1start, segment1start,0, 6);
+                Marshal.Copy(profile.segment1end,   segment1end  ,0, 6);
+                Marshal.Copy(profile.segment2start, segment2start,0, 6);
+                Marshal.Copy(profile.segment2end,   segment2end  ,0, 6);
+                Marshal.Copy(profile.segment3start, segment3start,0, 6);
+                Marshal.Copy(profile.segment3end,   segment3end  ,0, 6);
+
                 return new TimeProfile(profile.ID,
                                        profile.linked,
-                                       profile.from,
-                                       profile.to,
+                                       System.Text.Encoding.UTF8.GetString(from,0,from.Length),
+                                       System.Text.Encoding.UTF8.GetString(to,0,to.Length),
                                        profile.monday != 0,
                                        profile.tuesday != 0,
                                        profile.wednesday != 0,
@@ -540,17 +567,29 @@ namespace uhppoted {
                                        profile.friday != 0,
                                        profile.saturday != 0,
                                        profile.sunday != 0,
-                                       profile.segment1start, profile.segment1end,
-                                       profile.segment2start, profile.segment2end,
-                                       profile.segment3start, profile.segment3end);
+                                       System.Text.Encoding.UTF8.GetString(segment1start,0,segment1start.Length),
+                                       System.Text.Encoding.UTF8.GetString(segment1end,0,segment1end.Length),
+                                       System.Text.Encoding.UTF8.GetString(segment2start,0,segment2start.Length),
+                                       System.Text.Encoding.UTF8.GetString(segment2end,0,segment2end.Length),
+                                       System.Text.Encoding.UTF8.GetString(segment3start,0,segment3start.Length),
+                                       System.Text.Encoding.UTF8.GetString(segment3end,0,segment3end.Length));
             } finally {
+                Marshal.FreeHGlobal(profile.from);
+                Marshal.FreeHGlobal(profile.to);
+                Marshal.FreeHGlobal(profile.segment1start);
+                Marshal.FreeHGlobal(profile.segment1end);
+                Marshal.FreeHGlobal(profile.segment2start);
+                Marshal.FreeHGlobal(profile.segment2end);
+                Marshal.FreeHGlobal(profile.segment3start);
+                Marshal.FreeHGlobal(profile.segment3end);
+
                 Marshal.FreeHGlobal(errmsg);                
             }
         }
 
         public void SetTimeProfile(uint deviceID, TimeProfile p) {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
-            GoTimeProfile profile = new GoTimeProfile();
+            GoSetTimeProfile profile = new GoSetTimeProfile();
 
             profile.ID = p.ID;
             profile.linked = p.linked;
@@ -781,10 +820,10 @@ namespace uhppoted {
         private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, IntPtr errmsg);
 
         [DllImport("uhppoted.dll")]
-        private static extern int GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID, IntPtr errmsg);
+        private static extern int GetTimeProfile(ref UHPPOTE u, ref GoGetTimeProfile profile, uint deviceID, byte profileID, IntPtr errmsg);
 
         [DllImport("uhppoted.dll")]
-        private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile, IntPtr errmsg);
+        private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoSetTimeProfile profile, IntPtr errmsg);
 
         [DllImport("uhppoted.dll")]
         private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
@@ -887,7 +926,27 @@ namespace uhppoted {
             public uint PIN;
         }
 
-    struct GoTimeProfile {
+    struct GoGetTimeProfile {
+            public byte ID;
+            public byte linked;
+            public IntPtr from;
+            public IntPtr to;
+            public byte monday;
+            public byte tuesday;
+            public byte wednesday;
+            public byte thursday;
+            public byte friday;
+            public byte saturday;
+            public byte sunday;
+            public IntPtr segment1start;
+            public IntPtr segment1end;
+            public IntPtr segment2start;
+            public IntPtr segment2end;
+            public IntPtr segment3start;
+            public IntPtr segment3end;
+        }
+
+    struct GoSetTimeProfile {
             public byte ID;
             public byte linked;
             public string from;

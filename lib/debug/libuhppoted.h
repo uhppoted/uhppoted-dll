@@ -103,8 +103,8 @@ typedef struct Card {
 typedef struct TimeProfile {
     uint8_t ID;
     uint8_t linked;
-    char *from;
-    char *to;
+    char *from;            // char[11]
+    char *to;              // char[11]
     uint8_t monday;
     uint8_t tuesday;
     uint8_t wednesday;
@@ -112,12 +112,12 @@ typedef struct TimeProfile {
     uint8_t friday;
     uint8_t saturday;
     uint8_t sunday;
-    char * segment1start;
-    char * segment1end;
-    char * segment2start;
-    char * segment2end;
-    char * segment3start;
-    char * segment3end;
+    char * segment1start;  // char[6]
+    char * segment1end;    // char[6]
+    char * segment2start;  // char[6]
+    char * segment2end;    // char[6]
+    char * segment3start;  // char[6]
+    char * segment3end;    // char[6]
 } TimeProfile;
 
 typedef struct Task {

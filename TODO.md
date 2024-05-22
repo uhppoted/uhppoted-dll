@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] Rework to use preallocated strings and errors (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
+- [x] Rework to use preallocated strings and errors (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
       - [x] error handling
       - [x] cstring
       - [x] `possible null reference`
@@ -25,12 +25,12 @@
       - [x] set-event-index
       - [x] get-event
       - [x] record-special-events
-      - [ ] get-time-profile
-      - [ ] set-time-profile
-      - [ ] clear-time-profiles
-      - [ ] add-task
-      - [ ] refresh-tasklist
-      - [ ] clear-tasklist
+      - [x] get-time-profile
+      - [x] set-time-profile
+      - [x] clear-time-profiles
+      - [x] add-task
+      - [x] refresh-tasklist
+      - [x] clear-tasklist
       - [x] set-pc-control
       - [x] set-interlock
       - [x] activate-keypads
