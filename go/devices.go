@@ -194,14 +194,13 @@ func getListener(uu uhppote.IUHPPOTE, listener **C.char, deviceID uint32) error 
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
 	}
 
-	response, err := uu.GetListener(deviceID)
-	if err != nil {
+	if v, err := uu.GetListener(deviceID); err != nil {
 		return err
-	} else if response == nil {
-		return fmt.Errorf("%v: no response to get-listener", deviceID)
+	} else if !v.IsValid() {
+		return fmt.Errorf("%v: invalid response to get-listener", deviceID)
+	} else {
+		*listener = C.CString(fmt.Sprintf("%v", v))
 	}
-
-	*listener = C.CString(fmt.Sprintf("%v:%v", response.Address.IP, response.Address.Port))
 
 	return nil
 }
