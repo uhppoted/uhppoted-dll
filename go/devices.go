@@ -6,6 +6,7 @@ import (
 	"C"
 	"fmt"
 	"net"
+	"net/netip"
 	"time"
 	"unsafe"
 
@@ -205,21 +206,17 @@ func getListener(uu uhppote.IUHPPOTE, listener **C.char, deviceID uint32) error 
 	return nil
 }
 
-func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
+func setListener(uu uhppote.IUHPPOTE, controller uint32, listener *C.char) error {
 	if listener == nil {
 		return fmt.Errorf("invalid argument (listener) - expected valid pointer to string")
 	}
 
-	if address, err := net.ResolveUDPAddr("udp", C.GoString(listener)); err != nil {
+	if address, err := netip.ParseAddrPort(C.GoString(listener)); err != nil {
 		return err
-	} else if address == nil || address.IP.To4() == nil {
-		return fmt.Errorf("invalid UDP address: %v", listener)
-	} else {
-		if response, err := uu.SetListener(deviceID, *address); err != nil {
-			return err
-		} else if response == nil {
-			return fmt.Errorf("%v: no response to set-listener", deviceID)
-		}
+	} else if ok, err := uu.SetListener(controller, address); err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("failed to set event listener")
 	}
 
 	return nil
