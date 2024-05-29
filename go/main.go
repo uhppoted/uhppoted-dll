@@ -629,7 +629,7 @@ func cbool(b bool) C.uchar {
 
 func cstring(v any, c *C.char, N uint32) {
 	if c != nil {
-		s := C.CString(ellipsize(v, N))
+		s := C.CString(ellipsize(v, int(N)))
 		l := C.size_t(N)
 
 		C.strncpy(c, s, l)
@@ -637,12 +637,24 @@ func cstring(v any, c *C.char, N uint32) {
 	}
 }
 
-func ellipsize(v any, N uint32) string {
+// e.g. `你好你好你好你好你好你好你好你好你好你好`
+func ellipsize(v any, N int) string {
 	s := fmt.Sprintf("%v", v)
+	n := len(`…`)
 
-	if uint32(len(s)) < N {
+	if len(s) < N {
 		return s
 	} else {
-		return s[:N-3] + `…`
+		for l := N; l > 0; l-- {
+			if r := string([]rune(s)[:l]); len(r)+n < N {
+				return r + `…`
+			}
+		}
+
+		if N > 3 {
+			return "???"
+		} else {
+			return "???"[:N]
+		}
 	}
 }
