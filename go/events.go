@@ -132,7 +132,81 @@ func (l *listener) OnError(err error) bool {
 func (l *listener) pack(status types.Status) ([]byte, error) {
 	var b bytes.Buffer
 
+	granted := uint8(0x00)
+	if status.Event.Granted {
+		granted = 0x01
+	}
+
+	timestamp := []uint8{0, 0, 0, 0, 0, 0, 0}
+	if v, err := status.Event.Timestamp.MarshalUT0311L0x(); err != nil {
+		return []byte{}, err
+	} else {
+		timestamp = v
+	}
+
+	sysdate := []uint8{0, 0, 0}
+	if v, err := types.SystemDate(status.SystemDateTime).MarshalUT0311L0x(); err != nil {
+		return []byte{}, err
+	} else {
+		sysdate = v
+	}
+
+	systime := []uint8{0, 0, 0}
+	if v, err := types.SystemTime(status.SystemDateTime).MarshalUT0311L0x(); err != nil {
+		return []byte{}, err
+	} else {
+		systime = v
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, uint8(0x17)); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, uint8(0x20)); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, uint8(0x00)); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, uint8(0x00)); err != nil {
+		return nil, err
+	}
+
 	if err := binary.Write(&b, binary.LittleEndian, status.SerialNumber); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.Event.Index); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.Event.Type); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, granted); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.Event.Door); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.Event.Direction); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.Event.CardNumber); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, timestamp); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.Event.Reason); err != nil {
 		return nil, err
 	}
 
@@ -142,9 +216,64 @@ func (l *listener) pack(status types.Status) ([]byte, error) {
 				return nil, err
 			}
 		} else {
-			if err := binary.Write(&b, binary.LittleEndian, byte(0)); err != nil {
+			if err := binary.Write(&b, binary.LittleEndian, uint8(0)); err != nil {
 				return nil, err
 			}
+		}
+	}
+
+	for _, k := range []uint8{1, 2, 3, 4} {
+		if v, ok := status.DoorButton[k]; ok {
+			if err := binary.Write(&b, binary.LittleEndian, v); err != nil {
+				return nil, err
+			}
+		} else {
+			if err := binary.Write(&b, binary.LittleEndian, uint8(0)); err != nil {
+				return nil, err
+			}
+		}
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.SystemError); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, systime); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.SequenceId); err != nil {
+		return nil, err
+	}
+
+	// ... padding
+	for i := 0; i < 4; i++ {
+		if err := binary.Write(&b, binary.LittleEndian, uint8(0)); err != nil {
+			return nil, err
+		}
+	}
+
+	// ... other misc stuff
+	if err := binary.Write(&b, binary.LittleEndian, status.SpecialInfo); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.RelayState); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, status.InputState); err != nil {
+		return nil, err
+	}
+
+	if err := binary.Write(&b, binary.LittleEndian, sysdate); err != nil {
+		return nil, err
+	}
+
+	// ... padding
+	for i := 0; i < 10; i++ {
+		if err := binary.Write(&b, binary.LittleEndian, uint8(0)); err != nil {
+			return nil, err
 		}
 	}
 

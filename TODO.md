@@ -1,6 +1,13 @@
 # TODO
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
+      - [ ] Go
+            - Clean up event `pack(...)`
+      - [ ] C
+      - [ ] C++
+      - [ ] C#
+      - [ ] Python
+      - [ ] CCL
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 

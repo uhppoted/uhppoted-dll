@@ -72,6 +72,9 @@ const char *errmsg() { return err; }
 
 void unpack(uint8_t *, int, struct status *);
 uint32_t unpack_uint32(uint8_t *, int);
+uint16_t unpack_uint16(uint8_t *, int);
+uint8_t unpack_uint8(uint8_t *, int);
+bool unpack_bool(uint8_t *, int);
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
@@ -751,14 +754,72 @@ int listen_events(const char *pipe, void (*callback)(const status *)) {
 }
 
 void unpack(uint8_t *buffer, int N, struct status *status) {
-    status->ID = unpack_uint32(buffer, 0);
+    for (int i = 0; i < 4; i++) {
+        printf(">>> %02x %02x %02x %02x %02x %02x %02x %02x  %02x %02x %02x %02x %02x %02x %02x %02x\n",
+               buffer[16 * i + 0],
+               buffer[16 * i + 1],
+               buffer[16 * i + 2],
+               buffer[16 * i + 3],
+               buffer[16 * i + 4],
+               buffer[16 * i + 5],
+               buffer[16 * i + 6],
+               buffer[16 * i + 7],
+               buffer[16 * i + 8],
+               buffer[16 * i + 9],
+               buffer[16 * i + 10],
+               buffer[16 * i + 11],
+               buffer[16 * i + 12],
+               buffer[16 * i + 13],
+               buffer[16 * i + 14],
+               buffer[16 * i + 15]);
+    }
 
-    status->doors[0] = buffer[4];
-    status->doors[1] = buffer[5];
-    status->doors[2] = buffer[6];
-    status->doors[3] = buffer[7];
+    status->ID = unpack_uint32(buffer, 4);
 
-    printf("-- READ %d\n", N);
+    status->evt.index = unpack_uint32(buffer, 8);
+    status->evt.eventType = unpack_uint8(buffer, 12);
+    status->evt.granted = unpack_bool(buffer, 13);
+    status->evt.door = unpack_uint8(buffer, 14);
+    status->evt.direction = unpack_uint8(buffer, 15);
+    status->evt.card = unpack_uint32(buffer, 16);
+
+    snprintf(status->evt.timestamp, sizeof(status->evt.timestamp), "%02x%02x-%02x-%02x %02x:%02x:%02x",
+             unpack_uint8(buffer, 20),  // century
+             unpack_uint8(buffer, 21),  // year
+             unpack_uint8(buffer, 22),  // month
+             unpack_uint8(buffer, 23),  // day
+             unpack_uint8(buffer, 24),  // hour
+             unpack_uint8(buffer, 25),  // minute
+             unpack_uint8(buffer, 26)); // seconds
+
+    status->evt.reason = unpack_uint8(buffer, 27);
+
+    // ... doors
+    status->doors[0] = unpack_bool(buffer, 28);
+    status->doors[1] = unpack_bool(buffer, 29);
+    status->doors[2] = unpack_bool(buffer, 30);
+    status->doors[3] = unpack_bool(buffer, 31);
+
+    // ... buttons
+    status->buttons[0] = unpack_bool(buffer, 32);
+    status->buttons[1] = unpack_bool(buffer, 33);
+    status->buttons[2] = unpack_bool(buffer, 34);
+    status->buttons[3] = unpack_bool(buffer, 35);
+
+    // ... system stuff
+    snprintf(status->sysdatetime, sizeof(status->sysdatetime), "20%02x-%02x-%02x %02x:%02x:%02x",
+             unpack_uint8(buffer, 51),  // year (yy)
+             unpack_uint8(buffer, 52),  // month
+             unpack_uint8(buffer, 53),  // day
+             unpack_uint8(buffer, 37),  // hour
+             unpack_uint8(buffer, 38),  // minute
+             unpack_uint8(buffer, 39)); // seconds
+
+    status->syserror = unpack_uint8(buffer, 36);
+    status->seqno = unpack_uint32(buffer, 40);
+    status->info = unpack_uint8(buffer, 48);
+    status->relays = unpack_uint8(buffer, 49);
+    status->inputs = unpack_uint8(buffer, 50);
 }
 
 uint32_t unpack_uint32(uint8_t *buffer, int index) {
@@ -773,6 +834,24 @@ uint32_t unpack_uint32(uint8_t *buffer, int index) {
     v |= buffer[index];
 
     return v;
+}
+
+uint16_t unpack_uint16(uint8_t *buffer, int index) {
+    uint16_t v = 0;
+
+    v |= buffer[index + 1];
+    v <<= 8;
+    v |= buffer[index];
+
+    return v;
+}
+
+uint8_t unpack_uint8(uint8_t *buffer, int index) {
+    return buffer[index];
+}
+
+bool unpack_bool(uint8_t *buffer, int index) {
+    return buffer[index] == 0x01 ? true : false;
 }
 
 const char *lookup(const char *type, uint8_t code, const char *locale) {
