@@ -506,14 +506,14 @@ func Listen(u *C.struct_UHPPOTE, pipe *C.char) *C.char {
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 	bind := types.BindAddrFrom(INADDR_ANY, 0)
 	broadcast := types.BroadcastAddrFrom(BROADCAST, 60000)
-	listen := types.ListenAddr{IP: []byte{0, 0, 0, 0}, Port: 60001}
+	listen := types.ListenAddrFrom(INADDR_ANY, 60001)
 	timeout := 5 * time.Second
 	devices := []uhppote.Device{}
 	debug := false
 
 	if u != nil {
 		if s := C.GoString(u.bind); s != "" {
-			if addr, err := types.ResolveBindAddr(s); err != nil {
+			if addr, err := types.ParseBindAddr(s); err != nil {
 				return nil, err
 			} else if addr.IsValid() {
 				bind = addr
@@ -521,7 +521,7 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		}
 
 		if s := C.GoString(u.broadcast); s != "" {
-			if addr, err := types.ResolveBroadcastAddr(s); err != nil {
+			if addr, err := types.ParseBroadcastAddr(s); err != nil {
 				return nil, err
 			} else if addr.IsValid() {
 				broadcast = addr
@@ -529,10 +529,10 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 		}
 
 		if s := C.GoString(u.listen); s != "" {
-			if addr, err := types.ResolveListenAddr(s); err != nil {
+			if addr, err := types.ParseListenAddr(s); err != nil {
 				return nil, err
-			} else if addr != nil {
-				listen = *addr
+			} else if addr.IsValid() {
+				listen = addr
 			}
 		}
 
@@ -546,12 +546,12 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 			list := unsafe.Slice(u.devices.devices, u.devices.N)
 			for _, d := range list {
 				if d.id != 0 {
-					if addr, err := types.ResolveAddr(C.GoString(d.address)); err != nil {
+					if addr, err := types.ParseControllerAddr(C.GoString(d.address)); err != nil {
 						return nil, err
 					} else {
 						devices = append(devices, uhppote.Device{
 							DeviceID: uint32(d.id),
-							Address:  addr.AddrPort(),
+							Address:  addr,
 							Protocol: "udp",
 						})
 					}
@@ -584,13 +584,13 @@ func makeTimeProfile(profile *C.struct_TimeProfile) (*types.TimeProfile, error) 
 		Segments: map[uint8]types.Segment{},
 	}
 
-	if from, err := types.DateFromString(C.GoString(profile.from)); err != nil {
+	if from, err := types.ParseDate(C.GoString(profile.from)); err != nil {
 		return nil, fmt.Errorf("invalid 'from' date (%v)", err)
 	} else {
 		p.From = &from
 	}
 
-	if to, err := types.DateFromString(C.GoString(profile.to)); err != nil {
+	if to, err := types.ParseDate(C.GoString(profile.to)); err != nil {
 		return nil, fmt.Errorf("invalid 'to' date (%v)", err)
 	} else {
 		p.To = &to
@@ -636,12 +636,12 @@ func makeTimeProfile(profile *C.struct_TimeProfile) (*types.TimeProfile, error) 
 }
 
 func makeTask(task *C.struct_Task) (*types.Task, error) {
-	from, err := types.DateFromString(C.GoString(task.from))
+	from, err := types.ParseDate(C.GoString(task.from))
 	if err != nil {
 		return nil, fmt.Errorf("invalid 'from' date (%v)", err)
 	}
 
-	to, err := types.DateFromString(C.GoString(task.to))
+	to, err := types.ParseDate(C.GoString(task.to))
 	if err != nil {
 		return nil, fmt.Errorf("invalid 'to' date (%v)", err)
 	}
