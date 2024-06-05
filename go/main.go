@@ -574,13 +574,13 @@ func makeTimeProfile(profile *C.struct_TimeProfile) (*types.TimeProfile, error) 
 	if from, err := types.ParseDate(C.GoString(profile.from)); err != nil {
 		return nil, fmt.Errorf("invalid 'from' date (%v)", err)
 	} else {
-		p.From = &from
+		p.From = from
 	}
 
 	if to, err := types.ParseDate(C.GoString(profile.to)); err != nil {
 		return nil, fmt.Errorf("invalid 'to' date (%v)", err)
 	} else {
-		p.To = &to
+		p.To = to
 	}
 
 	hhmm := map[uint8][2]string{
