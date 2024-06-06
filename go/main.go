@@ -3,6 +3,8 @@ package main
 /*
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include "dispatch.h"
 
 typedef struct udevice {
 	uint32_t    id;
@@ -501,6 +503,40 @@ func Listen(u *C.struct_UHPPOTE, pipe *C.char) *C.char {
 	}
 
 	return nil
+}
+
+// Listens for events and invokes a callback function.
+//
+//export ListenX
+func ListenX(u *C.struct_UHPPOTE, pipe *C.char, f C.yadda) *C.char {
+	l := listenerx{
+		f: f,
+	}
+
+	if uu, err := makeUHPPOTE(u); err != nil {
+		return C.CString(err.Error())
+	} else if err := listenx(uu, &l); err != nil {
+		return C.CString(err.Error())
+	}
+
+	return nil
+}
+
+type listenerx struct {
+	f C.yadda
+}
+
+func (l *listenerx) OnConnected() {
+}
+
+func (l *listenerx) OnEvent(status *types.Status) {
+	if status != nil {
+		C.dispatch(l.f, C.uint(status.Event.Index))
+	}
+}
+
+func (l *listenerx) OnError(err error) bool {
+	return false
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {

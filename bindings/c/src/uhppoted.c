@@ -727,8 +727,38 @@ int restore_default_parameters(uint32_t controller) {
     return 0;
 }
 
+// int listen_events(const char *pipe, void (*callback)(const status *)) {
+//     char *err = Listen(u, (char *)pipe);
+//     if (err != NULL) {
+//         set_error(err);
+//         return -1;
+//     }
+//
+//     int fd, N;
+//     uint8_t buffer[2048];
+//
+//     if ((fd = open(pipe, O_RDONLY)) < 0) {
+//         set_error("error opening named pipe");
+//     }
+//
+//     while ((N = read(fd, buffer, 2048)) > 0) {
+//         struct status status;
+//
+//         unpack(buffer, N, &status);
+//         callback(&status);
+//     }
+//
+//     close(fd);
+//
+//     return 0;
+// }
+
+void woot(unsigned int index) {
+    printf(">>>>>>>>>>> Ye Olde Woot %u\n", index);
+}
+
 int listen_events(const char *pipe, void (*callback)(const status *)) {
-    char *err = Listen(u, (char *)pipe);
+    char *err = ListenX(u, (char *)pipe, woot);
     if (err != NULL) {
         set_error(err);
         return -1;

@@ -105,7 +105,20 @@ func listen(uu uhppote.IUHPPOTE, file string) error {
 
 		return nil
 	}
+}
 
+func listenx(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
+	go func() {
+		q := make(chan os.Signal, 1)
+
+		defer close(q)
+
+		signal.Notify(q, os.Interrupt)
+
+		uu.Listen(f, q)
+	}()
+
+	return nil
 }
 
 type listener struct {
