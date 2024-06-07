@@ -70,12 +70,6 @@ const char *EventReasonUnknown = "unknown";
 
 const char *errmsg() { return err; }
 
-void unpack(uint8_t *, int, struct status *);
-uint32_t unpack_uint32(uint8_t *, int);
-uint16_t unpack_uint16(uint8_t *, int);
-uint8_t unpack_uint8(uint8_t *, int);
-bool unpack_bool(uint8_t *, int);
-
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
  * - broadcast:   255.255.255.255:60000
@@ -727,38 +721,19 @@ int restore_default_parameters(uint32_t controller) {
     return 0;
 }
 
-// int listen_events(const char *pipe, void (*callback)(const status *)) {
-//     char *err = Listen(u, (char *)pipe);
-//     if (err != NULL) {
-//         set_error(err);
-//         return -1;
-//     }
-//
-//     int fd, N;
-//     uint8_t buffer[2048];
-//
-//     if ((fd = open(pipe, O_RDONLY)) < 0) {
-//         set_error("error opening named pipe");
-//     }
-//
-//     while ((N = read(fd, buffer, 2048)) > 0) {
-//         struct status status;
-//
-//         unpack(buffer, N, &status);
-//         callback(&status);
-//     }
-//
-//     close(fd);
-//
-//     return 0;
-// }
-
-void woot(unsigned int index) {
-    printf(">>>>>>>>>>> Ye Olde Woot %u\n", index);
+void on_event(uint32_t index, uint32_t date, uint32_t time, uint8_t event, uint32_t card, uint8_t door, uint8_t granted, uint8_t direction, uint8_t reason) {
+    printf(">>>>>>>>>>> %u\n", index);
+    printf("            %08x %06x\n", date, time);
+    printf("            %d\n", (int)event);
+    printf("            %u\n", (unsigned)card);
+    printf("            %d\n", (int)door);
+    printf("            %s\n", granted == 0x01 ? "GRANTED" : "DENIED");
+    printf("            %s\n", direction == 1 ? "IN" : (direction == 2 ? "OUT" : "???"));
+    printf("            %d\n", (int)reason);
 }
 
-int listen_events(const char *pipe, void (*callback)(const status *)) {
-    char *err = ListenX(u, (char *)pipe, woot);
+int listen_events(void (*callback)(const status *)) {
+    char *err = Listen(u, on_event);
     if (err != NULL) {
         set_error(err);
         return -1;
@@ -767,121 +742,16 @@ int listen_events(const char *pipe, void (*callback)(const status *)) {
     int fd, N;
     uint8_t buffer[2048];
 
-    if ((fd = open(pipe, O_RDONLY)) < 0) {
+    if ((fd = open("/tmp/uhppoted-dll.pipe", O_RDONLY)) < 0) {
         set_error("error opening named pipe");
     }
 
     while ((N = read(fd, buffer, 2048)) > 0) {
-        struct status status;
-
-        unpack(buffer, N, &status);
-        callback(&status);
     }
 
     close(fd);
 
     return 0;
-}
-
-void unpack(uint8_t *buffer, int N, struct status *status) {
-    for (int i = 0; i < 4; i++) {
-        printf(">>> %02x %02x %02x %02x %02x %02x %02x %02x  %02x %02x %02x %02x %02x %02x %02x %02x\n",
-               buffer[16 * i + 0],
-               buffer[16 * i + 1],
-               buffer[16 * i + 2],
-               buffer[16 * i + 3],
-               buffer[16 * i + 4],
-               buffer[16 * i + 5],
-               buffer[16 * i + 6],
-               buffer[16 * i + 7],
-               buffer[16 * i + 8],
-               buffer[16 * i + 9],
-               buffer[16 * i + 10],
-               buffer[16 * i + 11],
-               buffer[16 * i + 12],
-               buffer[16 * i + 13],
-               buffer[16 * i + 14],
-               buffer[16 * i + 15]);
-    }
-
-    status->ID = unpack_uint32(buffer, 4);
-
-    status->evt.index = unpack_uint32(buffer, 8);
-    status->evt.eventType = unpack_uint8(buffer, 12);
-    status->evt.granted = unpack_bool(buffer, 13);
-    status->evt.door = unpack_uint8(buffer, 14);
-    status->evt.direction = unpack_uint8(buffer, 15);
-    status->evt.card = unpack_uint32(buffer, 16);
-
-    snprintf(status->evt.timestamp, sizeof(status->evt.timestamp), "%02x%02x-%02x-%02x %02x:%02x:%02x",
-             unpack_uint8(buffer, 20),  // century
-             unpack_uint8(buffer, 21),  // year
-             unpack_uint8(buffer, 22),  // month
-             unpack_uint8(buffer, 23),  // day
-             unpack_uint8(buffer, 24),  // hour
-             unpack_uint8(buffer, 25),  // minute
-             unpack_uint8(buffer, 26)); // seconds
-
-    status->evt.reason = unpack_uint8(buffer, 27);
-
-    // ... doors
-    status->doors[0] = unpack_bool(buffer, 28);
-    status->doors[1] = unpack_bool(buffer, 29);
-    status->doors[2] = unpack_bool(buffer, 30);
-    status->doors[3] = unpack_bool(buffer, 31);
-
-    // ... buttons
-    status->buttons[0] = unpack_bool(buffer, 32);
-    status->buttons[1] = unpack_bool(buffer, 33);
-    status->buttons[2] = unpack_bool(buffer, 34);
-    status->buttons[3] = unpack_bool(buffer, 35);
-
-    // ... system stuff
-    snprintf(status->sysdatetime, sizeof(status->sysdatetime), "20%02x-%02x-%02x %02x:%02x:%02x",
-             unpack_uint8(buffer, 51),  // year (yy)
-             unpack_uint8(buffer, 52),  // month
-             unpack_uint8(buffer, 53),  // day
-             unpack_uint8(buffer, 37),  // hour
-             unpack_uint8(buffer, 38),  // minute
-             unpack_uint8(buffer, 39)); // seconds
-
-    status->syserror = unpack_uint8(buffer, 36);
-    status->seqno = unpack_uint32(buffer, 40);
-    status->info = unpack_uint8(buffer, 48);
-    status->relays = unpack_uint8(buffer, 49);
-    status->inputs = unpack_uint8(buffer, 50);
-}
-
-uint32_t unpack_uint32(uint8_t *buffer, int index) {
-    uint32_t v = 0;
-
-    v = buffer[index + 3];
-    v <<= 8;
-    v |= buffer[index + 2];
-    v <<= 8;
-    v |= buffer[index + 1];
-    v <<= 8;
-    v |= buffer[index];
-
-    return v;
-}
-
-uint16_t unpack_uint16(uint8_t *buffer, int index) {
-    uint16_t v = 0;
-
-    v |= buffer[index + 1];
-    v <<= 8;
-    v |= buffer[index];
-
-    return v;
-}
-
-uint8_t unpack_uint8(uint8_t *buffer, int index) {
-    return buffer[index];
-}
-
-bool unpack_bool(uint8_t *buffer, int index) {
-    return buffer[index] == 0x01 ? true : false;
 }
 
 const char *lookup(const char *type, uint8_t code, const char *locale) {

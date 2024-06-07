@@ -72,10 +72,6 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	return nil
 }
 
-func listen(uu uhppote.IUHPPOTE, pipe string) error {
-	return nil
-}
-
-func listenx(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
+func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
 	return nil
 }

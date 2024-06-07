@@ -136,7 +136,7 @@ void callback(const status *e) {
 }
 
 int listen(int argc, char **argv) {
-    if (listen_events("/tmp/uhppoted.pipe", callback) < 0) {
+    if (listen_events(callback) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }

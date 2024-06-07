@@ -127,3 +127,9 @@ tests:
 	make -C ./tests/python -f Makefile tests
 	make -C ./tests/ccl    -f Makefile tests
 
+swipe:
+	curl -X POST "http://127.0.0.1:8000/uhppote/simulator/405419896/swipe" \
+         -H "accept: application/json"                                     \
+         -H "Content-Type: application/json"                               \
+         -d '{"door":3,"card-number":10058400,"direction":1,"PIN":7531}'
+

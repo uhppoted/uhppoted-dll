@@ -495,47 +495,81 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 // Listens for events and invokes a callback function.
 //
 //export Listen
-func Listen(u *C.struct_UHPPOTE, pipe *C.char) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := listen(uu, C.GoString(pipe)); err != nil {
-		return C.CString(err.Error())
-	}
-
-	return nil
-}
-
-// Listens for events and invokes a callback function.
-//
-//export ListenX
-func ListenX(u *C.struct_UHPPOTE, pipe *C.char, f C.yadda) *C.char {
-	l := listenerx{
+func Listen(u *C.struct_UHPPOTE, f C.onevent) *C.char {
+	l := listener{
 		f: f,
 	}
 
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := listenx(uu, &l); err != nil {
+	} else if err := listen(uu, &l); err != nil {
 		return C.CString(err.Error())
 	}
 
 	return nil
 }
 
-type listenerx struct {
-	f C.yadda
+type listener struct {
+	f C.onevent
 }
 
-func (l *listenerx) OnConnected() {
+func (l *listener) OnConnected() {
 }
 
-func (l *listenerx) OnEvent(status *types.Status) {
+func (l *listener) OnEvent(status *types.Status) {
+	bcd := func(v int) uint32 {
+		return uint32((((v % 100) / 10) << 4) | (v % 10))
+	}
+
+	yyyymmmdd := func(t time.Time) uint32 {
+		var cc uint32 = bcd(t.Year() / 100)
+		var yy uint32 = bcd(t.Year() % 100)
+		var mm uint32 = bcd(int(t.Month()) % 100)
+		var dd uint32 = bcd(t.Day() % 100)
+
+		fmt.Printf(">> YEAR:%v,%v CC: %v YY:%v\n", t.Year(), t.Year()/100, cc, yy)
+
+		return ((cc << 24) & 0xff000000) |
+			((yy << 16) & 0x00ff0000) |
+			((mm << 8) & 0x0000ff00) |
+			(dd<<0)&0x000000ff
+	}
+
+	HHmmss := func(t time.Time) uint32 {
+		var HH uint32 = bcd(t.Hour() % 100)
+		var mm uint32 = bcd(t.Minute() % 100)
+		var ss uint32 = bcd(t.Second() % 100)
+
+		return ((HH << 16) & 0x00ff0000) |
+			((mm << 8) & 0x0000ff00) |
+			(ss<<0)&0x000000ff
+	}
+
 	if status != nil {
-		C.dispatch(l.f, C.uint(status.Event.Index))
+		var timestamp = time.Time(status.Event.Timestamp)
+		var date uint32 = yyyymmmdd(timestamp)
+		var time uint32 = HHmmss(timestamp)
+		var granted uint8 = 0x00
+
+		if status.Event.Granted {
+			granted = 0x01
+		}
+
+		C.dispatch(
+			l.f,
+			C.uint32_t(status.Event.Index),
+			C.uint32_t(date),
+			C.uint32_t(time),
+			C.uint8_t(status.Event.Type),
+			C.uint32_t(status.Event.CardNumber),
+			C.uint8_t(status.Event.Door),
+			C.uint8_t(granted),
+			C.uint8_t(status.Event.Direction),
+			C.uint8_t(status.Event.Reason))
 	}
 }
 
-func (l *listenerx) OnError(err error) bool {
+func (l *listener) OnError(err error) bool {
 	return false
 }
 
