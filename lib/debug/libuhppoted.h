@@ -21,9 +21,11 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 #line 3 "main.go"
 
+#include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
+#include <string.h>
+
 #include "dispatch.h"
 
 typedef struct udevice {

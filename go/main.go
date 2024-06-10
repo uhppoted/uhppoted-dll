@@ -1,9 +1,11 @@
 package main
 
 /*
+#include <stdlib.h>
 #include <stdbool.h>
 #include <stdint.h>
-#include <stdio.h>
+#include <string.h>
+
 #include "dispatch.h"
 
 typedef struct udevice {
@@ -517,36 +519,8 @@ func (l *listener) OnConnected() {
 }
 
 func (l *listener) OnEvent(status *types.Status) {
-	bcd := func(v int) uint32 {
-		return uint32((((v % 100) / 10) << 4) | (v % 10))
-	}
-
-	yyyymmmdd := func(t time.Time) uint32 {
-		var cc uint32 = bcd(t.Year() / 100)
-		var yy uint32 = bcd(t.Year() % 100)
-		var mm uint32 = bcd(int(t.Month()) % 100)
-		var dd uint32 = bcd(t.Day() % 100)
-
-		return ((cc << 24) & 0xff000000) |
-			((yy << 16) & 0x00ff0000) |
-			((mm << 8) & 0x0000ff00) |
-			(dd<<0)&0x000000ff
-	}
-
-	HHmmss := func(t time.Time) uint32 {
-		var HH uint32 = bcd(t.Hour() % 100)
-		var mm uint32 = bcd(t.Minute() % 100)
-		var ss uint32 = bcd(t.Second() % 100)
-
-		return ((HH << 16) & 0x00ff0000) |
-			((mm << 8) & 0x0000ff00) |
-			(ss<<0)&0x000000ff
-	}
-
 	if status != nil {
-		var timestamp = time.Time(status.Event.Timestamp)
-		var date uint32 = yyyymmmdd(timestamp)
-		var time uint32 = HHmmss(timestamp)
+		var timestamp *C.char = C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
 		var granted uint8 = 0x00
 
 		if status.Event.Granted {
@@ -557,14 +531,15 @@ func (l *listener) OnEvent(status *types.Status) {
 			l.f,
 			C.uint32_t(status.SerialNumber),
 			C.uint32_t(status.Event.Index),
-			C.uint32_t(date),
-			C.uint32_t(time),
+			timestamp,
 			C.uint8_t(status.Event.Type),
 			C.uint32_t(status.Event.CardNumber),
 			C.uint8_t(status.Event.Door),
 			C.uint8_t(granted),
 			C.uint8_t(status.Event.Direction),
 			C.uint8_t(status.Event.Reason))
+
+		C.free(unsafe.Pointer(timestamp))
 	}
 }
 

@@ -94,36 +94,10 @@ int recordSpecialEvents(int argc, char **argv) {
     return 0;
 }
 
-// void handler(const uint32_t controller, const event evt) {
-//     const char *direction = lookup(LOOKUP_DIRECTION, evt.direction, locale);
-//     const char *eventType = lookup(LOOKUP_EVENT_TYPE, evt.eventType, locale);
-//     const char *reason = lookup(LOOKUP_EVENT_REASON, evt.reason, locale);
-//     const char *timestamp = evt.timestamp;
-//
-//     if (strlen(evt.timestamp) == 0) {
-//         timestamp = "-";
-//     }
-//
-//     field fields[] = {
-//         {.field = "controller", .type = "uint32", .value.uint32 = controller},
-//         {.field = "event timestamp", .type = "string", .value.string = timestamp},
-//         {.field = "      index", .type = "uint32", .value.uint32 = evt.index},
-//         {.field = "      type", .type = "string", .value.string = eventType},
-//         {.field = "      granted", .type = "bool", .value.boolean = evt.granted},
-//         {.field = "      door", .type = "uint8", .value.uint8 = evt.door},
-//         {.field = "      direction", .type = "string", .value.string = direction},
-//         {.field = "      card", .type = "uint32", .value.uint32 = evt.card},
-//         {.field = "      reason", .type = "string", .value.string = reason},
-//     };
-//
-//     display("event", sizeof(fields) / sizeof(field), fields);
-// }
-
 void handler(
     uint32_t controller,
     uint32_t index,
-    uint32_t date,
-    uint32_t time,
+    const char *timestamp,
     uint8_t event,
     uint32_t card,
     uint8_t door,
@@ -135,15 +109,8 @@ void handler(
     const char *_reason = lookup(LOOKUP_EVENT_REASON, reason, locale);
     char _timestamp[20] = "-";
 
-    if ((index != 0) && (date != 0)) {
-        uint32_t year = (date >> 16) & 0x0000ffff;
-        uint32_t month = (date >> 8) & 0x0000ff;
-        uint32_t day = (date >> 0) & 0x0000ff;
-        uint32_t hour = (time >> 16) & 0x0000ff;
-        uint32_t minute = (time >> 8) & 0x0000ff;
-        uint32_t second = (time >> 0) & 0x0000ff;
-
-        snprintf(_timestamp, sizeof(_timestamp), "%04x-%02x-%02x %02x:%02x:%02x", year, month, day, hour, minute, second);
+    if ((timestamp != NULL) && (strcmp(timestamp, "") != 0)) {
+        snprintf(_timestamp, sizeof(_timestamp), "%s", timestamp);
     }
 
     field fields[] = {

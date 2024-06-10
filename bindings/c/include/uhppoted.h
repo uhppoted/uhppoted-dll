@@ -101,8 +101,7 @@ typedef struct task {
 typedef void (*on_event)(
     uint32_t controller,
     uint32_t index,
-    uint32_t date,
-    uint32_t time,
+    const char *timestamp,
     uint8_t event,
     uint32_t card,
     uint8_t door,
