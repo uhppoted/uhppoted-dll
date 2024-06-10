@@ -520,26 +520,20 @@ func (l *listener) OnConnected() {
 
 func (l *listener) OnEvent(status *types.Status) {
 	if status != nil {
-		var timestamp *C.char = C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
-		var granted uint8 = 0x00
-
-		if status.Event.Granted {
-			granted = 0x01
+		evt := C.ListenEvent{
+			controller: C.uint32_t(status.SerialNumber),
+			index:      C.uint32_t(status.Event.Index),
+			timestamp:  C.CString(fmt.Sprintf("%v", status.Event.Timestamp)),
+			event:      C.uint8_t(status.Event.Type),
+			card:       C.uint32_t(status.Event.CardNumber),
+			door:       C.uint8_t(status.Event.Door),
+			granted:    C.bool(status.Event.Granted),
+			direction:  C.uint8_t(status.Event.Direction),
+			reason:     C.uint8_t(status.Event.Reason),
 		}
 
-		C.dispatch(
-			l.f,
-			C.uint32_t(status.SerialNumber),
-			C.uint32_t(status.Event.Index),
-			timestamp,
-			C.uint8_t(status.Event.Type),
-			C.uint32_t(status.Event.CardNumber),
-			C.uint8_t(status.Event.Door),
-			C.uint8_t(granted),
-			C.uint8_t(status.Event.Direction),
-			C.uint8_t(status.Event.Reason))
-
-		C.free(unsafe.Pointer(timestamp))
+		C.dispatch(l.f, &evt)
+		C.free(unsafe.Pointer(evt.timestamp))
 	}
 }
 

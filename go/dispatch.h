@@ -1,28 +1,20 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
-typedef void (*onevent) (
-    uint32_t  controller, 
-    uint32_t  index, 
-    const char *timestamp, 
-    uint8_t event, 
-    uint32_t card,
-    uint8_t door, 
-    uint8_t granted, 
-    uint8_t direction,
-    uint8_t reason);
+typedef struct ListenEvent {
+    uint32_t  controller;
+    const char  *timestamp;
+    uint32_t index;
+    uint8_t event;
+    bool granted;
+    uint8_t door;
+    uint8_t direction;
+    uint32_t card;
+    uint8_t reason;
+} ListenEvent;
 
-extern void dispatch(
-    onevent f, 
-    uint32_t  controller, 
-    uint32_t index, 
-    const char *timestamp, 
-    uint8_t event, 
-    uint32_t card,
-    uint8_t door, 
-    uint8_t granted, 
-    uint8_t direction,
-    uint8_t reason);
+typedef void (*onevent) (const struct ListenEvent *evt);
 
-
+extern void dispatch(onevent f, const struct ListenEvent *evt);

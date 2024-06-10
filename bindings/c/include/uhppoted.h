@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "dispatch.h"
 #include "lookup.h"
 
 extern const char *LOOKUP_MODE;
@@ -98,16 +99,7 @@ typedef struct task {
     uint8_t cards;
 } task;
 
-typedef void (*on_event)(
-    uint32_t controller,
-    uint32_t index,
-    const char *timestamp,
-    uint8_t event,
-    uint32_t card,
-    uint8_t door,
-    uint8_t granted,
-    uint8_t direction,
-    uint8_t reason);
+typedef void (*on_event)(const struct ListenEvent *evt);
 
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();

@@ -94,34 +94,25 @@ int recordSpecialEvents(int argc, char **argv) {
     return 0;
 }
 
-void handler(
-    uint32_t controller,
-    uint32_t index,
-    const char *timestamp,
-    uint8_t event,
-    uint32_t card,
-    uint8_t door,
-    uint8_t granted,
-    uint8_t direction,
-    uint8_t reason) {
-    const char *_direction = lookup(LOOKUP_DIRECTION, direction, locale);
-    const char *_event = lookup(LOOKUP_EVENT_TYPE, event, locale);
-    const char *_reason = lookup(LOOKUP_EVENT_REASON, reason, locale);
+void handler(const struct ListenEvent *evt) {
+    const char *_direction = lookup(LOOKUP_DIRECTION, evt->direction, locale);
+    const char *_event = lookup(LOOKUP_EVENT_TYPE, evt->event, locale);
+    const char *_reason = lookup(LOOKUP_EVENT_REASON, evt->reason, locale);
     char _timestamp[20] = "-";
 
-    if ((timestamp != NULL) && (strcmp(timestamp, "") != 0)) {
-        snprintf(_timestamp, sizeof(_timestamp), "%s", timestamp);
+    if ((evt->timestamp != NULL) && (strcmp(evt->timestamp, "") != 0)) {
+        snprintf(_timestamp, sizeof(_timestamp), "%s", evt->timestamp);
     }
 
     field fields[] = {
-        {.field = "controller", .type = "uint32", .value.uint32 = controller},
+        {.field = "controller", .type = "uint32", .value.uint32 = evt->controller},
         {.field = "event timestamp", .type = "string", .value.string = _timestamp},
-        {.field = "      index", .type = "uint32", .value.uint32 = index},
+        {.field = "      index", .type = "uint32", .value.uint32 = evt->index},
         {.field = "      type", .type = "string", .value.string = _event},
-        {.field = "      granted", .type = "bool", .value.boolean = granted},
-        {.field = "      door", .type = "uint8", .value.uint8 = door},
+        {.field = "      granted", .type = "bool", .value.boolean = evt->granted},
+        {.field = "      door", .type = "uint8", .value.uint8 = evt->door},
         {.field = "      direction", .type = "string", .value.string = _direction},
-        {.field = "      card", .type = "uint32", .value.uint32 = card},
+        {.field = "      card", .type = "uint32", .value.uint32 = evt->card},
         {.field = "      reason", .type = "string", .value.string = _reason},
     };
 
