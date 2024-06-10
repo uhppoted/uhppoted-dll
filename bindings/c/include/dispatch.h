@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 typedef void (*onevent)(
+    uint32_t controller,
     uint32_t index,
     uint32_t date,
     uint32_t time,
@@ -15,6 +16,7 @@ typedef void (*onevent)(
 
 extern void dispatch(
     onevent f,
+    uint32_t controller,
     uint32_t index,
     uint32_t date,
     uint32_t time,

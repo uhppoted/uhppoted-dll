@@ -527,8 +527,6 @@ func (l *listener) OnEvent(status *types.Status) {
 		var mm uint32 = bcd(int(t.Month()) % 100)
 		var dd uint32 = bcd(t.Day() % 100)
 
-		fmt.Printf(">> YEAR:%v,%v CC: %v YY:%v\n", t.Year(), t.Year()/100, cc, yy)
-
 		return ((cc << 24) & 0xff000000) |
 			((yy << 16) & 0x00ff0000) |
 			((mm << 8) & 0x0000ff00) |
@@ -557,6 +555,7 @@ func (l *listener) OnEvent(status *types.Status) {
 
 		C.dispatch(
 			l.f,
+			C.uint32_t(status.SerialNumber),
 			C.uint32_t(status.Event.Index),
 			C.uint32_t(date),
 			C.uint32_t(time),

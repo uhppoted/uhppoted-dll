@@ -721,19 +721,8 @@ int restore_default_parameters(uint32_t controller) {
     return 0;
 }
 
-void on_event(uint32_t index, uint32_t date, uint32_t time, uint8_t event, uint32_t card, uint8_t door, uint8_t granted, uint8_t direction, uint8_t reason) {
-    printf(">>>>>>>>>>> %u\n", index);
-    printf("            %08x %06x\n", date, time);
-    printf("            %d\n", (int)event);
-    printf("            %u\n", (unsigned)card);
-    printf("            %d\n", (int)door);
-    printf("            %s\n", granted == 0x01 ? "GRANTED" : "DENIED");
-    printf("            %s\n", direction == 1 ? "IN" : (direction == 2 ? "OUT" : "???"));
-    printf("            %d\n", (int)reason);
-}
-
-int listen_events(void (*callback)(const status *)) {
-    char *err = Listen(u, on_event);
+int listen_events(on_event handler) {
+    char *err = Listen(u, handler);
     if (err != NULL) {
         set_error(err);
         return -1;

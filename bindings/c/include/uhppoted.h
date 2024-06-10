@@ -98,6 +98,18 @@ typedef struct task {
     uint8_t cards;
 } task;
 
+typedef void (*on_event)(
+    uint32_t controller,
+    uint32_t index,
+    uint32_t date,
+    uint32_t time,
+    uint8_t event,
+    uint32_t card,
+    uint8_t door,
+    uint8_t granted,
+    uint8_t direction,
+    uint8_t reason);
+
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);
 void teardown();
 const char *errmsg();
@@ -127,7 +139,7 @@ int get_event_index(uint32_t id, uint32_t *index);
 int set_event_index(uint32_t id, uint32_t index);
 int get_event(uint32_t id, uint32_t index, event *event);
 int record_special_events(uint32_t id, bool enabled);
-int listen_events();
+int listen_events(on_event handler);
 
 int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *profile);
 int set_time_profile(uint32_t id, time_profile *profile);

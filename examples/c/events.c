@@ -94,49 +94,75 @@ int recordSpecialEvents(int argc, char **argv) {
     return 0;
 }
 
-void callback(const status *e) {
-    if (e != NULL) {
-        const char *direction = lookup(LOOKUP_DIRECTION, e->evt.direction, locale);
-        const char *eventType = lookup(LOOKUP_EVENT_TYPE, e->evt.eventType, locale);
-        const char *reason = lookup(LOOKUP_EVENT_REASON, e->evt.reason, locale);
-        const char *timestamp = e->evt.timestamp;
+// void handler(const uint32_t controller, const event evt) {
+//     const char *direction = lookup(LOOKUP_DIRECTION, evt.direction, locale);
+//     const char *eventType = lookup(LOOKUP_EVENT_TYPE, evt.eventType, locale);
+//     const char *reason = lookup(LOOKUP_EVENT_REASON, evt.reason, locale);
+//     const char *timestamp = evt.timestamp;
+//
+//     if (strlen(evt.timestamp) == 0) {
+//         timestamp = "-";
+//     }
+//
+//     field fields[] = {
+//         {.field = "controller", .type = "uint32", .value.uint32 = controller},
+//         {.field = "event timestamp", .type = "string", .value.string = timestamp},
+//         {.field = "      index", .type = "uint32", .value.uint32 = evt.index},
+//         {.field = "      type", .type = "string", .value.string = eventType},
+//         {.field = "      granted", .type = "bool", .value.boolean = evt.granted},
+//         {.field = "      door", .type = "uint8", .value.uint8 = evt.door},
+//         {.field = "      direction", .type = "string", .value.string = direction},
+//         {.field = "      card", .type = "uint32", .value.uint32 = evt.card},
+//         {.field = "      reason", .type = "string", .value.string = reason},
+//     };
+//
+//     display("event", sizeof(fields) / sizeof(field), fields);
+// }
 
-        if (strlen(e->evt.timestamp) == 0) {
-            timestamp = "-";
-        }
+void handler(
+    uint32_t controller,
+    uint32_t index,
+    uint32_t date,
+    uint32_t time,
+    uint8_t event,
+    uint32_t card,
+    uint8_t door,
+    uint8_t granted,
+    uint8_t direction,
+    uint8_t reason) {
+    const char *_direction = lookup(LOOKUP_DIRECTION, direction, locale);
+    const char *_event = lookup(LOOKUP_EVENT_TYPE, event, locale);
+    const char *_reason = lookup(LOOKUP_EVENT_REASON, reason, locale);
+    char _timestamp[20] = "-";
 
-        field fields[] = {
-            {.field = "controller", .type = "uint32", .value.uint32 = e->ID},
-            {.field = "date/time", .type = "string", .value.string = e->sysdatetime},
-            {.field = "doors[1]", .type = "bool", .value.boolean = e->doors[0]},
-            {.field = "doors[2]", .type = "bool", .value.boolean = e->doors[1]},
-            {.field = "doors[3]", .type = "bool", .value.boolean = e->doors[2]},
-            {.field = "doors[4]", .type = "bool", .value.boolean = e->doors[3]},
-            {.field = "buttons[1]", .type = "bool", .value.boolean = e->buttons[0]},
-            {.field = "buttons[2]", .type = "bool", .value.boolean = e->buttons[1]},
-            {.field = "buttons[3]", .type = "bool", .value.boolean = e->buttons[2]},
-            {.field = "buttons[4]", .type = "bool", .value.boolean = e->buttons[3]},
-            {.field = "relays", .type = "uint8", .value.uint8 = e->relays},
-            {.field = "inputs", .type = "uint8", .value.uint8 = e->inputs},
-            {.field = "error", .type = "uint8", .value.uint8 = e->syserror},
-            {.field = "seq no.", .type = "uint32", .value.uint32 = e->seqno},
-            {.field = "info", .type = "uint8", .value.uint8 = e->info},
-            {.field = "event timestamp", .type = "string", .value.string = timestamp},
-            {.field = "      index", .type = "uint32", .value.uint32 = e->evt.index},
-            {.field = "      type", .type = "string", .value.string = eventType},
-            {.field = "      granted", .type = "bool", .value.boolean = e->evt.granted},
-            {.field = "      door", .type = "uint8", .value.uint8 = e->evt.door},
-            {.field = "      direction", .type = "string", .value.string = direction},
-            {.field = "      card", .type = "uint32", .value.uint32 = e->evt.card},
-            {.field = "      reason", .type = "string", .value.string = reason},
-        };
+    if ((index != 0) && (date != 0)) {
+        uint32_t year = (date >> 16) & 0x0000ffff;
+        uint32_t month = (date >> 8) & 0x0000ff;
+        uint32_t day = (date >> 0) & 0x0000ff;
+        uint32_t hour = (time >> 16) & 0x0000ff;
+        uint32_t minute = (time >> 8) & 0x0000ff;
+        uint32_t second = (time >> 0) & 0x0000ff;
 
-        display("event", sizeof(fields) / sizeof(field), fields);
+        snprintf(_timestamp, sizeof(_timestamp), "%04x-%02x-%02x %02x:%02x:%02x", year, month, day, hour, minute, second);
     }
+
+    field fields[] = {
+        {.field = "controller", .type = "uint32", .value.uint32 = controller},
+        {.field = "event timestamp", .type = "string", .value.string = _timestamp},
+        {.field = "      index", .type = "uint32", .value.uint32 = index},
+        {.field = "      type", .type = "string", .value.string = _event},
+        {.field = "      granted", .type = "bool", .value.boolean = granted},
+        {.field = "      door", .type = "uint8", .value.uint8 = door},
+        {.field = "      direction", .type = "string", .value.string = _direction},
+        {.field = "      card", .type = "uint32", .value.uint32 = card},
+        {.field = "      reason", .type = "string", .value.string = _reason},
+    };
+
+    display("event", sizeof(fields) / sizeof(field), fields);
 }
 
 int listen(int argc, char **argv) {
-    if (listen_events(callback) < 0) {
+    if (listen_events(handler) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
