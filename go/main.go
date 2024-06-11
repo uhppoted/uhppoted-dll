@@ -510,9 +510,13 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent) *C.char {
 
 		// Ref. https://stackoverflow.com/questions/34897843/why-does-go-panic-on-writing-to-a-closed-channel
 		// Ref. https://go.dev/ref/spec#Close
-		//
-		// defer close(q)
-		//
+		// Ref. https://golangdocs.com/channels-in-golang
+		defer func() {
+			if _, ok := <-q; ok {
+				close(q)
+			}
+		}()
+
 		// go func() {
 		// 	println(" ... sleeping")
 		// 	time.Sleep(10 * time.Second)
