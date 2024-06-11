@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"syscall"
 
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
@@ -76,36 +75,12 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 }
 
 func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
-	os.Remove("/tmp/uhppoted-dll.pipe")
+	q := make(chan os.Signal, 1)
 
-	if err := syscall.Mkfifo("/tmp/uhppoted-dll.pipe", 0666); err != nil {
-		return err
-	}
+	defer close(q)
 
-	if _, err := os.OpenFile("/tmp/uhppoted-dll.pipe", os.O_RDWR|os.O_CREATE|os.O_APPEND, os.ModeNamedPipe); err != nil {
-		return err
-	} else {
-		go func() {
-			q := make(chan os.Signal, 1)
+	signal.Notify(q, os.Interrupt)
 
-			defer close(q)
-
-			signal.Notify(q, os.Interrupt)
-
-			uu.Listen(f, q)
-		}()
-
-		return nil
-	}
+	uu.Listen(f, q)
+	return nil
 }
-
-// func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
-// 	q := make(chan os.Signal, 1)
-//
-// 	defer close(q)
-//
-// 	signal.Notify(q, os.Interrupt)
-//
-// 	uu.Listen(f, q)
-// 	return nil
-// }
