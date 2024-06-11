@@ -73,5 +73,5 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 }
 
 func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
-	return nil
+	return fmt.Errorf("*** NOT IMPLEMENTED ***")
 }

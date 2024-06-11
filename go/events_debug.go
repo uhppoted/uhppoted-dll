@@ -71,19 +71,10 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	return nil
 }
 
-// func listen(uu uhppote.IUHPPOTE, pipe string) error {
-// 	if DEBUG {
-// 		fmt.Printf(">>> listen\n")
-// 		fmt.Printf("    pipe: %v\n", pipe)
-// 	}
-//
-// 	return nil
-// }
-
 func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
 	if DEBUG {
 		fmt.Printf(">>> listen\n")
 	}
 
-	return nil
+	return fmt.Errorf("*** NOT IMPLEMENTED ***")
 }

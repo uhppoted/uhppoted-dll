@@ -1,12 +1,9 @@
 #include "../include/uhppoted.h"
 #include "libuhppoted.h"
 
-#include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 
 __thread char *err = NULL;
 __thread UHPPOTE *u = NULL;
@@ -727,18 +724,6 @@ int listen_events(on_event handler) {
         set_error(err);
         return -1;
     }
-
-    int fd, N;
-    uint8_t buffer[2048];
-
-    if ((fd = open("/tmp/uhppoted-dll.pipe", O_RDONLY)) < 0) {
-        set_error("error opening named pipe");
-    }
-
-    while ((N = read(fd, buffer, 2048)) > 0) {
-    }
-
-    close(fd);
 
     return 0;
 }

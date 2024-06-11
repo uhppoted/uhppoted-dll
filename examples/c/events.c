@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <fcntl.h>
+#include <unistd.h>
+
 #include "examples.h"
 #include "uhppoted.h"
 
@@ -123,6 +126,18 @@ int listen(int argc, char **argv) {
     if (listen_events(handler) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
+    }
+
+    int fd, N;
+    uint8_t buffer[2048];
+
+    if ((fd = open("/tmp/uhppoted-dll.pipe", O_RDONLY)) < 0) {
+        printf("ERROR %s\n", "error opening named pipe");
+    } else {
+        while ((N = read(fd, buffer, 2048)) > 0) {
+        }
+
+        close(fd);
     }
 
     return 0;

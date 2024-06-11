@@ -98,3 +98,14 @@ func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
 		return nil
 	}
 }
+
+// func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
+// 	q := make(chan os.Signal, 1)
+//
+// 	defer close(q)
+//
+// 	signal.Notify(q, os.Interrupt)
+//
+// 	uu.Listen(f, q)
+// 	return nil
+// }
