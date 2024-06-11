@@ -116,6 +116,7 @@ import "C"
 import (
 	"fmt"
 	"net/netip"
+	"os"
 	"time"
 	"unsafe"
 
@@ -498,14 +499,30 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 //
 //export Listen
 func Listen(u *C.struct_UHPPOTE, f C.onevent) *C.char {
-	l := listener{
-		f: f,
-	}
-
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
-	} else if err := listen(uu, &l); err != nil {
-		return C.CString(err.Error())
+	} else {
+		l := listener{
+			f: f,
+		}
+
+		q := make(chan os.Signal, 1)
+
+		// Ref. https://stackoverflow.com/questions/34897843/why-does-go-panic-on-writing-to-a-closed-channel
+		// Ref. https://go.dev/ref/spec#Close
+		//
+		// defer close(q)
+		//
+		// go func() {
+		// 	println(" ... sleeping")
+		// 	time.Sleep(10 * time.Second)
+		// 	println(" ... slept")
+		// 	close(q)
+		// }()
+
+		if err := listen(uu, &l, q); err != nil {
+			return C.CString(err.Error())
+		}
 	}
 
 	return nil

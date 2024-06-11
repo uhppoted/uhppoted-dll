@@ -6,7 +6,6 @@ import (
 	"C"
 	"fmt"
 	"os"
-	"os/signal"
 
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
@@ -74,13 +73,8 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	return nil
 }
 
-func listen(uu uhppote.IUHPPOTE, f uhppote.Listener) error {
-	q := make(chan os.Signal, 1)
-
-	defer close(q)
-
-	signal.Notify(q, os.Interrupt)
-
+func listen(uu uhppote.IUHPPOTE, f uhppote.Listener, q chan os.Signal) error {
 	uu.Listen(f, q)
+
 	return nil
 }
