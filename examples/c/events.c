@@ -1,8 +1,13 @@
+#include <signal.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "examples.h"
 #include "uhppoted.h"
+
+void handler(const struct ListenEvent *evt);
 
 int getEventIndex(int argc, char **argv) {
     options opts = parse(argc, argv);
@@ -94,6 +99,34 @@ int recordSpecialEvents(int argc, char **argv) {
     return 0;
 }
 
+int listen(int argc, char **argv) {
+    uintptr_t handle;
+    if (listen_events(handler, &handle) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    sigset_t set;
+    int sig;
+    int rc;
+
+    sigemptyset(&set);
+
+    if ((rc = sigaddset(&set, SIGINT)) == -1) {
+        printf("ERROR sigaddset (%d)", rc);
+        return -1;
+    }
+
+    if ((rc = sigwait(&set, &sig)) != 0) {
+        printf("ERROR sigwait (%d)\n", rc);
+        return -1;
+    }
+
+    listen_stop(handle);
+
+    return 0;
+}
+
 void handler(const struct ListenEvent *evt) {
     const char *_direction = lookup(LOOKUP_DIRECTION, evt->direction, locale);
     const char *_event = lookup(LOOKUP_EVENT_TYPE, evt->event, locale);
@@ -117,13 +150,4 @@ void handler(const struct ListenEvent *evt) {
     };
 
     display("event", sizeof(fields) / sizeof(field), fields);
-}
-
-int listen(int argc, char **argv) {
-    if (listen_events(handler) < 0) {
-        printf("ERROR %s\n", errmsg());
-        return -1;
-    }
-
-    return 0;
 }

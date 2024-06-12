@@ -117,6 +117,8 @@ import (
 	"fmt"
 	"net/netip"
 	"os"
+	"runtime"
+	"runtime/cgo"
 	"time"
 	"unsafe"
 
@@ -127,6 +129,7 @@ import (
 var DEBUG bool
 var INADDR_ANY = netip.AddrFrom4([4]byte{0, 0, 0, 0})
 var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
+var PIN runtime.Pinner
 
 func main() {}
 
@@ -498,7 +501,7 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 // Listens for events and invokes a callback function.
 //
 //export Listen
-func Listen(u *C.struct_UHPPOTE, f C.onevent) *C.char {
+func Listen(u *C.struct_UHPPOTE, f C.onevent, p *C.uintptr_t) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else {
@@ -507,15 +510,16 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent) *C.char {
 		}
 
 		q := make(chan os.Signal, 1)
+		h := cgo.NewHandle(q)
 
 		// Ref. https://stackoverflow.com/questions/34897843/why-does-go-panic-on-writing-to-a-closed-channel
 		// Ref. https://go.dev/ref/spec#Close
 		// Ref. https://golangdocs.com/channels-in-golang
-		defer func() {
-			if _, ok := <-q; ok {
-				close(q)
-			}
-		}()
+		// defer func() {
+		// 	if _, ok := <-q; ok {
+		// 		close(q)
+		// 	}
+		// }()
 
 		// go func() {
 		// 	println(" ... sleeping")
@@ -527,9 +531,26 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent) *C.char {
 		if err := listen(uu, &l, q); err != nil {
 			return C.CString(err.Error())
 		}
+
+		PIN.Pin(&q)
+		*p = C.uintptr_t(h)
+
+		// if err := listen(uu, &l, q); err != nil {
+		// 	return C.CString(err.Error())
+		// }
 	}
 
 	return nil
+}
+
+//export ListenStop
+func ListenStop(h C.uintptr_t) {
+	handle := cgo.Handle(h)
+	q := handle.Value().(chan os.Signal)
+
+	if _, ok := <-q; ok {
+	close(q)
+	}
 }
 
 type listener struct {
