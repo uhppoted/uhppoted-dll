@@ -4,6 +4,14 @@
 #include <stdio.h>
 #include <dispatch.h>
 
-void dispatch(onevent f, const struct ListenEvent *evt) {
-    f(evt);
+void dispatch_event(onevent f, const struct ListenEvent *evt) {
+    if (f != NULL) {
+        f(evt);
+    }
+}
+
+void dispatch_error(onerror f, const char *err) {
+    if (f != NULL) {
+        f(err);        
+    }
 }

@@ -8,6 +8,7 @@
 #include "uhppoted.h"
 
 void handler(const struct ListenEvent *evt);
+void errors(const char *err);
 
 int getEventIndex(int argc, char **argv) {
     options opts = parse(argc, argv);
@@ -103,7 +104,7 @@ int listen(int argc, char **argv) {
     bool running;
     bool stop;
 
-    if (listen_events(handler, &running, &stop) < 0) {
+    if (listen_events(handler, &running, &stop, errors) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -174,4 +175,8 @@ void handler(const struct ListenEvent *evt) {
     };
 
     display("event", sizeof(fields) / sizeof(field), fields);
+}
+
+void errors(const char *err) {
+    printf("ERROR %s\n", err);
 }

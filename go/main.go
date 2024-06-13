@@ -498,9 +498,10 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 // Listens for events and invokes a callback function.
 //
 //export Listen
-func Listen(u *C.struct_UHPPOTE, f C.onevent, running *C.bool, stop *C.bool) *C.char {
+func Listen(u *C.struct_UHPPOTE, f C.onevent, running *C.bool, stop *C.bool, g C.onerror) C.int {
 	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
+		C.dispatch_error(g, C.CString(err.Error()))
+		return -1
 	} else {
 		l := listener{
 			f: f,
@@ -533,8 +534,7 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *C.bool, stop *C.bool) *C.
 
 		go func() {
 			if err := listen(uu, &l, q); err != nil {
-				// return C.CString(err.Error())
-				fmt.Printf(">>> OOOPS %v\n", err)
+				C.dispatch_error(g, C.CString(err.Error()))
 			}
 
 			if running != nil {
@@ -542,7 +542,7 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *C.bool, stop *C.bool) *C.
 			}
 		}()
 
-		return nil
+		return 0
 	}
 }
 
@@ -567,7 +567,7 @@ func (l *listener) OnEvent(status *types.Status) {
 			reason:     C.uint8_t(status.Event.Reason),
 		}
 
-		C.dispatch(l.f, &evt)
+		C.dispatch_event(l.f, &evt)
 		C.free(unsafe.Pointer(evt.timestamp))
 	}
 }

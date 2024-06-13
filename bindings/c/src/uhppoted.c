@@ -718,10 +718,10 @@ int restore_default_parameters(uint32_t controller) {
     return 0;
 }
 
-int listen_events(on_event handler, bool *running, bool *stop) {
-    char *err = Listen(u, handler, running, stop);
-    if (err != NULL) {
-        set_error(err);
+int listen_events(on_event handler, bool *running, bool *stop, on_error err_handler) {
+    int err = Listen(u, handler, running, stop, err_handler);
+    if (err != 0) {
+        // set_error(err);
         return -1;
     }
 
