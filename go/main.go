@@ -117,8 +117,6 @@ import (
 	"fmt"
 	"net/netip"
 	"os"
-	"runtime"
-	"runtime/cgo"
 	"time"
 	"unsafe"
 
@@ -129,7 +127,6 @@ import (
 var DEBUG bool
 var INADDR_ANY = netip.AddrFrom4([4]byte{0, 0, 0, 0})
 var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
-var PIN runtime.Pinner
 
 func main() {}
 
@@ -501,7 +498,7 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 // Listens for events and invokes a callback function.
 //
 //export Listen
-func Listen(u *C.struct_UHPPOTE, f C.onevent, p *C.uintptr_t) *C.char {
+func Listen(u *C.struct_UHPPOTE, f C.onevent, running *C.bool, stop *C.bool) *C.char {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		return C.CString(err.Error())
 	} else {
@@ -509,47 +506,43 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, p *C.uintptr_t) *C.char {
 			f: f,
 		}
 
+		// NTS: cannot pin channels
+		//      Ref. https://pkg.go.dev/cmd/cgo
+		//      C code may not keep a copy of a Go pointer after the call returns, unless the memory
+		//      it points to is pinned with runtime.Pinner and the Pinner is not unpinned while the Go
+		//      pointer is stored in C memory. This implies that C code may not keep a copy of a string,
+		//      slice, channel, and so forth, because they cannot be pinned with runtime.Pinner.
 		q := make(chan os.Signal, 1)
-		h := cgo.NewHandle(q)
+
+		if running != nil {
+			*running = true
+		}
 
 		// Ref. https://stackoverflow.com/questions/34897843/why-does-go-panic-on-writing-to-a-closed-channel
 		// Ref. https://go.dev/ref/spec#Close
 		// Ref. https://golangdocs.com/channels-in-golang
-		// defer func() {
-		// 	if _, ok := <-q; ok {
-		// 		close(q)
-		// 	}
-		// }()
+		if stop != nil {
+			go func() {
+				for !(*stop) {
+					time.Sleep(100 * time.Millisecond)
+				}
 
-		// go func() {
-		// 	println(" ... sleeping")
-		// 	time.Sleep(10 * time.Second)
-		// 	println(" ... slept")
-		// 	close(q)
-		// }()
-
-		if err := listen(uu, &l, q); err != nil {
-			return C.CString(err.Error())
+				close(q)
+			}()
 		}
 
-		PIN.Pin(&q)
-		*p = C.uintptr_t(h)
+		go func() {
+			if err := listen(uu, &l, q); err != nil {
+				// return C.CString(err.Error())
+				fmt.Printf(">>> OOOPS %v\n", err)
+			}
 
-		// if err := listen(uu, &l, q); err != nil {
-		// 	return C.CString(err.Error())
-		// }
-	}
+			if running != nil {
+				*running = false
+			}
+		}()
 
-	return nil
-}
-
-//export ListenStop
-func ListenStop(h C.uintptr_t) {
-	handle := cgo.Handle(h)
-	q := handle.Value().(chan os.Signal)
-
-	if _, ok := <-q; ok {
-	close(q)
+		return nil
 	}
 }
 

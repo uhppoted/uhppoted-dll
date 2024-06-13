@@ -2,7 +2,13 @@
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [ ] Go
-            - Clean up event `pack(...)`
+            - [ ] Remove pinning:
+```
+https://pkg.go.dev/cmd/cgo
+
+C code may not keep a copy of a Go pointer after the call returns, unless the memory it points to is pinned with runtime.Pinner and the Pinner is not unpinned while the Go pointer is stored in C memory. This implies that C code may not keep a copy of a string, slice, channel, and so forth, because they cannot be pinned with runtime.Pinner.
+```
+
       - [ ] C
       - [ ] C++
       - [ ] C#

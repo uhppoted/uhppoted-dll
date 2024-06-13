@@ -100,11 +100,25 @@ int recordSpecialEvents(int argc, char **argv) {
 }
 
 int listen(int argc, char **argv) {
-    uintptr_t handle;
-    if (listen_events(handler, &handle) < 0) {
+    bool running;
+    bool stop;
+
+    if (listen_events(handler, &running, &stop) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
+
+    sleep(1);
+    for (int count = 0; count < 5 && !running; count++) {
+        printf(" ... waiting %d %s\n", count, running ? "running" : "stopped");
+    }
+
+    if (!running) {
+        printf("ERROR %s\n", "failed to start event listener");
+        return -1;
+    }
+
+    printf("INFO  listening\n");
 
     sigset_t set;
     int sig;
@@ -122,7 +136,17 @@ int listen(int argc, char **argv) {
         return -1;
     }
 
-    listen_stop(handle);
+    stop = true;
+    sleep(1);
+    for (int count = 0; count < 5 && running; count++) {
+        printf("DEBUG ... stoppping event listener %d %s\n", count, running ? "running" : "stopped");
+        sleep(1);
+    }
+
+    if (running) {
+        printf("ERROR %s\n", "failed to stop event listener");
+        return -1;
+    }
 
     return 0;
 }

@@ -131,8 +131,7 @@ int set_event_index(uint32_t id, uint32_t index);
 int get_event(uint32_t id, uint32_t index, event *event);
 int record_special_events(uint32_t id, bool enabled);
 
-int listen_events(on_event handler, uintptr_t *handle);
-int listen_stop(uintptr_t handle);
+int listen_events(on_event handler, bool *running, bool *stop);
 
 int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *profile);
 int set_time_profile(uint32_t id, time_profile *profile);
