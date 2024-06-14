@@ -1,6 +1,7 @@
 # TODO
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
+      - [x] Merge to main
       - [x] Go
             - [ ] Relook at error handling
             - [ ] Move implementation to events.go
