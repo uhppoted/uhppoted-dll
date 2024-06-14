@@ -498,7 +498,7 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 // Listens for events and invokes a callback function.
 //
 //export Listen
-func Listen(u *C.struct_UHPPOTE, f C.onevent, running *C.bool, stop *C.bool, g C.onerror) C.int {
+func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.onerror) int {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		C.dispatch_error(g, C.CString(err.Error()))
 		return -1
