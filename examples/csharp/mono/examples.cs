@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+
 using static System.Console;
 using static System.String;
 
@@ -154,6 +156,9 @@ public class examples {
         new command("restore-default-parameters",
                     "Resets a controller to the manufacturer default configuration.",
                     RestoreDefaultParameters),
+        new command("listen",
+                    "Listens for access events.",
+                    Listen),
     };
 
     static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
@@ -814,6 +819,51 @@ public class examples {
         };
 
         display("restore-default-parameters", fields);
+    }
+
+    static void Listen(Uhppoted u, string[] args) {
+        var exitEvent = new ManualResetEvent(false);
+        Console.CancelKeyPress += (sender, eventArgs) => {
+            eventArgs.Cancel = true;
+            exitEvent.Set();
+        };
+
+        bool running = false;
+        bool stop = false;
+        TimeSpan delay = TimeSpan.FromMilliseconds(1000);
+
+        u.ListenEvents(ref running, ref stop);
+
+        //    if (listen_events(handler, &running, &stop, errors) < 0) {
+        //        printf("ERROR %s\n", errmsg());
+        //        return -1;
+        //    }
+
+        Thread.Sleep(delay);
+        for (int count = 0; count < 5 && !running; count++) {
+            WriteLine("DEBUG ... waiting {0} {1}", count, running ? "running" : "pending");
+            Thread.Sleep(delay);
+        }
+
+        if (!running) {
+            WriteLine("ERROR {0}", "failed to start event listener");
+            return;
+        }
+
+        WriteLine("INFO  listening");
+
+        exitEvent.WaitOne();
+
+        stop = true;
+        Thread.Sleep(delay);
+        for (int count = 0; count < 5 && running; count++) {
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, running ? "running" : "stopped");
+            Thread.Sleep(delay);
+        }
+
+        if (running) {
+            WriteLine("ERROR {0}", "failed to stop event listener");
+        }
     }
 
     static options parse(string[] args) {

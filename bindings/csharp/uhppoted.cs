@@ -475,6 +475,19 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void ListenEvents(ref bool running, ref bool stop) {
+    }
+
+    //    int listen_events(on_event handler, bool *running, bool *stop, on_error err_handler) {
+    //        int err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
+    //        if (err != 0) {
+    //            // set_error(err);
+    //            return -1;
+    //        }
+    //
+    //        return 0;
+    //    }
+
     // Go FFI
 
     [DllImport("uhppoted.dll")]

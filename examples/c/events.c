@@ -101,8 +101,8 @@ int recordSpecialEvents(int argc, char **argv) {
 }
 
 int listen(int argc, char **argv) {
-    bool running;
-    bool stop;
+    bool running = false;
+    bool stop = false;
 
     if (listen_events(handler, &running, &stop, errors) < 0) {
         printf("ERROR %s\n", errmsg());
@@ -111,7 +111,8 @@ int listen(int argc, char **argv) {
 
     sleep(1);
     for (int count = 0; count < 5 && !running; count++) {
-        printf(" ... waiting %d %s\n", count, running ? "running" : "stopped");
+        printf(" ... waiting %d %s\n", count, running ? "running" : "pending");
+        sleep(1);
     }
 
     if (!running) {
