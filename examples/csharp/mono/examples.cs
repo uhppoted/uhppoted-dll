@@ -821,6 +821,11 @@ public class examples {
         display("restore-default-parameters", fields);
     }
 
+    static bool cbool(byte v) {
+        return v == 1;
+    }
+
+    // NTS: C# bool is not uint8_t
     static void Listen(Uhppoted u, string[] args) {
         var exitEvent = new ManualResetEvent(false);
         Console.CancelKeyPress += (sender, eventArgs) => {
@@ -828,24 +833,19 @@ public class examples {
             exitEvent.Set();
         };
 
-        bool running = false;
-        bool stop = false;
+        byte running = 0;
+        byte stop = 0;
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
 
         u.ListenEvents(ref running, ref stop);
 
-        //    if (listen_events(handler, &running, &stop, errors) < 0) {
-        //        printf("ERROR %s\n", errmsg());
-        //        return -1;
-        //    }
-
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !running; count++) {
-            WriteLine("DEBUG ... waiting {0} {1}", count, running ? "running" : "pending");
+        for (int count = 0; count < 5 && !cbool(running); count++) {
+            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(running) ? "running" : "pending");
             Thread.Sleep(delay);
         }
 
-        if (!running) {
+        if (!cbool(running)) {
             WriteLine("ERROR {0}", "failed to start event listener");
             return;
         }
@@ -854,14 +854,14 @@ public class examples {
 
         exitEvent.WaitOne();
 
-        stop = true;
+        stop = 1;
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && running; count++) {
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, running ? "running" : "stopped");
+        for (int count = 0; count < 5 && cbool(running); count++) {
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(running) ? "running" : "stopped");
             Thread.Sleep(delay);
         }
 
-        if (running) {
+        if (cbool(running)) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
     }

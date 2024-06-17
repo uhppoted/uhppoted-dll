@@ -475,7 +475,22 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public void ListenEvents(ref bool running, ref bool stop) {
+    public delegate void OnEvent();
+    public delegate void OnError();
+
+    //    delegate bool OnEvent(struct ListenEvent *evt);
+    //    delegate bool OnError(string error);
+
+    // private static bool OnListenEvent() {
+    //     Console.WriteLine(">>>>>>>>>>>>>>>>> WOOOTEDLY");
+    // }
+
+    public void ListenEvents(ref byte running, ref byte stop) {
+        //        int err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
+        int err = Listen(ref this.u, null, ref running, ref stop, null);
+        if (err != 0) {
+            throw new UhppotedException("error listening for events");
+        }
     }
 
     //    int listen_events(on_event handler, bool *running, bool *stop, on_error err_handler) {
@@ -586,6 +601,9 @@ public class Uhppoted : IDisposable {
     [DllImport("uhppoted.dll")]
     private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
 
+    [DllImport("uhppoted.dll")]
+    private static extern int Listen(ref UHPPOTE u, OnEvent handler, ref byte running, ref byte stop, OnError errx);
+
     struct udevice {
         public uint ID;
         public string address;
@@ -688,6 +706,18 @@ public class Uhppoted : IDisposable {
         public string at;
         public byte cards;
     }
+
+    // struct GoListenEvent {
+    //     public uint controller;
+    //     public string timestamp;
+    //     public uint index;
+    //     public byte eventType;
+    //     public byte granted;
+    //     public byte door;
+    //     public byte direction;
+    //     public uint card;
+    //     public byte reason;
+    // }
 }
 
 public class Controller {
