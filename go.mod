@@ -2,6 +2,6 @@ module github.com/uhppoted/uhppoted-dll
 
 go 1.22
 
-require github.com/uhppoted/uhppote-core v0.8.9-0.20240606155158-a18316ae7528
+require github.com/uhppoted/uhppote-core v0.8.9-0.20240617170953-4d35e4f646db
 
-require github.com/uhppoted/uhppoted-lib v0.8.9-0.20240610150828-0d96323cdb39 // indirect
+require github.com/uhppoted/uhppoted-lib v0.8.9-0.20240617172854-6a8488c7ac5d // indirect
