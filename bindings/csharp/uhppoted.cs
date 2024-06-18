@@ -475,33 +475,30 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public delegate void OnEvent();
+    public delegate void OnEvent(ListenEvent e);
     public delegate void OnError();
 
-    //    delegate bool OnEvent(struct ListenEvent *evt);
-    //    delegate bool OnError(string error);
+    delegate void OnListenEvent(ref GoListenEvent e);
 
-    // private static bool OnListenEvent() {
-    //     Console.WriteLine(">>>>>>>>>>>>>>>>> WOOOTEDLY");
-    // }
+    public void ListenEvents(OnEvent handler, ref byte running, ref byte stop) {
+        OnListenEvent onevent = (ref GoListenEvent e) => {
+            handler(new ListenEvent(
+                e.controller,
+                e.timestamp,
+                e.index,
+                e.eventType,
+                e.granted == 1 ? true : false,
+                e.door,
+                e.direction,
+                e.card,
+                e.reason));
+        };
 
-    public void ListenEvents(ref byte running, ref byte stop) {
-        //        int err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
-        int err = Listen(ref this.u, null, ref running, ref stop, null);
+        int err = Listen(ref this.u, onevent, ref running, ref stop, null);
         if (err != 0) {
             throw new UhppotedException("error listening for events");
         }
     }
-
-    //    int listen_events(on_event handler, bool *running, bool *stop, on_error err_handler) {
-    //        int err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
-    //        if (err != 0) {
-    //            // set_error(err);
-    //            return -1;
-    //        }
-    //
-    //        return 0;
-    //    }
 
     // Go FFI
 
@@ -602,7 +599,7 @@ public class Uhppoted : IDisposable {
     private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
 
     [DllImport("uhppoted.dll")]
-    private static extern int Listen(ref UHPPOTE u, OnEvent handler, ref byte running, ref byte stop, OnError errx);
+    private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnError errx);
 
     struct udevice {
         public uint ID;
@@ -707,17 +704,19 @@ public class Uhppoted : IDisposable {
         public byte cards;
     }
 
-    // struct GoListenEvent {
-    //     public uint controller;
-    //     public string timestamp;
-    //     public uint index;
-    //     public byte eventType;
-    //     public byte granted;
-    //     public byte door;
-    //     public byte direction;
-    //     public uint card;
-    //     public byte reason;
-    // }
+#pragma warning disable 649 // assigned in DLL
+    struct GoListenEvent {
+        public uint controller;
+        public string timestamp;
+        public uint index;
+        public byte eventType;
+        public byte granted;
+        public byte door;
+        public byte direction;
+        public uint card;
+        public byte reason;
+    }
+#pragma warning restore 649
 }
 
 public class Controller {
@@ -767,6 +766,38 @@ public class Event {
 
     public Event(string timestamp, uint index, byte eventType, bool granted,
                  byte door, byte direction, uint card, byte reason) {
+        this.timestamp = timestamp;
+        this.index = index;
+        this.eventType = eventType;
+        this.granted = granted;
+        this.door = door;
+        this.direction = direction;
+        this.card = card;
+        this.reason = reason;
+    }
+}
+
+public class ListenEvent {
+    public uint controller;
+    public string timestamp;
+    public uint index;
+    public byte eventType;
+    public bool granted;
+    public byte door;
+    public byte direction;
+    public uint card;
+    public byte reason;
+
+    public ListenEvent(uint controller,
+                       string timestamp,
+                       uint index,
+                       byte eventType,
+                       bool granted,
+                       byte door,
+                       byte direction,
+                       uint card,
+                       byte reason) {
+        this.controller = controller;
         this.timestamp = timestamp;
         this.index = index;
         this.eventType = eventType;
@@ -1058,5 +1089,4 @@ public class lookup {
         return "?";
     }
 }
-
 }

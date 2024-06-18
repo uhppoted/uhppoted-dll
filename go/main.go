@@ -499,11 +499,6 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 //
 //export Listen
 func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.onerror) int {
-	fmt.Printf(">>>>>>>>>>>>>> f:%v\n", f)
-	fmt.Printf(">>>>>>>>>>>>>> running:%v\n", *running)
-	fmt.Printf(">>>>>>>>>>>>>> stop:%v\n", *stop)
-	fmt.Printf(">>>>>>>>>>>>>> g:%v\n", g)
-
 	if uu, err := makeUHPPOTE(u); err != nil {
 		C.dispatch_error(g, C.CString(err.Error()))
 		return -1

@@ -833,11 +833,25 @@ public class examples {
             exitEvent.Set();
         };
 
+        Uhppoted.OnEvent onevent = (ListenEvent e) => {
+            Console.WriteLine("-- EVENT");
+            Console.WriteLine("   controller: {0}", e.controller);
+            Console.WriteLine("   timestamp:  {0}", e.timestamp);
+            Console.WriteLine("   index:      {0}", e.index);
+            Console.WriteLine("   event:      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, e.eventType, locale));
+            Console.WriteLine("   granted:    {0}", e.granted ? "yes" : "no");
+            Console.WriteLine("   door:       {0}", e.door);
+            Console.WriteLine("   direction:  {0}", lookup.find(lookup.LOOKUP_DIRECTION, e.direction, locale));
+            Console.WriteLine("   card:       {0}", e.card);
+            Console.WriteLine("   reason:     {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, e.reason, locale));
+            Console.WriteLine();
+        };
+
         byte running = 0;
         byte stop = 0;
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
 
-        u.ListenEvents(ref running, ref stop);
+        u.ListenEvents(onevent, ref running, ref stop);
 
         Thread.Sleep(delay);
         for (int count = 0; count < 5 && !cbool(running); count++) {
@@ -851,7 +865,6 @@ public class examples {
         }
 
         WriteLine("INFO  listening");
-
         exitEvent.WaitOne();
 
         stop = 1;
@@ -864,6 +877,8 @@ public class examples {
         if (cbool(running)) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
+
+        WriteLine("DEBUG ... refusing to exit apparently");
     }
 
     static options parse(string[] args) {
