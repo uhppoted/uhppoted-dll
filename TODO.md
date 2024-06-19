@@ -3,8 +3,9 @@
 - [x] Rework to use preallocated strings and errors (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] Import event listener code from _main_
-      - [ ] Update vs-mac example
-      - [ ] Update vs-windows example
+      - [x] Update vs-mac example
+      - [x] Update vs-windows example
+      - [ ] LTSC
 
 ## TODO
 
