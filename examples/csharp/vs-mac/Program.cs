@@ -1,5 +1,6 @@
 ﻿using static System.Console;
 using static System.String;
+using System.Threading;
 using System.Text.RegularExpressions;
 
 using uhppoted;
@@ -206,6 +207,10 @@ class UhppotedDLLCLI
         new command("restore-default-parameters",
                     "Resets a controller to the manufacturer default configuration.",
                     RestoreDefaultParameters),
+
+        new command("listen",
+                    "Listens for access events.",
+                    Listen),
     };
 
     static void usage()
@@ -894,6 +899,85 @@ class UhppotedDLLCLI
 
         WriteLine(Format("restore-default-parameters ({0})", controller));
     }
+
+    static void Listen(Uhppoted u, string[] args) {
+        var exitEvent = new ManualResetEvent(false);
+        Console.CancelKeyPress += (sender, eventArgs) => {
+            eventArgs.Cancel = true;
+            exitEvent.Set();
+        };
+
+        var thread = new Thread(() => listen(u, exitEvent));
+        var timeout = TimeSpan.FromMilliseconds(2500);
+
+        thread.IsBackground = true;
+        thread.Start();
+
+        exitEvent.WaitOne();
+        WriteLine("DEBUG ... waiting for thread");
+        thread.Join(timeout);
+    }
+
+    static void listen(Uhppoted u, ManualResetEvent done) {
+        Uhppoted.OnEvent onevent = (ListenEvent e) => {
+            Console.WriteLine("-- EVENT");
+            Console.WriteLine("   controller: {0}", e.controller);
+            Console.WriteLine("   timestamp:  {0}", e.timestamp);
+            Console.WriteLine("   index:      {0}", e.index);
+            Console.WriteLine("   event:      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, e.eventType, LOCALE));
+            Console.WriteLine("   granted:    {0}", e.granted ? "yes" : "no");
+            Console.WriteLine("   door:       {0}", e.door);
+            Console.WriteLine("   direction:  {0}", lookup.find(lookup.LOOKUP_DIRECTION, e.direction, LOCALE));
+            Console.WriteLine("   card:       {0}", e.card);
+            Console.WriteLine("   reason:     {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, e.reason, LOCALE));
+            Console.WriteLine();
+        };
+
+        Uhppoted.OnError onerror = (string err) => {
+            Console.WriteLine("ERROR {0}", err);
+        };
+
+        TimeSpan delay = TimeSpan.FromMilliseconds(1000);
+        byte running = 0; // NTS because C# bool is not uint8_t
+        byte stop = 0;    // NTS because C# bool is not uint8_t
+
+        u.ListenEvents(onevent, onerror, ref running, ref stop);
+
+        Thread.Sleep(delay);
+        for (int count = 0; count < 5 && !cbool(running); count++) {
+            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(running) ? "running" : "pending");
+            Thread.Sleep(delay);
+        }
+
+        if (!cbool(running)) {
+            WriteLine("ERROR {0}", "failed to start event listener");
+            return;
+        }
+
+        WriteLine("INFO  ... listening");
+        done.WaitOne();
+        WriteLine("DEBUG .. stopping");
+
+        stop = 1;
+        Thread.Sleep(delay);
+        for (int count = 0; count < 5 && cbool(running); count++) {
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(running) ? "running" : "stopped");
+            Thread.Sleep(delay);
+        }
+
+        WriteLine("DEBUG ... waited");
+
+        if (cbool(running)) {
+            WriteLine("ERROR {0}", "failed to stop event listener");
+        }
+
+        WriteLine("DEBUG ... thread exit");
+    }
+
+    static bool cbool(byte v) {
+        return v == 1;
+    }
+
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
     {

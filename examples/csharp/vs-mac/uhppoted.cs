@@ -706,6 +706,36 @@ namespace uhppoted {
             }
         }
 
+        public delegate void OnEvent(ListenEvent e);
+        public delegate void OnError(string err);
+
+        delegate void OnListenEvent(ref GoListenEvent e);
+        delegate void OnListenError(string err);
+
+        public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
+            OnListenEvent onevent = (ref GoListenEvent e) => {
+                on_event(new ListenEvent(
+                    e.controller,
+                    e.timestamp,
+                    e.index,
+                    e.eventType,
+                    e.granted == 1 ? true : false,
+                    e.door,
+                    e.direction,
+                    e.card,
+                    e.reason));
+            };
+
+            OnListenError onerror = (string err) => {
+                on_error(err);
+            };
+
+            int err = Listen(ref this.u, onevent, ref running, ref stop, onerror);
+            if (err != 0) {
+                throw new UhppotedException("error listening for events");
+            }
+        }
+
         private void raise(IntPtr errmsg) {
             if (errmsg == IntPtr.Zero) {
                 throw new UhppotedException("unknown error");
@@ -816,6 +846,9 @@ namespace uhppoted {
 
         [DllImport("libuhppoted.dylib")]
         private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, IntPtr errmsg);
+
+        [DllImport("libuhppoted.dylib")]
+        private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx);
 
         struct udevice {
             public uint ID;
@@ -964,6 +997,20 @@ namespace uhppoted {
             public string at;
             public byte cards;
         }
+
+#pragma warning disable 649 // assigned in DLL
+        struct GoListenEvent {
+            public uint controller;
+            public string timestamp;
+            public uint index;
+            public byte eventType;
+            public byte granted;
+            public byte door;
+            public byte direction;
+            public uint card;
+            public byte reason;
+        }
+#pragma warning restore 649
     }
 
     public class Controller {
@@ -1036,6 +1083,38 @@ namespace uhppoted {
 
         public Event(string timestamp, uint index, byte eventType, bool granted,
                  byte door, byte direction, uint card, byte reason) {
+            this.timestamp = timestamp;
+            this.index = index;
+            this.eventType = eventType;
+            this.granted = granted;
+            this.door = door;
+            this.direction = direction;
+            this.card = card;
+            this.reason = reason;
+        }
+    }
+
+    public class ListenEvent {
+        public uint controller;
+        public string timestamp;
+        public uint index;
+        public byte eventType;
+        public bool granted;
+        public byte door;
+        public byte direction;
+        public uint card;
+        public byte reason;
+
+        public ListenEvent(uint controller,
+                           string timestamp,
+                           uint index,
+                           byte eventType,
+                           bool granted,
+                           byte door,
+                           byte direction,
+                           uint card,
+                           byte reason) {
+            this.controller = controller;
             this.timestamp = timestamp;
             this.index = index;
             this.eventType = eventType;
