@@ -187,6 +187,11 @@ const command commands[] = {
         .help = "Resets a controller to the manufacturer default configuration.",
         .fn = restoreDefaultParameters,
     },
+    {
+        .cmd = "listen",
+        .help = "Listens for events from controllers.",
+        .fn = listen,
+    },
 };
 
 controller alpha = {.id = 405419896, .address = "192.168.1.100"};

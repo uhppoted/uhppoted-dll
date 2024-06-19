@@ -90,5 +90,7 @@ extern int activateKeypads(int argc, char **argv);
 extern int setDoorPasscodes(int argc, char **argv);
 extern int restoreDefaultParameters(int argc, char **argv);
 
+extern int listen(int argc, char **argv);
+
 extern options parse(int argc, char **argv);
 extern void display(const char *tag, int N, field fields[]);

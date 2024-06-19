@@ -1,8 +1,4 @@
 CODEGEN ?= ../uhppoted-codegen/bin/uhppoted-codegen
-
-SRC=go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
-DEBUG=go/devices_debug.go go/cards_debug.go go/events_debug.go go/time_profiles_debug.go go/tasks_debug.go go/main.go 
-TESTS=go/devices_tests.go go/cards_tests.go go/events_tests.go go/time_profiles_tests.go go/tasks_tests.go go/main.go 
 LIB=./lib
 LTSC=examples/csharp/vs-win
 
@@ -59,9 +55,9 @@ format:
 	go fmt ./go/...
 
 build: format
-	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
-	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
-	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
+	go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL)       ./go/...
+	go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./go/...
+	go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./go/...
 
 test:
 	cd go && make test
@@ -82,9 +78,9 @@ vuln:
 
 build-all: build test lint
 	go fmt ./go/...
-	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL) $(SRC)
-	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) $(DEBUG)
-	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) $(TESTS)
+	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL)       ./go/...
+	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./go/...
+	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./go/...
 
 	make -C ./tests/c              -f Makefile tests
 	make -C ./tests/c++            -f Makefile tests
@@ -141,4 +137,10 @@ tests:
 	make -C ./tests/csharp -f Makefile tests
 	make -C ./tests/python -f Makefile tests
 	make -C ./tests/ccl    -f Makefile tests
+
+swipe:
+	curl -X POST "http://127.0.0.1:8000/uhppote/simulator/405419896/swipe" \
+         -H "accept: application/json"                                     \
+         -H "Content-Type: application/json"                               \
+         -d '{"door":3,"card-number":10058400,"direction":1,"PIN":7531}'
 

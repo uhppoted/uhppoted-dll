@@ -3,7 +3,6 @@
 
 #include <stdarg.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 __thread char *err = NULL;
@@ -713,6 +712,16 @@ int restore_default_parameters(uint32_t controller) {
     char *err = RestoreDefaultParameters(u, controller);
     if (err != NULL) {
         set_error(err);
+        return -1;
+    }
+
+    return 0;
+}
+
+int listen_events(on_event handler, bool *running, bool *stop, on_error err_handler) {
+    int err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
+    if (err != 0) {
+        // set_error(err);
         return -1;
     }
 

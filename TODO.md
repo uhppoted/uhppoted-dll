@@ -1,45 +1,10 @@
 # TODO
 
 - [x] Rework to use preallocated strings and errors (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
-      - [x] error handling
-      - [x] cstring
-      - [x] `possible null reference`
-      - [x] get-devices
-      - [x] get-device
-      - [x] set-address
-      - [x] get-status
-      - [x] get-time
-      - [x] set-time
-      - [x] get-listener
-      - [x] set-listener
-      - [x] get-door-control
-      - [x] set-door-control
-      - [x] open-door
-      - [x] get-cards
-      - [x] get-card
-      - [x] get-card-by-index
-      - [x] put-card
-      - [x] delete-card
-      - [x] delete-cards
-      - [x] get-event-index
-      - [x] set-event-index
-      - [x] get-event
-      - [x] record-special-events
-      - [x] get-time-profile
-      - [x] set-time-profile
-      - [x] clear-time-profiles
-      - [x] add-task
-      - [x] refresh-tasklist
-      - [x] clear-tasklist
-      - [x] set-pc-control
-      - [x] set-interlock
-      - [x] activate-keypads
-      - [x] set-door-passcodes
-      - [x] restore-default-parameters
-
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
-
-- [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+      - [ ] Import event listener code from _main_
+      - [ ] Update vs-mac example
+      - [ ] Update vs-windows example
 
 ## TODO
 

@@ -6,6 +6,8 @@ package main
 #include <stdint.h>
 #include <string.h>
 
+#include "dispatch.h"
+
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
@@ -122,6 +124,7 @@ import "C"
 import (
 	"fmt"
 	"net/netip"
+	"os"
 	"time"
 	"unsafe"
 
@@ -447,6 +450,90 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32, errmsg *C.
 	}
 
 	return exec(u, f, errmsg)
+}
+
+// Listens for events and invokes a callback function.
+//
+//export Listen
+func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.onerror) int {
+	if uu, err := makeUHPPOTE(u); err != nil {
+		C.dispatch_error(g, C.CString(err.Error()))
+		return -1
+	} else {
+		l := listener{
+			onevent: f,
+			onerror: g,
+		}
+
+		// NTS: cannot pin channels
+		//      Ref. https://pkg.go.dev/cmd/cgo
+		//      C code may not keep a copy of a Go pointer after the call returns, unless the memory
+		//      it points to is pinned with runtime.Pinner and the Pinner is not unpinned while the Go
+		//      pointer is stored in C memory. This implies that C code may not keep a copy of a string,
+		//      slice, channel, and so forth, because they cannot be pinned with runtime.Pinner.
+		q := make(chan os.Signal, 1)
+
+		if running != nil {
+			*running = true
+		}
+
+		// Ref. https://stackoverflow.com/questions/34897843/why-does-go-panic-on-writing-to-a-closed-channel
+		// Ref. https://go.dev/ref/spec#Close
+		// Ref. https://golangdocs.com/channels-in-golang
+		if stop != nil {
+			go func() {
+				for !(*stop) {
+					time.Sleep(100 * time.Millisecond)
+				}
+				close(q)
+			}()
+		}
+
+		go func() {
+			if err := listen(uu, &l, q); err != nil {
+				e := C.CString(err.Error())
+				C.dispatch_error(g, e)
+				C.free(unsafe.Pointer(e))
+			}
+
+			if running != nil {
+				*running = false
+			}
+		}()
+
+		return 0
+	}
+}
+
+type listener struct {
+	onevent C.onevent
+	onerror C.onerror
+}
+
+func (l *listener) OnConnected() {
+}
+
+func (l *listener) OnEvent(status *types.Status) {
+	if status != nil {
+		evt := C.ListenEvent{
+			controller: C.uint32_t(status.SerialNumber),
+			index:      C.uint32_t(status.Event.Index),
+			timestamp:  C.CString(fmt.Sprintf("%v", status.Event.Timestamp)),
+			event:      C.uint8_t(status.Event.Type),
+			card:       C.uint32_t(status.Event.CardNumber),
+			door:       C.uint8_t(status.Event.Door),
+			granted:    C.bool(status.Event.Granted),
+			direction:  C.uint8_t(status.Event.Direction),
+			reason:     C.uint8_t(status.Event.Reason),
+		}
+
+		C.dispatch_event(l.onevent, &evt)
+		C.free(unsafe.Pointer(evt.timestamp))
+	}
+}
+
+func (l *listener) OnError(err error) bool {
+	return false
 }
 
 func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {

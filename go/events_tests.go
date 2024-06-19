@@ -5,6 +5,7 @@ package main
 import (
 	"C"
 	"fmt"
+	"os"
 
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
@@ -70,4 +71,8 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	}
 
 	return nil
+}
+
+func listen(uu uhppote.IUHPPOTE, f uhppote.Listener, q chan os.Signal) error {
+	return fmt.Errorf("*** NOT IMPLEMENTED ***")
 }

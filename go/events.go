@@ -5,6 +5,7 @@ package main
 import (
 	"C"
 	"fmt"
+	"os"
 
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
@@ -68,6 +69,12 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	} else if !ok && !enabled {
 		return fmt.Errorf("%v: failed to disable record special events", deviceID)
 	}
+
+	return nil
+}
+
+func listen(uu uhppote.IUHPPOTE, f uhppote.Listener, q chan os.Signal) error {
+	uu.Listen(f, q)
 
 	return nil
 }
