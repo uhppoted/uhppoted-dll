@@ -22,6 +22,9 @@
 20. https://iotexpert.com/stupid-python-tricks-c-structures-using-the-ctypes-module-part-2/
 21. https://github.com/hermanTenuki/goinpy/blob/e0c398ee55edaef50ceb5257d8d2d10f3e8216a1/goinpy/goinpy.py#L9
 
+## C#
+- https://geekswithblogs.net/gwbarchive/application-exit-vs-environment-exit
+
 ## OTHER
 
 1. http://www.swig.org/Doc2.0/Go.html

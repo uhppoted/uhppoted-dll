@@ -821,11 +821,6 @@ public class examples {
         display("restore-default-parameters", fields);
     }
 
-    static bool cbool(byte v) {
-        return v == 1;
-    }
-
-    // NTS: C# bool is not uint8_t
     static void Listen(Uhppoted u, string[] args) {
         var exitEvent = new ManualResetEvent(false);
         Console.CancelKeyPress += (sender, eventArgs) => {
@@ -833,6 +828,20 @@ public class examples {
             exitEvent.Set();
         };
 
+        var thread = new Thread(() => listen(u, exitEvent));
+        var timeout = TimeSpan.FromMilliseconds(2500);
+
+        thread.IsBackground = true;
+        thread.Start();
+
+        exitEvent.WaitOne();
+        WriteLine("DEBUG ... waiting for thread");
+        thread.Join(timeout);
+        WriteLine("DEBUG ... refuses to exit after swipe");
+    }
+
+    // NTS: C# bool is not uint8_t
+    static void listen(Uhppoted u, ManualResetEvent done) {
         Uhppoted.OnEvent onevent = (ListenEvent e) => {
             Console.WriteLine("-- EVENT");
             Console.WriteLine("   controller: {0}", e.controller);
@@ -864,8 +873,9 @@ public class examples {
             return;
         }
 
-        WriteLine("INFO  listening");
-        exitEvent.WaitOne();
+        WriteLine("INFO  ... listening");
+        done.WaitOne();
+        WriteLine("DEBUG .. stopping");
 
         stop = 1;
         Thread.Sleep(delay);
@@ -874,11 +884,17 @@ public class examples {
             Thread.Sleep(delay);
         }
 
+        WriteLine("DEBUG ... waited");
+
         if (cbool(running)) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 
-        WriteLine("DEBUG ... refusing to exit apparently");
+        WriteLine("DEBUG ... thread exit");
+    }
+
+    static bool cbool(byte v) {
+        return v == 1;
     }
 
     static options parse(string[] args) {

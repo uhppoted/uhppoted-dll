@@ -8,6 +8,10 @@
       - [x] C
       - [ ] C++
       - [ ] C#
+            - [ ] Hangs on closing after swipe
+                  - https://stackoverflow.com/questions/11006506/console-mono-executables-do-not-exit-when-completed
+                  - https://geekswithblogs.net/gwbarchive/application-exit-vs-environment-exit/
+                  
             - https://stackoverflow.com/questions/177856/how-do-i-trap-ctrlc-sigint-in-a-c-sharp-console-app
             - https://stackoverflow.com/questions/91108/how-do-i-get-my-c-sharp-program-to-sleep-for-50-milliseconds
             - https://www.codeproject.com/tips/318140/how-to-make-a-callback-to-csharp-from-c-cplusplus
