@@ -504,7 +504,8 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 		return -1
 	} else {
 		l := listener{
-			f: f,
+			onevent: f,
+			onerror: g,
 		}
 
 		// NTS: cannot pin channels
@@ -533,7 +534,9 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 
 		go func() {
 			if err := listen(uu, &l, q); err != nil {
-				C.dispatch_error(g, C.CString(err.Error()))
+				e := C.CString(err.Error())
+				C.dispatch_error(g, e)
+				C.free(unsafe.Pointer(e))
 			}
 
 			if running != nil {
@@ -546,7 +549,8 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 }
 
 type listener struct {
-	f C.onevent
+	onevent C.onevent
+	onerror C.onerror
 }
 
 func (l *listener) OnConnected() {
@@ -566,7 +570,7 @@ func (l *listener) OnEvent(status *types.Status) {
 			reason:     C.uint8_t(status.Event.Reason),
 		}
 
-		C.dispatch_event(l.f, &evt)
+		C.dispatch_event(l.onevent, &evt)
 		C.free(unsafe.Pointer(evt.timestamp))
 	}
 }

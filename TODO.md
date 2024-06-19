@@ -8,15 +8,9 @@
       - [x] C
       - [ ] C++
       - [ ] C#
-            - [ ] Hangs on closing after swipe
+            - [ ] mono: hangs on closing after swipe
                   - https://stackoverflow.com/questions/11006506/console-mono-executables-do-not-exit-when-completed
                   - https://geekswithblogs.net/gwbarchive/application-exit-vs-environment-exit/
-                  
-            - https://stackoverflow.com/questions/177856/how-do-i-trap-ctrlc-sigint-in-a-c-sharp-console-app
-            - https://stackoverflow.com/questions/91108/how-do-i-get-my-c-sharp-program-to-sleep-for-50-milliseconds
-            - https://www.codeproject.com/tips/318140/how-to-make-a-callback-to-csharp-from-c-cplusplus
-            - https://learn.microsoft.com/en-us/dotnet/framework/interop/how-to-implement-callback-functions
-            - https://www.brainbell.com/tutors/C_Sharp/Using_Callback_Functions_with_C.htm
       - [ ] Python
       - [ ] CCL
 

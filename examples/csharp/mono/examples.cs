@@ -840,7 +840,6 @@ public class examples {
         WriteLine("DEBUG ... refuses to exit after swipe");
     }
 
-    // NTS: C# bool is not uint8_t
     static void listen(Uhppoted u, ManualResetEvent done) {
         Uhppoted.OnEvent onevent = (ListenEvent e) => {
             Console.WriteLine("-- EVENT");
@@ -856,11 +855,15 @@ public class examples {
             Console.WriteLine();
         };
 
-        byte running = 0;
-        byte stop = 0;
-        TimeSpan delay = TimeSpan.FromMilliseconds(1000);
+        Uhppoted.OnError onerror = (string err) => {
+            Console.WriteLine("ERROR {0}", err);
+        };
 
-        u.ListenEvents(onevent, ref running, ref stop);
+        TimeSpan delay = TimeSpan.FromMilliseconds(1000);
+        byte running = 0; // NTS because C# bool is not uint8_t
+        byte stop = 0;    // NTS because C# bool is not uint8_t
+
+        u.ListenEvents(onevent, onerror, ref running, ref stop);
 
         Thread.Sleep(delay);
         for (int count = 0; count < 5 && !cbool(running); count++) {

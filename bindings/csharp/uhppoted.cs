@@ -476,13 +476,14 @@ public class Uhppoted : IDisposable {
     }
 
     public delegate void OnEvent(ListenEvent e);
-    public delegate void OnError();
+    public delegate void OnError(string err);
 
     delegate void OnListenEvent(ref GoListenEvent e);
+    delegate void OnListenError(string err);
 
-    public void ListenEvents(OnEvent handler, ref byte running, ref byte stop) {
+    public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
         OnListenEvent onevent = (ref GoListenEvent e) => {
-            handler(new ListenEvent(
+            on_event(new ListenEvent(
                 e.controller,
                 e.timestamp,
                 e.index,
@@ -494,7 +495,11 @@ public class Uhppoted : IDisposable {
                 e.reason));
         };
 
-        int err = Listen(ref this.u, onevent, ref running, ref stop, null);
+        OnListenError onerror = (string err) => {
+            on_error(err);
+        };
+
+        int err = Listen(ref this.u, onevent, ref running, ref stop, onerror);
         if (err != 0) {
             throw new UhppotedException("error listening for events");
         }
@@ -599,7 +604,7 @@ public class Uhppoted : IDisposable {
     private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
 
     [DllImport("uhppoted.dll")]
-    private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnError errx);
+    private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx);
 
     struct udevice {
         public uint ID;
