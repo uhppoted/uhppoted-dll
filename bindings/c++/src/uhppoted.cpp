@@ -86,11 +86,11 @@ uhppoted::uhppoted() { u = NULL; }
  */
 uhppoted::uhppoted(const string &_bind, const string &_broadcast,
                    const string &_listen, int timeout,
-                   const vector<controller> controllers, bool debug) : bind(_bind), broadcast(_broadcast), listen(_listen) {
+                   const vector<controller> controllers, bool debug) : bind_addr(_bind), broadcast_addr(_broadcast), listen_addr(_listen) {
     if ((u = new UHPPOTE) != NULL) {
-        u->bind = this->bind.c_str();
-        u->broadcast = this->broadcast.c_str();
-        u->listen = this->listen.c_str();
+        u->bind = this->bind_addr.c_str();
+        u->broadcast = this->broadcast_addr.c_str();
+        u->listen = this->listen_addr.c_str();
         u->timeout = timeout;
         u->devices = NULL;
         u->debug = debug;
@@ -604,6 +604,14 @@ void uhppoted::restore_default_parameters(uint32_t controller) {
     char *err = RestoreDefaultParameters(u, controller);
     if (err != NULL) {
         throw uhppoted_exception(err);
+    }
+}
+
+void uhppoted::listen(on_event handler, bool *running, bool *stop, on_error err_handler) {
+    int err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
+    if (err != 0) {
+        // FIXME rework error handling
+        throw uhppoted_exception((char *)"error starting event listener");
     }
 }
 

@@ -6,8 +6,9 @@
             - [ ] Relook at error handling
             - [ ] Move implementation to events.go
       - [x] C
-      - [ ] C++
-      - [ ] C#
+      - [x] C++
+            - [ ] FIXME rework uhppoted_exception for const char *
+      - [x] C#
             - [ ] mono: hangs on closing after swipe
                   - https://stackoverflow.com/questions/11006506/console-mono-executables-do-not-exit-when-completed
                   - https://geekswithblogs.net/gwbarchive/application-exit-vs-environment-exit/

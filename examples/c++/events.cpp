@@ -1,9 +1,15 @@
+#include <chrono>
+#include <condition_variable>
+#include <csignal>
 #include <iostream>
+#include <thread>
 
 #include "../include/uhppoted.hpp"
 #include "examples.hpp"
 
 using namespace std;
+using namespace std::this_thread;
+using namespace std::chrono;
 
 void getEventIndex(uhppoted &u, int argc, char **argv) {
     auto options = parse(argc, argv);
@@ -66,4 +72,78 @@ void recordSpecialEvents(uhppoted &u, int argc, char **argv) {
     };
 
     display("record-special-events", fields);
+}
+
+std::condition_variable sigint;
+std::mutex guard;
+
+void on_sigint(int signal) {
+    std::lock_guard<std::mutex> lock(guard);
+
+    sigint.notify_all();
+}
+
+void listenEvents(uhppoted &u, int argc, char **argv) {
+    bool running = false;
+    bool stop = false;
+
+    static struct {
+        uhppoted &u;
+    } q = {
+        .u = u,
+    };
+
+    on_event h = [](const struct ListenEvent *evt) {
+        string _event = q.u.lookup(LOOKUP_EVENT_TYPE, evt->event, LOCALE);
+        string _direction = q.u.lookup(LOOKUP_DIRECTION, evt->direction, LOCALE);
+        string _reason = q.u.lookup(LOOKUP_EVENT_REASON, evt->reason, LOCALE);
+        string _timestamp = "-";
+
+        if ((evt->timestamp != NULL) && (strcmp(evt->timestamp, "") != 0)) {
+            _timestamp = evt->timestamp;
+        }
+
+        vector<field> fields = {
+            field("controller", evt->controller),
+            field("timestamp", _timestamp),
+            field("index", evt->index),
+            field("type", _event),
+            field("granted", evt->granted),
+            field("door", evt->door),
+            field("direction", _direction),
+            field("card", evt->card),
+            field("reason", _reason),
+        };
+
+        display("event", fields);
+    };
+
+    // listen(handler, &running, &stop, errors);
+    u.listen(h, &running, &stop, NULL);
+
+    sleep_for(milliseconds(1000));
+    for (int count = 0; count < 5 && !running; count++) {
+        cout << " ... waiting " << count << " " << (running ? "running" : "pending") << endl;
+        sleep_for(milliseconds(1000));
+    }
+
+    if (!running) {
+        throw uhppoted_exception((char *)"failed to start event listener");
+    }
+
+    std::signal(SIGINT, on_sigint);
+    std::unique_lock<std::mutex> lock(guard);
+
+    sigint.wait(lock);
+
+    stop = true;
+    sleep_for(milliseconds(1000));
+    for (int count = 0; count < 5 && running; count++) {
+        cout << " ... stoppping event listener " << count << " " << (running ? "running" : "stopped") << endl;
+        sleep_for(milliseconds(1000));
+    }
+
+    if (running) {
+        throw uhppoted_exception((char *)"failed to stop event listener");
+    }
 }
