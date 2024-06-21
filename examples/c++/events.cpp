@@ -93,7 +93,11 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
         .u = u,
     };
 
-    on_event callback = [](const struct ListenEvent *evt) {
+    // NTS: '+' converts lambda to function pointer apparently. Ye gods :-(
+    //      Ref. https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer/28746827#28746827
+    //      Ref. https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
+    //      Ref. https://en.cppreference.com/w/cpp/language/lambda
+    on_event callback = +[](const struct ListenEvent *evt) {
         string _event = q.u.lookup(LOOKUP_EVENT_TYPE, evt->event, LOCALE);
         string _direction = q.u.lookup(LOOKUP_DIRECTION, evt->direction, LOCALE);
         string _reason = q.u.lookup(LOOKUP_EVENT_REASON, evt->reason, LOCALE);
@@ -118,8 +122,7 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
         display("event", fields);
     };
 
-    // NTS: '+' converts lambda to function pointer apparently. Ye gods :-(
-    u.listen(+callback, &running, &stop, NULL);
+    u.listen(callback, &running, &stop, NULL);
 
     sleep_for(milliseconds(1000));
     for (int count = 0; count < 5 && !running; count++) {

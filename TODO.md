@@ -8,6 +8,7 @@
       - [x] C
       - [ ] C++
             - [ ] on_error
+            - [ ] MAYBE: https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
       - [x] C#
             - [ ] mono: hangs on closing after swipe
