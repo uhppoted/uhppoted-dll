@@ -93,7 +93,7 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
         .u = u,
     };
 
-    on_event h = [](const struct ListenEvent *evt) {
+    on_event callback = [](const struct ListenEvent *evt) {
         string _event = q.u.lookup(LOOKUP_EVENT_TYPE, evt->event, LOCALE);
         string _direction = q.u.lookup(LOOKUP_DIRECTION, evt->direction, LOCALE);
         string _reason = q.u.lookup(LOOKUP_EVENT_REASON, evt->reason, LOCALE);
@@ -118,8 +118,8 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
         display("event", fields);
     };
 
-    // listen(handler, &running, &stop, errors);
-    u.listen(h, &running, &stop, NULL);
+    // NTS: '+' converts lambda to function pointer apparently. Ye gods :-(
+    u.listen(+callback, &running, &stop, NULL);
 
     sleep_for(milliseconds(1000));
     for (int count = 0; count < 5 && !running; count++) {

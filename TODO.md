@@ -6,7 +6,8 @@
             - [ ] Relook at error handling
             - [ ] Move implementation to events.go
       - [x] C
-      - [x] C++
+      - [ ] C++
+            - [ ] on_error
             - [ ] FIXME rework uhppoted_exception for const char *
       - [x] C#
             - [ ] mono: hangs on closing after swipe
