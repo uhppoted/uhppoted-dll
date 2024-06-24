@@ -167,6 +167,10 @@ def commands():
             'help': "Resets a controller to the manufacturer default configuration",
             'fn': restore_default_parameters,
         },
+        'listen': {
+            'help': "Listens for events from controllers",
+            'fn': listen,
+        },
     }
 
 
@@ -208,9 +212,9 @@ def main():
     if cmd == 'help':
         help()
     else:
-        bind = '0.0.0.0'
-        broadcast = '255.255.255.255'
-        listen = '0.0.0.0:60001'
+        bind_addr = '0.0.0.0'
+        broadcast_addr = '255.255.255.255'
+        listen_addr = '0.0.0.0:60001'
         timeout = 2500
         debug = True
         controllers = [
@@ -218,7 +222,8 @@ def main():
             uhppoted.Controller(303986753, '192.168.1.100'),
         ]
 
-        u = uhppoted.Uhppote(uhppote=uhppoted.UHPPOTE(bind, broadcast, listen, timeout, controllers, debug))
+        u = uhppoted.Uhppote(
+            uhppote=uhppoted.UHPPOTE(bind_addr, broadcast_addr, listen_addr, timeout, controllers, debug))
 
         try:
             if cmd in commands():
@@ -759,6 +764,10 @@ def restore_default_parameters(u, args):
     display('restore-default-parameters', [
         ('ID', controller),
     ])
+
+
+def listen(u, args):
+    u.listen()
 
 
 def display(tag, fields):

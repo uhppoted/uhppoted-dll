@@ -126,6 +126,9 @@ set-door-passcodes: build
 restore-default-parameters: build
 	$(GO) && $(DLL) && $(CMD) restore-default-parameters  --controller $(CONTROLLER)
 
+listen: build
+	$(GO) && $(DLL) && $(CMD) listen
+
 debug: build
 	$(GO) && $(DLL) && $(CMD) get-status --controller 303986753
 

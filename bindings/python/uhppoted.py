@@ -20,6 +20,10 @@ from functools import cache
 from types import SimpleNamespace
 from typing import Final
 
+from time import sleep
+import signal
+import sys
+
 if 'Windows' in platform.system():
     lib = ctypes.windll.LoadLibrary("uhppoted")
 elif 'Darwin' in platform.system():
@@ -422,6 +426,42 @@ class Uhppote:
     def restore_default_parameters(self, deviceID):
         self.ffi.RestoreDefaultParameters(self._uhppote, deviceID)
 
+    def listen(self):
+        callback = None
+        err_handler = None
+        running = ctypes.c_bool(False)
+        stop = ctypes.c_bool(False)
+
+        on_sigint = lambda sig, frame: print('CTRL-C')
+
+        err = self.ffi.Listen(self._uhppote, callback, byref(running), byref(stop), err_handler)
+        if err == None:
+            count = 0
+            while (not running) and (count < 10):
+                print(f' ... waiting {count}')
+                count += 1
+                sleep(0.1)
+
+            if not running:
+                raise Exception(f'timeout starting event listener')
+
+            print(f' >>> listening')
+            signal.signal(signal.SIGINT, on_sigint)
+            signal.pause()
+            print(f' >>> stopping')
+
+            stop = True
+            count = 0
+            while running and (count < 10):
+                print(f' ... stopping {count}')
+                count += 1
+                sleep(0.1)
+
+            if running:
+                raise Exception(f'timeout stopping event listener')
+        else:
+            raise Exception(f'error starting event listener {err}')
+
 
 # lookup
 
@@ -616,6 +656,7 @@ class FFI:
         self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
         self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
         self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
+        self.Listen = ffi('Listen', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -664,6 +705,7 @@ def libfunctions():
         'ActivateKeypads':          (lib.ActivateKeypads,          [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool]),
         'SetDoorPasscodes':         (lib.SetDoorPasscodes,         [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong]),
         'RestoreDefaultParameters': (lib.RestoreDefaultParameters, [POINTER(GoUHPPOTE), c_ulong]),
+        'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), POINTER(c_ulong), POINTER(c_bool), POINTER(c_bool), POINTER(c_ulong)]),
     }
 # yapf: enable
 
