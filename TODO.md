@@ -11,10 +11,7 @@
             - [ ] MAYBE: https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
       - [x] C#
-            - [ ] mono: hangs on closing after swipe
-                  - https://stackoverflow.com/questions/11006506/console-mono-executables-do-not-exit-when-completed
-                  - https://geekswithblogs.net/gwbarchive/application-exit-vs-environment-exit/
-      - [ ] Python
+      - [x] Python
       - [ ] CCL
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)

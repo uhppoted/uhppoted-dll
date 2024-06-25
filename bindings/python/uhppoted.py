@@ -19,10 +19,7 @@ from dataclasses import dataclass
 from functools import cache
 from types import SimpleNamespace
 from typing import Final
-
 from time import sleep
-import signal
-import sys
 
 if 'Windows' in platform.system():
     lib = ctypes.windll.LoadLibrary("uhppoted")
@@ -186,6 +183,19 @@ class Task:
     sunday: bool
     at: str
     cards: int
+
+
+@dataclass
+class ListenEvent:
+    controller: int
+    timestamp: str
+    index: int
+    event: int
+    granted: bool
+    door: int
+    direction: int
+    card: int
+    reason: int
 
 
 class Uhppote:
@@ -426,13 +436,13 @@ class Uhppote:
     def restore_default_parameters(self, deviceID):
         self.ffi.RestoreDefaultParameters(self._uhppote, deviceID)
 
-    def listen(self):
-        callback = None
-        err_handler = None
+    # Ref. https://docs.python.org/3/library/ctypes.html#callback-functions
+    # Ref. https://stackoverflow.com/questions/24912065/how-to-access-data-from-pointer-in-struct-from-python-with-ctypes
+    def listen(self, onevent, onerror, cv_running, cv_stop):
+        callback = on_event(lambda e: on_listen_event(onevent, e))
+        err_handler = on_error(lambda v: on_listen_error(onerror, v))
         running = ctypes.c_bool(False)
         stop = ctypes.c_bool(False)
-
-        on_sigint = lambda sig, frame: print('CTRL-C')
 
         err = self.ffi.Listen(self._uhppote, callback, byref(running), byref(stop), err_handler)
         if err == None:
@@ -445,10 +455,11 @@ class Uhppote:
             if not running:
                 raise Exception(f'timeout starting event listener')
 
-            print(f' >>> listening')
-            signal.signal(signal.SIGINT, on_sigint)
-            signal.pause()
-            print(f' >>> stopping')
+            with cv_running:
+                cv_running.notifyAll()
+
+            with cv_stop:
+                cv_stop.wait()
 
             stop = True
             count = 0
@@ -461,6 +472,26 @@ class Uhppote:
                 raise Exception(f'timeout stopping event listener')
         else:
             raise Exception(f'error starting event listener {err}')
+
+
+def on_listen_event(handler, event):
+    # yapf: disable
+    e = ListenEvent(event.contents.controller,
+                    event.contents.timestamp.decode('utf-8'),
+                    event.contents.index,
+                    event.contents.event,
+                    event.contents.granted,
+                    event.contents.door,
+                    event.contents.direction,
+                    event.contents.card,
+                    event.contents.reason)
+    # yapf: enable
+
+    handler(e)
+
+
+def on_listen_error(handler, err):
+    handler(err.decode('utf-8'))
 
 
 # lookup
@@ -705,7 +736,7 @@ def libfunctions():
         'ActivateKeypads':          (lib.ActivateKeypads,          [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool]),
         'SetDoorPasscodes':         (lib.SetDoorPasscodes,         [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong]),
         'RestoreDefaultParameters': (lib.RestoreDefaultParameters, [POINTER(GoUHPPOTE), c_ulong]),
-        'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), POINTER(c_ulong), POINTER(c_bool), POINTER(c_bool), POINTER(c_ulong)]),
+        'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), on_event, POINTER(c_bool), POINTER(c_bool), on_error]),
     }
 # yapf: enable
 
@@ -836,3 +867,21 @@ class GoTask(Structure):
         ('at', c_char_p),
         ('cards', c_ubyte),
     ]
+
+
+class GoListenEvent(Structure):
+    _fields_ = [
+        ('controller', c_uint32),
+        ('timestamp', c_char_p),
+        ('index', c_uint32),
+        ('event', c_ubyte),
+        ('granted', c_bool),
+        ('door', c_ubyte),
+        ('direction', c_ubyte),
+        ('card', c_uint32),
+        ('reason', c_ubyte),
+    ]
+
+
+on_event = ctypes.CFUNCTYPE(None, POINTER(GoListenEvent))
+on_error = ctypes.CFUNCTYPE(None, c_char_p)

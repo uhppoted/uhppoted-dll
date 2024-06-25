@@ -6,6 +6,9 @@ import sys
 import datetime
 import platform
 import os
+import threading
+import signal
+import sys
 
 sys.path.append('../../bindings/python')
 
@@ -767,7 +770,47 @@ def restore_default_parameters(u, args):
 
 
 def listen(u, args):
-    u.listen()
+    on_sigint = lambda sig, frame: print('CTRL-C')
+    running = threading.Condition()
+    stop = threading.Condition()
+
+    thread = threading.Thread(target=listen_events, args=[u, running, stop])
+    thread.daemon = True
+    thread.start()
+
+    with running:
+        if not running.wait(5):
+            raise Exception(f'timeout starting event listener')
+
+    signal.signal(signal.SIGINT, on_sigint)
+    signal.pause()
+
+    with stop:
+        stop.notifyAll()
+
+    thread.join()
+
+
+def listen_events(u, running, stop):
+    u.listen(on_listen_event, on_listen_error, running, stop)
+
+
+def on_listen_event(evt):
+    display('event', [
+        ('controller', evt.controller),
+        ('timestamp', evt.timestamp),
+        ('index', evt.index),
+        ('event', lookup(LOOKUP_EVENT_TYPE, evt.event, LOCALE)),
+        ('granted', evt.granted),
+        ('door', evt.door),
+        ('direction', lookup(LOOKUP_DIRECTION, evt.direction, LOCALE)),
+        ('card', evt.card),
+        ('reason', lookup(LOOKUP_EVENT_REASON, evt.reason, LOCALE)),
+    ])
+
+
+def on_listen_error(err):
+    print(f' *** ERROR {err}')
 
 
 def display(tag, fields):
