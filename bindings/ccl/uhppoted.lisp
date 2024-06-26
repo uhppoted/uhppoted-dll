@@ -728,6 +728,28 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
+(defun uhppoted-listen-events (uhppote) "Listens for controller events"
+  (unwind-protect
+    (rlet ((running :unsigned-byte 0)
+           (stop    :unsigned-byte 0))
+    (with-macptrs ((err (external-call "Listen" :address uhppote 
+                                                :address (%int-to-ptr 0)
+                                                :address running
+                                                :address stop
+                                                :address (%int-to-ptr 0)
+                                                :address)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (format t "  ~a ~d" "eeeeeek" err)))
+      (progn 
+        (format t " ~a ~d~%" "... listening" err)
+        (format t " ~a ~d~%" "... running"   (%get-unsigned-byte running))
+        (format t " ~a ~d~%" "... stop"      (%get-unsigned-byte stop))
+        (sleep 5)
+        (format t " ~a~%" "... stopping")
+        (setf (pref stop :unsigned-byte) 1)
+        (sleep 5)
+        ; (loop (sleep 10))
+        t)))))
+
 (defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"
   (cond ((string= category lookup-mode)         (uhppoted-lookup-mode         code locale))
         ((string= category lookup-direction)    (uhppoted-lookup-direction    code locale))

@@ -37,6 +37,7 @@
         '("activate-keypads"           examples:activate-keypads           "Activates and deactivates a controller reader access keypads.")
         '("set-door-passcodes"         examples:set-door-passcodes         "Sets the supervisor passcodes for keypad only access to a door.")
         '("restore-default-parameters" examples:restore-default-parameters "Resets a controller to the manufacturer default configuration.")
+        '("listen"                     examples:listen_events              "Listens for controller events.")
 ))
 
 

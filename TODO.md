@@ -11,10 +11,17 @@
             - [ ] MAYBE: https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
       - [x] C#
+            - [ ] Copy in vs-mac from LTSC
+            - [ ] Copy in vs-win from LTSC
       - [x] Python
+            - [ ] return code is ctypes.c_int32
       - [ ] CCL
+             - https://stackoverflow.com/questions/26665504/application-delivery-of-long-running-application-in-clozure-cl
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+
+- [ ] C++: use `nullptr`
+      - https://stackoverflow.com/questions/1282295/what-is-the-nullptr-keyword-and-why-is-it-better-than-null
 
 ## TODO
 

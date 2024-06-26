@@ -35,5 +35,6 @@
            set-interlock
            activate-keypads
            set-door-passcodes
-           restore-default-parameters))
+           restore-default-parameters
+           listen_events))
 

@@ -316,6 +316,11 @@
     (when ok
       (display "restore-default-parameters" device-id nil))))
 
+(defun listen_events (args) "" 
+  (declare (ignore args))
+  (let* ((ok        (exec #'(lambda (u) (uhppoted-listen-events u)))))
+    (when ok
+      (format t "  ~a~%" "... done"))))
 
 (defun args-device-id (args) 
   (parse-integer (parse-args args "--controller" "405419896")))

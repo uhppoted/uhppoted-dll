@@ -608,7 +608,7 @@ void uhppoted::restore_default_parameters(uint32_t controller) {
 }
 
 void uhppoted::listen(on_event handler, bool *running, bool *stop, on_error err_handler) {
-    int err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
+    int32_t err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler);
     if (err != 0) {
         // FIXME rework error handling
         throw uhppoted_exception((char *)"error starting event listener");

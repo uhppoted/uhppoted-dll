@@ -128,6 +128,9 @@ set-door-passcodes: build
 restore-default-parameters: build
 	$(CMD) restore-default-parameters $(DEVICEID)
 
+listen: build
+	$(CMD) listen 
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp
 
