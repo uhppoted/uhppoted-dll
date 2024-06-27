@@ -478,11 +478,11 @@ public class Uhppoted : IDisposable {
     public delegate void OnEvent(ListenEvent e);
     public delegate void OnError(string err);
 
-    delegate void OnListenEvent(ref GoListenEvent e);
+    delegate void OnListenEvent(GoListenEvent e);
     delegate void OnListenError(string err);
 
     public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
-        OnListenEvent onevent = (ref GoListenEvent e) => {
+        OnListenEvent onevent = (GoListenEvent e) => {
             on_event(new ListenEvent(
                 e.controller,
                 e.timestamp,

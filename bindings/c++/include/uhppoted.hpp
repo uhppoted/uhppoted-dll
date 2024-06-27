@@ -100,7 +100,7 @@ typedef struct task {
     uint8_t cards;
 } task;
 
-typedef void (*on_event)(const struct ListenEvent *evt);
+typedef void (*on_event)(const struct ListenEvent evt);
 typedef void (*on_error)(const char *err);
 
 class uhppoted {

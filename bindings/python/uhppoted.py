@@ -476,15 +476,15 @@ class Uhppote:
 
 def on_listen_event(handler, event):
     # yapf: disable
-    e = ListenEvent(event.contents.controller,
-                    event.contents.timestamp.decode('utf-8'),
-                    event.contents.index,
-                    event.contents.event,
-                    event.contents.granted,
-                    event.contents.door,
-                    event.contents.direction,
-                    event.contents.card,
-                    event.contents.reason)
+    e = ListenEvent(event.controller,
+                    event.timestamp.decode('utf-8'),
+                    event.index,
+                    event.event,
+                    event.granted,
+                    event.door,
+                    event.direction,
+                    event.card,
+                    event.reason)
     # yapf: enable
 
     handler(e)
@@ -883,5 +883,5 @@ class GoListenEvent(Structure):
     ]
 
 
-on_event = ctypes.CFUNCTYPE(None, POINTER(GoListenEvent))
+on_event = ctypes.CFUNCTYPE(None, GoListenEvent)
 on_error = ctypes.CFUNCTYPE(None, c_char_p)

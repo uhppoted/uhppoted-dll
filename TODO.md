@@ -1,7 +1,6 @@
 # TODO
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
-      - [x] Merge to main
       - [x] Go
             - [ ] Relook at error handling
             - [ ] Move implementation to events.go
@@ -10,10 +9,10 @@
             - [ ] on_error
             - [ ] MAYBE: https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
-      - [x] C#
-            - [ ] Copy in vs-mac from LTSC
-            - [ ] Copy in vs-win from LTSC
-      - [x] Python
+      - [ ] C#
+            - [x] Copy in vs-mac from LTSC
+            - [x] Copy in vs-win from LTSC
+      - [ ] Python
             - [ ] return code is ctypes.c_int32
       - [ ] CCL
              - https://stackoverflow.com/questions/26665504/application-delivery-of-long-running-application-in-clozure-cl

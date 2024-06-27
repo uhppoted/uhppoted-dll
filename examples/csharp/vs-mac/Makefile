@@ -97,3 +97,7 @@ set-door-passcodes:
 
 restore-default-parameters:
 	$(CLI) restore-default-parameters --controller $(CONTROLLER)
+
+listen:
+	$(CLI) listen
+

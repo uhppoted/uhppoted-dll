@@ -99,7 +99,7 @@ typedef struct task {
     uint8_t cards;
 } task;
 
-typedef void (*on_event)(const struct ListenEvent *evt);
+typedef void (*on_event)(const struct ListenEvent evt);
 typedef void (*on_error)(const char *err);
 
 void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...);

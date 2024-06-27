@@ -97,25 +97,25 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
     //      Ref. https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer/28746827#28746827
     //      Ref. https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
     //      Ref. https://en.cppreference.com/w/cpp/language/lambda
-    on_event callback = +[](const struct ListenEvent *evt) {
-        string _event = q.u.lookup(LOOKUP_EVENT_TYPE, evt->event, LOCALE);
-        string _direction = q.u.lookup(LOOKUP_DIRECTION, evt->direction, LOCALE);
-        string _reason = q.u.lookup(LOOKUP_EVENT_REASON, evt->reason, LOCALE);
+    on_event callback = +[](const struct ListenEvent evt) {
+        string _event = q.u.lookup(LOOKUP_EVENT_TYPE, evt.event, LOCALE);
+        string _direction = q.u.lookup(LOOKUP_DIRECTION, evt.direction, LOCALE);
+        string _reason = q.u.lookup(LOOKUP_EVENT_REASON, evt.reason, LOCALE);
         string _timestamp = "-";
 
-        if ((evt->timestamp != NULL) && (strcmp(evt->timestamp, "") != 0)) {
-            _timestamp = evt->timestamp;
+        if ((evt.timestamp != NULL) && (strcmp(evt.timestamp, "") != 0)) {
+            _timestamp = evt.timestamp;
         }
 
         vector<field> fields = {
-            field("controller", evt->controller),
+            field("controller", evt.controller),
             field("timestamp", _timestamp),
-            field("index", evt->index),
+            field("index", evt.index),
             field("type", _event),
-            field("granted", evt->granted),
-            field("door", evt->door),
+            field("granted", evt.granted),
+            field("door", evt.door),
             field("direction", _direction),
-            field("card", evt->card),
+            field("card", evt.card),
             field("reason", _reason),
         };
 

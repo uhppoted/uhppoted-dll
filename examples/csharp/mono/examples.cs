@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Diagnostics;
 
 using static System.Console;
 using static System.String;
@@ -837,7 +838,9 @@ public class examples {
         exitEvent.WaitOne();
         WriteLine("DEBUG ... waiting for thread");
         thread.Join(timeout);
-        WriteLine("DEBUG ... refuses to exit after swipe");
+
+        // NTS: only way to actually exit the app after receiving an event
+        Process.GetCurrentProcess().Kill();
     }
 
     static void listen(Uhppoted u, ManualResetEvent done) {
