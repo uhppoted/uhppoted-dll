@@ -141,6 +141,15 @@
                 at
                 cards)
 
+(defstruct listen-event controller
+                        timestamp
+                        index
+                        event-type
+                        granted
+                        door
+                        direction
+                        card
+                        reason)
 
 (def-foreign-type nil
   (:struct :UDEVICE (:id      :int)
@@ -234,6 +243,16 @@
                    (:at        :address)
                    (:cards     :unsigned-byte)))
 
+(def-foreign-type nil
+  (:struct :GoListenEvent (:controller :unsigned-fullword) 
+                          (:timestamp  :address)
+                          (:index      :unsigned-fullword)
+                          (:event-type :unsigned-byte)
+                          (:granted    :unsigned-byte)
+                          (:door       :unsigned-byte)
+                          (:direction  :unsigned-byte)
+                          (:card       :unsigned-fullword)
+                          (:reason     :unsigned-byte)))
 
 (define-condition uhppoted-error (error)
   ((message :initarg :message :reader message)))
@@ -728,12 +747,24 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
+(defcallback uhppoted-callback ((:struct :GoListenEvent) event) "Callback function for controller events"
+  (let ((evt (make-listen-event :controller (pref event :GoListenEvent.controller)
+                                :timestamp  (go-string (pref event :GoListenEvent.timestamp))
+                                :index      (pref event :GoListenEvent.index)
+                                :event-type (pref event :GoListenEvent.event-type)
+                                :granted    (/= 0 (pref event :GoListenEvent.granted))
+                                :door       (pref event :GoListenEvent.door)
+                                :direction  (pref event :GoListenEvent.direction)
+                                :card       (pref event :GoListenEvent.card)
+                                :reason     (pref event :GoListenEvent.reason))))
+    (format t ">>>>>>>>>>>>>>>>>>>>>>> EVENT ~a~%" evt)))
+
 (defun uhppoted-listen-events (uhppote) "Listens for controller events"
   (unwind-protect
     (rlet ((running :unsigned-byte 0)
            (stop    :unsigned-byte 0))
     (with-macptrs ((err (external-call "Listen" :address uhppote 
-                                                :address (%int-to-ptr 0)
+                                                :address uhppoted-callback
                                                 :address running
                                                 :address stop
                                                 :address (%int-to-ptr 0)
@@ -743,10 +774,11 @@
         (format t " ~a ~d~%" "... listening" err)
         (format t " ~a ~d~%" "... running"   (%get-unsigned-byte running))
         (format t " ~a ~d~%" "... stop"      (%get-unsigned-byte stop))
-        (sleep 5)
+        (sleep 10)
         (format t " ~a~%" "... stopping")
         (setf (pref stop :unsigned-byte) 1)
         (sleep 5)
+        (format t " ~a ~d~%" "... running ?" (%get-unsigned-byte running))
         ; (loop (sleep 10))
         t)))))
 
@@ -816,41 +848,3 @@
         ((equal code event-reason-remote-open-door)                EventReasonRemoteOpenDoor)
         ((equal code event-reason-remote-open-door-usb-reader)     EventReasonRemoteOpenDoorUSBReader)
         (t EventReasonUnknown)))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

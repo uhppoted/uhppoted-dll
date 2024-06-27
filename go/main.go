@@ -575,7 +575,7 @@ func (l *listener) OnEvent(status *types.Status) {
 			reason:     C.uint8_t(status.Event.Reason),
 		}
 
-		C.dispatch_event(l.onevent, &evt)
+		C.dispatch_event(l.onevent, evt)
 		C.free(unsafe.Pointer(evt.timestamp))
 	}
 }

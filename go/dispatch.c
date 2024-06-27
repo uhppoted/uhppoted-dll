@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <dispatch.h>
 
-void dispatch_event(onevent f, const struct ListenEvent *evt) {
+void dispatch_event(onevent f, const struct ListenEvent evt) {
     if (f != NULL) {
         f(evt);
     }
