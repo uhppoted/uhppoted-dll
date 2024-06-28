@@ -38,6 +38,7 @@
            uhppoted-restore-default-parameters
            uhppoted-listen-events
            uhppoted-error
+           uhppoted-event
            with-warning
            message
            uhppoted-lookup

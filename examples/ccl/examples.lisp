@@ -9,7 +9,12 @@
    ((uhppoted-error
      #'(lambda (c) 
         (format t "~%*** ERROR: ~a~%~%" (uhppoted:message c))
-        (invoke-restart 'ignore))))
+        (invoke-restart 'ignore)))
+    (uhppoted-event
+     #'(lambda (c) 
+        (format t "~%*** EVENT: ~a~%~%" (uhppoted:message c))
+        ; (invoke-restart 'ignore)
+        )))
    (uhppoted f 
              :bind-addr      "0.0.0.0"
              :broadcast-addr "255.255.255.255"

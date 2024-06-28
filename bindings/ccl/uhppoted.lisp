@@ -257,6 +257,9 @@
 (define-condition uhppoted-error (error)
   ((message :initarg :message :reader message)))
 
+(define-condition uhppoted-event (warning)
+  ((message :initarg :message :reader message)))
+
 (defun go-error (cstr) "Converts a 'C' char * returned by the Go FFI to a string and frees the 'C' string"
   (with-macptrs ((p cstr))
     (%get-cstring p)))
@@ -757,7 +760,9 @@
                                 :direction  (pref event :GoListenEvent.direction)
                                 :card       (pref event :GoListenEvent.card)
                                 :reason     (pref event :GoListenEvent.reason))))
-    (format t ">>>>>>>>>>>>>>>>>>>>>>> EVENT ~a~%" evt)))
+    (format t ">>>>>>>>>>>>>>>>>>>>>>> EVENT ~a~%" evt)
+    (warn 'uhppoted-event :message "yowza!!!!")
+    ))
 
 (defcallback uhppoted-on-error (:address err) "Callback function for controller event listen errors"
     (format t ">>>>>>>>>>>>>>>>>>>>>>> ERROR ~a~%" (go-string err)))
@@ -778,6 +783,7 @@
         (format t " ~a ~d~%" "... running"   (%get-unsigned-byte running))
         (format t " ~a ~d~%" "... stop"      (%get-unsigned-byte stop))
         (sleep 10)
+        ; (warn 'uhppoted-event :message "yowza!!!!")
         (format t " ~a~%" "... stopping")
         (setf (pref stop :unsigned-byte) 1)
         (sleep 5)
