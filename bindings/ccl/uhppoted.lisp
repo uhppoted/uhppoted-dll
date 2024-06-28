@@ -747,7 +747,7 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
-(defcallback uhppoted-callback ((:struct :GoListenEvent) event) "Callback function for controller events"
+(defcallback uhppoted-on-event ((:struct :GoListenEvent) event) "Callback function for controller events"
   (let ((evt (make-listen-event :controller (pref event :GoListenEvent.controller)
                                 :timestamp  (go-string (pref event :GoListenEvent.timestamp))
                                 :index      (pref event :GoListenEvent.index)
@@ -759,15 +759,18 @@
                                 :reason     (pref event :GoListenEvent.reason))))
     (format t ">>>>>>>>>>>>>>>>>>>>>>> EVENT ~a~%" evt)))
 
+(defcallback uhppoted-on-error (:address err) "Callback function for controller event listen errors"
+    (format t ">>>>>>>>>>>>>>>>>>>>>>> ERROR ~a~%" (go-string err)))
+
 (defun uhppoted-listen-events (uhppote) "Listens for controller events"
   (unwind-protect
     (rlet ((running :unsigned-byte 0)
            (stop    :unsigned-byte 0))
     (with-macptrs ((err (external-call "Listen" :address uhppote 
-                                                :address uhppoted-callback
+                                                :address uhppoted-on-event
                                                 :address running
                                                 :address stop
-                                                :address (%int-to-ptr 0)
+                                                :address uhppoted-on-error
                                                 :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (format t "  ~a ~d" "eeeeeek" err)))
       (progn 
