@@ -257,9 +257,6 @@
 (define-condition uhppoted-error (error)
   ((message :initarg :message :reader message)))
 
-(define-condition uhppoted-event (warning)
-  ((message :initarg :message :reader message)))
-
 (defun go-error (cstr) "Converts a 'C' char * returned by the Go FFI to a string and frees the 'C' string"
   (with-macptrs ((p cstr))
     (%get-cstring p)))
@@ -750,6 +747,8 @@
     (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
     t))
 
+(defparameter *uhppoted-event-handler* nil)
+
 (defcallback uhppoted-on-event ((:struct :GoListenEvent) event) "Callback function for controller events"
   (let ((evt (make-listen-event :controller (pref event :GoListenEvent.controller)
                                 :timestamp  (go-string (pref event :GoListenEvent.timestamp))
@@ -760,14 +759,16 @@
                                 :direction  (pref event :GoListenEvent.direction)
                                 :card       (pref event :GoListenEvent.card)
                                 :reason     (pref event :GoListenEvent.reason))))
-    (format t ">>>>>>>>>>>>>>>>>>>>>>> EVENT ~a~%" evt)
-    (warn 'uhppoted-event :message "yowza!!!!")
-    ))
+    (funcall *uhppoted-event-handler* evt)))
 
 (defcallback uhppoted-on-error (:address err) "Callback function for controller event listen errors"
     (format t ">>>>>>>>>>>>>>>>>>>>>>> ERROR ~a~%" (go-string err)))
 
-(defun uhppoted-listen-events (uhppote) "Listens for controller events"
+; NTS resorting to a global variable to store the on-event callback function because seemingly
+;     defcallback can't be used inside a lambda (or at least not simply) and the user defined
+;     condition handlers seem to be outside the process space of the DLL
+(defun uhppoted-listen-events (uhppote callback) "Listens for controller events"
+  (setf *uhppoted-event-handler* callback)
   (unwind-protect
     (rlet ((running :unsigned-byte 0)
            (stop    :unsigned-byte 0))
@@ -783,13 +784,13 @@
         (format t " ~a ~d~%" "... running"   (%get-unsigned-byte running))
         (format t " ~a ~d~%" "... stop"      (%get-unsigned-byte stop))
         (sleep 10)
-        ; (warn 'uhppoted-event :message "yowza!!!!")
         (format t " ~a~%" "... stopping")
         (setf (pref stop :unsigned-byte) 1)
         (sleep 5)
         (format t " ~a ~d~%" "... running ?" (%get-unsigned-byte running))
         ; (loop (sleep 10))
-        t)))))
+        t))))
+)
 
 (defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"
   (cond ((string= category lookup-mode)         (uhppoted-lookup-mode         code locale))

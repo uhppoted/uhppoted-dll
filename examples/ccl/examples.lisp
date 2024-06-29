@@ -9,12 +9,7 @@
    ((uhppoted-error
      #'(lambda (c) 
         (format t "~%*** ERROR: ~a~%~%" (uhppoted:message c))
-        (invoke-restart 'ignore)))
-    (uhppoted-event
-     #'(lambda (c) 
-        (format t "~%*** EVENT: ~a~%~%" (uhppoted:message c))
-        ; (invoke-restart 'ignore)
-        )))
+        (invoke-restart 'ignore))))
    (uhppoted f 
              :bind-addr      "0.0.0.0"
              :broadcast-addr "255.255.255.255"
@@ -323,7 +318,8 @@
 
 (defun listen_events (args) "" 
   (declare (ignore args))
-  (let* ((ok        (exec #'(lambda (u) (uhppoted-listen-events u)))))
+  (let*  ((callback (lambda (event) (format t "... event ~a~%" event)))
+          (ok       (exec #'(lambda (u) (uhppoted-listen-events u callback)))))
     (when ok
       (format t "  ~a~%" "... done"))))
 
