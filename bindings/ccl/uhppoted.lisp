@@ -141,8 +141,7 @@
                 at
                 cards)
 
-(defstruct listen-event controller
-                        timestamp
+(defstruct listen-event timestamp
                         index
                         event-type
                         granted
@@ -748,10 +747,11 @@
     t))
 
 (defparameter *uhppoted-event-handler* nil)
+(defparameter *uhppoted-error-handler* nil)
 
 (defcallback uhppoted-on-event ((:struct :GoListenEvent) event) "Callback function for controller events"
-  (let ((evt (make-listen-event :controller (pref event :GoListenEvent.controller)
-                                :timestamp  (go-string (pref event :GoListenEvent.timestamp))
+  (let ((controller (pref event :GoListenEvent.controller))
+        (evt (make-listen-event :timestamp  (go-string (pref event :GoListenEvent.timestamp))
                                 :index      (pref event :GoListenEvent.index)
                                 :event-type (pref event :GoListenEvent.event-type)
                                 :granted    (/= 0 (pref event :GoListenEvent.granted))
@@ -759,16 +759,19 @@
                                 :direction  (pref event :GoListenEvent.direction)
                                 :card       (pref event :GoListenEvent.card)
                                 :reason     (pref event :GoListenEvent.reason))))
-    (funcall *uhppoted-event-handler* evt)))
+    (when *uhppoted-event-handler*
+      (funcall *uhppoted-event-handler* controller evt))))
 
 (defcallback uhppoted-on-error (:address err) "Callback function for controller event listen errors"
-    (format t ">>>>>>>>>>>>>>>>>>>>>>> ERROR ~a~%" (go-string err)))
+    (when *uhppoted-error-handler*
+      (funcall *uhppoted-error-handler* (go-string err))))
 
 ; NTS resorting to a global variable to store the on-event callback function because seemingly
 ;     defcallback can't be used inside a lambda (or at least not simply) and the user defined
 ;     condition handlers seem to be outside the process space of the DLL
-(defun uhppoted-listen-events (uhppote callback) "Listens for controller events"
-  (setf *uhppoted-event-handler* callback)
+(defun uhppoted-listen-events (uhppote on-event on-error) "Listens for controller events"
+  (setf *uhppoted-event-handler* on-event)
+  (setf *uhppoted-error-handler* on-error)
   (unwind-protect
     (rlet ((running :unsigned-byte 0)
            (stop    :unsigned-byte 0))

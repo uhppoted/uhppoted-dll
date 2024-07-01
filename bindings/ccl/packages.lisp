@@ -114,6 +114,16 @@
            task-at
            task-cards
 
+           make-listen-event
+           listen-event-timestamp
+           listen-event-index
+           listen-event-event-type
+           listen-event-granted
+           listen-event-door
+           listen-event-direction
+           listen-event-card
+           listen-event-reason
+
            normally-open
            normally-closed
            controlled

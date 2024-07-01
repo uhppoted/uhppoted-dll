@@ -318,8 +318,9 @@
 
 (defun listen_events (args) "" 
   (declare (ignore args))
-  (let*  ((callback (lambda (event) (format t "... event ~a~%" event)))
-          (ok       (exec #'(lambda (u) (uhppoted-listen-events u callback)))))
+  (let*  ((on-event (lambda (controller event) (display " event" controller (as-fields event))))
+          (on-error (lambda (err)   (format t "warn  ~a~%" err)))
+          (ok       (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))))
     (when ok
       (format t "  ~a~%" "... done"))))
 
@@ -361,7 +362,7 @@
 
 
 (defun display (tag device-id fields) "" 
-  (let* ((all (as-pairs (nconc (list "device-id" device-id) fields)))
+  (let* ((all (as-pairs (nconc (list "controller" device-id) fields)))
          (w   (label-width all))
          (fmt (format nil "  ~~~da  ~~a~~%"  w)))
     (format t "~%~a~%" tag)
