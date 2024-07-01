@@ -322,7 +322,7 @@
           (on-error (lambda (err)   (format t "warn  ~a~%" err)))
           (ok       (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))))
     (when ok
-      (format t "  ~a~%" "... done"))))
+      (format t " ~a~%" "... done"))))
 
 (defun args-device-id (args) 
   (parse-integer (parse-args args "--controller" "405419896")))

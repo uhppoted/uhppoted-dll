@@ -517,7 +517,9 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 		q := make(chan os.Signal, 1)
 
 		if running != nil {
-			*running = true
+			go func() {
+				*running = true
+			}()
 		}
 
 		// Ref. https://stackoverflow.com/questions/34897843/why-does-go-panic-on-writing-to-a-closed-channel

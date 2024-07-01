@@ -783,15 +783,30 @@
                                                 :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (format t "  ~a ~d" "eeeeeek" err)))
       (progn 
+        ; wait for event listener to start
+        (loop repeat 5
+              until (= (%get-unsigned-byte running) 1)
+          do (progn
+                (format t " ~a~%" "... waiting")
+                (sleep 1)))
+
+        (unless (= (%get-unsigned-byte running) 1) (error 'uhppoted-error :message "failed to start event listener"))
+
+        ; wait for events
         (format t " ~a ~d~%" "... listening" err)
-        (format t " ~a ~d~%" "... running"   (%get-unsigned-byte running))
-        (format t " ~a ~d~%" "... stop"      (%get-unsigned-byte stop))
-        (sleep 10)
+        (sleep 5)
         (format t " ~a~%" "... stopping")
         (setf (pref stop :unsigned-byte) 1)
-        (sleep 5)
-        (format t " ~a ~d~%" "... running ?" (%get-unsigned-byte running))
-        ; (loop (sleep 10))
+
+        ; wait for event listener to stop
+        (loop repeat 5
+              until (/= (%get-unsigned-byte running) 1)
+          do (progn
+                (format t " ~a~%" "... stopping")
+                (sleep 1)))
+
+        (unless (= (%get-unsigned-byte running) 0) (error 'uhppoted-error :message "failed to stop event listener"))
+
         t))))
 )
 
