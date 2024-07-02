@@ -316,6 +316,13 @@
     (when ok
       (display "restore-default-parameters" device-id nil))))
 
+(defparameter *listen-events-interrupted* nil)
+
+(defcallback on-sigint (:int signal) "Callback function for SIGINT"
+  (declare (ignore signal))
+  (setf *listen-events-interrupted* t))
+  ; (ccl:quit))
+
 (defun listen-events-thread () "" 
   (let*  ((on-event (lambda (controller event) (display " event" controller (as-fields event))))
           (on-error (lambda (err)   (format t "warn  ~a~%" err))))
@@ -327,14 +334,20 @@
   (declare (ignore args))
   (process-run-function "listen" #'(lambda () (listen-events-thread) (break "interrupted")))
 
-  (let ((interrupted nil))
-    (setf ccl:*break-hook* 
-      (lambda (cond hook)        
-        (declare (ignore cond hook))                      
-        ; (ccl:quit)
-        (setf interrupted t)))
+  (external-call "signal" :int 2
+                          :address on-sigint
+                          :address)
 
-    (loop until interrupted)))
+  ; (let ((interrupted nil)
+  ;       (*break-on-signals* nil)) ; seems not to be implemented in CCL
+  ;   (setf ccl:*break-hook* 
+  ;     (lambda (cond hook)        
+  ;       (declare (ignore cond hook))                      
+  ;       ; (ccl:quit)
+  ;       (setf interrupted t)))
+
+  (loop until *listen-events-interrupted*)
+  (format t "... interrupted~%"))
 
 
 (defun args-device-id (args) 
