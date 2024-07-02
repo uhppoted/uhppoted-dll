@@ -794,21 +794,25 @@
 
         ; wait for events
         (format t " ~a ~d~%" "... listening" err)
-        (sleep 5)
-        (format t " ~a~%" "... stopping")
-        (setf (pref stop :unsigned-byte) 1)
+        (loop until (/= (%get-unsigned-byte running) 1)
+           do (sleep 1))
+        (format t " ~a~%" ">>> NOT RUNNING NO MORE")
+        
+        ; (format t " ~a~%" "... stopping")
+        ; (setf (pref stop :unsigned-byte) 1)
+        ; 
+        ; ; wait for event listener to stop
+        ; (loop repeat 5
+        ;       until (/= (%get-unsigned-byte running) 1)
+        ;   do (progn
+        ;         (format t " ~a~%" "... stopping")
+        ;         (sleep 1)))
+        ; 
+        ; (unless (= (%get-unsigned-byte running) 0) (error 'uhppoted-error :message "failed to stop event listener"))
 
-        ; wait for event listener to stop
-        (loop repeat 5
-              until (/= (%get-unsigned-byte running) 1)
-          do (progn
-                (format t " ~a~%" "... stopping")
-                (sleep 1)))
+        ; return stop-fn
+        )))))
 
-        (unless (= (%get-unsigned-byte running) 0) (error 'uhppoted-error :message "failed to stop event listener"))
-
-        t))))
-)
 
 (defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"
   (cond ((string= category lookup-mode)         (uhppoted-lookup-mode         code locale))

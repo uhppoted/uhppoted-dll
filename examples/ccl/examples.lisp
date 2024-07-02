@@ -316,13 +316,26 @@
     (when ok
       (display "restore-default-parameters" device-id nil))))
 
-(defun listen_events (args) "" 
-  (declare (ignore args))
+(defun listen-events-thread () "" 
   (let*  ((on-event (lambda (controller event) (display " event" controller (as-fields event))))
-          (on-error (lambda (err)   (format t "warn  ~a~%" err)))
-          (ok       (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))))
-    (when ok
-      (format t " ~a~%" "... done"))))
+          (on-error (lambda (err)   (format t "warn  ~a~%" err))))
+    (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))
+    (format t "WOOOOOOOT::end~%")))
+
+; Ref. https://stackoverflow.com/questions/9950680/unix-signal-handling-in-common-lisp
+(defun listen-events (args) "" 
+  (declare (ignore args))
+  (process-run-function "listen" #'(lambda () (listen-events-thread) (break "interrupted")))
+
+  (let ((interrupted nil))
+    (setf ccl:*break-hook* 
+      (lambda (cond hook)        
+        (declare (ignore cond hook))                      
+        ; (ccl:quit)
+        (setf interrupted t)))
+
+    (loop until interrupted)))
+
 
 (defun args-device-id (args) 
   (parse-integer (parse-args args "--controller" "405419896")))

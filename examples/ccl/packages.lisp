@@ -36,5 +36,5 @@
            activate-keypads
            set-door-passcodes
            restore-default-parameters
-           listen_events))
+           listen-events))
 
