@@ -316,18 +316,21 @@
     (when ok
       (display "restore-default-parameters" device-id nil))))
 
-(defparameter *listen-events-interrupted* nil)
+(defparameter *listen-events-interrupted* (make-semaphore))
+(defparameter *listen-events-stopped*     (make-semaphore))
 
 (defcallback on-sigint (:int signal) "Callback function for SIGINT"
   (declare (ignore signal))
-  (setf *listen-events-interrupted* t))
-  ; (ccl:quit))
+  (signal-semaphore *listen-events-interrupted*))
 
+; NTS: sends a 'break:interrupted' to the debugger on return which is concealed by
+;      the immediate exit after *listen-events-stoppped* is set
 (defun listen-events-thread () "" 
   (let*  ((on-event (lambda (controller event) (display " event" controller (as-fields event))))
           (on-error (lambda (err)   (format t "warn  ~a~%" err))))
     (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))
-    (format t "WOOOOOOOT::end~%")))
+    (signal-semaphore *listen-events-stopped*)))
+    ; (ccl:quit)))
 
 ; Ref. https://stackoverflow.com/questions/9950680/unix-signal-handling-in-common-lisp
 (defun listen-events (args) "" 
@@ -338,16 +341,19 @@
                           :address on-sigint
                           :address)
 
-  ; (let ((interrupted nil)
-  ;       (*break-on-signals* nil)) ; seems not to be implemented in CCL
-  ;   (setf ccl:*break-hook* 
-  ;     (lambda (cond hook)        
-  ;       (declare (ignore cond hook))                      
-  ;       ; (ccl:quit)
-  ;       (setf interrupted t)))
+  (let ((*break-on-signals* nil))
+    (setf ccl:*break-hook*
+      (lambda (cond hook)
+        (declare (ignore cond hook))
+        ; (ccl:quit)))
+        t))
 
-  (loop until *listen-events-interrupted*)
-  (format t "... interrupted~%"))
+  (wait-on-semaphore *listen-events-interrupted*)
+  (format t " ... interrupted~%")
+
+  (signal-semaphore *uhppoted-listen-stop*)
+  (timed-wait-on-semaphore *listen-events-stopped* 5)
+  (format t " ... done~%")))
 
 
 (defun args-device-id (args) 

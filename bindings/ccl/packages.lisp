@@ -39,9 +39,11 @@
            uhppoted-listen-events
            uhppoted-error
            uhppoted-event
-           with-warning
-           message
            uhppoted-lookup
+
+           message
+           with-warning
+           *uhppoted-listen-stop*
 
            device-id
            device-address

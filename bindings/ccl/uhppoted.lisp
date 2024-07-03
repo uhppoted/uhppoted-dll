@@ -748,6 +748,7 @@
 
 (defparameter *uhppoted-event-handler* nil)
 (defparameter *uhppoted-error-handler* nil)
+(defparameter *uhppoted-listen-stop*   (make-semaphore))
 
 (defcallback uhppoted-on-event ((:struct :GoListenEvent) event) "Callback function for controller events"
   (let ((controller (pref event :GoListenEvent.controller))
@@ -766,9 +767,9 @@
     (when *uhppoted-error-handler*
       (funcall *uhppoted-error-handler* (go-string err))))
 
-; NTS resorting to a global variable to store the on-event callback function because seemingly
-;     defcallback can't be used inside a lambda (or at least not simply) and the user defined
-;     condition handlers seem to be outside the process space of the DLL
+; NTS resorting to a global variables to store the on-event an on-error callback functions because
+;     seemingly defcallback can't be used inside a lambda (or at least not simply) and the user
+;     defined condition handlers seem to be outside the process space of the DLL
 (defun uhppoted-listen-events (uhppote on-event on-error) "Listens for controller events"
   (setf *uhppoted-event-handler* on-event)
   (setf *uhppoted-error-handler* on-error)
@@ -781,37 +782,27 @@
                                                 :address stop
                                                 :address uhppoted-on-error
                                                 :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (format t "  ~a ~d" "eeeeeek" err)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (format t "~a" err)))
       (progn 
         ; wait for event listener to start
         (loop repeat 5
               until (= (%get-unsigned-byte running) 1)
-          do (progn
-                (format t " ~a~%" "... waiting")
-                (sleep 1)))
+          do (sleep 1))
 
         (unless (= (%get-unsigned-byte running) 1) (error 'uhppoted-error :message "failed to start event listener"))
 
-        ; wait for events
-        (format t " ~a ~d~%" "... listening" err)
-        (loop until (/= (%get-unsigned-byte running) 1)
-           do (sleep 1))
-        (format t " ~a~%" ">>> NOT RUNNING NO MORE")
+        ; wait for 'stop'
+        (wait-on-semaphore *uhppoted-listen-stop*)
+        (format t " ~a~%" "... stopping")
+        (setf (pref stop :unsigned-byte) 1)
         
-        ; (format t " ~a~%" "... stopping")
-        ; (setf (pref stop :unsigned-byte) 1)
-        ; 
-        ; ; wait for event listener to stop
-        ; (loop repeat 5
-        ;       until (/= (%get-unsigned-byte running) 1)
-        ;   do (progn
-        ;         (format t " ~a~%" "... stopping")
-        ;         (sleep 1)))
-        ; 
-        ; (unless (= (%get-unsigned-byte running) 0) (error 'uhppoted-error :message "failed to stop event listener"))
-
-        ; return stop-fn
-        )))))
+        ; wait for event listener to stop
+        (loop repeat 5
+              until (/= (%get-unsigned-byte running) 1)
+          do (sleep 1))
+        
+        (unless (= (%get-unsigned-byte running) 0) (error 'uhppoted-error :message "failed to stop event listener"))
+        t)))))
 
 
 (defun uhppoted-lookup (category code locale) "Looks up the plain text description for a code"

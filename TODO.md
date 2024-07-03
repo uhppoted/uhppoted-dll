@@ -5,6 +5,7 @@
             - [ ] Relook at error handling
             - [ ] Move implementation to events.go
       - [x] C
+      - [x] CCL
       - [ ] C++
             - [ ] on_error
             - [ ] MAYBE: https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
@@ -14,9 +15,6 @@
             - [x] Copy in vs-win from LTSC
       - [ ] Python
             - [ ] return code is ctypes.c_int32
-      - [ ] CCL
-             - https://ccl.clozure.com/docs/ccl.html#f_process-run-function
-             - https://stackoverflow.com/questions/26665504/application-delivery-of-long-running-application-in-clozure-cl
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 
