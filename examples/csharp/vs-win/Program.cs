@@ -921,16 +921,16 @@ class UhppotedDLLCLI
     static void listen(Uhppoted u, ManualResetEvent done) {
         Uhppoted.OnEvent onevent = (ListenEvent e) => {
             Console.WriteLine("-- EVENT");
-            // Console.WriteLine("   controller: {0}", e.controller);
-            // Console.WriteLine("   timestamp:  {0}", e.timestamp);
-            // Console.WriteLine("   index:      {0}", e.index);
-            // Console.WriteLine("   event:      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, e.eventType, LOCALE));
-            // Console.WriteLine("   granted:    {0}", e.granted ? "yes" : "no");
-            // Console.WriteLine("   door:       {0}", e.door);
-            // Console.WriteLine("   direction:  {0}", lookup.find(lookup.LOOKUP_DIRECTION, e.direction, LOCALE));
-            // Console.WriteLine("   card:       {0}", e.card);
-            // Console.WriteLine("   reason:     {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, e.reason, LOCALE));
-            // Console.WriteLine();
+            Console.WriteLine("   controller: {0}", e.controller);
+            Console.WriteLine("   timestamp:  {0}", e.timestamp);
+            Console.WriteLine("   index:      {0}", e.index);
+            Console.WriteLine("   event:      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, e.eventType, LOCALE));
+            Console.WriteLine("   granted:    {0}", e.granted ? "yes" : "no");
+            Console.WriteLine("   door:       {0}", e.door);
+            Console.WriteLine("   direction:  {0}", lookup.find(lookup.LOOKUP_DIRECTION, e.direction, LOCALE));
+            Console.WriteLine("   card:       {0}", e.card);
+            Console.WriteLine("   reason:     {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, e.reason, LOCALE));
+            Console.WriteLine();
         };
 
         Uhppoted.OnError onerror = (string err) => {
