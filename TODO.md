@@ -2,8 +2,10 @@
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] Go
+            - [ ] debug
+            - [ ] test
             - [ ] Relook at error handling
-            - [ ] Move implementation to events.go
+            - (?) Move implementation to events.go
       - [x] C
       - [x] CCL
       - [ ] C++
@@ -11,8 +13,8 @@
             - [ ] MAYBE: https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
       - [ ] C#
-            - [x] Copy in vs-mac from LTSC
-            - [x] Copy in vs-win from LTSC
+            - [ ] Compile and test vs-mac
+            - [ ] Copy vs-mac to vs-win
       - [ ] Python
             - [ ] return code is ctypes.c_int32
 
