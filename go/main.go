@@ -563,7 +563,6 @@ func (l *listener) OnEvent(status *types.Status) {
 		evt := C.ListenEvent{
 			controller: C.uint32_t(status.SerialNumber),
 			index:      C.uint32_t(status.Event.Index),
-			timestamp:  C.CString(fmt.Sprintf("%v", status.Event.Timestamp)),
 			event:      C.uint8_t(status.Event.Type),
 			card:       C.uint32_t(status.Event.CardNumber),
 			door:       C.uint8_t(status.Event.Door),
@@ -572,8 +571,11 @@ func (l *listener) OnEvent(status *types.Status) {
 			reason:     C.uint8_t(status.Event.Reason),
 		}
 
+		timestamp := C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
+
+		C.strncpy(&evt.timestamp[0], timestamp, 20)
+		C.free(unsafe.Pointer(timestamp))
 		C.dispatch_event(l.onevent, evt)
-		C.free(unsafe.Pointer(evt.timestamp))
 	}
 }
 
@@ -756,5 +758,37 @@ func cbool(b bool) C.uchar {
 		return 1
 	} else {
 		return 0
+	}
+}
+
+func cstring(v any, c *C.char, N uint32) {
+	if c != nil {
+		s := C.CString(ellipsize(v, int(N)))
+		l := C.size_t(N)
+
+		C.strncpy(c, s, l)
+		C.free(unsafe.Pointer(s))
+	}
+}
+
+// e.g. `你好你好你好你好你好你好你好你好你好你好`
+func ellipsize(v any, N int) string {
+	s := fmt.Sprintf("%v", v)
+	n := len(`…`)
+
+	if len(s) < N {
+		return s
+	} else {
+		for l := N; l > 0; l-- {
+			if r := string([]rune(s)[:l]); len(r)+n < N {
+				return r + `…`
+			}
+		}
+
+		if N > 3 {
+			return "???"
+		} else {
+			return "???"[:N]
+		}
 	}
 }
