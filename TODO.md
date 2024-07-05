@@ -2,7 +2,7 @@
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] Go
-            - [ ] debug
+            - [x] debug
             - [ ] test
             - [ ] Relook at error handling
             - (?) Move implementation to events.go

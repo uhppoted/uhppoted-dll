@@ -136,8 +136,10 @@ restore-default-parameters: build
 listen: build
 	$(CMD) listen
 
+listen-debug: format
+	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && ./examples listen
+
 debug: format
-	cd ../.. && go fmt ./go/...
-	cd ../.. && go build -trimpath -buildmode=c-shared -tags debug -o ./lib/debug/libuhppoted.dylib ./go/...
 	gcc -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.c -I$(BINDINGS)/include -I$(LIB)/debug -L$(LIB)/debug -luhppoted
 	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && ./examples listen

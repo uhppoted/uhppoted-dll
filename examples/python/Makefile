@@ -129,6 +129,8 @@ restore-default-parameters: build
 listen: build
 	$(GO) && $(DLL) && $(CMD) listen
 
-debug: build
-	$(GO) && $(DLL) && $(CMD) get-status --controller 303986753
+listen-debug: build
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) listen
 
+debug: build
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && $(CMD) listen

@@ -137,6 +137,8 @@ restore-default-parameters: build
 listen: build
 	$(CMD) listen
 
+listen-debug: build
+	$(GO) && export $(DLL)/debug && mono ./examples.exe listen
+
 debug: build
-	$(GO) && export $(DLL)/debug && mono ./examples.exe get-status --controller 12345678
-	$(CMD) get-status --controller 303986753
+	$(GO) && export $(DLL)/debug && mono ./examples.exe listen

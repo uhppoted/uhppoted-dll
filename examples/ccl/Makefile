@@ -131,11 +131,15 @@ restore-default-parameters: build
 listen: build
 	$(CMD) listen 
 
+listen-debug:
+	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load main.lisp --eval '(make-app)' 
+	$(CMD) listen
+
 run: 
 	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '$(DLL)' --load main.lisp
 
 debug: build
 	# GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load main.lisp
-	# GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load main.lisp --eval '(make-app)' 
-	$(CMD) get-status --controller 303986753
+	GODEBUG=cgocheck=2 && rlwrap ccl64 --eval '(setenv "DYLD_LIBRARY_PATH" "$(LIB)/debug")' --load main.lisp --eval '(make-app)' 
+	$(CMD) listen
 

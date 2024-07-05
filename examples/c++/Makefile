@@ -136,6 +136,10 @@ restore-default-parameters: build
 listen: build
 	$(CMD) listen
 
+listen-debug: format
+	g++ -std=c++17 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && ./examples listen
+
 debug: format
 	g++ -std=c++17 -Wall -o examples $(SRC) $(BINDINGS)/src/uhppoted.cpp -I$(BINDINGS)/include -I$(LIB)/debug -lc++ -L$(LIB)/debug -luhppoted
-	$(CMD) get-status --controller 303986753
+	$(GO) && export DYLD_LIBRARY_PATH=$(LIB)/debug && ./examples listen
