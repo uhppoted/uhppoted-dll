@@ -527,9 +527,13 @@ func (l *listener) OnEvent(status *types.Status) {
 		// 	reason:     C.uint8_t(status.Event.Reason),
 		// }
 
-		C.dispatch_event(l.onevent)
 		// C.dispatch_event(l.onevent, &evt)
 		// C.free(unsafe.Pointer(evt.timestamp))
+
+		controller := C.uint32_t(status.SerialNumber)
+		index := C.uint32_t(status.Event.Index)
+
+		C.dispatch_event(l.onevent, controller, index)
 	}
 }
 

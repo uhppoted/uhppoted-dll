@@ -709,8 +709,7 @@ namespace uhppoted {
         public delegate void OnEvent(ListenEvent e);
         public delegate void OnError(string err);
 
-        // delegate void OnListenEvent(ref GoListenEvent e);
-        delegate void OnListenEvent();
+        delegate void OnListenEvent(uint controller, uint index);
         delegate void OnListenError(string err);
 
         public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
@@ -726,10 +725,10 @@ namespace uhppoted {
             //                              e.reason));
             // };
 
-            OnListenEvent onevent = () => {
-                on_event(new ListenEvent(405419896,
+            OnListenEvent onevent = (uint controller, uint index) => {
+                on_event(new ListenEvent(controller,
                                          "2024-07-04 12:34:56",
-                                         1234,
+                                         index,
                                          1,
                                          true,
                                          2,

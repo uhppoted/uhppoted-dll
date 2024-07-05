@@ -16,9 +16,9 @@ typedef struct ListenEvent {
 } ListenEvent;
 
 // typedef void (*onevent) (const struct ListenEvent *evt);
-typedef void (*onevent) ();
+typedef void (*onevent) (uint32_t  controller,uint32_t index);
 typedef void (*onerror) (const char *err);
 
 // extern void dispatch_event(onevent f, const struct ListenEvent *evt);
-extern void dispatch_event(onevent f);
+extern void dispatch_event(onevent f, uint32_t  controller,uint32_t index);
 extern void dispatch_error(onerror f, const char *err);

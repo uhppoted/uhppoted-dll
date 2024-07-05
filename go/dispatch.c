@@ -11,9 +11,9 @@
 //     }
 // }
 
-void dispatch_event(onevent f) {
+void dispatch_event(onevent f, uint32_t controller, uint32_t index) {
     if (f != NULL) {
-        f();
+        f(controller, index);
     }
 }
 
