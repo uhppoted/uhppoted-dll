@@ -7,8 +7,8 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-void event_handler(const struct ListenEvent evt);
-void errors(const char *err);
+void listen_on_event(const struct ListenEvent evt);
+void listen_on_error(const char *err);
 
 int getEventIndex(int argc, char **argv) {
     options opts = parse(argc, argv);
@@ -104,7 +104,7 @@ int listen(int argc, char **argv) {
     bool running = false;
     bool stop = false;
 
-    if (listen_events(event_handler, &running, &stop, errors) < 0) {
+    if (listen_events(listen_on_event, &running, &stop, listen_on_error) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -153,7 +153,7 @@ int listen(int argc, char **argv) {
     return 0;
 }
 
-void event_handler(const struct ListenEvent evt) {
+void listen_on_event(const struct ListenEvent evt) {
     const char *_direction = lookup(LOOKUP_DIRECTION, evt.direction, locale);
     const char *_event = lookup(LOOKUP_EVENT_TYPE, evt.event, locale);
     const char *_reason = lookup(LOOKUP_EVENT_REASON, evt.reason, locale);
@@ -178,6 +178,6 @@ void event_handler(const struct ListenEvent evt) {
     display("event", sizeof(fields) / sizeof(field), fields);
 }
 
-void errors(const char *err) {
+void listen_on_error(const char *err) {
     printf("ERROR %s\n", err);
 }

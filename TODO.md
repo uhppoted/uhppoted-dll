@@ -5,7 +5,6 @@
             - [x] debug
             - [ ] test
             - [ ] Relook at error handling
-            - (?) Move implementation to events.go
       - [x] C
       - [x] CCL
       - [ ] C++

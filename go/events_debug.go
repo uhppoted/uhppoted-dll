@@ -77,7 +77,7 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	return nil
 }
 
-func listen(uu uhppote.IUHPPOTE, listener uhppote.Listener, q chan os.Signal) error {
+func listen(uu uhppote.IUHPPOTE, listener uhppote.Listener, quit chan os.Signal) error {
 	if DEBUG {
 		fmt.Printf(">>> listen\n")
 	}
@@ -123,7 +123,7 @@ func listen(uu uhppote.IUHPPOTE, listener uhppote.Listener, q chan os.Signal) er
 	loop:
 		for {
 			select {
-			case <-q:
+			case <-quit:
 				break loop
 
 			case <-ticker.C:

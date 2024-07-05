@@ -6,7 +6,9 @@ import (
 	"C"
 	"fmt"
 	"os"
+	"time"
 
+	"github.com/uhppoted/uhppote-core/types"
 	"github.com/uhppoted/uhppote-core/uhppote"
 )
 
@@ -73,6 +75,40 @@ func recordSpecialEvents(uu uhppote.IUHPPOTE, deviceID uint32, enabled bool) err
 	return nil
 }
 
-func listen(uu uhppote.IUHPPOTE, f uhppote.Listener, q chan os.Signal) error {
-	return fmt.Errorf("*** NOT IMPLEMENTED ***")
+func listen(uu uhppote.IUHPPOTE, listener uhppote.Listener, quit chan os.Signal) error {
+	timestamp := time.Date(2024, time.July, 5, 12, 36, 45, 0, time.Local)
+
+	on_event := func() {
+		event := types.Status{
+			SerialNumber:   405419896,
+			DoorState:      map[uint8]bool{1: false, 2: false, 3: false, 4: false},
+			DoorButton:     map[uint8]bool{1: false, 2: false, 3: false, 4: false},
+			SystemError:    0x00,
+			SystemDateTime: types.DateTime(timestamp),
+			SequenceId:     12345678,
+			SpecialInfo:    0x00,
+			RelayState:     0x00,
+			InputState:     0x00,
+
+			Event: types.StatusEvent{
+				Index:      17,
+				Type:       6,
+				Granted:    true,
+				Door:       2,
+				Direction:  1,
+				CardNumber: 10058400,
+				Timestamp:  types.DateTime(timestamp),
+				Reason:     21,
+			},
+		}
+
+		listener.OnEvent(&event)
+	}
+
+	time.AfterFunc(500*time.Millisecond, on_event)
+	listener.OnConnected()
+
+	<-quit
+
+	return nil
 }

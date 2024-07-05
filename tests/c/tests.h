@@ -74,6 +74,8 @@ extern bool activateKeypads();
 extern bool setDoorPasscodes();
 extern bool restoreDefaultParameters();
 
+extern bool listen();
+
 extern bool internationalisation();
 extern bool structs();
 
