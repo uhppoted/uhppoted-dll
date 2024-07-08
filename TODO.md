@@ -3,19 +3,31 @@
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] Go
             - [x] debug
-            - [ ] test
+            - [x] test
+            - [ ] Change timestamp back to const char *
             - [ ] Relook at error handling
       - [x] C
-      - [x] CCL
+            - [x] test
       - [ ] C++
+            - [x] test
             - [ ] on_error
-            - [ ] MAYBE: https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
+            - [ ] rework using <functional>
+                  - https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
       - [ ] C#
+            - [ ] test
             - [ ] Compile and test vs-mac
             - [ ] Copy vs-mac to vs-win
+            - [ ] Use CallingConvention and [[MarshalAs(UnmanagedType.LPUTF8Str)] ]
+                  - https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
+                  - https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api
+                  - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.unmanagedtype?view=net-8.0
+
       - [ ] Python
+            - [ ] test
             - [ ] return code is ctypes.c_int32
+      - [ ] CCL
+            - [ ] test
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 

@@ -142,9 +142,8 @@ bool listen() {
 }
 
 void listen_on_event(const struct ListenEvent e) {
-
     evt.controller = e.controller;
-    snprintf(evt.timestamp, sizeof(evt.timestamp), "%s", e.timestamp);
+    evt.timestamp = strdup(e.timestamp);
     evt.index = e.index;
     evt.event = e.event;
     evt.granted = e.granted;

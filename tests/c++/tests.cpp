@@ -49,6 +49,7 @@ vector<test> tests = {
     {"activate-keypads", activateKeypads},
     {"set-door-passcodes", setDoorPasscodes},
     {"restore-default-parameters", restoreDefaultParameters},
+    {"listen", listen},
     {"lookup", internationalisation},
     {"structs", structs},
 };

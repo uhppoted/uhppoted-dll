@@ -58,6 +58,8 @@ extern bool activateKeypads(uhppoted &);
 extern bool setDoorPasscodes(uhppoted &);
 extern bool restoreDefaultParameters(uhppoted &);
 
+extern bool listen(uhppoted &);
+
 extern bool internationalisation(uhppoted &);
 extern bool structs(uhppoted &);
 

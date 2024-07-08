@@ -562,6 +562,7 @@ func (l *listener) OnEvent(status *types.Status) {
 	if status != nil {
 		evt := C.ListenEvent{
 			controller: C.uint32_t(status.SerialNumber),
+			timestamp:  C.CString(fmt.Sprintf("%v", status.Event.Timestamp)),
 			index:      C.uint32_t(status.Event.Index),
 			event:      C.uint8_t(status.Event.Type),
 			card:       C.uint32_t(status.Event.CardNumber),
@@ -571,11 +572,8 @@ func (l *listener) OnEvent(status *types.Status) {
 			reason:     C.uint8_t(status.Event.Reason),
 		}
 
-		timestamp := C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
-
-		C.strncpy(&evt.timestamp[0], timestamp, 20)
-		C.free(unsafe.Pointer(timestamp))
 		C.dispatch_event(l.onevent, evt)
+		C.free(unsafe.Pointer(evt.timestamp))
 	}
 }
 
