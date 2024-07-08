@@ -532,8 +532,10 @@ func (l *listener) OnEvent(status *types.Status) {
 
 		controller := C.uint32_t(status.SerialNumber)
 		index := C.uint32_t(status.Event.Index)
+		timestamp := C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
 
-		C.dispatch_event(l.onevent, controller, index)
+		C.dispatch_event(l.onevent, controller, index, timestamp)
+		C.free(unsafe.Pointer(timestamp))
 	}
 }
 

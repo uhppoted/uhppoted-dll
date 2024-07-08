@@ -11,9 +11,9 @@
 //     }
 // }
 
-void dispatch_event(onevent f, uint32_t controller, uint32_t index) {
+void dispatch_event(onevent f, uint32_t controller, uint32_t index,const char *timestamp) {
     if (f != NULL) {
-        f(controller, index);
+        f(controller, index,timestamp);
     }
 }
 

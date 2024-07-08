@@ -709,8 +709,8 @@ namespace uhppoted {
         public delegate void OnEvent(ListenEvent e);
         public delegate void OnError(string err);
 
-        delegate void OnListenEvent(uint controller, uint index);
-        delegate void OnListenError(string err);
+        delegate void OnListenEvent(uint controller, uint index,[MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp);
+        delegate void OnListenError([MarshalAs(UnmanagedType.LPUTF8Str)]string err);
 
         public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
             // OnListenEvent onevent = (ref GoListenEvent e) => {
@@ -725,9 +725,9 @@ namespace uhppoted {
             //                              e.reason));
             // };
 
-            OnListenEvent onevent = (uint controller, uint index) => {
+            OnListenEvent onevent = (uint controller, uint index, [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp) => {
                 on_event(new ListenEvent(controller,
-                                         "2024-07-04 12:34:56",
+                                         timestamp,
                                          index,
                                          1,
                                          true,
@@ -737,7 +737,7 @@ namespace uhppoted {
                                          6));
             };
 
-            OnListenError onerror = (string err) => {
+            OnListenError onerror = ([MarshalAs(UnmanagedType.LPUTF8Str)]string err) => {
                 on_error(err);
             };
 

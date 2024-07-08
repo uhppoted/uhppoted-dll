@@ -6,6 +6,9 @@
       - [x] Update vs-mac example
       - [x] Update vs-windows example
       - [ ] LTSC
+            - Use CallingConvention
+            - Ref. https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
+            - Ref. https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api/
 
 ## TODO
 
