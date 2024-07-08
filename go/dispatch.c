@@ -11,9 +11,17 @@
 //     }
 // }
 
-void dispatch_event(onevent f, uint32_t controller, uint32_t index,const char *timestamp) {
+void dispatch_event(onevent f, uint32_t controller, 
+                               uint32_t    index, 
+                               const char *timestamp,
+                               uint8_t     event, 
+                               bool        granted, 
+                               uint8_t     door, 
+                               uint8_t     direction, 
+                               uint32_t    card, 
+                               uint8_t     reason) {
     if (f != NULL) {
-        f(controller, index,timestamp);
+        f(controller, index, timestamp, event, granted, door, direction, card, reason);
     }
 }
 

@@ -533,8 +533,24 @@ func (l *listener) OnEvent(status *types.Status) {
 		controller := C.uint32_t(status.SerialNumber)
 		index := C.uint32_t(status.Event.Index)
 		timestamp := C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
+		event := C.uint8_t(status.Event.Type)
+		card := C.uint32_t(status.Event.CardNumber)
+		door := C.uint8_t(status.Event.Door)
+		granted := C.bool(status.Event.Granted)
+		direction := C.uint8_t(status.Event.Direction)
+		reason := C.uint8_t(status.Event.Reason)
 
-		C.dispatch_event(l.onevent, controller, index, timestamp)
+		C.dispatch_event(l.onevent,
+			controller,
+			index,
+			timestamp,
+			event,
+			granted,
+			door,
+			direction,
+			card,
+			reason)
+
 		C.free(unsafe.Pointer(timestamp))
 	}
 }

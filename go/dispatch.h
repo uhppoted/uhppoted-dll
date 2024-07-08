@@ -16,9 +16,27 @@ typedef struct ListenEvent {
 } ListenEvent;
 
 // typedef void (*onevent) (const struct ListenEvent *evt);
-typedef void (*onevent) (uint32_t  controller,uint32_t index, const char *timestamp);
+typedef void (*onevent) (uint32_t    controller,
+                         uint32_t    index, 
+                         const char *timestamp, 
+                         uint8_t     event, 
+                         bool        granted, 
+                         uint8_t     door, 
+                         uint8_t     direction, 
+                         uint32_t    card, 
+                         uint8_t     reason);
+
 typedef void (*onerror) (const char *err);
 
 // extern void dispatch_event(onevent f, const struct ListenEvent *evt);
-extern void dispatch_event(onevent f, uint32_t  controller,uint32_t index, const char *timestamp);
+extern void dispatch_event(onevent f, uint32_t    controller,
+                                      uint32_t    index, 
+                                      const char *timestamp,
+                                      uint8_t     event, 
+                                      bool        granted, 
+                                      uint8_t     door, 
+                                      uint8_t     direction, 
+                                      uint32_t    card, 
+                                      uint8_t     reason);
+
 extern void dispatch_error(onerror f, const char *err);

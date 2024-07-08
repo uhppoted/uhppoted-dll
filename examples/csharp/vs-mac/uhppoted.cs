@@ -709,7 +709,16 @@ namespace uhppoted {
         public delegate void OnEvent(ListenEvent e);
         public delegate void OnError(string err);
 
-        delegate void OnListenEvent(uint controller, uint index,[MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp);
+        delegate void OnListenEvent(uint controller,
+                                    uint index,
+                                    [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
+                                    byte eventType,
+                                    byte granted,
+                                    byte door,
+                                    byte direction,
+                                    uint card,
+                                    byte reason);
+
         delegate void OnListenError([MarshalAs(UnmanagedType.LPUTF8Str)]string err);
 
         public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
@@ -725,16 +734,24 @@ namespace uhppoted {
             //                              e.reason));
             // };
 
-            OnListenEvent onevent = (uint controller, uint index, [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp) => {
+            OnListenEvent onevent = (uint controller, 
+                                     uint index, 
+                                     [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
+                                     byte eventType,
+                                     byte granted,
+                                     byte door,
+                                     byte direction,
+                                     uint card,
+                                     byte reason) => {
                 on_event(new ListenEvent(controller,
                                          timestamp,
                                          index,
-                                         1,
-                                         true,
-                                         2,
-                                         1,
-                                         10058400,
-                                         6));
+                                         eventType,
+                                         granted == 1 ? true : false,
+                                         door,
+                                         direction,
+                                         card,
+                                         reason));
             };
 
             OnListenError onerror = ([MarshalAs(UnmanagedType.LPUTF8Str)]string err) => {
