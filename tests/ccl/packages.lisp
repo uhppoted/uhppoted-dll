@@ -37,6 +37,7 @@
            activate-keypads
            set-door-passcodes
            restore-default-parameters
+           listen-events
            internationalisation
            structs
            failed

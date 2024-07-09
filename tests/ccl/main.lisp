@@ -39,6 +39,7 @@
         '("activate-keypads"           tests:activate-keypads)
         '("set-door-passcodes"         tests:set-door-passcodes)
         '("restore-default-parameters" tests:restore-default-parameters)
+        '("listen"                     tests:listen-events)
         '("lookup"                     tests:internationalisation)
         '("structs"                    tests:structs)
 ))

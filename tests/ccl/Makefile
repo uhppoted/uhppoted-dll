@@ -129,6 +129,9 @@ set-door-passcodes: build
 restore-default-parameters: build
 	$(CMD) restore-default-parameters
 
+listen: build
+	$(CMD) listen
+
 lookup: build
 	$(CMD) lookup
 

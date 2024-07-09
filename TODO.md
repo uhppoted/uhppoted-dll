@@ -21,8 +21,10 @@
             - [x] test
             - [ ] return code is ctypes.c_int32
       - [ ] CCL
-            - [ ] debug
-            - [ ] test
+            - [x] debug
+            - [x] test
+            - [ ] seperate listen-event and GoListenEvent
+                  - listen-event includes controller
       - [ ] C#
             - [ ] debug
             - [ ] test

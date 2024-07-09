@@ -308,6 +308,45 @@
   (exec #'(lambda (u) (uhppoted-restore-default-parameters u TEST-DEVICE-ID)))
   (evaluate "restore-default-parameters" '()))
 
+(defparameter *listen-events-interrupted* (make-semaphore))
+(defparameter *listen-events-stopped*     (make-semaphore))
+(defparameter *listen-events-controller*  0)
+(defparameter *listen-events-event*       (make-listen-event))
+
+(defun listen-events-thread () "" 
+  (let*  ((on-event (lambda (controller event) 
+                    (progn 
+                      (setf *listen-events-controller* controller)
+                      (setf (listen-event-index      *listen-events-event*) (listen-event-index      event))
+                      (setf (listen-event-timestamp  *listen-events-event*) (listen-event-timestamp  event))
+                      (setf (listen-event-event-type *listen-events-event*) (listen-event-event-type event))
+                      (setf (listen-event-granted    *listen-events-event*) (listen-event-granted    event))
+                      (setf (listen-event-door       *listen-events-event*) (listen-event-door       event))
+                      (setf (listen-event-direction  *listen-events-event*) (listen-event-direction  event))
+                      (setf (listen-event-card       *listen-events-event*) (listen-event-card       event))
+                      (setf (listen-event-reason     *listen-events-event*) (listen-event-reason     event))
+                    )))
+          (on-error (lambda (err)              (format t "warn  ~a~%" err))))
+    (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))
+    (signal-semaphore *listen-events-stopped*)))
+
+(defun listen-events() "" 
+  (process-run-function "listen" #'(lambda () (listen-events-thread) (break "interrupted")))
+  (sleep 1)
+  (signal-semaphore *uhppoted-listen-stop*)
+  (timed-wait-on-semaphore *listen-events-stopped* 5)
+  (evaluate "listen" 
+            (list (make-result :field "event controller"  :expected 405419896             :value *listen-events-controller*)
+                  (make-result :field "event index"       :expected 17                    :value (listen-event-index      *listen-events-event*))
+                  (make-result :field "event timestamp"   :expected "2024-07-05 12:36:45" :value (listen-event-timestamp  *listen-events-event*))
+                  (make-result :field "event type"        :expected 6                     :value (listen-event-event-type *listen-events-event*))
+                  (make-result :field "event granted"     :expected T                     :value (listen-event-granted    *listen-events-event*))
+                  (make-result :field "event door"        :expected 2                     :value (listen-event-door       *listen-events-event*))
+                  (make-result :field "event direction"   :expected 1                     :value (listen-event-direction  *listen-events-event*))
+                  (make-result :field "event card number" :expected 10058400              :value (listen-event-card       *listen-events-event*))
+                  (make-result :field "event reason"      :expected 21                    :value (listen-event-reason     *listen-events-event*))
+                  )))
+
 
 (defun internationalisation () "" 
   (let ((mode-normally-open              (uhppoted-lookup lookup-mode         normally-open                                ""))
