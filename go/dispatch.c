@@ -4,24 +4,23 @@
 #include <stdio.h>
 #include <dispatch.h>
 
-// void dispatch_event(onevent f, const struct ListenEvent *evt) {
+// void dispatch_event(onevent f, uint32_t controller, 
+//                                uint32_t    index, 
+//                                const char *timestamp,
+//                                uint8_t     event, 
+//                                bool        granted, 
+//                                uint8_t     door, 
+//                                uint8_t     direction, 
+//                                uint32_t    card, 
+//                                uint8_t     reason) {
 //     if (f != NULL) {
-//         f(evt);
-//         f();
+//         f(controller, index, timestamp, event, granted, door, direction, card, reason);
 //     }
 // }
 
-void dispatch_event(onevent f, uint32_t controller, 
-                               uint32_t    index, 
-                               const char *timestamp,
-                               uint8_t     event, 
-                               bool        granted, 
-                               uint8_t     door, 
-                               uint8_t     direction, 
-                               uint32_t    card, 
-                               uint8_t     reason) {
+void dispatch_event(onevent f, const struct ListenEvent *evt) {
     if (f != NULL) {
-        f(controller, index, timestamp, event, granted, door, direction, card, reason);
+        f(evt);
     }
 }
 

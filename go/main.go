@@ -515,43 +515,43 @@ func (l *listener) OnConnected() {
 
 func (l *listener) OnEvent(status *types.Status) {
 	if status != nil {
-		// evt := C.ListenEvent{
-		// 	controller: C.uint32_t(status.SerialNumber),
-		// 	index:      C.uint32_t(status.Event.Index),
-		// 	timestamp:  C.CString(fmt.Sprintf("%v", status.Event.Timestamp)),
-		// 	event:      C.uint8_t(status.Event.Type),
-		// 	card:       C.uint32_t(status.Event.CardNumber),
-		// 	door:       C.uint8_t(status.Event.Door),
-		// 	granted:    C.bool(status.Event.Granted),
-		// 	direction:  C.uint8_t(status.Event.Direction),
-		// 	reason:     C.uint8_t(status.Event.Reason),
-		// }
+		evt := C.ListenEvent{
+			controller: C.uint32_t(status.SerialNumber),
+			index:      C.uint32_t(status.Event.Index),
+			// timestamp:  C.CString(fmt.Sprintf("%v", status.Event.Timestamp)),
+			event:     C.uint8_t(status.Event.Type),
+			card:      C.uint32_t(status.Event.CardNumber),
+			door:      C.uint8_t(status.Event.Door),
+			granted:   C.bool(status.Event.Granted),
+			direction: C.uint8_t(status.Event.Direction),
+			reason:    C.uint8_t(status.Event.Reason),
+		}
 
-		// C.dispatch_event(l.onevent, &evt)
+		C.dispatch_event(l.onevent, &evt)
 		// C.free(unsafe.Pointer(evt.timestamp))
 
-		controller := C.uint32_t(status.SerialNumber)
-		index := C.uint32_t(status.Event.Index)
-		timestamp := C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
-		event := C.uint8_t(status.Event.Type)
-		card := C.uint32_t(status.Event.CardNumber)
-		door := C.uint8_t(status.Event.Door)
-		granted := C.bool(status.Event.Granted)
-		direction := C.uint8_t(status.Event.Direction)
-		reason := C.uint8_t(status.Event.Reason)
+		// controller := C.uint32_t(status.SerialNumber)
+		// index := C.uint32_t(status.Event.Index)
+		// timestamp := C.CString(fmt.Sprintf("%v", status.Event.Timestamp))
+		// event := C.uint8_t(status.Event.Type)
+		// card := C.uint32_t(status.Event.CardNumber)
+		// door := C.uint8_t(status.Event.Door)
+		// granted := C.bool(status.Event.Granted)
+		// direction := C.uint8_t(status.Event.Direction)
+		// reason := C.uint8_t(status.Event.Reason)
 
-		C.dispatch_event(l.onevent,
-			controller,
-			index,
-			timestamp,
-			event,
-			granted,
-			door,
-			direction,
-			card,
-			reason)
+		// C.dispatch_event(l.onevent,
+		// 	controller,
+		// 	index,
+		// 	timestamp,
+		// 	event,
+		// 	granted,
+		// 	door,
+		// 	direction,
+		// 	card,
+		// 	reason)
 
-		C.free(unsafe.Pointer(timestamp))
+		// C.free(unsafe.Pointer(timestamp))
 	}
 }
 

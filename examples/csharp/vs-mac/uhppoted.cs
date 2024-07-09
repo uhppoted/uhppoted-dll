@@ -709,52 +709,53 @@ namespace uhppoted {
         public delegate void OnEvent(ListenEvent e);
         public delegate void OnError(string err);
 
-        delegate void OnListenEvent(uint controller,
-                                    uint index,
-                                    [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
-                                    byte eventType,
-                                    byte granted,
-                                    byte door,
-                                    byte direction,
-                                    uint card,
-                                    byte reason);
+        // delegate void OnListenEvent(uint controller,
+        //                             uint index,
+        //                             [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
+        //                             byte eventType,
+        //                             byte granted,
+        //                             byte door,
+        //                             byte direction,
+        //                             uint card,
+        //                             byte reason);
 
-        delegate void OnListenError([MarshalAs(UnmanagedType.LPUTF8Str)]string err);
+        delegate void OnListenEvent([In] ref GoListenEvent evt);
+        delegate void OnListenError([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
         public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
-            // OnListenEvent onevent = (ref GoListenEvent e) => {
-            //     on_event(new ListenEvent(e.controller,
-            //                              e.timestamp,
-            //                              e.index,
-            //                              e.eventType,
-            //                              e.granted == 1 ? true : false,
-            //                              e.door,
-            //                              e.direction,
-            //                              e.card,
-            //                              e.reason));
+            // OnListenEvent onevent = (uint controller, 
+            //                          uint index, 
+            //                          [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
+            //                          byte eventType,
+            //                          byte granted,
+            //                          byte door,
+            //                          byte direction,
+            //                          uint card,
+            //                          byte reason) => {
+            //     on_event(new ListenEvent(controller,
+            //                              timestamp,
+            //                              index,
+            //                              eventType,
+            //                              granted == 1 ? true : false,
+            //                              door,
+            //                              direction,
+            //                              card,
+            //                              reason));
             // };
 
-            OnListenEvent onevent = (uint controller, 
-                                     uint index, 
-                                     [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
-                                     byte eventType,
-                                     byte granted,
-                                     byte door,
-                                     byte direction,
-                                     uint card,
-                                     byte reason) => {
-                on_event(new ListenEvent(controller,
-                                         timestamp,
-                                         index,
-                                         eventType,
-                                         granted == 1 ? true : false,
-                                         door,
-                                         direction,
-                                         card,
-                                         reason));
+            OnListenEvent onevent = ([In] ref GoListenEvent e) => {
+                on_event(new ListenEvent(e.controller,
+                                         "2024--7-09 12:34:56", // e.timestamp,
+                                         e.index,
+                                         e.eventType,
+                                         e.granted == 1 ? true : false,
+                                         e.door,
+                                         e.direction,
+                                         e.card,
+                                         e.reason));
             };
 
-            OnListenError onerror = ([MarshalAs(UnmanagedType.LPUTF8Str)]string err) => {
+            OnListenError onerror = ([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err) => {
                 on_error(err);
             };
 
@@ -1029,7 +1030,7 @@ namespace uhppoted {
 #pragma warning disable 649 // assigned in DLL
         struct GoListenEvent {
             public uint controller;
-            public string timestamp;
+//          public string timestamp;
             public uint index;
             public byte eventType;
             public byte granted;
