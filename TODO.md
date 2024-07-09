@@ -13,6 +13,7 @@
             - https://stackoverflow.com/questions/827672/how-do-i-marshal-a-structure-as-a-pointer-to-a-structure
             - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/best-practices#guids
             - https://github.com/dotnet/docs/blob/main/docs/standard/native-interop/best-practices.md
+            - https://limbioliong.wordpress.com/2011/11/01/using-the-stringbuilder-in-unmanaged-api-calls/
 
 ## TODO
 

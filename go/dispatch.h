@@ -5,7 +5,7 @@
 
 typedef struct ListenEvent {
     uint32_t  controller;
-    // const char  *timestamp;
+    char  *timestamp;
     uint32_t index;
     uint8_t event;
     bool granted;

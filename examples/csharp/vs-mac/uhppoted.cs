@@ -745,7 +745,7 @@ namespace uhppoted {
 
             OnListenEvent onevent = ([In] ref GoListenEvent e) => {
                 on_event(new ListenEvent(e.controller,
-                                         "2024--7-09 12:34:56", // e.timestamp,
+                                         e.timestamp,
                                          e.index,
                                          e.eventType,
                                          e.granted == 1 ? true : false,
@@ -1030,7 +1030,7 @@ namespace uhppoted {
 #pragma warning disable 649 // assigned in DLL
         struct GoListenEvent {
             public uint controller;
-//          public string timestamp;
+            [MarshalAs(UnmanagedType.LPUTF8Str)] public string timestamp;
             public uint index;
             public byte eventType;
             public byte granted;
