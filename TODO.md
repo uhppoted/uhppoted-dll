@@ -4,17 +4,27 @@
       - [x] Go
             - [x] debug
             - [x] test
-            - [ ] Change timestamp back to const char *
+            - [x] Change timestamp back to char *
             - [ ] Relook at error handling
       - [x] C
+            - [x] debug
             - [x] test
       - [ ] C++
+            - [x] debug
             - [x] test
             - [ ] on_error
             - [ ] rework using <functional>
                   - https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
+      - [ ] Python
+            - [x] debug
+            - [x] test
+            - [ ] return code is ctypes.c_int32
+      - [ ] CCL
+            - [ ] debug
+            - [ ] test
       - [ ] C#
+            - [ ] debug
             - [ ] test
             - [ ] Compile and test vs-mac
             - [ ] Copy vs-mac to vs-win
@@ -22,12 +32,6 @@
                   - https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
                   - https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api
                   - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.unmanagedtype?view=net-8.0
-
-      - [ ] Python
-            - [ ] test
-            - [ ] return code is ctypes.c_int32
-      - [ ] CCL
-            - [ ] test
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 

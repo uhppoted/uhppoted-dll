@@ -4,6 +4,8 @@ import ctypes
 import sys
 import platform
 import os
+import threading
+import time
 
 from functools import reduce
 
@@ -71,6 +73,7 @@ def tests():
         'activate-keypads': activate_keypads,
         'set-door-passcodes': set_door_passcodes,
         'restore-default-parameters': restore_default_parameters,
+        'listen': listen,
         'lookup': internationalisation,
         'structs': structs,
     }
@@ -429,6 +432,62 @@ def restore_default_parameters(u):
     u.restore_default_parameters(DEVICE_ID)
 
     return evaluate(tag, [])
+
+
+received_event = {}
+
+
+def listen(u):
+    tag = 'listen'
+    running = threading.Condition()
+    stop = threading.Condition()
+
+    thread = threading.Thread(target=listen_events, args=[u, running, stop])
+    thread.daemon = True
+    thread.start()
+
+    with running:
+        if not running.wait(1):
+            raise Exception(f'timeout starting event listener')
+
+    time.sleep(1)
+
+    with stop:
+        stop.notifyAll()
+
+    thread.join()
+
+    return evaluate(tag, [
+        ('event controller', 405419896, received_event['controller']),
+        ('event index', 17, received_event['index']),
+        ('event timestamp', '2024-07-05 12:36:45', received_event['timestamp']),
+        ('event type', 6, received_event['event']),
+        ('event granted', True, received_event['granted']),
+        ('event door', 2, received_event['door']),
+        ('event direction', 1, received_event['direction']),
+        ('event card', 10058400, received_event['card']),
+        ('event reason', 21, received_event['reason']),
+    ])
+
+
+def listen_events(u, running, stop):
+    u.listen(on_listen_event, on_listen_error, running, stop)
+
+
+def on_listen_event(evt):
+    received_event['controller'] = evt.controller
+    received_event['index'] = evt.index
+    received_event['timestamp'] = evt.timestamp
+    received_event['event'] = evt.event
+    received_event['granted'] = evt.granted
+    received_event['door'] = evt.door
+    received_event['direction'] = evt.direction
+    received_event['card'] = evt.card
+    received_event['reason'] = evt.reason
+
+
+def on_listen_error(err):
+    print(f' *** ERROR {err}')
 
 
 def internationalisation(u):
