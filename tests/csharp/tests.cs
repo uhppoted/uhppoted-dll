@@ -541,11 +541,11 @@ public class Tests {
 
         // NTS: only way to actually exit a Mono MacOs console app that uses the 'listen' thread
         var exit = new Thread(() => {
-            Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+            Thread.Sleep(TimeSpan.FromMilliseconds(10000));
             Process.GetCurrentProcess().Kill();
         });
 
-        // exit.IsBackground = false;
+        exit.IsBackground = false;
         exit.Start();
 
         result[] resultset = {
