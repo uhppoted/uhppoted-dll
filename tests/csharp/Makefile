@@ -134,6 +134,9 @@ set-door-passcodes: build
 restore-default-parameters: build
 	$(CMD) restore-default-parameters
 
+listen: build
+	$(CMD) listen || true
+
 lookup: build
 	$(CMD) lookup
 
@@ -141,7 +144,7 @@ structs: build
 	$(CMD) structs
 
 all: build
-	$(CMD) all
+	$(CMD) all || true
 
 tests: build
 	$(CMD)

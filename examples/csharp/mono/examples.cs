@@ -839,7 +839,7 @@ public class examples {
         WriteLine("DEBUG ... waiting for thread");
         thread.Join(timeout);
 
-        // NTS: only way to actually exit the app after receiving an event
+        // NTS: only way to actually exit a Mono MacOS console app after receiving an event
         Process.GetCurrentProcess().Kill();
     }
 

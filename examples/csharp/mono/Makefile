@@ -135,10 +135,10 @@ restore-default-parameters: build
 	$(CMD) restore-default-parameters $(DEVICEID)
 
 listen: build
-	$(CMD) listen
+	$(CMD) listen || true
 
 listen-debug: build
-	$(GO) && export $(DLL)/debug && mono ./examples.exe listen
+	$(GO) && export $(DLL)/debug && mono ./examples.exe listen || true
 
 debug: build
 	$(GO) && export $(DLL)/debug && mono ./examples.exe listen

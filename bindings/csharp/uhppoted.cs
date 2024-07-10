@@ -793,6 +793,18 @@ public class ListenEvent {
     public uint card;
     public byte reason;
 
+    public ListenEvent() {
+        this.controller = 0;
+        this.timestamp = "";
+        this.index = 0;
+        this.eventType = 0;
+        this.granted = false;
+        this.door = 0;
+        this.direction = 0;
+        this.card = 0;
+        this.reason = 0;
+    }
+
     public ListenEvent(uint controller,
                        string timestamp,
                        uint index,

@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Diagnostics;
+
 using static System.Console;
 using static System.String;
 
@@ -64,6 +67,7 @@ public class Tests {
         new test("activate-keypads", ActivateKeypads),
         new test("set-door-passcodes", SetDoorPasscodes),
         new test("restore-default-parameters", RestoreDefaultParameters),
+        new test("listen", Listen),
         new test("lookup", Internationalisation),
         new test("structs", Structs),
     };
@@ -518,6 +522,95 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("restore-default-parameters", resultset);
+    }
+
+    static ListenEvent testEvent = new ListenEvent();
+
+    static bool Listen(Uhppoted u) {
+        var stopEvent = new ManualResetEvent(false);
+        var thread = new Thread(() => listen(u, stopEvent));
+        var delay = TimeSpan.FromMilliseconds(1000);
+        var timeout = TimeSpan.FromMilliseconds(5000);
+
+        thread.IsBackground = false;
+        thread.Start();
+
+        Thread.Sleep(delay);
+        stopEvent.Set();
+        thread.Join(timeout);
+
+        // NTS: only way to actually exit a Mono MacOs console app that uses the 'listen' thread
+        var exit = new Thread(() => {
+            Thread.Sleep(TimeSpan.FromMilliseconds(2500));
+            Process.GetCurrentProcess().Kill();
+        });
+
+        // exit.IsBackground = false;
+        exit.Start();
+
+        result[] resultset = {
+            new uint32Result("event controller", 405419896, testEvent.controller),
+            new uint32Result("event index", 17, testEvent.index),
+            new stringResult("event timestamp", "2024-07-05 12:36:45", testEvent.timestamp),
+            new uint8Result("event type", 6, testEvent.eventType),
+            new boolResult("event granted", true, testEvent.granted),
+            new uint8Result("event door", 2, testEvent.door),
+            new uint8Result("event direction", 1, testEvent.direction),
+            new uint32Result("event card", 10058400, testEvent.card),
+            new uint8Result("event reason", 21, testEvent.reason),
+        };
+
+        return evaluate("listen", resultset);
+    }
+
+    static void listen(Uhppoted u, ManualResetEvent done) {
+        Uhppoted.OnEvent onevent = (ListenEvent e) => {
+            testEvent.controller = e.controller;
+            testEvent.timestamp = e.timestamp;
+            testEvent.index = e.index;
+            testEvent.eventType = e.eventType;
+            testEvent.granted = e.granted;
+            testEvent.door = e.door;
+            testEvent.direction = e.direction;
+            testEvent.card = e.card;
+            testEvent.reason = e.reason;
+        };
+
+        Uhppoted.OnError onerror = (string err) => {
+            Console.WriteLine("ERROR {0}", err);
+        };
+
+        TimeSpan delay = TimeSpan.FromMilliseconds(100);
+        byte running = 0; // NTS because C# bool is not uint8_t
+        byte stop = 0;    // NTS because C# bool is not uint8_t
+
+        u.ListenEvents(onevent, onerror, ref running, ref stop);
+
+        Thread.Sleep(delay);
+        for (int count = 0; count < 5 && !cbool(running); count++) {
+            Thread.Sleep(delay);
+        }
+
+        if (!cbool(running)) {
+            WriteLine("ERROR {0}", "failed to start event listener");
+            return;
+        }
+
+        done.WaitOne();
+
+        stop = 1;
+        Thread.Sleep(delay);
+        for (int count = 0; count < 5 && cbool(running); count++) {
+            Thread.Sleep(delay);
+        }
+
+        if (cbool(running)) {
+            WriteLine("ERROR {0}", "failed to stop event listener");
+        }
+    }
+
+    static bool cbool(byte v) {
+        return v == 1;
     }
 
     static bool Internationalisation(Uhppoted u) {
