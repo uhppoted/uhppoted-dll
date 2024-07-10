@@ -2,32 +2,19 @@
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] Go
-            - [x] debug
-            - [x] test
-            - [x] Change timestamp back to char *
-            - [ ] Relook at error handling
       - [x] C
-            - [x] debug
-            - [x] test
       - [ ] C++
-            - [x] debug
-            - [x] test
-            - [ ] on_error
+            - [x] on_error
             - [ ] rework using <functional>
                   - https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
       - [ ] Python
-            - [x] debug
-            - [x] test
             - [ ] return code is ctypes.c_int32
       - [ ] CCL
-            - [x] debug
-            - [x] test
             - [ ] seperate listen-event and GoListenEvent
                   - listen-event includes controller
       - [ ] C#
-            - [x] debug
-            - [x] test
+            - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/pinvoke
             - [ ] run/stop should be volatile
                   - VolatileRead/Write
                   - https://learn.microsoft.com/en-us/dotnet/api/system.threading.thread?view=net-8.0

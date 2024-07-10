@@ -327,7 +327,7 @@
 ;      the immediate exit after *listen-events-stoppped* is set
 (defun listen-events-thread () "" 
   (let*  ((on-event (lambda (controller event) (display " event" controller (as-fields event))))
-          (on-error (lambda (err)   (format t "warn  ~a~%" err))))
+          (on-error (lambda (err)   (format t " *** ERROR ~a~%" err))))
     (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))
     (signal-semaphore *listen-events-stopped*)))
     ; (ccl:quit)))

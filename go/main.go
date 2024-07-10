@@ -500,7 +500,10 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 //export Listen
 func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.onerror) int32 {
 	if uu, err := makeUHPPOTE(u); err != nil {
-		C.dispatch_error(g, C.CString(err.Error()))
+		e := C.CString(err.Error())
+		C.dispatch_error(g, e)
+		C.free(unsafe.Pointer(e))
+
 		return -1
 	} else {
 		l := listener{
@@ -578,6 +581,10 @@ func (l *listener) OnEvent(status *types.Status) {
 }
 
 func (l *listener) OnError(err error) bool {
+	e := C.CString(err.Error())
+	C.dispatch_error(l.onerror, e)
+	C.free(unsafe.Pointer(e))
+
 	return false
 }
 
