@@ -105,14 +105,50 @@ namespace uhppoted {
             IntPtr errmsg = Marshal.AllocHGlobal(256);
             GoDevice device = new GoDevice();
 
+            device.address = Marshal.AllocHGlobal(16);
+            device.subnet = Marshal.AllocHGlobal(16);
+            device.gateway = Marshal.AllocHGlobal(16);
+            device.MAC = Marshal.AllocHGlobal(18);
+            device.version = Marshal.AllocHGlobal(5);
+            device.date = Marshal.AllocHGlobal(11);
+
             try {
                 if (GetDevice(ref this.u, ref device, deviceID, errmsg) != 0) {
-                        raise(errmsg);
+                    raise(errmsg);
                 }
 
-                return new Device(ref device);
+                // uint ID = device.ID;
+                // byte[] address = new byte[16];
+                // byte[] subnet = new byte[16];
+                // byte[] gateway = new byte[16];
+                // byte[] MAC = new byte[18];
+                // byte[] version = new byte[6];
+                // byte[] date = new byte[11];
+                // 
+                // Marshal.Copy(device.address, address, 0, 16);
+                // Marshal.Copy(device.subnet, subnet, 0, 16);
+                // Marshal.Copy(device.gateway, gateway, 0, 16);
+                // Marshal.Copy(device.MAC, MAC, 0, 18);
+                // Marshal.Copy(device.version, version, 0, 6);
+                // Marshal.Copy(device.date, date, 0, 11);
+
+                uint ID = device.ID;
+                string address = Marshal.PtrToStringAnsi(device.address);
+                string netmask = Marshal.PtrToStringAnsi(device.subnet);
+                string gateway = Marshal.PtrToStringAnsi(device.gateway);
+                string MAC = Marshal.PtrToStringAnsi(device.MAC);
+                string version = Marshal.PtrToStringAnsi(device.version);
+                string date = Marshal.PtrToStringAnsi(device.date);
+
+                return new Device(ID, address, netmask, gateway, MAC, version, date);
             } finally {
-                device.Free();
+                Marshal.FreeHGlobal(device.address);
+                Marshal.FreeHGlobal(device.subnet);
+                Marshal.FreeHGlobal(device.gateway);
+                Marshal.FreeHGlobal(device.MAC);
+                Marshal.FreeHGlobal(device.version);
+                Marshal.FreeHGlobal(device.date);
+
                 Marshal.FreeHGlobal(errmsg);                
             }
         }
@@ -709,40 +745,10 @@ namespace uhppoted {
         public delegate void OnEvent(ListenEvent e);
         public delegate void OnError(string err);
 
-        // delegate void OnListenEvent(uint controller,
-        //                             uint index,
-        //                             [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
-        //                             byte eventType,
-        //                             byte granted,
-        //                             byte door,
-        //                             byte direction,
-        //                             uint card,
-        //                             byte reason);
-
-        delegate void OnListenEvent([In] ref GoListenEvent evt);
-        delegate void OnListenError([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err);
+        private delegate void OnListenEvent([In] ref GoListenEvent evt);
+        private delegate void OnListenError([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
         public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
-            // OnListenEvent onevent = (uint controller, 
-            //                          uint index, 
-            //                          [MarshalAs(UnmanagedType.LPUTF8Str)] string timestamp,
-            //                          byte eventType,
-            //                          byte granted,
-            //                          byte door,
-            //                          byte direction,
-            //                          uint card,
-            //                          byte reason) => {
-            //     on_event(new ListenEvent(controller,
-            //                              timestamp,
-            //                              index,
-            //                              eventType,
-            //                              granted == 1 ? true : false,
-            //                              door,
-            //                              direction,
-            //                              card,
-            //                              reason));
-            // };
-
             OnListenEvent onevent = ([In] ref GoListenEvent e) => {
                 on_event(new ListenEvent(e.controller,
                                          e.timestamp,
@@ -783,7 +789,7 @@ namespace uhppoted {
         [DllImport("uhppoted.dll")]
         private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr errmsg);
 
         [DllImport("uhppoted.dll")]
@@ -899,6 +905,7 @@ namespace uhppoted {
             public bool debug;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         internal struct GoDevice {
             public uint ID;
             public IntPtr address;
@@ -907,24 +914,6 @@ namespace uhppoted {
             public IntPtr MAC;
             public IntPtr version;
             public IntPtr date;
-
-            public GoDevice() {
-                address = Marshal.AllocHGlobal(16);
-                subnet = Marshal.AllocHGlobal(16);
-                gateway = Marshal.AllocHGlobal(16);
-                MAC = Marshal.AllocHGlobal(18);
-                version = Marshal.AllocHGlobal(5);
-                date = Marshal.AllocHGlobal(11);
-            }
-
-            public void Free() {
-                Marshal.FreeHGlobal(address);
-                Marshal.FreeHGlobal(subnet);
-                Marshal.FreeHGlobal(gateway);
-                Marshal.FreeHGlobal(MAC);
-                Marshal.FreeHGlobal(version);
-                Marshal.FreeHGlobal(date);
-            }
         }
 
         struct GoEvent {
