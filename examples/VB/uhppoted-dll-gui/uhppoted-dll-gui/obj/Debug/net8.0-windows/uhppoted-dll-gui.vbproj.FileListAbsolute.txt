@@ -1,0 +1,17 @@
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\bin\Debug\net8.0-windows\uhppoted-dll-gui.exe
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\bin\Debug\net8.0-windows\uhppoted-dll-gui.deps.json
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\bin\Debug\net8.0-windows\uhppoted-dll-gui.runtimeconfig.json
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\bin\Debug\net8.0-windows\uhppoted-dll-gui.dll
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\bin\Debug\net8.0-windows\uhppoted-dll-gui.pdb
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted_dll_gui.Uhppotegui.resources
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.vbproj.GenerateResource.cache
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.GeneratedMSBuildEditorConfig.editorconfig
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.AssemblyInfoInputs.cache
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.AssemblyInfo.vb
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.vbproj.CoreCompileInputs.cache
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.dll
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\refint\uhppoted-dll-gui.dll
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.pdb
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted-dll-gui.genruntimeconfig.cache
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\ref\uhppoted-dll-gui.dll
+D:\Projects\uhppoted-dll-gui\uhppoted-dll-gui\obj\Debug\net8.0-windows\uhppoted_dll_gui.CardMgmtFRM.resources
