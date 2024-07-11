@@ -792,7 +792,10 @@ def listen(u, args):
 
 
 def listen_events(u, running, stop):
-    u.listen(on_listen_event, on_listen_error, running, stop)
+    try:
+        u.listen(on_listen_event, on_listen_error, running, stop)
+    except Exception as err:
+        print(f'ERROR {err}')
 
 
 def on_listen_event(evt):

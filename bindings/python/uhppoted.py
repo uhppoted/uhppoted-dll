@@ -209,10 +209,20 @@ class Uhppote:
 
     @staticmethod
     def errcheck(err, func, args):
-        if err:
+        # error code
+        if isinstance(err, int):
+            if err != 0:
+                raise Exception(f'error code {err}')
+
+        # UTF-8 error message
+        if err and isinstance(err, bytes):
             raise Exception(f"{err.decode('utf-8')}")
-        else:
-            return args
+
+        # other error
+        if err:
+            raise Exception(f'{err}')
+
+        return args
 
     def get_devices(self):
         N = 0
@@ -444,8 +454,8 @@ class Uhppote:
         running = ctypes.c_bool(False)
         stop = ctypes.c_bool(False)
 
-        err = self.ffi.Listen(self._uhppote, callback, byref(running), byref(stop), err_handler)
-        if err == None:
+        try:
+            self.ffi.Listen(self._uhppote, callback, byref(running), byref(stop), err_handler)
             count = 0
             while (not running) and (count < 10):
                 print(f' ... waiting {count}')
@@ -470,8 +480,8 @@ class Uhppote:
 
             if running:
                 raise Exception(f'timeout stopping event listener')
-        else:
-            raise Exception(f'error starting event listener {err}')
+        except Exception as err:
+            raise Exception(f'event listener ({err})')
 
 
 def on_listen_event(handler, event):
@@ -687,7 +697,7 @@ class FFI:
         self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
         self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
         self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
-        self.Listen = ffi('Listen', errcheck)
+        self.Listen = ffix('Listen', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -695,6 +705,16 @@ def ffi(tag, errcheck):
 
     ff.argtypes = argtypes
     ff.restype = ctypes.c_char_p
+    ff.errcheck = errcheck
+
+    return ff
+
+
+def ffix(tag, errcheck):
+    (ff, argtypes) = libfunctions()[tag]
+
+    ff.argtypes = argtypes
+    ff.restype = ctypes.c_int32
     ff.errcheck = errcheck
 
     return ff

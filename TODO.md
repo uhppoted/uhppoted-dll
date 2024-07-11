@@ -4,12 +4,12 @@
       - [x] Go
       - [x] C
       - [ ] C++
-            - [x] on_error
             - [ ] rework using <functional>
                   - https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
             - [ ] FIXME rework uhppoted_exception for const char *
       - [ ] Python
-            - [ ] return code is ctypes.c_int32
+            - [x] return code is ctypes.c_int32
+            - [ ] propogate returned error to parent thread
       - [ ] CCL
             - [ ] seperate listen-event and GoListenEvent
                   - listen-event includes controller
