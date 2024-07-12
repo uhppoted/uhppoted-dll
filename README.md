@@ -4,12 +4,12 @@
 
 Shared library (DLL) for `uhppote-core` with bindings and examples for:
 
-- [C](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/csharp.md)
+- [C](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/csharp.md)
 - [VB.NET](https://github.com/uhppoted/uhppoted-dll/tree/main/examples/dotnet/VB.NET) (contributed by [@threeeye](https://github.com/threeeye))
-- [Python](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/python.md)
-- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/ccl.md)
+- [Python](https://github.com/uhppoted/uhppoted-dll/tree/blob/doc/python.md)
+- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/ccl.md)
 
 3rd party bindings:
 - [Rust](https://github.com/wouterdebie/uhppote-rs)
@@ -65,11 +65,11 @@ Copy the generated DLL (Windows), shared lib (Linux) or dylib (MacOS) to the lib
 - (OR) to the same folder as the project executable.
 
 The usage for the language specfic bindings are described in their own documents:
-- [C](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/csharp.md)
-- [Python](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/python.md))
-- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/ccl.md))
+- [C](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/csharp.md)
+- [Python](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/python.md))
+- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/ccl.md))
 
 
 ### `debug` lib

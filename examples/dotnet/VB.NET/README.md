@@ -18,4 +18,4 @@ VB.NET GUI example application, originally authored by [@threeeye](https://githu
    under the more restrictive environment of LTSC have been migrated to the _main_ branch.
 2. The application has only been tested on Windows 2019 LTSC.
 3. _uhppoted.dll_ must be in the application startup path (e.g. _\bin\Debug\net8.0-windows_)
-4. A prebuilt DLL for Windows 2019 LTSC can be downloaded from [uhppoted-dll-windows-2019-LTSC.zip](\doc\VB.NET\dll\uhppoted-dll-windows-2019-LTSC.zip).
+4. A prebuilt DLL for Windows 2019 LTSC can be downloaded from [uhppoted-dll-windows-2019-LTSC.zip](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/VB.NET/dll/uhppoted-dll-windows-2019-LTSC.zip).
