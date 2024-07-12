@@ -4,12 +4,12 @@
 
 Shared library (DLL) for `uhppote-core` with bindings and examples for:
 
-- [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
-- [VB.NET](https://github.com/uhppoted/uhppoted-dll/master/examples/dotnet/VB.NET) (contributed by @threeeye)
-- [Python](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md)
-- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md)
+- [C](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/csharp.md)
+- [VB.NET](https://github.com/uhppoted/uhppoted-dll/tree/main/examples/dotnet/VB.NET) (contributed by [@threeeye](https://github.com/threeeye))
+- [Python](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/python.md)
+- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/ccl.md)
 
 3rd party bindings:
 - [Rust](https://github.com/wouterdebie/uhppote-rs)
@@ -56,7 +56,7 @@ If you prefer to build manually:
    go build -trimpath -buildmode=c-shared -o <lib> go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
 ```
 
-_NOTE: _The list of source files is required pending a fix for [cmd/cgo: inconsistent compiler behaviour when compiling a C.struct](https://github.com/golang/go/issues/52611#issuecomment-1120322135)_
+_NOTE_: The list of source files is required pending a fix for [cmd/cgo: inconsistent compiler behaviour when compiling a C.struct](https://github.com/golang/go/issues/52611#issuecomment-1120322135)_
 
 Copy the generated DLL (Windows), shared lib (Linux) or dylib (MacOS) to the library search path for the platform:
 - LD_LIBRARY (Linux)
@@ -65,11 +65,11 @@ Copy the generated DLL (Windows), shared lib (Linux) or dylib (MacOS) to the lib
 - (OR) to the same folder as the project executable.
 
 The usage for the language specfic bindings are described in their own documents:
-- [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
-- [Python]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md))
-- [Clozure Common Lisp]((https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md))
+- [C](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/csharp.md)
+- [Python](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/python.md))
+- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/ccl.md))
 
 
 ### `debug` lib
@@ -94,11 +94,11 @@ returns a fixed response.
 
 ## Documentation
 
-- [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C++.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
-- [Python](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md)
-- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md)
+- [C](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
+- [C++](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C++.md)
+- [C#](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/csharp.md)
+- [Python](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/python.md)
+- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/ccl.md)
 
 ## API
 
@@ -313,7 +313,7 @@ Resets a controller to the manufacturer default configuration.
 
 ## Contributions
 
-1. [VB.NET](https://github.com/uhppoted/uhppoted-dll/master/examples/dotnet/VB.NET) GUI example application authored by
-   @threeeye.
+1. [VB.NET](https://github.com/uhppoted/uhppoted-dll/tree/main/examples/dotnet/VB.NET) GUI example application authored by
+   [@threeeye](https://github.com/threeeye).
 
 
