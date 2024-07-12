@@ -1,6 +1,8 @@
 # VB.NET
 
 VB.NET GUI example application, originally authored by [@threeeye](https://github.com/threeeye).
+- [screenshots](#screenshots)
+- [build notes](#notes)
 
 ## Screenshots
 
