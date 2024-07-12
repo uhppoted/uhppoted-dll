@@ -16,7 +16,7 @@ endif
 .PHONY: python
 .PHONY: c
 .PHONY: cpp
-.PHONY: csharp
+.PHONY: dotnet
 .PHONY: ccl
 .PHONY: examples
 .PHONY: tests
@@ -37,7 +37,7 @@ regen:
 	$(CODEGEN) --models .codegen/.models --templates .codegen/c      --out bindings/c
 	$(CODEGEN) --models .codegen/.models --templates .codegen/c++    --out bindings/c++
 	$(CODEGEN) --models .codegen/.models --templates .codegen/python --out bindings/python
-	$(CODEGEN) --models .codegen/.models --templates .codegen/csharp --out bindings/csharp
+	$(CODEGEN) --models .codegen/.models --templates .codegen/dotnet --out bindings/dotnet
 	$(CODEGEN) --models .codegen/.models --templates .codegen/ccl    --out bindings/ccl
 
 format:
@@ -73,12 +73,12 @@ build-all: build test lint
 
 	make -C ./tests/c              -f Makefile tests
 	make -C ./tests/c++            -f Makefile tests
-	make -C ./tests/csharp         -f Makefile tests || true
+	make -C ./tests/dotnet         -f Makefile tests || true
 	make -C ./tests/python         -f Makefile tests
 	make -C ./tests/ccl            -f Makefile tests
 	make -C ./examples/c           -f Makefile build
 	make -C ./examples/c++         -f Makefile build
-	make -C ./examples/csharp/mono -f Makefile build
+	make -C ./examples/dotnet/mono -f Makefile build
 	make -C ./examples/python      -f Makefile build
 	make -C ./examples/ccl         -f Makefile build
 
@@ -103,9 +103,9 @@ cpp:
 	make -C ./examples/c++ -f Makefile build
 	make -C ./tests/c++    -f Makefile build
 
-csharp: 
-	make -C ./examples/csharp/mono -f Makefile build
-	make -C ./tests/csharp         -f Makefile build
+dotnet-mono: 
+	make -C ./examples/dotnet/mono -f Makefile build
+	make -C ./tests/dotnet         -f Makefile build
 
 python: 
 	make -C ./examples/python -f Makefile build
@@ -116,14 +116,14 @@ ccl:
 examples:
 	make -C ./examples/c           -f Makefile build
 	make -C ./examples/c++         -f Makefile build
-	make -C ./examples/csharp/mono -f Makefile build
+	make -C ./examples/dotnet/mono -f Makefile build
 	make -C ./examples/python      -f Makefile build
 	make -C ./examples/ccl         -f Makefile build
 
 tests: 
 	make -C ./tests/c      -f Makefile tests
 	make -C ./tests/c++    -f Makefile tests
-	make -C ./tests/csharp -f Makefile tests || true
+	make -C ./tests/dotnet -f Makefile tests || true
 	make -C ./tests/python -f Makefile tests
 	make -C ./tests/ccl    -f Makefile tests
 

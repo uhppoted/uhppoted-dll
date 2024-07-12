@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. VB.NET example GUI application authored by @threeeye.
+
 
 ## [0.8.8](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.8) - 2024-03-27
 

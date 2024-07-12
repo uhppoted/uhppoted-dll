@@ -7,6 +7,7 @@ Shared library (DLL) for `uhppote-core` with bindings and examples for:
 - [C](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
 - [C++](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/C.md)
 - [C#](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/csharp.md)
+- [VB.NET](https://github.com/uhppoted/uhppoted-dll/master/examples/dotnet/VB.NET) (contributed by @threeeye)
 - [Python](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/python.md)
 - [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/master/doc/ccl.md)
 
@@ -308,4 +309,11 @@ Sets up to four supervisor passcodes to allow keypad only access to a door.
 #### `RestoreDefaultParameters`
 
 Resets a controller to the manufacturer default configuration.
+
+
+## Contributions
+
+1. [VB.NET](https://github.com/uhppoted/uhppoted-dll/master/examples/dotnet/VB.NET) GUI example application authored by
+   @threeeye.
+
 
