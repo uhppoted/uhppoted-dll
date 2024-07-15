@@ -117,28 +117,13 @@ namespace uhppoted {
                     raise(errmsg);
                 }
 
-                // uint ID = device.ID;
-                // byte[] address = new byte[16];
-                // byte[] subnet = new byte[16];
-                // byte[] gateway = new byte[16];
-                // byte[] MAC = new byte[18];
-                // byte[] version = new byte[6];
-                // byte[] date = new byte[11];
-                // 
-                // Marshal.Copy(device.address, address, 0, 16);
-                // Marshal.Copy(device.subnet, subnet, 0, 16);
-                // Marshal.Copy(device.gateway, gateway, 0, 16);
-                // Marshal.Copy(device.MAC, MAC, 0, 18);
-                // Marshal.Copy(device.version, version, 0, 6);
-                // Marshal.Copy(device.date, date, 0, 11);
-
                 uint ID = device.ID;
-                string address = Marshal.PtrToStringAnsi(device.address);
-                string netmask = Marshal.PtrToStringAnsi(device.subnet);
-                string gateway = Marshal.PtrToStringAnsi(device.gateway);
-                string MAC = Marshal.PtrToStringAnsi(device.MAC);
-                string version = Marshal.PtrToStringAnsi(device.version);
-                string date = Marshal.PtrToStringAnsi(device.date);
+                string address = Marshal.PtrToStringAnsi(device.address)!;
+                string netmask = Marshal.PtrToStringAnsi(device.subnet)!;
+                string gateway = Marshal.PtrToStringAnsi(device.gateway)!;
+                string MAC = Marshal.PtrToStringAnsi(device.MAC)!;
+                string version = Marshal.PtrToStringAnsi(device.version)!;
+                string date = Marshal.PtrToStringAnsi(device.date)!;
 
                 return new Device(ID, address, netmask, gateway, MAC, version, date);
             } finally {
@@ -240,7 +225,7 @@ namespace uhppoted {
                 byte[] datetime = new byte[20];
 
                 Marshal.Copy(time, datetime, 0, 20);
-                
+
                 return System.Text.Encoding.UTF8.GetString(datetime, 0, datetime.Length);
             } finally {
                 Marshal.FreeHGlobal(time);
@@ -786,115 +771,118 @@ namespace uhppoted {
 
         // Go FFI
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr errmsg);
 
         [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetTime(ref UHPPOTE u, IntPtr datetime, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetEventIndex(ref UHPPOTE u, uint deviceID, uint index, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int GetTimeProfile(ref UHPPOTE u, ref GoGetTimeProfile profile, uint deviceID, byte profileID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoSetTimeProfile profile, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int RefreshTaskList(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int ClearTaskList(ref UHPPOTE u, uint deviceID, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, IntPtr errmsg);
 
-        [DllImport("uhppoted.dll")]
+        [DllImport("uhppoted.dll",CharSet=CharSet.Ansi)]
         private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx);
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct udevice {
             public uint ID;
             public string address;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct udevices {
             public uint N;
             public IntPtr devices; // array of udevice *
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct UHPPOTE {
             public string bind;
             public string broadcast;
@@ -916,6 +904,7 @@ namespace uhppoted {
             public IntPtr date;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoEvent {
             public IntPtr timestamp;
             public uint index;
@@ -927,6 +916,7 @@ namespace uhppoted {
             public byte reason;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoStatus {
             public uint ID;
             public IntPtr sysdatetime;
@@ -947,11 +937,13 @@ namespace uhppoted {
             public byte   eventReason;
         }
     
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoDoorControl {
             public byte control;
             public byte delay;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoCard {
             public uint cardNumber;
             public IntPtr from;
@@ -960,6 +952,7 @@ namespace uhppoted {
             public uint PIN;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoGetTimeProfile {
             public byte ID;
             public byte linked;
@@ -980,6 +973,7 @@ namespace uhppoted {
             public IntPtr segment3end;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoSetTimeProfile {
             public byte ID;
             public byte linked;
@@ -1000,6 +994,7 @@ namespace uhppoted {
             public string segment3end;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoTask {
             public byte task;
             public byte door;
@@ -1017,6 +1012,7 @@ namespace uhppoted {
         }
 
 #pragma warning disable 649 // assigned in DLL
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoListenEvent {
             public uint controller;
             [MarshalAs(UnmanagedType.LPUTF8Str)] public string timestamp;
