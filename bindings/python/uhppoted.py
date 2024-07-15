@@ -448,7 +448,7 @@ class Uhppote:
 
     # Ref. https://docs.python.org/3/library/ctypes.html#callback-functions
     # Ref. https://stackoverflow.com/questions/24912065/how-to-access-data-from-pointer-in-struct-from-python-with-ctypes
-    def listen(self, onevent, onerror, cv_running, cv_stop):
+    def listen(self, onevent, onerror, ev_running, ev_stop):
         callback = on_event(lambda e: on_listen_event(onevent, e))
         err_handler = on_error(lambda v: on_listen_error(onerror, v))
         running = ctypes.c_bool(False)
@@ -465,11 +465,8 @@ class Uhppote:
             if not running:
                 raise Exception(f'timeout starting event listener')
 
-            with cv_running:
-                cv_running.notifyAll()
-
-            with cv_stop:
-                cv_stop.wait()
+            ev_running.set()
+            ev_stop.wait()
 
             stop = True
             count = 0

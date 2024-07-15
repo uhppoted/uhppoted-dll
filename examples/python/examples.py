@@ -10,6 +10,8 @@ import threading
 import signal
 import sys
 
+from time import sleep
+
 sys.path.append('../../bindings/python')
 
 if 'Windows' in platform.system():
@@ -771,31 +773,42 @@ def restore_default_parameters(u, args):
 
 def listen(u, args):
     on_sigint = lambda sig, frame: print('CTRL-C')
-    running = threading.Condition()
-    stop = threading.Condition()
+    running = threading.Event()
+    stop = threading.Event()
+    error = threading.Event()
+    message = [None]
 
-    thread = threading.Thread(target=listen_events, args=[u, running, stop])
+    thread = threading.Thread(target=listen_events, args=[u, running, stop, error, message])
     thread.daemon = True
     thread.start()
 
-    with running:
-        if not running.wait(5):
-            raise Exception(f'timeout starting event listener')
+    count = 0
+    while not error.is_set() and not running.is_set() and count < 10:
+        count += 1
+        sleep(0.25)
+
+    if error.is_set():
+        if message[0]:
+            raise Exception(message[0])
+        else:
+            raise Exception('error starting event listener')
+
+    if not running.is_set():
+        raise Exception(f'timeout starting event listener')
 
     signal.signal(signal.SIGINT, on_sigint)
     signal.pause()
 
-    with stop:
-        stop.notifyAll()
-
+    stop.set()
     thread.join()
 
 
-def listen_events(u, running, stop):
+def listen_events(u, running, stop, error, message):
     try:
         u.listen(on_listen_event, on_listen_error, running, stop)
     except Exception as err:
-        print(f'ERROR {err}')
+        message[0] = f'{err}'
+        error.set()
 
 
 def on_listen_event(evt):
