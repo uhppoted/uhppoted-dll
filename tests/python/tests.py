@@ -439,22 +439,32 @@ received_event = {}
 
 def listen(u):
     tag = 'listen'
-    running = threading.Condition()
-    stop = threading.Condition()
+    running = threading.Event()
+    stop = threading.Event()
+    error = threading.Event()
+    message = [None]
 
-    thread = threading.Thread(target=listen_events, args=[u, running, stop])
+    thread = threading.Thread(target=listen_events, args=[u, running, stop, error, message])
     thread.daemon = True
     thread.start()
 
-    with running:
-        if not running.wait(1):
-            raise Exception(f'timeout starting event listener')
+    count = 0
+    while not error.is_set() and not running.is_set() and count < 10:
+        count += 1
+        time.sleep(0.25)
+
+    if error.is_set():
+        if message[0]:
+            raise Exception(message[0])
+        else:
+            raise Exception('error starting event listener')
+
+    if not running.is_set():
+        raise Exception(f'timeout starting event listener')
 
     time.sleep(1)
 
-    with stop:
-        stop.notifyAll()
-
+    stop.set()
     thread.join()
 
     return evaluate(tag, [
@@ -470,8 +480,12 @@ def listen(u):
     ])
 
 
-def listen_events(u, running, stop):
-    u.listen(on_listen_event, on_listen_error, running, stop)
+def listen_events(u, running, stop, error, message):
+    try:
+        u.listen(on_listen_event, on_listen_error, running, stop)
+    except Exception as err:
+        message[0] = f'{err}'
+        error.set()
 
 
 def on_listen_event(evt):
