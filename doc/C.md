@@ -492,6 +492,25 @@ Returns:
 - -1 if the call failed. The error message can be retrieved using errmsg().
 ```
 
+### `listen`
+```
+int listen_events(on_event callback, bool *listening, bool *stop, on_error onerror);
+
+callback   callback function invoked to process received events
+listening  set to 'true' when the listen function is initialised and listening
+stop       set to 'true' by the parent function to terminate the listen function
+onerror    callback function to report event errors
+
+The callback functions are defined as:
+
+typedef void (*on_event)(const struct ListenEvent evt);
+typedef void (*on_error)(const char *err);
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
 ## Types
 
 ### `controller`
@@ -617,3 +636,20 @@ typedef struct task {
     uint8_t cards;
 } task;
 ```
+
+### ListenEvent
+Container struct for a received event.
+```
+typedef struct ListenEvent {
+    uint32_t controller;
+    const char *timestamp;
+    uint32_t index;
+    uint8_t event;
+    bool granted;
+    uint8_t door;
+    uint8_t direction;
+    uint32_t card;
+    uint8_t reason;
+} ListenEvent;
+```
+
