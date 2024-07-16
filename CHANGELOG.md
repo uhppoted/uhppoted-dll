@@ -3,7 +3,11 @@
 ## Unreleased
 
 ### Added
-1. VB.NET example GUI application authored by @threeeye.
+1. `listen` API function to capture controller events.
+2. VB.NET example GUI application authored by @threeeye.
+
+### Updated
+1. C++ Replaced NULL with nullptr (cf. https://stackoverflow.com/questions/1282295/what-is-the-nullptr-keyword-and-why-is-it-better-than-null)
 
 
 ## [0.8.8](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.8) - 2024-03-27

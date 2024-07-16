@@ -87,6 +87,8 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
     bool running = false;
     bool stop = false;
 
+    // NTS: because can't use a lambda with a capture as a 'C' function pointer and std::function is 
+    //      unbelievably messy and cumbersome
     static struct {
         uhppoted &u;
     } q = {

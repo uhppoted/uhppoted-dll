@@ -1,15 +1,14 @@
 # TODO
 
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
+      - [x] CHANGELOG
+      - [ ] README
+      - [ ] documentation
       - [x] Go
       - [x] C
       - [x] Python
-      - [ ] C++
-            - [ ] rework using <functional>
-                  - https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
-                  - sg14::inplace_function
+      - [x] C++
             - [x] use `nullptr`
-                  - https://stackoverflow.com/questions/1282295/what-is-the-nullptr-keyword-and-why-is-it-better-than-null
       - [ ] CCL
             - [ ] seperate listen-event and GoListenEvent
                   - listen-event includes controller
