@@ -3,13 +3,13 @@
 - [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] Go
       - [x] C
+      - [x] Python
       - [ ] C++
             - [ ] rework using <functional>
                   - https://stackoverflow.com/questions/28746744/passing-capturing-lambda-as-function-pointer
                   - sg14::inplace_function
-      - [x] Python
-            - [x] return code is ctypes.c_int32
-            - [x] propagate returned error to parent thread
+            - [x] use `nullptr`
+                  - https://stackoverflow.com/questions/1282295/what-is-the-nullptr-keyword-and-why-is-it-better-than-null
       - [ ] CCL
             - [ ] seperate listen-event and GoListenEvent
                   - listen-event includes controller
@@ -32,8 +32,6 @@
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 
-- [ ] C++: use `nullptr`
-      - https://stackoverflow.com/questions/1282295/what-is-the-nullptr-keyword-and-why-is-it-better-than-null
 
 ## TODO
 

@@ -279,7 +279,7 @@ options parse(int argc, char **argv) {
         const string arg = argv[ix++];
 
         if (arg == "--controller" && ix < argc) {
-            if ((lval = strtol(argv[ix++], NULL, 10)) > 0) {
+            if ((lval = strtol(argv[ix++], nullptr, 10)) > 0) {
                 opts.device_id = lval;
             }
         }
@@ -301,32 +301,32 @@ options parse(int argc, char **argv) {
         }
 
         if (arg == "--card" && ix < argc) {
-            if ((lval = strtol(argv[ix++], NULL, 10)) > 0) {
+            if ((lval = strtol(argv[ix++], nullptr, 10)) > 0) {
                 opts.card = lval;
             }
         }
 
         if (arg == "--card-index" && ix < argc) {
-            if ((lval = strtol(argv[ix++], NULL, 10)) > 0) {
+            if ((lval = strtol(argv[ix++], nullptr, 10)) > 0) {
                 opts.card_index = lval;
             }
         }
 
         if (arg == "--door" && ix < argc) {
-            lval = strtol(argv[ix++], NULL, 10);
+            lval = strtol(argv[ix++], nullptr, 10);
             if (lval >= 1 && lval <= 4) {
                 opts.door = (uint8_t)lval;
             }
         }
 
         if (arg == "--event-index" && ix < argc) {
-            if ((lval = strtol(argv[ix++], NULL, 10)) > 0) {
+            if ((lval = strtol(argv[ix++], nullptr, 10)) > 0) {
                 opts.event_index = lval;
             }
         }
 
         if (arg == "--time-profile" && ix < argc) {
-            lval = strtol(argv[ix++], NULL, 10);
+            lval = strtol(argv[ix++], nullptr, 10);
             if (lval >= 2 && lval <= 255) {
                 opts.time_profile_id = (uint8_t)lval;
             }

@@ -103,7 +103,7 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
         string _reason = q.u.lookup(LOOKUP_EVENT_REASON, evt.reason, LOCALE);
         string _timestamp = "-";
 
-        if ((evt.timestamp != NULL) && (strcmp(evt.timestamp, "") != 0)) {
+        if ((evt.timestamp != nullptr) && (strcmp(evt.timestamp, "") != 0)) {
             _timestamp = evt.timestamp;
         }
 

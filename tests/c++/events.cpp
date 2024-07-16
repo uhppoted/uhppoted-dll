@@ -76,7 +76,7 @@ bool listen(uhppoted &u) {
         };
     };
 
-    u.listen(callback, &running, &stop, NULL);
+    u.listen(callback, &running, &stop, nullptr);
 
     sleep_for(chrono::milliseconds(100));
     for (int count = 0; count < 5 && !running; count++) {

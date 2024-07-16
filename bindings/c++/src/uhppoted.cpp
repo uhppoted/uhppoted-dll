@@ -73,7 +73,9 @@ uhppoted_exception::~uhppoted_exception() {}
 
 const char *uhppoted_exception::what() const noexcept { return *message; }
 
-uhppoted::uhppoted() { u = NULL; }
+uhppoted::uhppoted() {
+    u = nullptr;
+}
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
@@ -87,12 +89,12 @@ uhppoted::uhppoted() { u = NULL; }
 uhppoted::uhppoted(const string &_bind, const string &_broadcast,
                    const string &_listen, int timeout,
                    const vector<controller> controllers, bool debug) : bind_addr(_bind), broadcast_addr(_broadcast), listen_addr(_listen) {
-    if ((u = new UHPPOTE) != NULL) {
+    if ((u = new UHPPOTE) != nullptr) {
         u->bind = this->bind_addr.c_str();
         u->broadcast = this->broadcast_addr.c_str();
         u->listen = this->listen_addr.c_str();
         u->timeout = timeout;
-        u->devices = NULL;
+        u->devices = nullptr;
         u->debug = debug;
 
         udevices *devices;
@@ -100,11 +102,11 @@ uhppoted::uhppoted(const string &_bind, const string &_broadcast,
         uint32_t N = controllers.size();
         int ix = 0;
 
-        if ((devices = new udevices) == NULL) {
+        if ((devices = new udevices) == nullptr) {
             return;
         }
 
-        if ((list = new udevice[N]) == NULL) {
+        if ((list = new udevice[N]) == nullptr) {
             delete devices;
             return;
         }
@@ -130,10 +132,10 @@ uhppoted::uhppoted(const string &_bind, const string &_broadcast,
 }
 
 uhppoted::~uhppoted() {
-    if (u != NULL) {
+    if (u != nullptr) {
         udevices *devices;
 
-        if ((devices = u->devices) != NULL) {
+        if ((devices = u->devices) != nullptr) {
             delete[] devices->devices;
             delete devices;
         }
@@ -152,7 +154,7 @@ vector<uint32_t> uhppoted::get_devices() {
 
         int count = allocated;
         char *err = GetDevices(u, &count, list.data());
-        if (err != NULL) {
+        if (err != nullptr) {
             throw uhppoted_exception(err);
         }
 
@@ -171,7 +173,7 @@ struct device uhppoted::get_device(uint32_t id) {
     struct Device device;
 
     char *err = GetDevice(u, &device, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -199,7 +201,7 @@ void uhppoted::set_address(uint32_t id, std::string &address,
                            std::string &subnet, std::string &gateway) {
     char *err = SetAddress(u, id, (char *)address.c_str(), (char *)subnet.c_str(),
                            (char *)gateway.c_str());
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -215,7 +217,7 @@ status uhppoted::get_status(unsigned id) {
     status.event = &event;
 
     char *err = GetStatus(u, &status, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -261,7 +263,7 @@ string uhppoted::get_time(uint32_t id) {
     char *datetime;
 
     char *err = GetTime(u, &datetime, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -275,7 +277,7 @@ string uhppoted::get_time(uint32_t id) {
 void uhppoted::set_time(uint32_t id, std::string &datetime) {
     char *err = SetTime(u, id, (char *)datetime.c_str());
 
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -284,7 +286,7 @@ string uhppoted::get_listener(uint32_t id) {
     char *listener;
 
     char *err = GetListener(u, &listener, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -298,7 +300,7 @@ string uhppoted::get_listener(uint32_t id) {
 void uhppoted::set_listener(uint32_t id, std::string &listener) {
     char *err = SetListener(u, id, (char *)listener.c_str());
 
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -307,7 +309,7 @@ struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
     struct DoorControl control;
 
     char *err = GetDoorControl(u, &control, id, door);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -321,14 +323,14 @@ struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
 
 void uhppoted::set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
     char *err = SetDoorControl(u, id, door, mode, delay);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::open_door(uint32_t id, uint8_t door) {
     char *err = OpenDoor(u, id, door);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -337,7 +339,7 @@ int uhppoted::get_cards(uint32_t id) {
     int N;
 
     char *err = GetCards(u, &N, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -352,7 +354,7 @@ card uhppoted::get_card(uint32_t id, uint32_t card_number) {
     card.doors = doors.data();
 
     char *err = GetCard(u, &card, id, card_number);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -378,7 +380,7 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
     card.doors = doors.data();
 
     char *err = GetCardByIndex(u, &card, id, index);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -399,7 +401,7 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
 void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string to, uint8_t doors[4], uint32_t PIN) {
     char *err = PutCard(u, id, card_number, (char *)from.c_str(), (char *)to.c_str(), (uint8_t *)doors, PIN);
 
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -407,7 +409,7 @@ void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string t
 void uhppoted::delete_card(uint32_t id, uint32_t card_number) {
     char *err = DeleteCard(u, id, card_number);
 
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -415,7 +417,7 @@ void uhppoted::delete_card(uint32_t id, uint32_t card_number) {
 void uhppoted::delete_cards(uint32_t id) {
     char *err = DeleteCards(u, id);
 
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -424,7 +426,7 @@ uint32_t uhppoted::get_event_index(uint32_t id) {
     uint32_t index;
 
     char *err = GetEventIndex(u, &index, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -433,7 +435,7 @@ uint32_t uhppoted::get_event_index(uint32_t id) {
 
 void uhppoted::set_event_index(uint32_t id, uint32_t index) {
     char *err = SetEventIndex(u, id, index);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -442,7 +444,7 @@ event uhppoted::get_event(uint32_t id, uint32_t index) {
     Event event;
 
     char *err = GetEvent(u, &event, id, index);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -462,7 +464,7 @@ event uhppoted::get_event(uint32_t id, uint32_t index) {
 
 void uhppoted::record_special_events(uint32_t id, bool enabled) {
     char *err = RecordSpecialEvents(u, id, enabled);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -471,7 +473,7 @@ time_profile uhppoted::get_time_profile(uint32_t id, uint8_t profile_id) {
     TimeProfile profile;
 
     char *err = GetTimeProfile(u, &profile, id, profile_id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 
@@ -522,7 +524,7 @@ void uhppoted::set_time_profile(uint32_t id, const time_profile &p) {
     profile.segment3end = (char *)p.segment3end.c_str();
 
     char *err = SetTimeProfile(u, id, &profile);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -530,7 +532,7 @@ void uhppoted::set_time_profile(uint32_t id, const time_profile &p) {
 void uhppoted::clear_time_profiles(uint32_t id) {
     char *err = ClearTimeProfiles(u, id);
 
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
@@ -553,56 +555,56 @@ void uhppoted::add_task(uint32_t id, const task &t) {
     task.cards = t.cards;
 
     char *err = AddTask(u, id, &task);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::refresh_tasklist(uint32_t id) {
     char *err = RefreshTaskList(u, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::clear_tasklist(uint32_t id) {
     char *err = ClearTaskList(u, id);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::set_pc_control(uint32_t controller, bool enabled) {
     char *err = SetPCControl(u, controller, enabled);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::set_interlock(uint32_t controller, uint8_t interlock) {
     char *err = SetInterlock(u, controller, interlock);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4) {
     char *err = ActivateKeypads(u, controller, reader1, reader2, reader3, reader4);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
     char *err = SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::restore_default_parameters(uint32_t controller) {
     char *err = RestoreDefaultParameters(u, controller);
-    if (err != NULL) {
+    if (err != nullptr) {
         throw uhppoted_exception(err);
     }
 }
