@@ -62,7 +62,7 @@ bool listen(uhppoted &u) {
         .rs = {},
     };
 
-    on_event callback = +[](const struct ListenEvent e) {
+    on_event callback = +[](const struct ListenEvent e, void *userdata) {
         q.rs = {
             result("event controller", uint32_t(405419896), e.controller),
             result("event index", uint32_t(17), e.index),

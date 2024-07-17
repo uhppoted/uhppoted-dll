@@ -15,8 +15,8 @@ typedef struct ListenEvent {
     uint8_t reason;
 } ListenEvent;
 
-typedef void (*onevent) (const struct ListenEvent evt);
+typedef void (*onevent) (const struct ListenEvent evt, void *userdata);
 typedef void (*onerror) (const char *err);
 
-extern void dispatch_event(onevent f, const struct ListenEvent evt);
+extern void dispatch_event(onevent f, const struct ListenEvent evt, void * userdata);
 extern void dispatch_error(onerror f, const char *err);

@@ -449,13 +449,13 @@ class Uhppote:
     # Ref. https://docs.python.org/3/library/ctypes.html#callback-functions
     # Ref. https://stackoverflow.com/questions/24912065/how-to-access-data-from-pointer-in-struct-from-python-with-ctypes
     def listen(self, onevent, onerror, ev_running, ev_stop):
-        callback = on_event(lambda e: on_listen_event(onevent, e))
+        callback = on_event(lambda e, v: on_listen_event(onevent, e, v))
         err_handler = on_error(lambda v: on_listen_error(onerror, v))
         running = ctypes.c_bool(False)
         stop = ctypes.c_bool(False)
 
         try:
-            self.ffi.Listen(self._uhppote, callback, byref(running), byref(stop), err_handler)
+            self.ffi.Listen(self._uhppote, callback, byref(running), byref(stop), err_handler, None)
             count = 0
             while (not running) and (count < 10):
                 print(f' ... waiting {count}')
@@ -481,7 +481,7 @@ class Uhppote:
             raise Exception(f'event listener ({err})')
 
 
-def on_listen_event(handler, event):
+def on_listen_event(handler, event, userdata):
     # yapf: disable
     e = ListenEvent(event.controller,
                     event.timestamp.decode('utf-8'),
@@ -753,7 +753,7 @@ def libfunctions():
         'ActivateKeypads':          (lib.ActivateKeypads,          [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool]),
         'SetDoorPasscodes':         (lib.SetDoorPasscodes,         [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong]),
         'RestoreDefaultParameters': (lib.RestoreDefaultParameters, [POINTER(GoUHPPOTE), c_ulong]),
-        'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), on_event, POINTER(c_bool), POINTER(c_bool), on_error]),
+        'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), on_event, POINTER(c_bool), POINTER(c_bool), on_error, ctypes.c_void_p]),
     }
 # yapf: enable
 
@@ -900,5 +900,5 @@ class GoListenEvent(Structure):
     ]
 
 
-on_event = ctypes.CFUNCTYPE(None, GoListenEvent)
+on_event = ctypes.CFUNCTYPE(None, GoListenEvent, c_void_p)
 on_error = ctypes.CFUNCTYPE(None, c_char_p)

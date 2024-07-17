@@ -7,7 +7,7 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-void listen_on_event(const struct ListenEvent evt);
+void listen_on_event(const struct ListenEvent evt, void *userdata);
 void listen_on_error(const char *err);
 
 int getEventIndex(int argc, char **argv) {
@@ -153,7 +153,7 @@ int listen(int argc, char **argv) {
     return 0;
 }
 
-void listen_on_event(const struct ListenEvent evt) {
+void listen_on_event(const struct ListenEvent evt, void *userdata) {
     const char *_direction = lookup(LOOKUP_DIRECTION, evt.direction, locale);
     const char *_event = lookup(LOOKUP_EVENT_TYPE, evt.event, locale);
     const char *_reason = lookup(LOOKUP_EVENT_REASON, evt.reason, locale);

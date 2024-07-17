@@ -6,7 +6,7 @@
 #include "tests.h"
 #include "uhppoted.h"
 
-void listen_on_event(const struct ListenEvent evt);
+void listen_on_event(const struct ListenEvent evt, void *userdata);
 void listen_on_error(const char *err);
 
 bool getEventIndex() {
@@ -141,7 +141,7 @@ bool listen() {
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
-void listen_on_event(const struct ListenEvent e) {
+void listen_on_event(const struct ListenEvent e, void *userdata) {
     evt.controller = e.controller;
     evt.timestamp = strdup(e.timestamp);
     evt.index = e.index;

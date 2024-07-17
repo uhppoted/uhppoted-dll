@@ -498,7 +498,7 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 // Listens for events and invokes a callback function.
 //
 //export Listen
-func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.onerror) int32 {
+func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.onerror, userdata unsafe.Pointer) int32 {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		e := C.CString(err.Error())
 		C.dispatch_error(g, e)
@@ -507,8 +507,9 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 		return -1
 	} else {
 		l := listener{
-			onevent: f,
-			onerror: g,
+			onevent:  f,
+			onerror:  g,
+			userdata: userdata,
 		}
 
 		// NTS: cannot pin channels
@@ -554,8 +555,9 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 }
 
 type listener struct {
-	onevent C.onevent
-	onerror C.onerror
+	onevent  C.onevent
+	onerror  C.onerror
+	userdata unsafe.Pointer
 }
 
 func (l *listener) OnConnected() {
@@ -575,7 +577,7 @@ func (l *listener) OnEvent(status *types.Status) {
 			reason:     C.uint8_t(status.Event.Reason),
 		}
 
-		C.dispatch_event(l.onevent, evt)
+		C.dispatch_event(l.onevent, evt, l.userdata)
 		C.free(unsafe.Pointer(evt.timestamp))
 	}
 }

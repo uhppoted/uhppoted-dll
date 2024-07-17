@@ -750,7 +750,8 @@
 (defparameter *uhppoted-error-handler* nil)
 (defparameter *uhppoted-listen-stop*   (make-semaphore))
 
-(defcallback uhppoted-on-event ((:struct :GoListenEvent) event) "Callback function for controller events"
+(defcallback uhppoted-on-event ((:struct :GoListenEvent) event :address userdata) "Callback function for controller events"
+  (declare (ignore userdata))
   (let ((controller (pref event :GoListenEvent.controller))
         (evt (make-listen-event :timestamp  (go-string (pref event :GoListenEvent.timestamp))
                                 :index      (pref event :GoListenEvent.index)
@@ -781,6 +782,7 @@
                                                 :address running
                                                 :address stop
                                                 :address uhppoted-on-error
+                                                :address (%null-ptr)
                                                 :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (format t "~a" err)))
       (progn 
