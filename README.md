@@ -134,6 +134,7 @@ returns a fixed response.
 - [`ActivateKeypads`](#activatekeypads)
 - [`SetDoorPasscodes`](#setdoorpasscodes)
 - [`RestoreDefaultParameters`](#restoredefaultparameters)
+- [`ListenEvents`](#listenevents)
 
 #### `GetDevices`
 
@@ -309,6 +310,12 @@ Sets up to four supervisor passcodes to allow keypad only access to a door.
 #### `RestoreDefaultParameters`
 
 Resets a controller to the manufacturer default configuration.
+
+
+#### `ListenEvents`
+
+Listens for controller events and forwards received events to a callback function for processing by the
+application.
 
 
 ## Contributions

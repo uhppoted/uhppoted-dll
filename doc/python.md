@@ -412,6 +412,27 @@ ID        controller serial number
 Raises an Exception if the call failed.
 ```
 
+### `listen-events`
+```
+uhppoted.listen_events(onevent, onerror, listening, stop):
+
+onevent    callback function invoked to process received events
+onerror    callback function to report event errors
+listening  threading.Event: set to 'true' when the listen function is initialised and listening
+stop       threading.Event: set to 'true' by the parent function to terminate the listen function
+
+The callback functions are defined as:
+
+- onevent(event)
+- onerror(string)
+
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
+
+
+Raises an Exception if the call failed.
+```
+
 
 ## Types
 
@@ -538,4 +559,20 @@ class Task:
     sunday: bool
     at: str
     cards: int
+```
+
+### ListenEvent
+Container class for a received event.
+```
+@dataclass
+class ListenEvent:
+    controller: int
+    timestamp: str
+    index: int
+    event: int
+    granted: bool
+    door: int
+    direction: int
+    card: int
+    reason: int
 ```

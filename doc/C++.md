@@ -395,9 +395,8 @@ int set_pc_control(uint32_t controller, bool enabled);
 controller  controller serial number 
 enabled     enables/disables PC control
 
-Returns:
-- 0  if the call succeeded. 
-- -1 if the call failed. The error message can be retrieved using errmsg().
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
 ```
 
 ### `set_interlock`
@@ -413,14 +412,13 @@ interlock   controller door interlock mode
             4: doors 1&2&3
             8: doors 1&2&3&4
 
-Returns:
-- 0  if the call succeeded. 
-- -1 if the call failed. The error message can be retrieved using errmsg().
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
 ```
 
 ### `activate-keypads`
 ```
-int activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4);
+void activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4);
 
 controller  controller serial number 
 reader1     activate/deactivate reader 1 access keypad
@@ -428,15 +426,14 @@ reader2     activate/deactivate reader 2 access keypad
 reader3     activate/deactivate reader 3 access keypad
 reader4     activate/deactivate reader 4 access keypad
 
-Returns:
-- 0  if the call succeeded. 
-- -1 if the call failed. The error message can be retrieved using errmsg().
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
 ```
 
 
 ### `set-door-passcodes`
 ```
-int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
+void set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
 
 controller  controller serial number 
 door        door ID [1..4]
@@ -445,21 +442,37 @@ passcode2   PIN code in the range [1..999999] or 0 (for none)
 passcode3   PIN code in the range [1..999999] or 0 (for none)
 passcode4   PIN code in the range [1..999999] or 0 (for none)
 
-Returns:
-- 0  if the call succeeded. 
-- -1 if the call failed. The error message can be retrieved using errmsg().
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
 ```
 
 
 ### `restore-default-parameters`
 ```
-int restore_default_parameters(uint32_t controller);
+void restore_default_parameters(uint32_t controller);
 
 controller  controller serial number 
 
-Returns:
-- 0  if the call succeeded. 
-- -1 if the call failed. The error message can be retrieved using errmsg().
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
+```
+
+### `listen-events`
+```
+void listen(on_event handler, bool *running, bool *stop, on_error err_handler);
+
+callback   callback function invoked to process received events
+listening  set to 'true' when the listen function is initialised and listening
+stop       set to 'true' by the parent function to terminate the listen function
+onerror    callback function to report event errors
+
+The callback functions are defined as:
+
+- typedef void (*on_event)(const struct ListenEvent evt, void *userdata);
+- typedef void (*on_error)(const char *err);
+
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
 ```
 
 
@@ -588,4 +601,20 @@ typedef struct task {
     std::string at;
     uint8_t cards;
 } task;
+```
+
+### ListenEvent
+Container struct for a received event.
+```
+typedef struct ListenEvent {
+    uint32_t controller;
+    const char *timestamp;
+    uint32_t index;
+    uint8_t event;
+    bool granted;
+    uint8_t door;
+    uint8_t direction;
+    uint32_t card;
+    uint8_t reason;
+} ListenEvent;
 ```

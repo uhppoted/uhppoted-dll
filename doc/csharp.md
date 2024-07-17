@@ -394,7 +394,7 @@ Throws a UhppotedException if the call failed.
 
 ### `Uhppoted::SetDoorPasscodes`
 ```
-int SetDoorPasscodes(uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4)
+public void SetDoorPasscodes(uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4)
 
 controller  controller serial number 
 door        door ID [1..4]
@@ -403,20 +403,32 @@ passcode2   PIN code in the range [1..999999] or 0 (for none)
 passcode3   PIN code in the range [1..999999] or 0 (for none)
 passcode4   PIN code in the range [1..999999] or 0 (for none)
 
-Returns:
-- 0  if the call succeeded. 
-- -1 if the call failed. The error message can be retrieved using errmsg().
+Throws a UhppotedException if the call failed.
 
 
 ### `Uhppoted::RestoreDefaultParameters`
 ```
-int RestoreDefaultParameters(uint controller)
+public void RestoreDefaultParameters(uint controller)
 
 controller  controller serial number 
 
-Returns:
-- 0  if the call succeeded. 
-- -1 if the call failed. The error message can be retrieved using errmsg().
+Throws a UhppotedException if the call failed.
+
+
+### `Uhppoted::ListenEvents`
+```
+public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop)
+
+on_event   callback function invoked to process received events
+on_error   callback function to report event errors
+running    set to 'true' (1) when the listen function is initialised and listening
+stop       set to 'true' (1) by the parent function to terminate the listen function
+
+The callback functions are defined as:
+- public delegate void OnEvent(ListenEvent e);
+- public delegate void OnError(string err);
+
+Throws a UhppotedException if the call failed.
 
 
 ## Types
@@ -525,7 +537,7 @@ public class TimeProfile {
 }
 ```
 
-### task
+### Task
 Container class for the task information required for `AddTask`.
 ```
 public class Task {
@@ -543,4 +555,21 @@ public class Task {
     public string at;
     public byte cards;
 }
+```
+
+### ListenEvent
+Container class for a received event.
+```
+public class ListenEvent {
+    public uint controller;
+    public string timestamp;
+    public uint index;
+    public byte eventType;
+    public bool granted;
+    public byte door;
+    public byte direction;
+    public uint card;
+    public byte reason;
+}
+
 ```

@@ -503,7 +503,7 @@ onerror    callback function to report event errors
 
 The callback functions are defined as:
 
-typedef void (*on_event)(const struct ListenEvent evt);
+typedef void (*on_event)(const struct ListenEvent evt, void *userdata);
 typedef void (*on_error)(const char *err);
 
 Returns:

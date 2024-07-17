@@ -436,6 +436,20 @@ device-id  controller serial number
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
+### `listen-events`
+```
+(defun uhppoted-listen-events (uhppote on-event on-error) ...)
+
+on-event   callback function invoked to process received events
+on-error   callback function to report event errors
+
+The callback functions are defined as:
+- (defun on-event (controller event) ...)
+- (defun on-error (error) ...)
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
 
 ## Types
 
@@ -539,4 +553,17 @@ Container class for the task information required for `add_task`.
                 sunday
                 at
                 cards)
+```
+
+### listen-event
+Container class for a received event.
+```
+(defstruct listen-event timestamp
+                        index
+                        event-type
+                        granted
+                        door
+                        direction
+                        card
+                        reason)
 ```

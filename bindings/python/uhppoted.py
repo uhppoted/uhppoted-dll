@@ -448,7 +448,7 @@ class Uhppote:
 
     # Ref. https://docs.python.org/3/library/ctypes.html#callback-functions
     # Ref. https://stackoverflow.com/questions/24912065/how-to-access-data-from-pointer-in-struct-from-python-with-ctypes
-    def listen(self, onevent, onerror, ev_running, ev_stop):
+    def listen_events(self, onevent, onerror, ev_running, ev_stop):
         callback = on_event(lambda e, v: on_listen_event(onevent, e, v))
         err_handler = on_error(lambda v: on_listen_error(onerror, v))
         running = ctypes.c_bool(False)

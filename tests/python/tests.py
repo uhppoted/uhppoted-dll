@@ -482,7 +482,7 @@ def listen(u):
 
 def listen_events(u, running, stop, error, message):
     try:
-        u.listen(on_listen_event, on_listen_error, running, stop)
+        u.listen_events(on_listen_event, on_listen_error, running, stop)
     except Exception as err:
         message[0] = f'{err}'
         error.set()
