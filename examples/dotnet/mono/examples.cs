@@ -844,7 +844,7 @@ public class examples {
     }
 
     static void listen(Uhppoted u, ManualResetEvent done) {
-        Uhppoted.OnEvent onevent = (ListenEvent e) => {
+        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
             Console.WriteLine("-- EVENT");
             Console.WriteLine("   controller: {0}", e.controller);
             Console.WriteLine("   timestamp:  {0}", e.timestamp);
@@ -866,7 +866,7 @@ public class examples {
         byte running = 0; // NTS because C# bool is not uint8_t
         byte stop = 0;    // NTS because C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, ref running, ref stop);
+        u.ListenEvents(onevent, onerror, ref running, ref stop, IntPtr.Zero);
 
         Thread.Sleep(delay);
         for (int count = 0; count < 5 && !cbool(running); count++) {

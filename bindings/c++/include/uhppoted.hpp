@@ -151,7 +151,7 @@ class uhppoted {
     void set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
     void restore_default_parameters(uint32_t controller);
 
-    void listen(on_event handler, bool *running, bool *stop, on_error err_handler);
+    void listen(on_event handler, bool *running, bool *stop, on_error err_handler, void *userdata);
 
     const std::string lookup(const std::string &, uint8_t, const std::string &);
 

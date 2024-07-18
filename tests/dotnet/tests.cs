@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 using static System.Console;
 using static System.String;
@@ -524,11 +525,10 @@ public class Tests {
         return evaluate("restore-default-parameters", resultset);
     }
 
-    static ListenEvent testEvent = new ListenEvent();
-
     static bool Listen(Uhppoted u) {
+        var testEvent = new ListenEvent();
         var stopEvent = new ManualResetEvent(false);
-        var thread = new Thread(() => listen(u, stopEvent));
+        var thread = new Thread(() => listen(u, stopEvent, ref testEvent));
         var delay = TimeSpan.FromMilliseconds(1000);
         var timeout = TimeSpan.FromMilliseconds(5000);
 
@@ -563,17 +563,22 @@ public class Tests {
         return evaluate("listen", resultset);
     }
 
-    static void listen(Uhppoted u, ManualResetEvent done) {
-        Uhppoted.OnEvent onevent = (ListenEvent e) => {
-            testEvent.controller = e.controller;
-            testEvent.timestamp = e.timestamp;
-            testEvent.index = e.index;
-            testEvent.eventType = e.eventType;
-            testEvent.granted = e.granted;
-            testEvent.door = e.door;
-            testEvent.direction = e.direction;
-            testEvent.card = e.card;
-            testEvent.reason = e.reason;
+    static void listen(Uhppoted u, ManualResetEvent done, ref ListenEvent testEvent) {
+        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
+            GCHandle handle = (GCHandle)userdata;
+            ListenEvent evt = handle.Target as ListenEvent;
+
+            evt.controller = e.controller;
+            evt.timestamp = e.timestamp;
+            evt.index = e.index;
+            evt.eventType = e.eventType;
+            evt.granted = e.granted;
+            evt.door = e.door;
+            evt.direction = e.direction;
+            evt.card = e.card;
+            evt.reason = e.reason;
+
+            handle.Free();
         };
 
         Uhppoted.OnError onerror = (string err) => {
@@ -583,8 +588,9 @@ public class Tests {
         TimeSpan delay = TimeSpan.FromMilliseconds(100);
         byte running = 0; // NTS because C# bool is not uint8_t
         byte stop = 0;    // NTS because C# bool is not uint8_t
+        GCHandle handle = GCHandle.Alloc(testEvent);
 
-        u.ListenEvents(onevent, onerror, ref running, ref stop);
+        u.ListenEvents(onevent, onerror, ref running, ref stop, (IntPtr)handle);
 
         Thread.Sleep(delay);
         for (int count = 0; count < 5 && !cbool(running); count++) {
@@ -607,6 +613,8 @@ public class Tests {
         if (cbool(running)) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
+
+        handle.Free();
     }
 
     static bool cbool(byte v) {

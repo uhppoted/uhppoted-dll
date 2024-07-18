@@ -434,17 +434,15 @@ def restore_default_parameters(u):
     return evaluate(tag, [])
 
 
-received_event = {}
-
-
 def listen(u):
     tag = 'listen'
     running = threading.Event()
     stop = threading.Event()
     error = threading.Event()
     message = [None]
+    event = {}
 
-    thread = threading.Thread(target=listen_events, args=[u, running, stop, error, message])
+    thread = threading.Thread(target=listen_events, args=[u, running, stop, error, message, event])
     thread.daemon = True
     thread.start()
 
@@ -468,36 +466,38 @@ def listen(u):
     thread.join()
 
     return evaluate(tag, [
-        ('event controller', 405419896, received_event['controller']),
-        ('event index', 17, received_event['index']),
-        ('event timestamp', '2024-07-05 12:36:45', received_event['timestamp']),
-        ('event type', 6, received_event['event']),
-        ('event granted', True, received_event['granted']),
-        ('event door', 2, received_event['door']),
-        ('event direction', 1, received_event['direction']),
-        ('event card', 10058400, received_event['card']),
-        ('event reason', 21, received_event['reason']),
+        ('event controller', 405419896, event['controller']),
+        ('event index', 17, event['index']),
+        ('event timestamp', '2024-07-05 12:36:45', event['timestamp']),
+        ('event type', 6, event['event']),
+        ('event granted', True, event['granted']),
+        ('event door', 2, event['door']),
+        ('event direction', 1, event['direction']),
+        ('event card', 10058400, event['card']),
+        ('event reason', 21, event['reason']),
     ])
 
 
-def listen_events(u, running, stop, error, message):
+def listen_events(u, running, stop, error, message, userdata):
     try:
-        u.listen_events(on_listen_event, on_listen_error, running, stop)
+        u.listen_events(on_listen_event, on_listen_error, running, stop, userdata)
     except Exception as err:
         message[0] = f'{err}'
         error.set()
 
 
-def on_listen_event(evt):
-    received_event['controller'] = evt.controller
-    received_event['index'] = evt.index
-    received_event['timestamp'] = evt.timestamp
-    received_event['event'] = evt.event
-    received_event['granted'] = evt.granted
-    received_event['door'] = evt.door
-    received_event['direction'] = evt.direction
-    received_event['card'] = evt.card
-    received_event['reason'] = evt.reason
+def on_listen_event(evt, userdata):
+    received = userdata
+
+    received['controller'] = evt.controller
+    received['index'] = evt.index
+    received['timestamp'] = evt.timestamp
+    received['event'] = evt.event
+    received['granted'] = evt.granted
+    received['door'] = evt.door
+    received['direction'] = evt.direction
+    received['card'] = evt.card
+    received['reason'] = evt.reason
 
 
 def on_listen_error(err):

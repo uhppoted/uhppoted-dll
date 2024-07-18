@@ -104,7 +104,7 @@ int listen(int argc, char **argv) {
     bool running = false;
     bool stop = false;
 
-    if (listen_events(listen_on_event, &running, &stop, listen_on_error) < 0) {
+    if (listen_events(listen_on_event, &running, &stop, listen_on_error, NULL) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }

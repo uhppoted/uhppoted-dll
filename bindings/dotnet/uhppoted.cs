@@ -475,31 +475,32 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public delegate void OnEvent(ListenEvent e);
+    public delegate void OnEvent(ListenEvent e, IntPtr userdata);
     public delegate void OnError(string err);
 
     delegate void OnListenEvent(GoListenEvent e, IntPtr userdata);
     delegate void OnListenError(string err);
 
-    public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
+    public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop, IntPtr userdata) {
         OnListenEvent onevent = (GoListenEvent e, IntPtr userdata) => {
             on_event(new ListenEvent(
-                e.controller,
-                e.timestamp,
-                e.index,
-                e.eventType,
-                e.granted == 1 ? true : false,
-                e.door,
-                e.direction,
-                e.card,
-                e.reason));
+                         e.controller,
+                         e.timestamp,
+                         e.index,
+                         e.eventType,
+                         e.granted == 1 ? true : false,
+                         e.door,
+                         e.direction,
+                         e.card,
+                         e.reason),
+                     userdata);
         };
 
         OnListenError onerror = (string err) => {
             on_error(err);
         };
 
-        int err = Listen(ref this.u, onevent, ref running, ref stop, onerror, IntPtr.Zero);
+        int err = Listen(ref this.u, onevent, ref running, ref stop, onerror, userdata);
         if (err != 0) {
             throw new UhppotedException("error listening for events");
         }

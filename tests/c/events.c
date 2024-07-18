@@ -80,25 +80,23 @@ bool recordSpecialEvents() {
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
-struct ListenEvent evt = {
-    .controller = 0,
-    .timestamp = "",
-    .index = 0,
-    .event = 0,
-    .granted = false,
-    .door = 0,
-    .direction = 0,
-    .card = 0,
-    .reason = 0,
-};
-
 bool listen() {
     const char *tag = "listen";
-
     bool running = false;
     bool stop = false;
+    struct ListenEvent evt = {
+        .controller = 0,
+        .timestamp = "",
+        .index = 0,
+        .event = 0,
+        .granted = false,
+        .door = 0,
+        .direction = 0,
+        .card = 0,
+        .reason = 0,
+    };
 
-    if (listen_events(listen_on_event, &running, &stop, listen_on_error) < 0) {
+    if (listen_events(listen_on_event, &running, &stop, listen_on_error, &evt) < 0) {
         printf("ERROR %s\n", "error starting event listener");
         return false;
     }
@@ -142,15 +140,17 @@ bool listen() {
 }
 
 void listen_on_event(const struct ListenEvent e, void *userdata) {
-    evt.controller = e.controller;
-    evt.timestamp = strdup(e.timestamp);
-    evt.index = e.index;
-    evt.event = e.event;
-    evt.granted = e.granted;
-    evt.door = e.door;
-    evt.direction = e.direction;
-    evt.card = e.card;
-    evt.reason = e.reason;
+    ListenEvent *evt = (ListenEvent *)userdata;
+
+    evt->controller = e.controller;
+    evt->timestamp = strdup(e.timestamp);
+    evt->index = e.index;
+    evt->event = e.event;
+    evt->granted = e.granted;
+    evt->door = e.door;
+    evt->direction = e.direction;
+    evt->card = e.card;
+    evt->reason = e.reason;
 }
 
 void listen_on_error(const char *err) {

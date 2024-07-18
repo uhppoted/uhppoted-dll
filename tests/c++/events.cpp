@@ -55,15 +55,12 @@ bool recordSpecialEvents(uhppoted &u) {
 bool listen(uhppoted &u) {
     bool running = false;
     bool stop = false;
-
-    static struct {
-        vector<result> rs;
-    } q = {
-        .rs = {},
-    };
+    vector<result> rs;
 
     on_event callback = +[](const struct ListenEvent e, void *userdata) {
-        q.rs = {
+        vector<result> *rs = (vector<result> *)userdata;
+
+        *rs = {
             result("event controller", uint32_t(405419896), e.controller),
             result("event index", uint32_t(17), e.index),
             result("event timestamp", string("2024-07-05 12:36:45"), string(e.timestamp)),
@@ -76,7 +73,7 @@ bool listen(uhppoted &u) {
         };
     };
 
-    u.listen(callback, &running, &stop, nullptr);
+    u.listen(callback, &running, &stop, nullptr, &rs);
 
     sleep_for(chrono::milliseconds(100));
     for (int count = 0; count < 5 && !running; count++) {
@@ -100,5 +97,5 @@ bool listen(uhppoted &u) {
         throw uhppoted_exception((char *)"failed to stop event listener");
     }
 
-    return evaluate("listen", q.rs);
+    return evaluate("listen", rs);
 }

@@ -128,7 +128,7 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
         cout << " **** ERROR " << err << endl;
     };
 
-    u.listen(callback, &running, &stop, on_err);
+    u.listen(callback, &running, &stop, on_err, nullptr);
 
     sleep_for(milliseconds(1000));
     for (int count = 0; count < 5 && !running; count++) {
