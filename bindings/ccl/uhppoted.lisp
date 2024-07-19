@@ -750,8 +750,7 @@
 (defparameter *uhppoted-error-handler* nil)
 (defparameter *uhppoted-listen-stop*   (make-semaphore))
 
-(defcallback uhppoted-on-event ((:struct :GoListenEvent) event :address userdata) "Callback function for controller events"
-  (declare (ignore userdata))
+(defcallback uhppoted-on-event ((:struct :GoListenEvent) event :unsigned-doubleword userdata) "Callback function for controller events"
   (let ((controller (pref event :GoListenEvent.controller))
         (evt (make-listen-event :timestamp  (go-string (pref event :GoListenEvent.timestamp))
                                 :index      (pref event :GoListenEvent.index)
@@ -762,7 +761,7 @@
                                 :card       (pref event :GoListenEvent.card)
                                 :reason     (pref event :GoListenEvent.reason))))
     (when *uhppoted-event-handler*
-      (funcall *uhppoted-event-handler* controller evt))))
+      (funcall *uhppoted-event-handler* controller evt userdata))))
 
 (defcallback uhppoted-on-error (:address err) "Callback function for controller event listen errors"
     (when *uhppoted-error-handler*
@@ -771,18 +770,18 @@
 ; NTS resorting to a global variables to store the on-event an on-error callback functions because
 ;     seemingly defcallback can't be used inside a lambda (or at least not simply) and the user
 ;     defined condition handlers seem to be outside the process space of the DLL
-(defun uhppoted-listen-events (uhppote on-event on-error) "Listens for controller events"
+(defun uhppoted-listen-events (uhppote on-event on-error userdata) "Listens for controller events"
   (setf *uhppoted-event-handler* on-event)
   (setf *uhppoted-error-handler* on-error)
   (unwind-protect
     (rlet ((listening :unsigned-byte 0)
            (stop      :unsigned-byte 0))
-    (with-macptrs ((err (external-call "Listen" :address uhppote 
-                                                :address uhppoted-on-event
-                                                :address listening
-                                                :address stop
-                                                :address uhppoted-on-error
-                                                :address (%null-ptr)
+    (with-macptrs ((err (external-call "Listen" :address             uhppote 
+                                                :address             uhppoted-on-event
+                                                :address             listening
+                                                :address             stop
+                                                :address             uhppoted-on-error
+                                                :unsigned-doubleword userdata
                                                 :address)))
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (format t "~a" err)))
       (progn 

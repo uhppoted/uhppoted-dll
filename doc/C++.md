@@ -459,12 +459,13 @@ uhppoted_exception::what() method.
 
 ### `listen-events`
 ```
-void listen(on_event handler, bool *listening, bool *stop, on_error err_handler);
+void listen(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata);
 
 callback   callback function invoked to process received events
 listening  set to 'true' when the listen function is initialised and listening
 stop       set to 'true' by the parent function to terminate the listen function
 onerror    callback function to report event errors
+userdata   (optional) pointer to non-specific data. Returned 'as is' by the callback function.
 
 The callback functions are defined as:
 

@@ -414,16 +414,17 @@ Raises an Exception if the call failed.
 
 ### `listen-events`
 ```
-uhppoted.listen_events(onevent, onerror, listening, stop):
+uhppoted.listen_events(onevent, onerror, listening, stop, userdata):
 
 onevent    callback function invoked to process received events
 onerror    callback function to report event errors
 listening  threading.Event: set to 'true' when the listen function is initialised and listening
 stop       threading.Event: set to 'true' by the parent function to terminate the listen function
+userdata   (optional) non-specific user data. Returned 'as is' by the callback function.
 
 The callback functions are defined as:
 
-- onevent(event)
+- onevent(event, userdata)
 - onerror(string)
 
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 

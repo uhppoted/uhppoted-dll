@@ -438,13 +438,14 @@ Raises a `uhppoted-error` condition if the call failed.
 
 ### `listen-events`
 ```
-(defun uhppoted-listen-events (uhppote on-event on-error) ...)
+(defun uhppoted-listen-events (uhppote on-event on-error userdata) ...)
 
 on-event   callback function invoked to process received events
 on-error   callback function to report event errors
+userdata   (optional) unsigned double word (uint64). Returned 'as is' by the callback function.
 
 The callback functions are defined as:
-- (defun on-event (controller event) ...)
+- (defun on-event (controller event userdata) ...)
 - (defun on-error (error) ...)
 
 Raises a `uhppoted-error` condition if the call failed.

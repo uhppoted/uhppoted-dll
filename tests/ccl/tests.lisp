@@ -312,9 +312,10 @@
 (defparameter *listen-events-stopped*     (make-semaphore))
 (defparameter *listen-events-controller*  0)
 (defparameter *listen-events-event*       (make-listen-event))
+(defparameter *listen-events-userdata*    0)
 
-(defun listen-events-thread () "" 
-  (let*  ((on-event (lambda (controller event) 
+(defun listen-events-thread (userdata) "" 
+  (let*  ((on-event (lambda (controller event userdata) 
                     (progn 
                       (setf *listen-events-controller* controller)
                       (setf (listen-event-index      *listen-events-event*) (listen-event-index      event))
@@ -325,13 +326,13 @@
                       (setf (listen-event-direction  *listen-events-event*) (listen-event-direction  event))
                       (setf (listen-event-card       *listen-events-event*) (listen-event-card       event))
                       (setf (listen-event-reason     *listen-events-event*) (listen-event-reason     event))
-                    )))
+                      (setf *listen-events-userdata* userdata))))
           (on-error (lambda (err)              (format t "warn  ~a~%" err))))
-    (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error)))
+    (exec #'(lambda (u) (uhppoted-listen-events u on-event on-error userdata)))
     (signal-semaphore *listen-events-stopped*)))
 
 (defun listen-events() "" 
-  (process-run-function "listen" #'(lambda () (listen-events-thread) (break "interrupted")))
+  (process-run-function "listen" #'(lambda () (listen-events-thread 12345678) (break "interrupted")))
   (sleep 1)
   (signal-semaphore *uhppoted-listen-stop*)
   (timed-wait-on-semaphore *listen-events-stopped* 5)
@@ -345,7 +346,7 @@
                   (make-result :field "event direction"   :expected 1                     :value (listen-event-direction  *listen-events-event*))
                   (make-result :field "event card number" :expected 10058400              :value (listen-event-card       *listen-events-event*))
                   (make-result :field "event reason"      :expected 21                    :value (listen-event-reason     *listen-events-event*))
-                  )))
+                  (make-result :field "callback userdata" :expected 12345678              :value *listen-events-userdata*))))
 
 
 (defun internationalisation () "" 

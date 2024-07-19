@@ -7,9 +7,10 @@
             - [x] C
             - [x] C++
             - [x] Python
+                  - [ ] wrap userdata in struct
             - [x] C#
-            - [ ] CCL
-            - [ ] documentation
+            - [x] CCL
+            - [x] documentation
       - [x] Change _running_ to _listening_
       - [x] documentation
       - [x] Go
