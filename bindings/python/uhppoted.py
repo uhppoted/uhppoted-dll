@@ -454,7 +454,11 @@ class Uhppote:
         err_handler = on_error(lambda v: on_listen_error(onerror, v))
         listening = c_bool(False)
         stop = c_bool(False)
-        p = None if userdata is None else pointer(ctypes.py_object(userdata))
+        p = None
+
+        if userdata is not None:
+            v = tuple([userdata])
+            p = pointer(ctypes.py_object(v))
 
         try:
             self.ffi.Listen(self._uhppote, callback, byref(listening), byref(stop), err_handler, p)
@@ -486,7 +490,7 @@ class Uhppote:
 def on_listen_event(handler, event, userdata):
     u = None
     if userdata is not None:
-        u = ctypes.cast(userdata, ctypes.POINTER(ctypes.py_object)).contents.value
+        u = ctypes.cast(userdata, ctypes.POINTER(ctypes.py_object)).contents.value[0]
 
     # yapf: disable
     e = ListenEvent(event.controller,

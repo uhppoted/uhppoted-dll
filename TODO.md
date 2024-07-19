@@ -7,7 +7,7 @@
             - [x] C
             - [x] C++
             - [x] Python
-                  - [ ] wrap userdata in struct
+                  - [x] wrap userdata in struct
             - [x] C#
             - [x] CCL
             - [x] documentation
