@@ -459,7 +459,7 @@ uhppoted_exception::what() method.
 
 ### `listen-events`
 ```
-void listen(on_event handler, bool *running, bool *stop, on_error err_handler);
+void listen(on_event handler, bool *listening, bool *stop, on_error err_handler);
 
 callback   callback function invoked to process received events
 listening  set to 'true' when the listen function is initialised and listening

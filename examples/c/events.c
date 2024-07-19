@@ -101,21 +101,21 @@ int recordSpecialEvents(int argc, char **argv) {
 }
 
 int listen(int argc, char **argv) {
-    bool running = false;
+    bool listening = false;
     bool stop = false;
 
-    if (listen_events(listen_on_event, &running, &stop, listen_on_error, NULL) < 0) {
+    if (listen_events(listen_on_event, &listening, &stop, listen_on_error, NULL) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
 
     sleep(1);
-    for (int count = 0; count < 5 && !running; count++) {
-        printf(" ... waiting %d %s\n", count, running ? "running" : "pending");
+    for (int count = 0; count < 5 && !listening; count++) {
+        printf(" ... waiting %d %s\n", count, listening ? "listening" : "pending");
         sleep(1);
     }
 
-    if (!running) {
+    if (!listening) {
         printf("ERROR %s\n", "failed to start event listener");
         return -1;
     }
@@ -140,12 +140,12 @@ int listen(int argc, char **argv) {
 
     stop = true;
     sleep(1);
-    for (int count = 0; count < 5 && running; count++) {
-        printf("DEBUG ... stoppping event listener %d %s\n", count, running ? "running" : "stopped");
+    for (int count = 0; count < 5 && listening; count++) {
+        printf("DEBUG ... stoppping event listener %d %s\n", count, listening ? "listening" : "stopped");
         sleep(1);
     }
 
-    if (running) {
+    if (listening) {
         printf("ERROR %s\n", "failed to stop event listener");
         return -1;
     }

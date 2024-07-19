@@ -775,11 +775,11 @@
   (setf *uhppoted-event-handler* on-event)
   (setf *uhppoted-error-handler* on-error)
   (unwind-protect
-    (rlet ((running :unsigned-byte 0)
-           (stop    :unsigned-byte 0))
+    (rlet ((listening :unsigned-byte 0)
+           (stop      :unsigned-byte 0))
     (with-macptrs ((err (external-call "Listen" :address uhppote 
                                                 :address uhppoted-on-event
-                                                :address running
+                                                :address listening
                                                 :address stop
                                                 :address uhppoted-on-error
                                                 :address (%null-ptr)
@@ -788,10 +788,10 @@
       (progn 
         ; wait for event listener to start
         (loop repeat 5
-              until (= (%get-unsigned-byte running) 1)
+              until (= (%get-unsigned-byte listening) 1)
           do (sleep 1))
 
-        (unless (= (%get-unsigned-byte running) 1) (error 'uhppoted-error :message "failed to start event listener"))
+        (unless (= (%get-unsigned-byte listening) 1) (error 'uhppoted-error :message "failed to start event listener"))
 
         ; wait for 'stop'
         (wait-on-semaphore *uhppoted-listen-stop*)
@@ -800,10 +800,10 @@
         
         ; wait for event listener to stop
         (loop repeat 5
-              until (/= (%get-unsigned-byte running) 1)
+              until (/= (%get-unsigned-byte listening) 1)
           do (sleep 1))
         
-        (unless (= (%get-unsigned-byte running) 0) (error 'uhppoted-error :message "failed to stop event listener"))
+        (unless (= (%get-unsigned-byte listening) 0) (error 'uhppoted-error :message "failed to stop event listener"))
         t)))))
 
 

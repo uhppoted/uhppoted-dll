@@ -773,17 +773,17 @@ def restore_default_parameters(u, args):
 
 def listen(u, args):
     on_sigint = lambda sig, frame: print('CTRL-C')
-    running = threading.Event()
+    listening = threading.Event()
     stop = threading.Event()
     error = threading.Event()
     message = [None]
 
-    thread = threading.Thread(target=listen_events, args=[u, running, stop, error, message])
+    thread = threading.Thread(target=listen_events, args=[u, listening, stop, error, message])
     thread.daemon = True
     thread.start()
 
     count = 0
-    while not error.is_set() and not running.is_set() and count < 10:
+    while not error.is_set() and not listening.is_set() and count < 10:
         count += 1
         sleep(0.25)
 
@@ -793,7 +793,7 @@ def listen(u, args):
         else:
             raise Exception('error starting event listener')
 
-    if not running.is_set():
+    if not listening.is_set():
         raise Exception(f'timeout starting event listener')
 
     signal.signal(signal.SIGINT, on_sigint)
@@ -803,9 +803,9 @@ def listen(u, args):
     thread.join()
 
 
-def listen_events(u, running, stop, error, message):
+def listen_events(u, listening, stop, error, message):
     try:
-        u.listen_events(on_listen_event, on_listen_error, running, stop, None)
+        u.listen_events(on_listen_event, on_listen_error, listening, stop, None)
     except Exception as err:
         message[0] = f'{err}'
         error.set()

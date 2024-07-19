@@ -863,18 +863,18 @@ public class examples {
         };
 
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
-        byte running = 0; // NTS because C# bool is not uint8_t
-        byte stop = 0;    // NTS because C# bool is not uint8_t
+        byte listening = 0; // NTS because C# bool is not uint8_t
+        byte stop = 0;      // NTS because C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, ref running, ref stop, IntPtr.Zero);
+        u.ListenEvents(onevent, onerror, ref listening, ref stop, IntPtr.Zero);
 
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !cbool(running); count++) {
-            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(running) ? "running" : "pending");
+        for (int count = 0; count < 5 && !cbool(listening); count++) {
+            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(listening) ? "listening" : "pending");
             Thread.Sleep(delay);
         }
 
-        if (!cbool(running)) {
+        if (!cbool(listening)) {
             WriteLine("ERROR {0}", "failed to start event listener");
             return;
         }
@@ -885,14 +885,14 @@ public class examples {
 
         stop = 1;
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && cbool(running); count++) {
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(running) ? "running" : "stopped");
+        for (int count = 0; count < 5 && cbool(listening); count++) {
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(listening) ? "listening" : "stopped");
             Thread.Sleep(delay);
         }
 
         WriteLine("DEBUG ... waited");
 
-        if (cbool(running)) {
+        if (cbool(listening)) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 

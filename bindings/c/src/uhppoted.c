@@ -718,8 +718,8 @@ int restore_default_parameters(uint32_t controller) {
     return 0;
 }
 
-int listen_events(on_event handler, bool *running, bool *stop, on_error err_handler, void *userdata) {
-    int32_t err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler, userdata);
+int listen_events(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata) {
+    int32_t err = Listen(u, handler, (uint8_t *)listening, (uint8_t *)stop, err_handler, userdata);
     if (err != 0) {
         set_error("error starting event listener");
         return -1;

@@ -449,35 +449,35 @@ class Uhppote:
 
     # Ref. https://docs.python.org/3/library/ctypes.html#callback-functions
     # Ref. https://stackoverflow.com/questions/24912065/how-to-access-data-from-pointer-in-struct-from-python-with-ctypes
-    def listen_events(self, onevent, onerror, ev_running, ev_stop, userdata):
+    def listen_events(self, onevent, onerror, ev_listening, ev_stop, userdata):
         callback = on_event(lambda e, v: on_listen_event(onevent, e, v))
         err_handler = on_error(lambda v: on_listen_error(onerror, v))
-        running = c_bool(False)
+        listening = c_bool(False)
         stop = c_bool(False)
         p = None if userdata is None else pointer(ctypes.py_object(userdata))
 
         try:
-            self.ffi.Listen(self._uhppote, callback, byref(running), byref(stop), err_handler, p)
+            self.ffi.Listen(self._uhppote, callback, byref(listening), byref(stop), err_handler, p)
             count = 0
-            while (not running) and (count < 10):
+            while (not listening) and (count < 10):
                 print(f' ... waiting {count}')
                 count += 1
                 sleep(0.1)
 
-            if not running:
+            if not listening:
                 raise Exception(f'timeout starting event listener')
 
-            ev_running.set()
+            ev_listening.set()
             ev_stop.wait()
 
             stop = True
             count = 0
-            while running and (count < 10):
+            while listening and (count < 10):
                 print(f' ... stopping {count}')
                 count += 1
                 sleep(0.1)
 
-            if running:
+            if listening:
                 raise Exception(f'timeout stopping event listener')
         except Exception as err:
             raise Exception(f'event listener ({err})')

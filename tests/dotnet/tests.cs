@@ -586,18 +586,18 @@ public class Tests {
         };
 
         TimeSpan delay = TimeSpan.FromMilliseconds(100);
-        byte running = 0; // NTS because C# bool is not uint8_t
-        byte stop = 0;    // NTS because C# bool is not uint8_t
+        byte listening = 0; // NTS because C# bool is not uint8_t
+        byte stop = 0;      // NTS because C# bool is not uint8_t
         GCHandle handle = GCHandle.Alloc(testEvent);
 
-        u.ListenEvents(onevent, onerror, ref running, ref stop, (IntPtr)handle);
+        u.ListenEvents(onevent, onerror, ref listening, ref stop, (IntPtr)handle);
 
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !cbool(running); count++) {
+        for (int count = 0; count < 5 && !cbool(listening); count++) {
             Thread.Sleep(delay);
         }
 
-        if (!cbool(running)) {
+        if (!cbool(listening)) {
             WriteLine("ERROR {0}", "failed to start event listener");
             return;
         }
@@ -606,11 +606,11 @@ public class Tests {
 
         stop = 1;
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && cbool(running); count++) {
+        for (int count = 0; count < 5 && cbool(listening); count++) {
             Thread.Sleep(delay);
         }
 
-        if (cbool(running)) {
+        if (cbool(listening)) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 

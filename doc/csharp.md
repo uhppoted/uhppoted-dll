@@ -417,11 +417,11 @@ Throws a UhppotedException if the call failed.
 
 ### `Uhppoted::ListenEvents`
 ```
-public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop)
+public void ListenEvents(OnEvent on_event, OnError on_error, ref byte listening, ref byte stop)
 
 on_event   callback function invoked to process received events
 on_error   callback function to report event errors
-running    set to 'true' (1) when the listen function is initialised and listening
+listening  set to 'true' (1) when the listen function is initialised and listening
 stop       set to 'true' (1) by the parent function to terminate the listen function
 
 The callback functions are defined as:

@@ -84,7 +84,7 @@ void on_sigint(int signal) {
 }
 
 void listenEvents(uhppoted &u, int argc, char **argv) {
-    bool running = false;
+    bool listening = false;
     bool stop = false;
 
     // NTS: because can't use a lambda with a capture as a 'C' function pointer and std::function is
@@ -128,15 +128,15 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
         cout << " **** ERROR " << err << endl;
     };
 
-    u.listen(callback, &running, &stop, on_err, nullptr);
+    u.listen(callback, &listening, &stop, on_err, nullptr);
 
     sleep_for(milliseconds(1000));
-    for (int count = 0; count < 5 && !running; count++) {
-        cout << " ... waiting " << count << " " << (running ? "running" : "pending") << endl;
+    for (int count = 0; count < 5 && !listening; count++) {
+        cout << " ... waiting " << count << " " << (listening ? "listening" : "pending") << endl;
         sleep_for(milliseconds(1000));
     }
 
-    if (!running) {
+    if (!listening) {
         throw uhppoted_exception((char *)"failed to start event listener");
     }
 
@@ -147,12 +147,12 @@ void listenEvents(uhppoted &u, int argc, char **argv) {
 
     stop = true;
     sleep_for(milliseconds(1000));
-    for (int count = 0; count < 5 && running; count++) {
-        cout << " ... stoppping event listener " << count << " " << (running ? "running" : "stopped") << endl;
+    for (int count = 0; count < 5 && listening; count++) {
+        cout << " ... stoppping event listener " << count << " " << (listening ? "listening" : "stopped") << endl;
         sleep_for(milliseconds(1000));
     }
 
-    if (running) {
+    if (listening) {
         throw uhppoted_exception((char *)"failed to stop event listener");
     }
 }

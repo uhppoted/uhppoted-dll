@@ -53,7 +53,7 @@ bool recordSpecialEvents(uhppoted &u) {
 }
 
 bool listen(uhppoted &u) {
-    bool running = false;
+    bool listening = false;
     bool stop = false;
     vector<result> rs;
 
@@ -73,27 +73,27 @@ bool listen(uhppoted &u) {
         };
     };
 
-    u.listen(callback, &running, &stop, nullptr, &rs);
+    u.listen(callback, &listening, &stop, nullptr, &rs);
 
     sleep_for(chrono::milliseconds(100));
-    for (int count = 0; count < 5 && !running; count++) {
-        cout << " ... waiting " << count << " " << (running ? "running" : "pending") << endl;
+    for (int count = 0; count < 5 && !listening; count++) {
+        cout << " ... waiting " << count << " " << (listening ? "listening" : "pending") << endl;
         sleep_for(chrono::milliseconds(500));
     }
 
-    if (!running) {
+    if (!listening) {
         throw uhppoted_exception((char *)"failed to start event listener");
     }
 
     sleep_for(chrono::milliseconds(1000));
 
     stop = true;
-    for (int count = 0; count < 5 && running; count++) {
-        cout << " ... stoppping event listener " << count << " " << (running ? "running" : "stopped") << endl;
+    for (int count = 0; count < 5 && listening; count++) {
+        cout << " ... stoppping event listener " << count << " " << (listening ? "listening" : "stopped") << endl;
         sleep_for(chrono::milliseconds(100));
     }
 
-    if (running) {
+    if (listening) {
         throw uhppoted_exception((char *)"failed to stop event listener");
     }
 

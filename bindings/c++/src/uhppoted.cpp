@@ -609,8 +609,8 @@ void uhppoted::restore_default_parameters(uint32_t controller) {
     }
 }
 
-void uhppoted::listen(on_event handler, bool *running, bool *stop, on_error err_handler, void *userdata) {
-    int32_t err = Listen(u, handler, (uint8_t *)running, (uint8_t *)stop, err_handler, userdata);
+void uhppoted::listen(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata) {
+    int32_t err = Listen(u, handler, (uint8_t *)listening, (uint8_t *)stop, err_handler, userdata);
     if (err != 0) {
         throw uhppoted_exception((char *)"error starting event listener");
     }

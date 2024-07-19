@@ -498,7 +498,7 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
 // Listens for events and invokes a callback function.
 //
 //export Listen
-func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.onerror, userdata unsafe.Pointer) int32 {
+func Listen(u *C.struct_UHPPOTE, f C.onevent, listening *bool, stop *bool, g C.onerror, userdata unsafe.Pointer) int32 {
 	if uu, err := makeUHPPOTE(u); err != nil {
 		e := C.CString(err.Error())
 		C.dispatch_error(g, e)
@@ -520,9 +520,9 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 		//      slice, channel, and so forth, because they cannot be pinned with runtime.Pinner.
 		q := make(chan os.Signal, 1)
 
-		if running != nil {
+		if listening != nil {
 			go func() {
-				*running = true
+				*listening = true
 			}()
 		}
 
@@ -545,8 +545,8 @@ func Listen(u *C.struct_UHPPOTE, f C.onevent, running *bool, stop *bool, g C.one
 				C.free(unsafe.Pointer(e))
 			}
 
-			if running != nil {
-				*running = false
+			if listening != nil {
+				*listening = false
 			}
 		}()
 

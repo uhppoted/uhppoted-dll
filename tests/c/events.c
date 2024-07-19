@@ -82,7 +82,7 @@ bool recordSpecialEvents() {
 
 bool listen() {
     const char *tag = "listen";
-    bool running = false;
+    bool listening = false;
     bool stop = false;
     struct ListenEvent evt = {
         .controller = 0,
@@ -96,17 +96,17 @@ bool listen() {
         .reason = 0,
     };
 
-    if (listen_events(listen_on_event, &running, &stop, listen_on_error, &evt) < 0) {
+    if (listen_events(listen_on_event, &listening, &stop, listen_on_error, &evt) < 0) {
         printf("ERROR %s\n", "error starting event listener");
         return false;
     }
 
     sleep(1);
-    for (int count = 0; count < 5 && !running; count++) {
+    for (int count = 0; count < 5 && !listening; count++) {
         sleep(1);
     }
 
-    if (!running) {
+    if (!listening) {
         printf("ERROR %s\n", "failed to start event listener");
         return false;
     }
@@ -115,11 +115,11 @@ bool listen() {
 
     stop = true;
     sleep(1);
-    for (int count = 0; count < 5 && running; count++) {
+    for (int count = 0; count < 5 && listening; count++) {
         sleep(1);
     }
 
-    if (running) {
+    if (listening) {
         printf("ERROR %s\n", "failed to stop event listener");
         return false;
     }
