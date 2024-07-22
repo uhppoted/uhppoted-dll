@@ -583,10 +583,9 @@ namespace uhppoted
                 throw new UhppotedException("error listening for events");
             }
 
-        if (err != 0) {
-            throw new UhppotedException("error listening for events");
-        }
-
+            if (err != 0) {
+                throw new UhppotedException("error listening for events");
+            }
         }
 
         private void raise(IntPtr errmsg) {

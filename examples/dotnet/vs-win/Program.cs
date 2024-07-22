@@ -945,12 +945,17 @@ class UhppotedDLLCLI
         u.ListenEvents(onevent, onerror, ref listening, ref stop, IntPtr.Zero);
 
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !cbool(listening); count++) {
-            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(listening) ? "listening" : "pending");
+        for (int count = 0; count < 5; count++) {
+            if (Volatile.Read(ref listening) == 1) {
+                WriteLine("DEBUG ... listening");
+                break;
+            }
+
+            WriteLine("DEBUG ... waiting {0} {1}", count, "pending");
             Thread.Sleep(delay);
         }
 
-        if (!cbool(listening)) {
+        if (Volatile.Read(ref listening) != 1) {
             WriteLine("ERROR {0}", "failed to start event listener");
             return;
         }
@@ -959,16 +964,22 @@ class UhppotedDLLCLI
         done.WaitOne();
         WriteLine("DEBUG .. stopping");
 
-        stop = 1;
+        Volatile.Write(ref stop,1);
+
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && cbool(listening); count++) {
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(listening) ? "stopping" : "stopped");
+        for (int count = 0; count < 5; count++) {
+            if (Volatile.Read(ref listening) == 0) {
+                WriteLine("DEBUG ... stopped");
+                break;
+            }
+
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, "stopping");
             Thread.Sleep(delay);
         }
 
         WriteLine("DEBUG ... waited");
 
-        if (cbool(listening)) {
+        if (Volatile.Read(ref listening) != 0) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 

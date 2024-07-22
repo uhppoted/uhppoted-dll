@@ -12,23 +12,22 @@
       - [x] C++
       - [x] CCL
       - [ ] C#
-            - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/pinvoke
-            - [ ] run/stop should be volatile
-                  - VolatileRead/Write
-                  - https://learn.microsoft.com/en-us/dotnet/api/system.threading.thread?view=net-8.0
-                  - https://learn.microsoft.com/en-us/dotnet/standard/threading/using-threads-and-threading#how-to-stop-a-thread
+            - [x] Compile and test vs-mac
+            - [x] Copy vs-mac to vs-win
+            - [x] run/stop should be volatile (VolatileRead/Write)
             - [ ] Use ThreadCancellationToken
                   - https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-8.0
                   - https://learn.microsoft.com/en-us/dotnet/standard/threading/using-threads-and-threading#how-to-stop-a-thread
-            - [ ] Compile and test vs-mac
-            - [ ] Copy vs-mac to vs-win
-            - [ ] Use CallingConvention and [[MarshalAs(UnmanagedType.LPUTF8Str)] ]
-                  - https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
-                  - https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api
-                  - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.unmanagedtype?view=net-8.0
-                  - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.ptrtostringansi?view=net-8.0
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+
+- [ ] .NET
+      - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/pinvoke
+      - [ ] Use CallingConvention and [[MarshalAs(UnmanagedType.LPUTF8Str)] ]
+            - https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
+            - https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api
+            - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.unmanagedtype?view=net-8.0
+            - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.ptrtostringansi?view=net-8.0
 
 
 ## TODO
