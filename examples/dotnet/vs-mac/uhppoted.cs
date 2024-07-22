@@ -553,14 +553,14 @@ namespace uhppoted
             }
         }
 
-        public delegate void OnEvent(ListenEvent e);
+        public delegate void OnEvent(ListenEvent e, IntPtr userdata);
         public delegate void OnError(string err);
 
-        delegate void OnListenEvent(ref GoListenEvent e);
-        delegate void OnListenError(string err);
+        delegate void OnListenEvent([In] GoListenEvent e, IntPtr userdata);
+        delegate void OnListenError([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
-        public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
-            OnListenEvent onevent = (ref GoListenEvent e) => {
+        public void ListenEvents(OnEvent on_event, OnError on_error, ref byte listening, ref byte stop, IntPtr userdata) {
+            OnListenEvent onevent = ([In] GoListenEvent e, IntPtr userdata) => {
                 on_event(new ListenEvent(
                     e.controller,
                     e.timestamp,
@@ -570,17 +570,23 @@ namespace uhppoted
                     e.door,
                     e.direction,
                     e.card,
-                    e.reason));
+                    e.reason),
+                userdata);
             };
 
-            OnListenError onerror = (string err) => {
+            OnListenError onerror = ([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err) => {
                 on_error(err);
             };
 
-            int err = Listen(ref this.u, onevent, ref running, ref stop, onerror);
+            int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror, IntPtr.Zero);
             if (err != 0) {
                 throw new UhppotedException("error listening for events");
             }
+
+        if (err != 0) {
+            throw new UhppotedException("error listening for events");
+        }
+
         }
 
         private void raise(IntPtr errmsg) {
@@ -695,18 +701,21 @@ namespace uhppoted
         private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
 
         [DllImport("libuhppoted.dylib")]
-        private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx);
+        private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx, IntPtr userdata);
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct udevice {
             public uint ID;
             public string address;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct udevices {
             public uint N;
             public IntPtr devices; // array of udevice *
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct UHPPOTE {
             public string bind;
             public string broadcast;
@@ -717,6 +726,7 @@ namespace uhppoted
             public bool debug;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoDevice
         {
             public uint ID;
@@ -728,6 +738,7 @@ namespace uhppoted
             public string date;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoEvent
         {
             public string timestamp;
@@ -740,6 +751,7 @@ namespace uhppoted
             public byte reason;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoStatus
         {
             public uint ID;
@@ -754,12 +766,14 @@ namespace uhppoted
             public IntPtr evt;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoDoorControl
         {
             public byte control;
             public byte delay;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoCard
         {
             public uint cardNumber;
@@ -769,6 +783,7 @@ namespace uhppoted
             public uint PIN;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoTimeProfile
         {
             public byte ID;
@@ -790,6 +805,7 @@ namespace uhppoted
             public string segment3end;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoTask {
             public byte task;
             public byte door;
@@ -807,9 +823,10 @@ namespace uhppoted
         }
 
 #pragma warning disable 649 // assigned in DLL
+        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
         struct GoListenEvent {
             public uint controller;
-            public string timestamp;
+            [MarshalAs(UnmanagedType.LPUTF8Str)] public string timestamp;
             public uint index;
             public byte eventType;
             public byte granted;

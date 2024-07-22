@@ -919,7 +919,8 @@ class UhppotedDLLCLI
     }
 
     static void listen(Uhppoted u, ManualResetEvent done) {
-        Uhppoted.OnEvent onevent = (ListenEvent e) => {
+
+        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
             Console.WriteLine("-- EVENT");
             Console.WriteLine("   controller: {0}", e.controller);
             Console.WriteLine("   timestamp:  {0}", e.timestamp);
@@ -938,18 +939,18 @@ class UhppotedDLLCLI
         };
 
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
-        byte running = 0; // NTS because C# bool is not uint8_t
+        byte listening = 0; // NTS because C# bool is not uint8_t
         byte stop = 0;    // NTS because C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, ref running, ref stop);
+        u.ListenEvents(onevent, onerror, ref listening, ref stop, IntPtr.Zero);
 
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !cbool(running); count++) {
-            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(running) ? "running" : "pending");
+        for (int count = 0; count < 5 && !cbool(listening); count++) {
+            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(listening) ? "listening" : "pending");
             Thread.Sleep(delay);
         }
 
-        if (!cbool(running)) {
+        if (!cbool(listening)) {
             WriteLine("ERROR {0}", "failed to start event listener");
             return;
         }
@@ -960,14 +961,14 @@ class UhppotedDLLCLI
 
         stop = 1;
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && cbool(running); count++) {
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(running) ? "running" : "stopped");
+        for (int count = 0; count < 5 && cbool(listening); count++) {
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(listening) ? "stopping" : "stopped");
             Thread.Sleep(delay);
         }
 
         WriteLine("DEBUG ... waited");
 
-        if (cbool(running)) {
+        if (cbool(listening)) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 
