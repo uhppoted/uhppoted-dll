@@ -1,4 +1,5 @@
-﻿Imports System.Threading
+﻿Imports System.Net
+Imports System.Threading
 Imports uhppoted_dll_gui.uhppoted
 Imports uhppoted_dll_gui.uhppoted.Uhppoted
 
@@ -21,6 +22,25 @@ Public Class Uhppotegui
 
     Public Function GetControllers()
         Return u.GetDevices()
+    End Function
+
+    Private Function GetController(Controller As UInteger)
+        Dim output As String
+
+        Try
+            Dim device As Device = u.GetDevice(Controller)
+            output = "Get Controller: " & Controller & Environment.NewLine &
+                                   "address: " & device.address & Environment.NewLine &
+                                   "subnet mask: " & device.subnet & Environment.NewLine &
+                                   "gateway: " & device.gateway & Environment.NewLine &
+                                   "MAC: " & device.MAC & Environment.NewLine &
+                                   "version: " & device.version & Environment.NewLine &
+                                   "released: " & device.date
+        Catch ex As Exception
+            output = ex.Message
+        End Try
+
+        Return output
     End Function
 
     Private Shared Sub GetStatus(u As uhppoted.Uhppoted, Controller As UInteger)
@@ -57,6 +77,18 @@ Public Class Uhppotegui
                        "      reason    : " & Lookup.Find(Lookup.LOOKUP_EVENT_REASON, status.evt.reason)
 
         MsgBox(message)
+    End Sub
+
+    Private Sub OpenDoor(controller As UInteger, Door As Byte)
+        u.OpenDoor(controller, Door)
+    End Sub
+
+    Private Function GetListener(Controller As UInteger)
+        Return u.GetListener(Controller)
+    End Function
+
+    Private Sub SetListener(Controller As UInteger, IP As String)
+        u.SetListener(Controller, IP)
     End Sub
 
 #Region "Listener"
@@ -222,69 +254,76 @@ Public Class Uhppotegui
 #End Region
 #End Region
 
-    Private Sub Uhppotegui_Load(sender As Object, e As EventArgs) Handles Me.Load
+    Private Sub Uhppotegui_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Initialize uhppote
         InitUhppote()
     End Sub
 
-    Private Sub GetControllersBTN_Click(sender As Object, e As EventArgs) Handles GetControllersBTN.Click
-        Dim list As UInteger() = GetControllers()
-        For i As Integer = 0 To List.Length - 1
-            ControllerListBox.Items.Add(List(i))
-        Next
-    End Sub
-
     Private Sub GetControllerBTN_Click(sender As Object, e As EventArgs) Handles GetControllerBTN.Click
-        Dim controller As Integer
-        Dim str As String = InputBox("Enter Controller ID")
-        If Not String.IsNullOrWhiteSpace(str) Then
-            If Integer.TryParse(str, controller) Then
-                Try
-                    Dim device As uhppoted.Device = u.GetDevice(controller)
-                    Dim output As String = "Get Controller: " & controller & Environment.NewLine &
-                                           "address: " & device.address & Environment.NewLine &
-                                           "subnet mask: " & device.subnet & Environment.NewLine &
-                                           "gateway: " & device.gateway & Environment.NewLine &
-                                           "MAC: " & device.MAC & Environment.NewLine &
-                                           "version: " & device.version & Environment.NewLine &
-                                           "released: " & device.date
-                    MessageBox.Show(output)
-                Catch ex As Exception
-                    MessageBox.Show(ex.Message)
-                End Try
-            Else
-                MessageBox.Show("Please enter a valid Controller ID number.", "Invalid Input")
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As Integer
+            Dim str As String = InputBox("Enter Controller ID")
+            If Not String.IsNullOrWhiteSpace(str) Then
+                If Integer.TryParse(str, controller) Then
+                    MsgBox(GetController(controller))
+                Else
+                    MessageBox.Show("Please enter a valid Controller ID number.", "Invalid Input")
+                End If
             End If
+        Else
+            MsgBox(GetController(ControllerListBox.SelectedItem))
         End If
     End Sub
 
+    Private Sub GetControllersBTN_Click(sender As Object, e As EventArgs) Handles GetControllersBTN.Click
+        Dim list As UInteger() = GetControllers()
+        For i As Integer = 0 To list.Length - 1
+            ControllerListBox.Items.Add(list(i))
+        Next
+    End Sub
+
     Private Sub GetStatusBTN_Click(sender As Object, e As EventArgs) Handles GetStatusBTN.Click
-        Dim controller As Integer
-        Dim str As String = InputBox("Enter Controller ID")
-        If Not String.IsNullOrWhiteSpace(str) Then
-            If Integer.TryParse(str, controller) Then
-                GetStatus(u, controller)
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As Integer
+            Dim str As String = InputBox("Enter Controller ID")
+            If Not String.IsNullOrWhiteSpace(str) Then
+                If Integer.TryParse(str, controller) Then
+                    GetStatus(u, controller)
+                End If
             End If
+        Else
+            GetStatus(u, ControllerListBox.SelectedItem)
         End If
     End Sub
 
     Private Sub OpenDoorBTN_Click(sender As Object, e As EventArgs) Handles OpenDoorBTN.Click
-        Dim controller As Integer
         Dim Door As Integer
-        Dim str As String = InputBox("Enter Controller ID")
-        If Not String.IsNullOrWhiteSpace(str) Then
-            If Integer.TryParse(str, controller) Then
-                Dim str1 As String = InputBox("Enter Door number (between 1 and 4)")
-                If Not String.IsNullOrWhiteSpace(str1) Then
-                    If Integer.TryParse(str1, Door) Then
-                        u.OpenDoor(controller, Door)
-                    Else
-                        MessageBox.Show("Please enter a valid door number")
-                        Exit Sub
+
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As UInteger
+            Dim str As String = InputBox("Enter Controller ID")
+            If Not String.IsNullOrWhiteSpace(str) Then
+                If UInteger.TryParse(str, controller) Then
+                    Dim DoorSTR As String = InputBox("Enter Door number (between 1 and 4)")
+                    If Not String.IsNullOrWhiteSpace(DoorSTR) Then
+                        If Integer.TryParse(DoorSTR, Door) Then
+                            OpenDoor(controller, Door)
+                        Else
+                            MessageBox.Show("Please enter a valid door number")
+                            Exit Sub
+                        End If
                     End If
+                Else
+                    MessageBox.Show("Please enter a valid Controller ID")
+                    Exit Sub
                 End If
+            End If
+        Else
+            Dim DoorSTR As String = InputBox("Enter Door number (between 1 and 4)")
+            If Not String.IsNullOrWhiteSpace(DoorSTR) Then
+                If Integer.TryParse(DoorSTR, Door) Then OpenDoor(ControllerListBox.SelectedItem, Door)
             Else
-                MessageBox.Show("Please enter a valid Controller ID")
+                MessageBox.Show("Please enter a valid door number")
                 Exit Sub
             End If
         End If
@@ -306,4 +345,61 @@ Public Class Uhppotegui
         Dim f As New CardMgmtFRM
         f.ShowDialog()
     End Sub
+
+    Private Sub SetPCControlBTN_Click(sender As Object, e As EventArgs) Handles SetPCControlBTN.Click
+        MsgBox("Still working on this...")
+    End Sub
+
+    Private Sub GetLisenerBTN_Click(sender As Object, e As EventArgs) Handles GetLisenerBTN.Click
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As UInteger
+            Dim str As String = InputBox("Enter Controller ID")
+
+            If Not String.IsNullOrWhiteSpace(str) Then
+                If UInteger.TryParse(str, controller) Then
+                    MsgBox(GetListener(controller))
+                Else
+                    MessageBox.Show("Please enter a valid Controller ID")
+                    Exit Sub
+                End If
+            End If
+        Else
+            MsgBox(GetListener(ControllerListBox.SelectedItem))
+        End If
+    End Sub
+
+    Private Sub SetLisenerBTN_Click(sender As Object, e As EventArgs) Handles SetLisenerBTN.Click
+        ' I set here the port, but in uhppote-dll-cli (not the vb version) it's "IP:PORT" (eg. 192.168.1.121:60001)
+        Dim Port As String = ":60001"
+
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As UInteger
+            Dim str As String = InputBox("Enter Controller ID")
+            If UInteger.TryParse(str, controller) Then
+                Dim IPInput As String = InputBox("Enter Lisener IP address (eg. 192.168.1.121)")
+                If IsValidIPAddress(IPInput) Then
+                    SetListener(controller, IPInput & Port)
+                Else
+                    MsgBox("Please enter a valid IP address")
+                    Exit Sub
+                End If
+            Else
+                MessageBox.Show("Please enter a valid Controller ID")
+                Exit Sub
+            End If
+        Else
+            Dim IPInput As String = InputBox("Enter Lisener IP address (eg. 192.168.1.121)")
+            If IsValidIPAddress(IPInput) Then
+                SetListener(ControllerListBox.SelectedItem, IPInput & Port)
+            Else
+                MsgBox("Please enter a valid IP address")
+                Exit Sub
+            End If
+        End If
+    End Sub
+
+    Private Function IsValidIPAddress(ipString As String) As Boolean
+        Dim address As IPAddress = Nothing
+        Return IPAddress.TryParse(ipString, address)
+    End Function
 End Class

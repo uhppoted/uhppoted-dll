@@ -265,6 +265,7 @@ Partial Class CardMgmtFRM
         Controls.Add(AddCardBTN)
         Controls.Add(DataGridView1)
         Name = "CardMgmtFRM"
+        StartPosition = FormStartPosition.CenterScreen
         Text = "Card Management"
         CType(DataGridView1, ComponentModel.ISupportInitialize).EndInit()
         Panel1.ResumeLayout(False)

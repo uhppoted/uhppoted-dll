@@ -4,7 +4,7 @@
     <Compile Update="CardMgmtFRM.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="Uhppote-gui.vb">
+    <Compile Update="Uhppotegui.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
