@@ -1,19 +1,11 @@
 # TODO
 
 - [x] Rework to use preallocated strings and errors (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
-- [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
+- [x] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] Import event listener code from _main_
       - [x] Update vs-mac example
       - [x] Update vs-windows example
-      - [ ] LTSC
-            - Use CallingConvention
-            - Ref. https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
-            - Ref. https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api
-            - Ref. https://limbioliong.wordpress.com/2011/06/03/passing-structures-between-managed-and-unmanaged-code
-            - https://stackoverflow.com/questions/827672/how-do-i-marshal-a-structure-as-a-pointer-to-a-structure
-            - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/best-practices#guids
-            - https://github.com/dotnet/docs/blob/main/docs/standard/native-interop/best-practices.md
-            - https://limbioliong.wordpress.com/2011/11/01/using-the-stringbuilder-in-unmanaged-api-calls/
+      - [x] LTSC
 
 ## TODO
 
