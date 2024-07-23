@@ -733,7 +733,7 @@ namespace uhppoted {
         private delegate void OnListenEvent([In] ref GoListenEvent evt);
         private delegate void OnListenError([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
-        public void ListenEvents(OnEvent on_event, OnError on_error, ref byte running, ref byte stop) {
+        public void ListenEvents(OnEvent on_event, OnError on_error, CancellationToken token, ref byte listening) {
             OnListenEvent onevent = ([In] ref GoListenEvent e) => {
                 on_event(new ListenEvent(e.controller,
                                          e.timestamp,
@@ -750,10 +750,28 @@ namespace uhppoted {
                 on_error(err);
             };
 
-            int err = Listen(ref this.u, onevent, ref running, ref stop, onerror);
+            TimeSpan delay = TimeSpan.FromMilliseconds(100);
+            byte stop = 0; // NTS because C# bool is not uint8_t
+
+            token.Register(() => {
+                Volatile.Write(ref stop, 1);
+            });
+
+            int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror);
             if (err != 0) {
                 throw new UhppotedException("error listening for events");
             }
+
+            for (int count = 0; count < 5; count++) {
+                Thread.Sleep(delay);
+                if (Volatile.Read(ref listening) == 1) {
+                    return;
+                }
+
+                Console.WriteLine("DEBUG ... waiting {0} {1}", count, "stopping");
+            }
+
+            throw new UhppotedException("error starting event listener");
         }
 
         private void raise(IntPtr errmsg) {

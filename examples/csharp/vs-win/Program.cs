@@ -902,23 +902,26 @@ class UhppotedDLLCLI
 
     static void Listen(Uhppoted u, string[] args) {
         var exitEvent = new ManualResetEvent(false);
+        var cancel = new CancellationTokenSource();
+
         Console.CancelKeyPress += (sender, eventArgs) => {
             eventArgs.Cancel = true;
             exitEvent.Set();
         };
 
-        var thread = new Thread(() => listen(u, exitEvent));
+        var thread = new Thread(() => listen(u, cancel.Token));
         var timeout = TimeSpan.FromMilliseconds(2500);
 
         thread.IsBackground = true;
         thread.Start();
 
         exitEvent.WaitOne();
+        cancel.Cancel();
         WriteLine("DEBUG ... waiting for thread");
         thread.Join(timeout);
     }
 
-    static void listen(Uhppoted u, ManualResetEvent done) {
+    static void listen(Uhppoted u, CancellationToken done) {
         Uhppoted.OnEvent onevent = (ListenEvent e) => {
             Console.WriteLine("-- EVENT");
             Console.WriteLine("   controller: {0}", e.controller);
@@ -938,46 +941,35 @@ class UhppotedDLLCLI
         };
 
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
-        byte running = 0; // NTS because C# bool is not uint8_t
-        byte stop = 0;    // NTS because C# bool is not uint8_t
+        byte listening = 0; // NTS because C# bool is not uint8_t
+        CancellationTokenSource stop = new CancellationTokenSource();
 
-        u.ListenEvents(onevent, onerror, ref running, ref stop);
-
-        Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !cbool(running); count++) {
-            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(running) ? "running" : "pending");
-            Thread.Sleep(delay);
-        }
-
-        if (!cbool(running)) {
-            WriteLine("ERROR {0}", "failed to start event listener");
-            return;
-        }
+        u.ListenEvents(onevent, onerror, stop.Token, ref listening);
 
         WriteLine("INFO  ... listening");
-        done.WaitOne();
+        done.WaitHandle.WaitOne();
+        stop.Cancel();
         WriteLine("DEBUG .. stopping");
 
-        stop = 1;
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && cbool(running); count++) {
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(running) ? "running" : "stopped");
+        for (int count = 0; count < 5; count++) {
+            if (Volatile.Read(ref listening) == 0) {
+                WriteLine("DEBUG ... stopped");
+                break;
+            }
+
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, "stopping");
             Thread.Sleep(delay);
         }
 
         WriteLine("DEBUG ... waited");
 
-        if (cbool(running)) {
+        if (Volatile.Read(ref listening) != 0) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 
         WriteLine("DEBUG ... thread exit");
     }
-
-    static bool cbool(byte v) {
-        return v == 1;
-    }
-
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
     {
