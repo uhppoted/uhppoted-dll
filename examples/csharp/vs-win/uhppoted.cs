@@ -733,7 +733,7 @@ namespace uhppoted {
         private delegate void OnListenEvent([In] ref GoListenEvent evt);
         private delegate void OnListenError([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
-        public void ListenEvents(OnEvent on_event, OnError on_error, CancellationToken token, ref byte listening) {
+        public void ListenEvents(OnEvent on_event, OnError on_error, CancellationToken token, ManualResetEvent stopped) {
             OnListenEvent onevent = ([In] ref GoListenEvent e) => {
                 on_event(new ListenEvent(e.controller,
                                          e.timestamp,
@@ -751,10 +751,19 @@ namespace uhppoted {
             };
 
             TimeSpan delay = TimeSpan.FromMilliseconds(100);
-            byte stop = 0; // NTS because C# bool is not uint8_t
+            byte listening = 0; // NTS C# bool is not uint8_t
+            byte stop = 0;      // NTS C# bool is not uint8_t
 
             token.Register(() => {
                 Volatile.Write(ref stop, 1);
+
+                for (int count = 0; count < 5; count++) {
+                    Thread.Sleep(delay);
+                    if (Volatile.Read(ref listening) == 0) {
+                        stopped.Set();
+                        return;
+                    }
+                }
             });
 
             int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror);

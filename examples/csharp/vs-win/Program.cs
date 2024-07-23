@@ -917,7 +917,6 @@ class UhppotedDLLCLI
 
         exitEvent.WaitOne();
         cancel.Cancel();
-        WriteLine("DEBUG ... waiting for thread");
         thread.Join(timeout);
     }
 
@@ -940,35 +939,21 @@ class UhppotedDLLCLI
             Console.WriteLine("ERROR {0}", err);
         };
 
-        TimeSpan delay = TimeSpan.FromMilliseconds(1000);
-        byte listening = 0; // NTS because C# bool is not uint8_t
         CancellationTokenSource stop = new CancellationTokenSource();
+        ManualResetEvent stopped = new ManualResetEvent(false);
+        TimeSpan delay = TimeSpan.FromMilliseconds(1000);
 
-        u.ListenEvents(onevent, onerror, stop.Token, ref listening);
+        u.ListenEvents(onevent, onerror, stop.Token, stopped);
 
         WriteLine("INFO  ... listening");
         done.WaitHandle.WaitOne();
-        stop.Cancel();
+
         WriteLine("DEBUG .. stopping");
+        stop.Cancel();
 
-        Thread.Sleep(delay);
-        for (int count = 0; count < 5; count++) {
-            if (Volatile.Read(ref listening) == 0) {
-                WriteLine("DEBUG ... stopped");
-                break;
-            }
-
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, "stopping");
-            Thread.Sleep(delay);
+        if (!stopped.WaitOne(delay)) {
+            WriteLine("ERROR timeout waiting for event listener to terminate");            
         }
-
-        WriteLine("DEBUG ... waited");
-
-        if (Volatile.Read(ref listening) != 0) {
-            WriteLine("ERROR {0}", "failed to stop event listener");
-        }
-
-        WriteLine("DEBUG ... thread exit");
     }
 
     static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
