@@ -916,7 +916,6 @@ class UhppotedDLLCLI
 
         exitEvent.WaitOne();
         cancel.Cancel();
-        WriteLine("DEBUG ... waiting for thread");
         thread.Join(timeout);
     }
 
