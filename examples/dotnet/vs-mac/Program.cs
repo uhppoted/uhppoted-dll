@@ -920,57 +920,44 @@ class UhppotedDLLCLI
         thread.Join(timeout);
     }
 
-    static void listen(Uhppoted u, CancellationToken done) {
+    static void listen(Uhppoted u, CancellationToken done)
+    {
         Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
-            Console.WriteLine("-- EVENT");
-            Console.WriteLine("   controller: {0}", e.controller);
-            Console.WriteLine("   timestamp:  {0}", e.timestamp);
-            Console.WriteLine("   index:      {0}", e.index);
-            Console.WriteLine("   event:      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, e.eventType, LOCALE));
-            Console.WriteLine("   granted:    {0}", e.granted ? "yes" : "no");
-            Console.WriteLine("   door:       {0}", e.door);
-            Console.WriteLine("   direction:  {0}", lookup.find(lookup.LOOKUP_DIRECTION, e.direction, LOCALE));
-            Console.WriteLine("   card:       {0}", e.card);
-            Console.WriteLine("   reason:     {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, e.reason, LOCALE));
-            Console.WriteLine();
+            WriteLine("-- EVENT");
+            WriteLine("   controller: {0}", e.controller);
+            WriteLine("   timestamp:  {0}", e.timestamp);
+            WriteLine("   index:      {0}", e.index);
+            WriteLine("   event:      {0}", lookup.find(lookup.LOOKUP_EVENT_TYPE, e.eventType, LOCALE));
+            WriteLine("   granted:    {0}", e.granted ? "yes" : "no");
+            WriteLine("   door:       {0}", e.door);
+            WriteLine("   direction:  {0}", lookup.find(lookup.LOOKUP_DIRECTION, e.direction, LOCALE));
+            WriteLine("   card:       {0}", e.card);
+            WriteLine("   reason:     {0}", lookup.find(lookup.LOOKUP_EVENT_REASON, e.reason, LOCALE));
+            WriteLine();
         };
 
         Uhppoted.OnError onerror = (string err) => {
-            Console.WriteLine("ERROR {0}", err);
+            WriteLine("ERROR {0}", err);
         };
 
         CancellationTokenSource stop = new CancellationTokenSource();
+        ManualResetEvent stopped = new ManualResetEvent(false);
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
-        byte listening = 0; // NTS C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, stop.Token, ref listening, IntPtr.Zero);
+        u.ListenEvents(onevent, onerror, stop.Token, stopped, IntPtr.Zero);
 
         WriteLine("INFO  ... listening");
         done.WaitHandle.WaitOne();
         WriteLine("DEBUG .. stopping");
         stop.Cancel();
 
-        Thread.Sleep(delay);
-        for (int count = 0; count < 5; count++) {
-            if (Volatile.Read(ref listening) == 0) {
-                WriteLine("DEBUG ... stopped");
-                break;
-            }
-
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, "stopping");
-            Thread.Sleep(delay);
+        if (!stopped.WaitOne(delay)) {
+            WriteLine("ERROR timeout waiting for event listener to terminate");            
         }
-
-        WriteLine("DEBUG ... waited");
-
-        if (Volatile.Read(ref listening) != 0) {
-            WriteLine("ERROR {0}", "failed to stop event listener");
-        }
-
-        WriteLine("DEBUG ... thread exit");
     }
 
-    static UInt32 ParseArgs(string[] args, string option, UInt32 defval) {
+    static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
+    {
         int ix = 1;
         while (ix < args.Length)
         {
@@ -985,7 +972,8 @@ class UhppotedDLLCLI
         return defval;
     }
 
-    static byte ParseArgs(string[] args, string option, byte defval) {
+    static byte ParseArgs(string[] args, string option, byte defval)
+    {
         int ix = 1;
         while (ix < args.Length)
         {
@@ -1000,7 +988,8 @@ class UhppotedDLLCLI
         return defval;
     }
 
-    static string ParseArgs(string[] args, string option, string defval) {
+    static string ParseArgs(string[] args, string option, string defval)
+    {
         int ix = 1;
         while (ix < args.Length)
         {
@@ -1015,7 +1004,8 @@ class UhppotedDLLCLI
         return defval;
     }
 
-    static bool ParseArgs(string[] args, string option, bool defval) {
+    static bool ParseArgs(string[] args, string option, bool defval)
+    {
         int ix = 1;
         while (ix < args.Length)
         {
