@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
+- [x] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
       - [x] CHANGELOG
       - [x] README
       - [x] _userdata_
@@ -12,12 +12,6 @@
       - [x] C++
       - [x] CCL
       - [x] C#
-            - [x] Compile and test vs-mac
-            - [x] Copy vs-mac to vs-win
-            - [x] run/stop should be volatile (VolatileRead/Write)
-            - [x] Use ThreadCancellationToken
-            - [x] Use CallingConvention
-            - [x] Replace 'listening' byte flag with ManualResetEvent
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 
