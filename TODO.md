@@ -11,11 +11,13 @@
       - [x] Python
       - [x] C++
       - [x] CCL
-      - [x] C#
+      - [ ] C#
             - [x] Compile and test vs-mac
             - [x] Copy vs-mac to vs-win
             - [x] run/stop should be volatile (VolatileRead/Write)
             - [x] Use ThreadCancellationToken
+            - [x] Use CallingConvention
+            - [ ] Replace 'listening' byte flag with Event
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 
