@@ -11,13 +11,11 @@
       - [x] Python
       - [x] C++
       - [x] CCL
-      - [ ] C#
+      - [x] C#
             - [x] Compile and test vs-mac
             - [x] Copy vs-mac to vs-win
             - [x] run/stop should be volatile (VolatileRead/Write)
-            - [ ] Use ThreadCancellationToken
-                  - https://learn.microsoft.com/en-us/dotnet/api/system.threading.cancellationtoken?view=net-8.0
-                  - https://learn.microsoft.com/en-us/dotnet/standard/threading/using-threads-and-threading#how-to-stop-a-thread
+            - [x] Use ThreadCancellationToken
 
 - [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 

@@ -854,8 +854,7 @@ class UhppotedDLLCLI
         WriteLine(Format("   reader 4 {0}", reader4));
     }
 
-    static void SetDoorPasscodes(Uhppoted u, string[] args)
-    {
+    static void SetDoorPasscodes(Uhppoted u, string[] args) {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         byte door = ParseArgs(args, "--door", DOOR);
         string[] passcodes = ParseArgs(args, "--passcodes", "").Split(",");
@@ -891,8 +890,7 @@ class UhppotedDLLCLI
         WriteLine(Format("   passcode 4 {0}", passcode4));
     }
 
-    static void RestoreDefaultParameters(Uhppoted u, string[] args)
-    {
+    static void RestoreDefaultParameters(Uhppoted u, string[] args) {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
 
         u.RestoreDefaultParameters(controller);
@@ -901,25 +899,28 @@ class UhppotedDLLCLI
     }
 
     static void Listen(Uhppoted u, string[] args) {
-        var exitEvent = new ManualResetEvent(false);
+        ManualResetEvent exitEvent = new ManualResetEvent(false);
+        CancellationTokenSource cancel = new CancellationTokenSource();
+        CancellationToken token = cancel.Token;
+
         Console.CancelKeyPress += (sender, eventArgs) => {
             eventArgs.Cancel = true;
             exitEvent.Set();
         };
 
-        var thread = new Thread(() => listen(u, exitEvent));
+        var thread = new Thread(() => listen(u, token));
         var timeout = TimeSpan.FromMilliseconds(2500);
 
         thread.IsBackground = true;
         thread.Start();
 
         exitEvent.WaitOne();
+        cancel.Cancel();
         WriteLine("DEBUG ... waiting for thread");
         thread.Join(timeout);
     }
 
-    static void listen(Uhppoted u, ManualResetEvent done) {
-
+    static void listen(Uhppoted u, CancellationToken done) {
         Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
             Console.WriteLine("-- EVENT");
             Console.WriteLine("   controller: {0}", e.controller);
@@ -938,33 +939,16 @@ class UhppotedDLLCLI
             Console.WriteLine("ERROR {0}", err);
         };
 
+        CancellationTokenSource stop = new CancellationTokenSource();
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
-        byte listening = 0; // NTS because C# bool is not uint8_t
-        byte stop = 0;    // NTS because C# bool is not uint8_t
+        byte listening = 0; // NTS C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, ref listening, ref stop, IntPtr.Zero);
-
-        Thread.Sleep(delay);
-        for (int count = 0; count < 5; count++) {
-            if (Volatile.Read(ref listening) == 1) {
-                WriteLine("DEBUG ... listening");
-                break;
-            }
-
-            WriteLine("DEBUG ... waiting {0} {1}", count, "pending");
-            Thread.Sleep(delay);
-        }
-
-        if (Volatile.Read(ref listening) != 1) {
-            WriteLine("ERROR {0}", "failed to start event listener");
-            return;
-        }
+        u.ListenEvents(onevent, onerror, stop.Token, ref listening, IntPtr.Zero);
 
         WriteLine("INFO  ... listening");
-        done.WaitOne();
+        done.WaitHandle.WaitOne();
         WriteLine("DEBUG .. stopping");
-
-        Volatile.Write(ref stop,1);
+        stop.Cancel();
 
         Thread.Sleep(delay);
         for (int count = 0; count < 5; count++) {
@@ -986,13 +970,7 @@ class UhppotedDLLCLI
         WriteLine("DEBUG ... thread exit");
     }
 
-    static bool cbool(byte v) {
-        return v == 1;
-    }
-
-
-    static UInt32 ParseArgs(string[] args, string option, UInt32 defval)
-    {
+    static UInt32 ParseArgs(string[] args, string option, UInt32 defval) {
         int ix = 1;
         while (ix < args.Length)
         {
@@ -1007,8 +985,7 @@ class UhppotedDLLCLI
         return defval;
     }
 
-    static byte ParseArgs(string[] args, string option, byte defval)
-    {
+    static byte ParseArgs(string[] args, string option, byte defval) {
         int ix = 1;
         while (ix < args.Length)
         {
@@ -1023,8 +1000,7 @@ class UhppotedDLLCLI
         return defval;
     }
 
-    static string ParseArgs(string[] args, string option, string defval)
-    {
+    static string ParseArgs(string[] args, string option, string defval) {
         int ix = 1;
         while (ix < args.Length)
         {
@@ -1039,8 +1015,7 @@ class UhppotedDLLCLI
         return defval;
     }
 
-    static bool ParseArgs(string[] args, string option, bool defval)
-    {
+    static bool ParseArgs(string[] args, string option, bool defval) {
         int ix = 1;
         while (ix < args.Length)
         {
