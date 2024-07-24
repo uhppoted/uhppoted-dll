@@ -4,6 +4,12 @@
     <Compile Update="CardMgmtFRM.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="DoorControlFRM.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="SetAddressFRM.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Uhppotegui.vb">
       <SubType>Form</SubType>
     </Compile>

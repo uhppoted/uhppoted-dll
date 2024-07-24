@@ -40,10 +40,14 @@ Partial Class Uhppotegui
         card = New DataGridViewTextBoxColumn()
         reason = New DataGridViewTextBoxColumn()
         CardMgmtBTN = New Button()
-        SetPCControlBTN = New Button()
         OpenDoorBTN = New Button()
         GetLisenerBTN = New Button()
         SetLisenerBTN = New Button()
+        SetAddressBTN = New Button()
+        GetDoorControlBTN = New Button()
+        SetDoorControlBTN = New Button()
+        GetTimeBTN = New Button()
+        SetTimeBTN = New Button()
         CType(ListenDGV, ComponentModel.ISupportInitialize).BeginInit()
         SuspendLayout()
         ' 
@@ -85,7 +89,7 @@ Partial Class Uhppotegui
         ' 
         ' StartListenBTN
         ' 
-        StartListenBTN.Location = New Point(233, 12)
+        StartListenBTN.Location = New Point(93, 231)
         StartListenBTN.Name = "StartListenBTN"
         StartListenBTN.Size = New Size(75, 41)
         StartListenBTN.TabIndex = 4
@@ -94,7 +98,7 @@ Partial Class Uhppotegui
         ' 
         ' StopListenBTN
         ' 
-        StopListenBTN.Location = New Point(233, 59)
+        StopListenBTN.Location = New Point(93, 278)
         StopListenBTN.Name = "StopListenBTN"
         StopListenBTN.Size = New Size(75, 41)
         StopListenBTN.TabIndex = 5
@@ -103,7 +107,7 @@ Partial Class Uhppotegui
         ' 
         ' RichTextBox1
         ' 
-        RichTextBox1.Location = New Point(328, 12)
+        RichTextBox1.Location = New Point(188, 231)
         RichTextBox1.Name = "RichTextBox1"
         RichTextBox1.Size = New Size(168, 88)
         RichTextBox1.TabIndex = 6
@@ -116,7 +120,7 @@ Partial Class Uhppotegui
         ListenDGV.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
         ListenDGV.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize
         ListenDGV.Columns.AddRange(New DataGridViewColumn() {Controller, timestamp, index, eventclnm, granted, door, direction, card, reason})
-        ListenDGV.Location = New Point(233, 121)
+        ListenDGV.Location = New Point(12, 325)
         ListenDGV.Name = "ListenDGV"
         ListenDGV.ReadOnly = True
         ListenDGV.RowHeadersVisible = False
@@ -179,34 +183,25 @@ Partial Class Uhppotegui
         ' 
         ' CardMgmtBTN
         ' 
-        CardMgmtBTN.Location = New Point(568, 12)
+        CardMgmtBTN.Location = New Point(658, 12)
         CardMgmtBTN.Name = "CardMgmtBTN"
         CardMgmtBTN.Size = New Size(88, 41)
         CardMgmtBTN.TabIndex = 8
         CardMgmtBTN.Text = "Card Management"
         CardMgmtBTN.UseVisualStyleBackColor = True
         ' 
-        ' SetPCControlBTN
-        ' 
-        SetPCControlBTN.Location = New Point(683, 12)
-        SetPCControlBTN.Name = "SetPCControlBTN"
-        SetPCControlBTN.Size = New Size(75, 41)
-        SetPCControlBTN.TabIndex = 9
-        SetPCControlBTN.Text = "Set PC Control"
-        SetPCControlBTN.UseVisualStyleBackColor = True
-        ' 
         ' OpenDoorBTN
         ' 
-        OpenDoorBTN.Location = New Point(124, 59)
+        OpenDoorBTN.Location = New Point(334, 12)
         OpenDoorBTN.Name = "OpenDoorBTN"
-        OpenDoorBTN.Size = New Size(75, 40)
+        OpenDoorBTN.Size = New Size(75, 41)
         OpenDoorBTN.TabIndex = 10
         OpenDoorBTN.Text = "Open Door"
         OpenDoorBTN.UseVisualStyleBackColor = True
         ' 
         ' GetLisenerBTN
         ' 
-        GetLisenerBTN.Location = New Point(124, 105)
+        GetLisenerBTN.Location = New Point(124, 86)
         GetLisenerBTN.Name = "GetLisenerBTN"
         GetLisenerBTN.Size = New Size(75, 23)
         GetLisenerBTN.TabIndex = 11
@@ -215,22 +210,71 @@ Partial Class Uhppotegui
         ' 
         ' SetLisenerBTN
         ' 
-        SetLisenerBTN.Location = New Point(124, 134)
+        SetLisenerBTN.Location = New Point(124, 115)
         SetLisenerBTN.Name = "SetLisenerBTN"
         SetLisenerBTN.Size = New Size(75, 23)
         SetLisenerBTN.TabIndex = 12
         SetLisenerBTN.Text = "Set Lisener"
         SetLisenerBTN.UseVisualStyleBackColor = True
         ' 
+        ' SetAddressBTN
+        ' 
+        SetAddressBTN.Location = New Point(205, 13)
+        SetAddressBTN.Name = "SetAddressBTN"
+        SetAddressBTN.Size = New Size(75, 40)
+        SetAddressBTN.TabIndex = 13
+        SetAddressBTN.Text = "Set Address"
+        SetAddressBTN.UseVisualStyleBackColor = True
+        ' 
+        ' GetDoorControlBTN
+        ' 
+        GetDoorControlBTN.Location = New Point(415, 12)
+        GetDoorControlBTN.Name = "GetDoorControlBTN"
+        GetDoorControlBTN.Size = New Size(75, 41)
+        GetDoorControlBTN.TabIndex = 14
+        GetDoorControlBTN.Text = "Get Door Control"
+        GetDoorControlBTN.UseVisualStyleBackColor = True
+        ' 
+        ' SetDoorControlBTN
+        ' 
+        SetDoorControlBTN.Location = New Point(496, 12)
+        SetDoorControlBTN.Name = "SetDoorControlBTN"
+        SetDoorControlBTN.Size = New Size(75, 41)
+        SetDoorControlBTN.TabIndex = 15
+        SetDoorControlBTN.Text = "Set Door Control"
+        SetDoorControlBTN.UseVisualStyleBackColor = True
+        ' 
+        ' GetTimeBTN
+        ' 
+        GetTimeBTN.Location = New Point(205, 86)
+        GetTimeBTN.Name = "GetTimeBTN"
+        GetTimeBTN.Size = New Size(75, 23)
+        GetTimeBTN.TabIndex = 16
+        GetTimeBTN.Text = "Get Time"
+        GetTimeBTN.UseVisualStyleBackColor = True
+        ' 
+        ' SetTimeBTN
+        ' 
+        SetTimeBTN.Location = New Point(205, 115)
+        SetTimeBTN.Name = "SetTimeBTN"
+        SetTimeBTN.Size = New Size(75, 23)
+        SetTimeBTN.TabIndex = 17
+        SetTimeBTN.Text = "Set Time"
+        SetTimeBTN.UseVisualStyleBackColor = True
+        ' 
         ' Uhppotegui
         ' 
         AutoScaleDimensions = New SizeF(7F, 15F)
         AutoScaleMode = AutoScaleMode.Font
-        ClientSize = New Size(1162, 576)
+        ClientSize = New Size(944, 534)
+        Controls.Add(SetTimeBTN)
+        Controls.Add(GetTimeBTN)
+        Controls.Add(SetDoorControlBTN)
+        Controls.Add(GetDoorControlBTN)
+        Controls.Add(SetAddressBTN)
         Controls.Add(SetLisenerBTN)
         Controls.Add(GetLisenerBTN)
         Controls.Add(OpenDoorBTN)
-        Controls.Add(SetPCControlBTN)
         Controls.Add(CardMgmtBTN)
         Controls.Add(ListenDGV)
         Controls.Add(RichTextBox1)
@@ -265,9 +309,13 @@ Partial Class Uhppotegui
     Friend WithEvents card As DataGridViewTextBoxColumn
     Friend WithEvents reason As DataGridViewTextBoxColumn
     Friend WithEvents CardMgmtBTN As Button
-    Friend WithEvents SetPCControlBTN As Button
     Friend WithEvents OpenDoorBTN As Button
     Friend WithEvents GetLisenerBTN As Button
     Friend WithEvents SetLisenerBTN As Button
+    Friend WithEvents SetAddressBTN As Button
+    Friend WithEvents GetDoorControlBTN As Button
+    Friend WithEvents SetDoorControlBTN As Button
+    Friend WithEvents GetTimeBTN As Button
+    Friend WithEvents SetTimeBTN As Button
 
 End Class

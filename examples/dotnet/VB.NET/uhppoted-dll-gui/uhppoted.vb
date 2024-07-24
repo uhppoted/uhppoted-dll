@@ -1,5 +1,6 @@
 ﻿Imports System.Runtime.InteropServices
 Imports System.Text
+Imports System.Threading
 
 Namespace uhppoted
     Public Class Uhppoted
@@ -69,7 +70,7 @@ Namespace uhppoted
         End Function
 
         Public Function GetDevice(deviceID As UInteger) As Device
-            Dim errmsg = Marshal.AllocHGlobal(256)
+            Dim errmsg As IntPtr = Marshal.AllocHGlobal(256)
             Dim device As New GoDevice With {
                 .address = Marshal.AllocHGlobal(16),
                 .subnet = Marshal.AllocHGlobal(16),
@@ -80,17 +81,17 @@ Namespace uhppoted
             }
 
             Try
-                If GetDevice(u, device, deviceID, errmsg) <> 0 Then
+                If GetDevice(Me.u, device, deviceID, errmsg) <> 0 Then
                     Raise(errmsg)
                 End If
 
                 Dim ID As UInteger = device.ID
-                Dim address = Marshal.PtrToStringAnsi(device.address)
-                Dim netmask = Marshal.PtrToStringAnsi(device.subnet)
-                Dim gateway = Marshal.PtrToStringAnsi(device.gateway)
-                Dim MAC = Marshal.PtrToStringAnsi(device.MAC)
-                Dim version = Marshal.PtrToStringAnsi(device.version)
-                Dim [date] = Marshal.PtrToStringAnsi(device.[date])
+                Dim address As String = Marshal.PtrToStringAnsi(device.address)
+                Dim netmask As String = Marshal.PtrToStringAnsi(device.subnet)
+                Dim gateway As String = Marshal.PtrToStringAnsi(device.gateway)
+                Dim MAC As String = Marshal.PtrToStringAnsi(device.MAC)
+                Dim version As String = Marshal.PtrToStringAnsi(device.version)
+                Dim [date] As String = Marshal.PtrToStringAnsi(device.date)
 
                 Return New Device(ID, address, netmask, gateway, MAC, version, [date])
             Finally
@@ -99,7 +100,7 @@ Namespace uhppoted
                 Marshal.FreeHGlobal(device.gateway)
                 Marshal.FreeHGlobal(device.MAC)
                 Marshal.FreeHGlobal(device.version)
-                Marshal.FreeHGlobal(device.[date])
+                Marshal.FreeHGlobal(device.date)
 
                 Marshal.FreeHGlobal(errmsg)
             End Try
@@ -154,17 +155,18 @@ Namespace uhppoted
         End Function
 
         Public Function GetTime(deviceID As UInteger) As String
-            Dim errmsg As IntPtr = Marshal.AllocHGlobal(256)
-            Dim time As IntPtr = Marshal.AllocHGlobal(20)
+            Dim errmsg = Marshal.AllocHGlobal(256)
+            Dim time = Marshal.AllocHGlobal(20)
 
             Try
-
                 If GetTime(Me.u, time, deviceID, errmsg) <> 0 Then
                     Raise(errmsg)
                 End If
 
-                Dim datetime As Byte() = New Byte(19) {}
+                Dim datetime = New Byte(19) {}
+
                 Marshal.Copy(time, datetime, 0, 20)
+
                 Return Encoding.UTF8.GetString(datetime, 0, datetime.Length)
             Finally
                 Marshal.FreeHGlobal(time)
@@ -627,17 +629,43 @@ Namespace uhppoted
         Private Delegate Sub OnListenEvent(<[In]> ByRef evt As GoListenEvent)
         Private Delegate Sub OnListenError(<[In]> <MarshalAs(UnmanagedType.LPUTF8Str)> err As String)
 
-        Public Sub ListenEvents(on_event As OnEvent, on_error As OnError, ByRef running As Byte, ByRef [stop] As Byte)
-            Dim onevent As OnListenEvent = Sub(ByRef e) on_event(
-                New ListenEvent(e.controller, e.timestamp, e.index, e.eventType, e.granted = 1,
-                                e.door, e.direction, e.card, e.reason))
+        Public Sub ListenEvents(on_event As OnEvent, on_error As OnError, stopped As ManualResetEvent, token As CancellationToken)
+            Dim onevent As OnListenEvent = Sub(ByRef e) on_event(New ListenEvent(e.controller, e.timestamp, e.index, e.eventType,
+                                                                                 e.granted = 1, e.door, e.direction, e.card, e.reason))
 
             Dim onerror As OnListenError = Sub(err1) on_error(err1)
 
-            Dim err As Integer = Listen(Me.u, onevent, running, [stop], onerror)
+            Dim delay = TimeSpan.FromMilliseconds(100)
+            Dim listening As Byte = 0 ' NTS C# bool is not uint8_t
+            Dim [stop] As Byte = 0      ' NTS C# bool is not uint8_t
+
+            token.Register(Sub()
+                               Volatile.Write([stop], 1)
+
+                               For count = 0 To 4
+                                   Thread.Sleep(delay)
+                                   If Volatile.Read(listening) = 0 Then
+                                       stopped.Set()
+                                       Return
+                                   End If
+                               Next
+                           End Sub)
+
+            Dim err As Integer = Listen(Me.u, onevent, listening, [stop], onerror)
             If err <> 0 Then
                 Throw New UhppotedException("error listening for events")
             End If
+
+            For count = 0 To 4
+                Thread.Sleep(delay)
+                If Volatile.Read(listening) = 1 Then
+                    Return
+                End If
+
+                Console.WriteLine("DEBUG ... waiting {0} {1}", count, "stopping")
+            Next
+
+            Throw New UhppotedException("error starting event listener")
         End Sub
 
         Private Shared Sub Raise(errmsg As IntPtr)
@@ -655,123 +683,159 @@ Namespace uhppoted
         End Sub
 
 #Disable Warning CA2101
-        <DllImport("uhppoted.dll")>
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetDevices(ByRef u As UHPPOTE, ByRef N As Integer, list As UInteger(), errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetDevice(ByRef u As UHPPOTE, ByRef device As GoDevice, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetAddress(ByRef u As UHPPOTE, deviceID As UInteger, address As String, subnet As String, gateway As String, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetStatus(ByRef u As UHPPOTE, ByRef status As GoStatus, deviceID As UInteger, err As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetTime(ByRef u As UHPPOTE, datetime As IntPtr, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetTime(ByRef u As UHPPOTE, deviceID As UInteger, datetime As String, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetListener(ByRef u As UHPPOTE, listener As IntPtr, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetListener(ByRef u As UHPPOTE, deviceID As UInteger, listener As String, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetDoorControl(ByRef u As UHPPOTE, ByRef c As GoDoorControl, deviceID As UInteger, door As Byte, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetDoorControl(ByRef u As UHPPOTE, deviceID As UInteger, door As Byte, mode As Byte, delay As Byte, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function OpenDoor(ByRef u As UHPPOTE, deviceID As UInteger, door As Byte, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetCards(ByRef u As UHPPOTE, ByRef N As UInteger, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetCard(ByRef u As UHPPOTE, ByRef card As GoCard, deviceID As UInteger, cardNumber As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetCardByIndex(ByRef u As UHPPOTE, ByRef card As GoCard, deviceID As UInteger, index As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function PutCard(ByRef u As UHPPOTE, deviceID As UInteger, cardNumber As UInteger, from As String, [to] As String, doors As Byte(), PIN As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function DeleteCard(ByRef u As UHPPOTE, deviceID As UInteger, cardNumber As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function DeleteCards(ByRef u As UHPPOTE, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetEventIndex(ByRef u As UHPPOTE, ByRef index As UInteger, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetEventIndex(ByRef u As UHPPOTE, deviceID As UInteger, index As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetEvent(ByRef u As UHPPOTE, ByRef evt As GoEvent, deviceID As UInteger, index As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function RecordSpecialEvents(ByRef u As UHPPOTE, deviceID As UInteger, enabled As Boolean, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function GetTimeProfile(ByRef u As UHPPOTE, ByRef profile As GoGetTimeProfile, deviceID As UInteger, profileID As Byte, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetTimeProfile(ByRef u As UHPPOTE, deviceID As UInteger, ByRef profile As GoSetTimeProfile, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function ClearTimeProfiles(ByRef u As UHPPOTE, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function AddTask(ByRef u As UHPPOTE, deviceID As UInteger, ByRef task As GoTask, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function RefreshTaskList(ByRef u As UHPPOTE, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function ClearTaskList(ByRef u As UHPPOTE, deviceID As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetPCControl(ByRef u As UHPPOTE, deviceID As UInteger, enabled As Boolean, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetInterlock(ByRef u As UHPPOTE, deviceID As UInteger, interlock As Byte, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function ActivateKeypads(ByRef u As UHPPOTE, deviceID As UInteger, reader1 As Boolean, reader2 As Boolean, reader3 As Boolean, reader4 As Boolean, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function SetDoorPasscodes(ByRef u As UHPPOTE, deviceID As UInteger, door As Byte, passcode1 As UInteger, passcode2 As UInteger, passcode3 As UInteger, passcode4 As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function RestoreDefaultParameters(ByRef u As UHPPOTE, controller As UInteger, errmsg As IntPtr) As Integer
         End Function
-        <DllImport("uhppoted.dll")>
+
+        <DllImport("uhppoted.dll", CallingConvention:=CallingConvention.Cdecl, CharSet:=CharSet.Ansi)>
         Private Shared Function Listen(ByRef u As UHPPOTE, handler As OnListenEvent, ByRef running As Byte, ByRef [stop] As Byte, errx As OnListenError) As Integer
         End Function
 #Enable Warning CA2101
 
-        Structure Udevice
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure Udevice
             Public ID As UInteger
             Public address As String
         End Structure
 
-        Structure Udevices
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure Udevices
             Public N As UInteger
-            Public devices As IntPtr
+            Public devices As IntPtr ' array of udevice *
         End Structure
 
-        Structure UHPPOTE
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure UHPPOTE
             Public bind As String
             Public broadcast As String
             Public listen As String
-            Public timeout As Integer
-            Public devices As IntPtr
+            Public timeout As Integer    ' seconds, defaults to 5 if <= 0
+            Public devices As IntPtr ' udevices * (optional list of non-local controller
+            ' ID + address pairs)
             Public debug As Boolean
         End Structure
 
@@ -786,7 +850,8 @@ Namespace uhppoted
             Public [date] As IntPtr
         End Structure
 
-        Structure GoEvent
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure GoEvent
             Public timestamp As IntPtr
             Public index As UInteger
             Public eventType As Byte
@@ -797,7 +862,8 @@ Namespace uhppoted
             Public reason As Byte
         End Structure
 
-        Structure GoStatus
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure GoStatus
             Public ID As UInteger
             Public sysdatetime As IntPtr
             Public doors As IntPtr
@@ -817,20 +883,23 @@ Namespace uhppoted
             Public eventReason As Byte
         End Structure
 
-        Structure GoDoorControl
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure GoDoorControl
             Public control As Byte
             Public delay As Byte
         End Structure
 
-        Structure GoCard
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure GoCard
             Public cardNumber As UInteger
-            Public [from] As IntPtr
+            Public from As IntPtr
             Public [to] As IntPtr
             Public doors As IntPtr
             Public PIN As UInteger
         End Structure
 
-        Structure GoGetTimeProfile
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure GoGetTimeProfile
             Public ID As Byte
             Public linked As Byte
             Public from As IntPtr
@@ -850,7 +919,8 @@ Namespace uhppoted
             Public segment3end As IntPtr
         End Structure
 
-        Structure GoSetTimeProfile
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure GoSetTimeProfile
             Public ID As Byte
             Public linked As Byte
             Public from As String
@@ -870,7 +940,8 @@ Namespace uhppoted
             Public segment3end As String
         End Structure
 
-        Structure GoTask
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
+        Friend Structure GoTask
             Public task As Byte
             Public door As Byte
             Public from As String
@@ -886,6 +957,7 @@ Namespace uhppoted
             Public cards As Byte
         End Structure
 
+        <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)>
         Friend Structure GoListenEvent
             Public controller As UInteger
             <MarshalAs(UnmanagedType.LPUTF8Str)>

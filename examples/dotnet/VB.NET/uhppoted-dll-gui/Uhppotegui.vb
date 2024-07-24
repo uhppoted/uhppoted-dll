@@ -91,11 +91,77 @@ Public Class Uhppotegui
         u.SetListener(Controller, IP)
     End Sub
 
+    Public Sub SetAddress(Controller As UInteger, Address As String, Netmask As String, Gateway As String)
+        Try
+            u.SetAddress(Controller, Address, Netmask, Gateway)
+
+            MsgBox("set-address: " & Controller & Environment.NewLine & "IP Address: " & Address & Environment.NewLine &
+                   "Subnet Mask: " & Netmask & Environment.NewLine & "Gateway: " & Gateway)
+        Catch ex As Exception
+            MsgBox(ex.Message)
+        End Try
+    End Sub
+
+    Private Function GetTime(Controller As UInteger)
+        Try
+            Dim ControllerTime As String = u.GetTime(Controller)
+
+            Return "get-time: " & Controller & Environment.NewLine & "date/time: " & ControllerTime
+        Catch ex As Exception
+            Return ex.Message
+        End Try
+    End Function
+
+    Private Function SetTime(Controller As UInteger)
+        Try
+            Dim OldTime As String = u.GetTime(Controller)
+
+            Dim time As String = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            u.SetTime(Controller, time)
+
+            Return "set-time: " & Controller & Environment.NewLine & "Old time: " & OldTime & Environment.NewLine & "New time: " & time
+        Catch ex As Exception
+            Return ex.Message
+        End Try
+    End Function
+
+    Private Function GetDoorControl(Controller As UInteger, Door As Byte)
+        Try
+            Dim control As DoorControl = u.GetDoorControl(Controller, Door)
+
+            Return "get-door-control: " & Controller & Environment.NewLine & "Door: : " & Door & Environment.NewLine &
+                "Mode: " & Lookup.Find(Lookup.LOOKUP_MODE, control.mode)
+        Catch ex As Exception
+            Return ex.Message
+        End Try
+    End Function
+
+    Public Function SetDoorControl(Controller As UInteger, Door As Byte, mode As String, delay As Byte)
+        Try
+            Select Case mode
+                Case "controlled"
+                    u.SetDoorControl(Controller, Door, DoorMode.Controlled, delay)
+                Case "normally-open"
+                    u.SetDoorControl(Controller, Door, DoorMode.NormallyOpen, delay)
+                Case "normally-closed"
+                    u.SetDoorControl(Controller, Door, DoorMode.NormallyClosed, delay)
+                Case Else
+                    Throw New ArgumentException(Format("Unknown door mode {0}", mode))
+            End Select
+            Return "set-door-control: " & Controller & Environment.NewLine & "Door: " & Door & Environment.NewLine &
+                "Mode" & mode & Environment.NewLine & "Delay: " & delay
+        Catch ex As Exception
+            Return ex.Message
+        End Try
+    End Function
+
 #Region "Listener"
     Dim ListenThread As Thread
+    Dim thread As Thread
     Dim exitEvent As ManualResetEvent
+    Dim cancel As CancellationTokenSource
 
-    Private Sub Listen(u As uhppoted.Uhppoted, done As ManualResetEvent)
+    Private Sub Listen(u As uhppoted.Uhppoted, done As CancellationToken) 'ManualResetEvent) 'CancellationToken)
         Dim onevent As OnEvent = Sub(e As ListenEvent)
                                      ''Send incoming data to textbox
                                      ''I'm leaving this here as an option
@@ -117,49 +183,24 @@ Public Class Uhppotegui
                                             e.card, Lookup.Find(Lookup.LOOKUP_EVENT_REASON, e.reason))
                                  End Sub
 
-        Dim onerror As OnError = Sub(err As String) WTT("ERROR: " & err)
+        Dim onerror As OnError = Sub(err As String) Console.WriteLine("ERROR {0}", err)
 
+        Dim [stop] As New CancellationTokenSource()
+        Dim stopped As New ManualResetEvent(False)
         Dim delay = TimeSpan.FromMilliseconds(1000)
-        Dim running As Byte = 0 ' NTS because C# bool is not uint8_t
-        Dim [stop] As Byte = 0    ' NTS because C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, running, [stop])
-
-        Thread.Sleep(delay)
-        Dim count = 0
-
-        While count < 5 AndAlso Not [CBool](running)
-            WTT("DEBUG ... waiting " & count & " " & If([CBool](running), "running", "pending"))
-            Thread.Sleep(delay)
-            count += 1
-        End While
-
-        If Not [CBool](running) Then
-            WTT("ERROR failed to start event listener")
-            Return
-        End If
+        u.ListenEvents(onevent, onerror, stopped, [stop].Token)
 
         WTT("INFO  ... listening")
-        done.WaitOne()
+        done.WaitHandle.WaitOne()
+        'done.WaitOne()
+
         WTT("DEBUG .. stopping")
+        [stop].Cancel()
 
-        [stop] = 1
-        Thread.Sleep(delay)
-        Dim count1 = 0
-
-        While count1 < 5 AndAlso [CBool](running)
-            WTT("DEBUG ... stoppping event listener " & count1 & " " & If([CBool](running), "running", "stopped"))
-            Thread.Sleep(delay)
-            count1 += 1
-        End While
-
-        WTT("DEBUG ... waited")
-
-        If [CBool](running) Then
-            WTT("ERROR failed to stop event listener")
+        If Not stopped.WaitOne(delay) Then
+            WTT("ERROR timeout waiting for event listener to terminate")
         End If
-
-        WTT("DEBUG ... thread exit")
     End Sub
 
     Shared Function [CBool](v As Byte) As Boolean
@@ -261,10 +302,10 @@ Public Class Uhppotegui
 
     Private Sub GetControllerBTN_Click(sender As Object, e As EventArgs) Handles GetControllerBTN.Click
         If ControllerListBox.SelectedItem = Nothing Then
-            Dim controller As Integer
+            Dim controller As UInteger
             Dim str As String = InputBox("Enter Controller ID")
             If Not String.IsNullOrWhiteSpace(str) Then
-                If Integer.TryParse(str, controller) Then
+                If UInteger.TryParse(str, controller) Then
                     MsgBox(GetController(controller))
                 Else
                     MessageBox.Show("Please enter a valid Controller ID number.", "Invalid Input")
@@ -284,10 +325,10 @@ Public Class Uhppotegui
 
     Private Sub GetStatusBTN_Click(sender As Object, e As EventArgs) Handles GetStatusBTN.Click
         If ControllerListBox.SelectedItem = Nothing Then
-            Dim controller As Integer
+            Dim controller As UInteger
             Dim str As String = InputBox("Enter Controller ID")
             If Not String.IsNullOrWhiteSpace(str) Then
-                If Integer.TryParse(str, controller) Then
+                If UInteger.TryParse(str, controller) Then
                     GetStatus(u, controller)
                 End If
             End If
@@ -333,21 +374,23 @@ Public Class Uhppotegui
         RichTextBox1.Clear()
 
         exitEvent = New ManualResetEvent(False)
-        ListenThread = New Thread(Sub() Listen(u, exitEvent)) With {.IsBackground = True}
-        ListenThread.Start()
+        cancel = New CancellationTokenSource
+
+        thread = New Thread(Sub() Listen(u, cancel.Token)) With {.IsBackground = True}
+        thread.Start()
     End Sub
 
     Private Sub StopListenBTN_Click(sender As Object, e As EventArgs) Handles StopListenBTN.Click
         exitEvent.Set()
+        cancel.Cancel()
+
+        Dim timeout = TimeSpan.FromMilliseconds(2500)
+        thread.Join(Timeout)
     End Sub
 
     Private Sub CardMgmtBTN_Click(sender As Object, e As EventArgs) Handles CardMgmtBTN.Click
         Dim f As New CardMgmtFRM
         f.ShowDialog()
-    End Sub
-
-    Private Sub SetPCControlBTN_Click(sender As Object, e As EventArgs) Handles SetPCControlBTN.Click
-        MsgBox("Still working on this...")
     End Sub
 
     Private Sub GetLisenerBTN_Click(sender As Object, e As EventArgs) Handles GetLisenerBTN.Click
@@ -402,4 +445,75 @@ Public Class Uhppotegui
         Dim address As IPAddress = Nothing
         Return IPAddress.TryParse(ipString, address)
     End Function
+
+    Private Sub SetAddressBTN_Click(sender As Object, e As EventArgs) Handles SetAddressBTN.Click
+        Dim f As New SetAddressFRM
+        f.ShowDialog()
+    End Sub
+
+    Private Sub GetDoorControlBTN_Click(sender As Object, e As EventArgs) Handles GetDoorControlBTN.Click
+        Dim Door As Integer
+
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As UInteger
+            Dim str As String = InputBox("Enter Controller ID")
+            If Not String.IsNullOrWhiteSpace(str) Then
+                If UInteger.TryParse(str, controller) Then
+                    Dim DoorSTR As String = InputBox("Enter Door number (between 1 and 4)")
+                    If Not String.IsNullOrWhiteSpace(DoorSTR) Then
+                        If Integer.TryParse(DoorSTR, Door) Then
+                            MsgBox(GetDoorControl(controller, Door))
+                        Else
+                            MessageBox.Show("Please enter a valid door number")
+                            Exit Sub
+                        End If
+                    End If
+                Else
+                    MessageBox.Show("Please enter a valid Controller ID")
+                    Exit Sub
+                End If
+            End If
+        Else
+            Dim DoorSTR As String = InputBox("Enter Door number (between 1 and 4)")
+            If Not String.IsNullOrWhiteSpace(DoorSTR) Then
+                If Integer.TryParse(DoorSTR, Door) Then MsgBox(GetDoorControl(ControllerListBox.SelectedItem, Door))
+            Else
+                MessageBox.Show("Please enter a valid door number")
+                Exit Sub
+            End If
+        End If
+    End Sub
+
+    Private Sub SetDoorControlBTN_Click(sender As Object, e As EventArgs) Handles SetDoorControlBTN.Click
+        Dim f As New DoorControlFRM
+        f.ShowDialog()
+    End Sub
+
+    Private Sub GetTimeBTN_Click(sender As Object, e As EventArgs) Handles GetTimeBTN.Click
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As UInteger
+            Dim str As String = InputBox("Enter Controller ID")
+            If Not String.IsNullOrWhiteSpace(str) Then
+                If UInteger.TryParse(str, controller) Then
+                    MsgBox(GetTime(controller))
+                End If
+            End If
+        Else
+            MsgBox(GetTime(ControllerListBox.SelectedItem))
+        End If
+    End Sub
+
+    Private Sub SetTimeBTN_Click(sender As Object, e As EventArgs) Handles SetTimeBTN.Click
+        If ControllerListBox.SelectedItem = Nothing Then
+            Dim controller As UInteger
+            Dim str As String = InputBox("Enter Controller ID")
+            If Not String.IsNullOrWhiteSpace(str) Then
+                If UInteger.TryParse(str, controller) Then
+                    MsgBox(SetTime(controller))
+                End If
+            End If
+        Else
+            MsgBox(SetTime(ControllerListBox.SelectedItem))
+        End If
+    End Sub
 End Class
