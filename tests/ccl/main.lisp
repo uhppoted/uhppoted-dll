@@ -6,8 +6,8 @@
 
 
 (defun commands () "Returns a list of the commands and their associated functions"
-  (list '("get-devices"                tests:get-devices)
-        '("get-device"                 tests:get-device)
+  (list '("get-controllers"            tests:get-controllers)
+        '("get-controller"             tests:get-controller)
         '("set-address"                tests:set-address)
         '("get-status"                 tests:get-status)
         '("get-status-no-event"        tests:get-status-no-event)

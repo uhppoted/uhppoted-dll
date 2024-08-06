@@ -5,8 +5,8 @@
 #include "tests.h"
 #include "uhppoted.h"
 
-bool getDevices() {
-    const char *tag = "get-devices";
+bool getControllers() {
+    const char *tag = "get-controllers";
     uint32_t *devices = NULL;
     int N;
 
@@ -31,8 +31,8 @@ bool getDevices() {
     return ok;
 }
 
-bool getDevice() {
-    const char *tag = "get-device";
+bool getController() {
+    const char *tag = "get-controller";
     struct device d;
 
     if (get_device(DEVICE_ID, &d) != 0) {

@@ -30,11 +30,11 @@ help: build
 invalid: build
 	$(GO) && $(DLL) && $(CMD) mystery-meat
 
-get-devices: build
-	$(GO) && $(DLL) && $(CMD) get-devices
+get-controllers: build
+	$(GO) && $(DLL) && $(CMD) get-controllers
 
-get-device: build
-	$(GO) && $(DLL) && $(CMD) get-device
+get-controller: build
+	$(GO) && $(DLL) && $(CMD) get-controller
 
 set-address: build
 	$(GO) && $(DLL) && $(CMD) set-address

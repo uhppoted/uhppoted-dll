@@ -24,27 +24,27 @@
               :broadcast-addr "255.255.255.255"
               :listen-addr    "0.0.0.0:60001"
               :timeout        2500
-              :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+              :controllers    (list '(405419896 "192.168.1.100" "tcp") '(303986753 "192.168.1.100"))
               :debug          T)))
 
 
-(defun get-devices () "" 
+(defun get-controllers () "" 
   (let ((devices (exec #'(lambda (u) (uhppoted-get-devices u)))))
-    (evaluate "get-devices" 
+    (evaluate "get-controllers" 
               (list (make-result :field "device count" :expected 3                                :value (length devices))
                     (make-result :field "device list"  :expected '(201020304 303986753 405419896) :value (coerce devices 'list))))))
 
 
-(defun get-device () "" 
-  (let ((device (exec #'(lambda (u) (uhppoted-get-device u TEST-DEVICE-ID)))))
-    (evaluate "get-device" 
-              (list (make-result :field "device ID"              :expected 405419896           :value (device-id      device))
-                    (make-result :field "device address"         :expected "192.168.1.101"     :value (device-address device))
-                    (make-result :field "device subnet mask"     :expected "255.255.255.0"     :value (device-subnet  device))
-                    (make-result :field "device gateway address" :expected "192.168.1.1"       :value (device-gateway device))
-                    (make-result :field "device MAC address"     :expected "00:12:23:34:45:56" :value (device-MAC     device))
-                    (make-result :field "device version"         :expected "v8.92"             :value (device-version device))
-                    (make-result :field "device date"            :expected "2018-11-05"        :value (device-date    device))))))
+(defun get-controller () "" 
+  (let ((controller (exec #'(lambda (u) (uhppoted-get-device u TEST-DEVICE-ID)))))
+    (evaluate "get-controller" 
+              (list (make-result :field "controller ID"              :expected 405419896           :value (device-id      controller))
+                    (make-result :field "controller address"         :expected "192.168.1.101"     :value (device-address controller))
+                    (make-result :field "controller subnet mask"     :expected "255.255.255.0"     :value (device-subnet  controller))
+                    (make-result :field "controller gateway address" :expected "192.168.1.1"       :value (device-gateway controller))
+                    (make-result :field "controller MAC address"     :expected "00:12:23:34:45:56" :value (device-MAC     controller))
+                    (make-result :field "controller version"         :expected "v8.92"             :value (device-version controller))
+                    (make-result :field "controller date"            :expected "2018-11-05"        :value (device-date    controller))))))
 
 
 (defun set-address () "" 

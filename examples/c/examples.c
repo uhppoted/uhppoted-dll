@@ -28,14 +28,14 @@ typedef struct command {
 
 const command commands[] = {
     {
-        .cmd = "get-devices",
+        .cmd = "get-controllers",
         .help = "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
-        .fn = getDevices,
+        .fn = getControllers,
     },
     {
-        .cmd = "get-device",
-        .help = "Retrieves the basic device information for a single UHPPOTE controller.",
-        .fn = getDevice,
+        .cmd = "get-controller",
+        .help = "Retrieves the basic controller information for a single UHPPOTE controller.",
+        .fn = getController,
     },
     {
         .cmd = "set-address",
@@ -194,7 +194,7 @@ const command commands[] = {
     },
 };
 
-controller alpha = {.id = 405419896, .address = "192.168.1.100"};
+controller alpha = {.id = 405419896, .address = "192.168.1.100", .transport = "tcp"};
 controller beta = {.id = 303986753, .address = "192.168.1.100"};
 
 int main(int argc, char **argv) {

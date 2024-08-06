@@ -44,13 +44,13 @@ LOCALE = ""
 
 def commands():
     return {
-        'get-devices': {
+        'get-controllers': {
             'help': "Retrieves a list of UHPPOTE controller IDs findable on the local LAN",
-            'fn': get_devices,
+            'fn': get_controllers,
         },
-        'get-device': {
-            'help': "Retrieves the basic device information for a single UHPPOTE controller",
-            'fn': get_device,
+        'get-controller': {
+            'help': "Retrieves the basic controller information for a single UHPPOTE controller",
+            'fn': get_controller,
         },
         'set-address': {
             'help': "Sets the controller IPv4 address, subnet mask and gateway address",
@@ -187,17 +187,11 @@ def main():
     parser = argparse.ArgumentParser(description='uhppoted-dll examples')
 
     parser.add_argument('command', type=str, help='command')
-
     parser.add_argument('--controller', type=int, default=DEVICE_ID, help='controller serial number')
-
     parser.add_argument('--interlock', type=int, default=1, help='controller door interlock')
-
     parser.add_argument('--ip-address', type=str, default='192.168.1.100', help='controller IP address')
-
     parser.add_argument('--subnet-mask', type=str, default='255.255.255.0', help='controller subnet mask')
-
     parser.add_argument('--gateway-address', type=str, default='192.168.1.5', help='controller gateway address')
-
     parser.add_argument('--listener-address',
                         type=str,
                         default='192.168.1.100:60001',
@@ -223,7 +217,7 @@ def main():
         timeout = 2500
         debug = True
         controllers = [
-            uhppoted.Controller(405419896, '192.168.1.100'),
+            uhppoted.Controller(405419896, '192.168.1.100', 'tcp'),
             uhppoted.Controller(303986753, '192.168.1.100'),
         ]
 
@@ -270,22 +264,22 @@ def help():
     print()
 
 
-def get_devices(u, args):
+def get_controllers(u, args):
     list = u.get_devices()
 
     fields = []
     for id in list:
         fields.append(('', id))
 
-    display(f'get-devices({len(list)})', fields)
+    display(f'get-controllers({len(list)})', fields)
 
 
-def get_device(u, args):
+def get_controller(u, args):
     device_id = args.controller
 
     info = u.get_device(device_id)
 
-    display('get-device', [
+    display('get-controller', [
         ('ID', device_id),
         ('IP address', info.address),
         ('subnet mask', info.subnet),

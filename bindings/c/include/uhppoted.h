@@ -14,6 +14,7 @@ extern const char *LOOKUP_EVENT_REASON;
 typedef struct controller {
     uint32_t id;
     const char *address;
+    const char *transport;
 } controller;
 
 typedef struct device {

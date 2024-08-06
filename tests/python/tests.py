@@ -40,8 +40,8 @@ PROFILE_ID = 49
 
 def tests():
     return {
-        'get-devices': get_devices,
-        'get-device': get_device,
+        'get-controllers': get_controllers,
+        'get-controller': get_controller,
         'set-address': set_address,
         'get-status': get_status,
         'get-status-no-event': get_status_no_event,
@@ -89,7 +89,7 @@ def main():
     debug = True
 
     controllers = [
-        uhppoted.Controller(405419896, '192.168.1.100'),
+        uhppoted.Controller(405419896, '192.168.1.100', 'tcp'),
         uhppoted.Controller(303986753, '192.168.1.100'),
     ]
 
@@ -122,16 +122,16 @@ def main():
         sys.exit(1)
 
 
-def get_devices(u):
-    devices = u.get_devices()
+def get_controllers(u):
+    controllers = u.get_devices()
 
-    return evaluate('get-devices', [
-        ('device count', 3, len(devices)),
-        ('device list', [201020304, 303986753, 405419896], [devices[0], devices[1], devices[2]]),
+    return evaluate('get-controllers', [
+        ('controllers count', 3, len(controllers)),
+        ('controllers list', [201020304, 303986753, 405419896], [controllers[0], controllers[1], controllers[2]]),
     ])
 
 
-def get_device(u):
+def get_controller(u):
     info = u.get_device(DEVICE_ID)
 
     return evaluate('get-device', [

@@ -15,6 +15,7 @@ extern const std::string LOOKUP_EVENT_REASON;
 typedef struct controller {
     uint32_t id;
     std::string address;
+    std::string transport;
 } controller;
 
 typedef struct device {

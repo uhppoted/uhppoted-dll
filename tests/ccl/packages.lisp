@@ -4,8 +4,8 @@
   (:use :common-lisp 
 		:ccl
 		:uhppoted)
-  (:export get-devices
-		       get-device
+  (:export get-controllers
+		       get-controller
 		       set-address
 		       get-status
            get-status-no-event

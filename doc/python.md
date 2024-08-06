@@ -444,7 +444,9 @@ Container class for use with the `uhppoted` _conclassor_.
 class Controller:
     id: int
     address: str
+    transport: str
 ```
+The _transport_ field is optional - valid values are "udp" or "tcp", defaulting to "udp" if the value is NULL.
 
 ### `Device`
 Container class for the controller information retrieved by `get_device`

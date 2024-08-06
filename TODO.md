@@ -1,19 +1,17 @@
 # TODO
 
 - [x] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
-      - [x] CHANGELOG
-      - [x] README
-      - [x] _userdata_
-      - [x] Change _running_ to _listening_
-      - [x] documentation
+- [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
       - [x] Go
       - [x] C
-      - [x] Python
       - [x] C++
+      - [x] .NET
+      - [x] Python
       - [x] CCL
-      - [x] C#
-
-- [ ] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
+      - [x] tests
+      - [x] documentation
+      - [x] CHANGELOG
+      - [x] README
 
 - [ ] .NET
       - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/pinvoke

@@ -31,6 +31,7 @@ namespace uhppoted
 
                 list[ix].ID = c.ID;
                 list[ix].address = c.address;
+                list[ix].transport = c.transport;
             }
 
             int sz = Marshal.SizeOf(typeof(udevice));
@@ -729,6 +730,7 @@ namespace uhppoted
         struct udevice {
             public uint ID;
             public string address;
+            public string transport;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
@@ -863,10 +865,18 @@ namespace uhppoted
     public class Controller {
         public uint ID;
         public string address;
+        public string transport;
 
-    public Controller(uint ID, string address) {
+        public Controller(uint ID, string address) {
             this.ID = ID;
             this.address = address;
+            this.transport = "udp";
+        }
+
+        public Controller(uint ID, string address, string transport) {
+            this.ID = ID;
+            this.address = address;
+            this.transport = transport;
         }
     }
 

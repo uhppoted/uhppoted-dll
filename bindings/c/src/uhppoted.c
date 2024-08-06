@@ -127,6 +127,7 @@ void setup(const char *bind, const char *broadcast, const char *listen,
             while (p != NULL) {
                 list[ix].id = p->id;
                 list[ix].address = strdup(p->address);
+                list[ix].transport = p->transport == NULL ? NULL : strdup(p->transport);
                 ix++;
                 p = va_arg(args, controller *);
             }

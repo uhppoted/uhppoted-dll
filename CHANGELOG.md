@@ -5,6 +5,7 @@
 ### Added
 1. `listen` API function to capture controller events.
 2. VB.NET example GUI application authored by @threeeye.
+3. Added `transport` field to `udevice` struct for TCP support.
 
 ### Updated
 1. C++ Replaced NULL with nullptr (cf. https://stackoverflow.com/questions/1282295/what-is-the-nullptr-keyword-and-why-is-it-better-than-null)

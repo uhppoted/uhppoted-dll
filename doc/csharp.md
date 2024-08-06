@@ -440,8 +440,11 @@ Container class for use with the `Uhppoted` _constructor_.
 public class Controller {
     public uint ID;
     public string address;
+    public string transport;
 }
 ```
+The _transport_ field is optional - valid values are "udp" or "tcp", defaulting to "udp" if the value is NULL.
+
 
 ### `Device`
 Container class for the controller information retrieved by `GetDevice`

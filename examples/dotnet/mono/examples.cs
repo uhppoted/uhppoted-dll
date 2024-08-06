@@ -61,12 +61,12 @@ public class examples {
     const string locale = "";
 
     static command[] commands = {
-        new command("get-devices",
+        new command("get-controllers",
                     "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.",
-                    GetDevices),
-        new command("get-device",
-                    "Retrieves the basic device information for a single UHPPOTE controller.",
-                    GetDevice),
+                    GetControllers),
+        new command("get-controller",
+                    "Retrieves the basic controller information for a single UHPPOTE controller.",
+                    GetController),
         new command("set-address",
                     "Sets the controller IPv4 address, subnet mask and gateway address.",
                     SetAddress),
@@ -162,7 +162,7 @@ public class examples {
                     Listen),
     };
 
-    static Controller[] controllers = { new Controller(405419896, "192.168.1.100"),
+    static Controller[] controllers = { new Controller(405419896, "192.168.1.100", "tcp"),
                                         new Controller(303986753, "192.168.1.100") };
 
     public static void Main(string[] args) {
@@ -223,20 +223,20 @@ public class examples {
         WriteLine();
     }
 
-    static void GetDevices(Uhppoted u, string[] args) {
+    static void GetControllers(Uhppoted u, string[] args) {
         uint[] list = u.GetDevices();
 
-        string tag = Format("get-devices ({0})", list.Length);
+        string tag = Format("get-controllers ({0})", list.Length);
         field[] fields = new field[list.Length];
 
         for (int i = 0; i < list.Length; i++) {
             fields[i] = new uint32Field("", list[i]);
         }
 
-        display("get-devices", fields);
+        display("get-controllers", fields);
     }
 
-    static void GetDevice(Uhppoted u, string[] args) {
+    static void GetController(Uhppoted u, string[] args) {
         options opts = parse(args);
         uint deviceID = opts.deviceID;
 
@@ -252,7 +252,7 @@ public class examples {
             new stringField("released", device.date),
         };
 
-        display("get-device", fields);
+        display("get-controller", fields);
     }
 
     static void SetAddress(Uhppoted u, string[] args) {

@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c++
 GO=GODEBUG=cgocheck=2
-SRC=tests.cpp device.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp lookup.cpp structs.cpp
+SRC=tests.cpp controller.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp lookup.cpp structs.cpp
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -38,11 +38,11 @@ usage: build
 invalid: build
 	$(CMD) mystery-meat
 
-get-devices: build
-	$(CMD) get-devices
+get-controllers: build
+	$(CMD) get-controllers
 
-get-device: build
-	$(CMD) get-device
+get-controller: build
+	$(CMD) get-controller
 
 set-address: build
 	$(CMD) set-address

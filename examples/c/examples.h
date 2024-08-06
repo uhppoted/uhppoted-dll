@@ -52,8 +52,8 @@ typedef struct options {
 } options;
 
 
-extern int getDevices(int argc, char **argv);
-extern int getDevice(int argc, char **argv);
+extern int getControllers(int argc, char **argv);
+extern int getController(int argc, char **argv);
 extern int setAddress(int argc, char **argv);
 extern int getStatus(int argc, char **argv);
 extern int getTime(int argc, char **argv);

@@ -19,8 +19,8 @@ extern const uint8_t PROFILE_ID;
 extern const controller ALPHA;
 extern const controller BETA;
 
-extern bool getDevices(uhppoted &);
-extern bool getDevice(uhppoted &);
+extern bool getControllers(uhppoted &);
+extern bool getController(uhppoted &);
 extern bool setAddress(uhppoted &);
 extern bool getStatus(uhppoted &);
 extern bool getStatusNoEvent(uhppoted &);

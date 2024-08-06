@@ -27,8 +27,8 @@ const uint8_t DOOR = 4;
 const uint8_t PROFILE_ID = 49;
 
 const test tests[] = {
-    {.name = "get-devices", .fn = getDevices},
-    {.name = "get-device", .fn = getDevice},
+    {.name = "get-controllers", .fn = getControllers},
+    {.name = "get-controller", .fn = getController},
     {.name = "set-address", .fn = setAddress},
     {.name = "get-status", .fn = getStatus},
     {.name = "get-status-no-event", .fn = getStatusNoEvent},
@@ -65,8 +65,8 @@ const test tests[] = {
     {.name = "structs", .fn = structs},
 };
 
-controller alpha = {.id = 405419896, .address = "192.168.1.100"};
-controller beta = {.id = 303986753, .address = "192.168.1.100"};
+controller ALPHA = {.id = 405419896, .address = "192.168.1.100", "tcp"};
+controller BETA = {.id = 303986753, .address = "192.168.1.100"};
 
 int main(int argc, char **argv) {
     bool ok = true;
@@ -76,7 +76,7 @@ int main(int argc, char **argv) {
         cmd = argv[1];
     }
 
-    setup("0.0.0.0:0", "255.255.255.255", "0.0.0.0:60001", 2500, true, &alpha, &beta, NULL);
+    setup("0.0.0.0:0", "255.255.255.255", "0.0.0.0:60001", 2500, true, &ALPHA, &BETA, NULL);
 
     if (cmd == NULL || strncmp(cmd, "all", 3) == 0) {
         ok = all();

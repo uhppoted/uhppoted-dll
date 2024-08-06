@@ -35,8 +35,8 @@ typedef struct result {
     } value;
 } result;
 
-extern bool getDevices();
-extern bool getDevice();
+extern bool getControllers();
+extern bool getController();
 extern bool setAddress();
 extern bool getStatus();
 extern bool getStatusNoEvent();

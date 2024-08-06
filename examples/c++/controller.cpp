@@ -6,22 +6,22 @@
 
 using namespace std;
 
-void getDevices(uhppoted &u, int argc, char **argv) {
-    auto devices = u.get_devices();
+void getControllers(uhppoted &u, int argc, char **argv) {
+    auto controllers = u.get_devices();
 
     stringstream tag;
-    vector<field> fields(devices.size());
+    vector<field> fields(controllers.size());
     int ix = 0;
 
-    tag << "get-devices (" << devices.size() << ")";
-    for (auto id : devices) {
+    tag << "get-controllers (" << controllers.size() << ")";
+    for (auto id : controllers) {
         fields[ix++] = field("", id); // doing this with 'push_back' doesn't compile on github (seems fine everywhere else)
     }
 
     display(tag.str(), fields);
 }
 
-void getDevice(uhppoted &u, int argc, char **argv) {
+void getController(uhppoted &u, int argc, char **argv) {
     auto options = parse(argc, argv);
     uint32_t deviceID = options.device_id;
 
@@ -37,7 +37,7 @@ void getDevice(uhppoted &u, int argc, char **argv) {
         field("released", d.date),
     };
 
-    display("get-device", fields);
+    display("get-controller", fields);
 }
 
 void setAddress(uhppoted &u, int argc, char **argv) {

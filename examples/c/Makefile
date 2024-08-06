@@ -1,4 +1,4 @@
-SRC=examples.c device.c cards.c events.c time_profiles.c tasks.c
+SRC=examples.c controller.c cards.c events.c time_profiles.c tasks.c
 BINDINGS=../../bindings/c
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
@@ -37,11 +37,11 @@ help: build
 invalid: build
 	$(CMD) mystery-meat
 
-get-devices: build
-	$(CMD) get-devices
+get-controllers: build
+	$(CMD) get-controllers
 
-get-device: build
-	$(CMD) get-device --controller $(DEVICEID)
+get-controller: build
+	$(CMD) get-controller --controller $(DEVICEID)
 
 set-address: build
 	$(CMD) set-address --controller $(DEVICEID) --ip-address 192.168.1.125 --subnet-mask 255.255.255.0 --gateway-address 192.168.0.1

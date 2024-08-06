@@ -24,8 +24,8 @@ typedef struct options {
 } options;
 
 
-void getDevices(uhppoted &, int argc, char **argv);
-void getDevice(uhppoted &u, int argc, char **argv);
+void getControllers(uhppoted &, int argc, char **argv);
+void getController(uhppoted &u, int argc, char **argv);
 void setAddress(uhppoted &, int argc, char **argv);
 void getStatus(uhppoted &, int argc, char **argv);
 void getTime(uhppoted &, int argc, char **argv);

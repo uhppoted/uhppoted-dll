@@ -520,8 +520,11 @@ Container struct for use with the `setup` function.
 typedef struct controller {
     uint32_t id;
     const char *address;
+    const char *transport;
 } controller;
 ```
+
+The _transport_ field is optional - valid values are "udp" or "tcp", defaulting to "udp" if the value is NULL.
 
 ### `device`
 Container struct for the controller information retrieved by `get_device`

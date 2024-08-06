@@ -11,6 +11,7 @@ package main
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
+	const char *transport;
 } udevice;
 
 typedef struct udevices {
@@ -636,10 +637,15 @@ func makeUHPPOTE(u *C.struct_UHPPOTE) (uhppote.IUHPPOTE, error) {
 					if addr, err := types.ParseControllerAddr(C.GoString(d.address)); err != nil {
 						return nil, err
 					} else {
+						transport := "udp"
+						if d.transport != nil {
+							transport = C.GoString(d.transport)
+						}
+
 						devices = append(devices, uhppote.Device{
 							DeviceID: uint32(d.id),
 							Address:  addr,
-							Protocol: "udp",
+							Protocol: transport,
 						})
 					}
 				}

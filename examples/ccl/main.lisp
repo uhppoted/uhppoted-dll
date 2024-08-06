@@ -5,8 +5,8 @@
 (load "examples.lisp")
 
 (defun commands () ""
-  (list '("get-devices"                examples:get-devices                "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.")
-        '("get-device"                 examples:get-device                 "Retrieves the basic device information for a single UHPPOTE controller.")
+  (list '("get-controllers"            examples:get-controllers            "Retrieves a list of UHPPOTE controller IDs findable on the local LAN.")
+        '("get-controller"             examples:get-controller             "Retrieves the basic controller information for a single UHPPOTE controller.")
         '("set-address"                examples:set-address                "Sets the controller IPv4 address, subnet mask and gateway address.")
         '("get-status"                 examples:get-status                 "Retrieves a controller status.")
         '("get-time"                   examples:get-time                   "Retrieves a controller current date/time (YYYY-MM-DD HH:mm:ss).")

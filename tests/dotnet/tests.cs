@@ -30,13 +30,13 @@ public class Tests {
     const byte PROFILE_ID = 49;
 
     static Controller[] controllers = {
-        new Controller(405419896, "192.168.1.100"),
+        new Controller(405419896, "192.168.1.100", "tcp"),
         new Controller(303986753, "192.168.1.100")
     };
 
     static test[] tests = {
-        new test("get-devices", GetDevices),
-        new test("get-device", GetDevice),
+        new test("get-controllers", GetControllers),
+        new test("get-controller", GetController),
         new test("set-address", SetAddress),
         new test("get-status", GetStatus),
         new test("get-status-no-event", GetStatusNoEvent),
@@ -132,33 +132,33 @@ public class Tests {
         return ok;
     }
 
-    static bool GetDevices(Uhppoted u) {
-        uint[] devices = u.GetDevices();
+    static bool GetControllers(Uhppoted u) {
+        uint[] controllers = u.GetDevices();
 
         result[] resultset = {
-            new uint32Result("device count", 3, (uint)devices.Length),
-            new uint32Result("device[0]", 201020304, devices[0]),
-            new uint32Result("device[1]", 303986753, devices[1]),
-            new uint32Result("device[2]", 405419896, devices[2]),
+            new uint32Result("controllers count", 3, (uint)controllers.Length),
+            new uint32Result("controllers[0]", 201020304, controllers[0]),
+            new uint32Result("controllers[1]", 303986753, controllers[1]),
+            new uint32Result("controllers[2]", 405419896, controllers[2]),
         };
 
-        return evaluate("get-devices", resultset);
+        return evaluate("get-controllers", resultset);
     }
 
-    static bool GetDevice(Uhppoted u) {
-        Device device = u.GetDevice(DEVICE_ID);
+    static bool GetController(Uhppoted u) {
+        Device controller = u.GetDevice(DEVICE_ID);
 
         result[] resultset = {
-            new uint32Result("device ID", 405419896, device.ID),
-            new stringResult("IP address", "192.168.1.101", device.address),
-            new stringResult("subnet mask", "255.255.255.0", device.subnet),
-            new stringResult("gateway address", "192.168.1.1", device.gateway),
-            new stringResult("MAC address", "00:12:23:34:45:56", device.MAC),
-            new stringResult("version", "v8.92", device.version),
-            new stringResult("date", "2018-11-05", device.date),
+            new uint32Result("controller ID", 405419896, controller.ID),
+            new stringResult("IP address", "192.168.1.101", controller.address),
+            new stringResult("subnet mask", "255.255.255.0", controller.subnet),
+            new stringResult("gateway address", "192.168.1.1", controller.gateway),
+            new stringResult("MAC address", "00:12:23:34:45:56", controller.MAC),
+            new stringResult("version", "v8.92", controller.version),
+            new stringResult("date", "2018-11-05", controller.date),
         };
 
-        return evaluate("get-device", resultset);
+        return evaluate("get-controller", resultset);
     }
 
     static bool SetAddress(Uhppoted u) {

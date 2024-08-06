@@ -31,6 +31,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
+	const char *transport;
 } udevice;
 
 typedef struct udevices {

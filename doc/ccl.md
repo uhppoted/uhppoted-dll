@@ -27,7 +27,7 @@ information required to access a controller, e.g.:
           :broadcast-addr "255.255.255.255"
           :listen-addr    "0.0.0.0:60001"
           :timeout        2500
-          :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+          :controllers    (list '(405419896 "192.168.1.100" "tcp") '(303986753 "192.168.1.100"))
           :debug          T)))
 
 bind-addr        IPv4 address:port to which to bind the UDP socket. Defaults to 0.0.0.0:0
@@ -38,6 +38,9 @@ controllers      Optional list of specific controllers and their associated IPv4
                  located on a different interface, a VLAN or a VPN)
 debug            Displays the DLL and controller requests/responses if true.
 ```
+
+Each controller is tuple of the form `(id address transport)`. - the _transport_ field is optional, with valid values "udp" or "tcp"
+and defaulting to "udp" if the value is not provided.
 
 All API functions raise a `uhppoted-error` _condition_ if the call fails for any reason whatsoever:
 ```

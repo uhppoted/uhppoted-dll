@@ -15,22 +15,22 @@
              :broadcast-addr "255.255.255.255"
              :listen-addr    "0.0.0.0:60001"
              :timeout        2500
-             :controllers    (list '(405419896 "192.168.1.100") '(303986753 "192.168.1.100"))
+             :controllers    (list '(405419896 "192.168.1.100" "tcp") '(303986753 "192.168.1.100"))
              :debug          T)))
 
 
-(defun get-devices (args) "" 
+(defun get-controllers (args) "" 
   (declare (ignore args))
-  (let ((devices (coerce (exec #'(lambda (u) (uhppoted-get-devices u))) 'list)))
-    (when devices 
-      (format t "  ~a:~%    ~:w~%~%" "get-devices" devices))))
+  (let ((controllers (coerce (exec #'(lambda (u) (uhppoted-get-devices u))) 'list)))
+    (when controllers
+      (format t "  ~a:~%    ~:w~%~%" "get-controllers" controllers))))
 
 
-(defun get-device (args) "" 
+(defun get-controller (args) "" 
   (let* ((device-id (args-device-id args))
          (device    (exec #'(lambda (u) (uhppoted-get-device u device-id)))))
     (when device 
-      (display "get-device" device-id (as-fields device)))))
+      (display "get-controller" device-id (as-fields device)))))
 
 
 (defun set-address (args) "" 

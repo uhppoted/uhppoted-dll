@@ -6,20 +6,20 @@
 
 using namespace std;
 
-bool getDevices(uhppoted &u) {
-    auto devices = u.get_devices();
+bool getControllers(uhppoted &u) {
+    auto controllers = u.get_devices();
 
     vector<result> rs = {
-        result("device count", uint32_t(3), uint32_t(devices.size())),
-        result("device[0] ID", uint32_t(201020304), devices[0]),
-        result("device[1] ID", uint32_t(303986753), devices[1]),
-        result("device[2] ID", uint32_t(405419896), devices[2]),
+        result("device count", uint32_t(3), uint32_t(controllers.size())),
+        result("device[0] ID", uint32_t(201020304), controllers[0]),
+        result("device[1] ID", uint32_t(303986753), controllers[1]),
+        result("device[2] ID", uint32_t(405419896), controllers[2]),
     };
 
-    return evaluate("get-devices", rs);
+    return evaluate("get-controllers", rs);
 }
 
-bool getDevice(uhppoted &u) {
+bool getController(uhppoted &u) {
     auto d = u.get_device(DEVICE_ID);
 
     vector<result> rs = {
@@ -32,7 +32,7 @@ bool getDevice(uhppoted &u) {
         result("date", string("2018-11-05"), d.date),
     };
 
-    return evaluate("get-device", rs);
+    return evaluate("get-controller", rs);
 }
 
 bool setAddress(uhppoted &u) {

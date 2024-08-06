@@ -151,8 +151,9 @@
                         reason)
 
 (def-foreign-type nil
-  (:struct :UDEVICE (:id      :int)
-	                  (:address :address)))
+  (:struct :UDEVICE (:id        :int)
+	                  (:address   :address)
+                    (:transport :address)))
 
 (def-foreign-type nil
   (:struct :UDEVICES (:N       :int)
@@ -265,12 +266,12 @@
     (%get-cstring p)))
 
 (defun go-sizeof (type) "" 
-  (cond ((eq type :udevice) 16)
+  (cond ((eq type :udevice) 24)
 	      (T 0)))
 
 (defun uhppoted (f &key (bind-addr "") (broadcast-addr "") (listen-addr "") (timeout 5) (controllers NIL) (debug NIL)) ""
-  (%stack-block ((devices (* (length controllers) (go-sizeof :udevice)   )))
-    (rletz ((udevices (:struct UDEVICES) :N (length controllers) 
+  (%stack-block ((devices (* (length controllers) (go-sizeof :udevice))))
+    (rletz ((udevices (:struct UDEVICES) :N       (length controllers) 
                                          :devices devices)
 			      (uhppote (:struct :UHPPOTE) :bind      (ccl::make-cstring bind-addr)
                                         :broadcast (ccl::make-cstring broadcast-addr)
@@ -278,11 +279,12 @@
                                         :timeout   timeout
                                         :devices   udevices
                                         :debug     (cond (debug 1) (T 0))))
-      (loop for (id addr) in controllers
+      (loop for (id addr transport) in controllers
         do (progn
 		         (setf (pref devices :udevice.id) id)
-			       (setf (pref devices :udevice.address) (ccl::make-cstring addr))
-			       (%setf-macptr devices (%inc-ptr devices 16))))
+			       (setf (pref devices :udevice.address)   (ccl::make-cstring addr))
+             (setf (pref devices :udevice.transport) (ccl::make-cstring (or transport "")))
+			       (%setf-macptr devices (%inc-ptr devices (go-sizeof :udevice)))))
 
 	    (unwind-protect
 	      (restart-case (funcall f uhppote)
@@ -297,7 +299,8 @@
             (loop for a from 1 to (length controllers)
               do (progn
                    (free (pref p :UDEVICE.address))
-			       (%setf-macptr p (%inc-ptr p 16))))))))))
+                   (free (pref p :UDEVICE.transport))
+			       (%setf-macptr p (%inc-ptr p (go-sizeof :udevice)))))))))))
 
 
 (defun uhppoted-get-devices (uhppote &optional (N 16)) "Retrieves a list of device IDs on the local LAN"

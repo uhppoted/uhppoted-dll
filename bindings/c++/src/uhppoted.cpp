@@ -112,16 +112,23 @@ uhppoted::uhppoted(const string &_bind, const string &_broadcast,
         }
 
         for (auto p : controllers) {
-            // NTS: because the controllers may go out of scope after the invocation
-            // of the
-            //      constructor and c_str() returns a pointer to the underlying string
-            //      char array
+            // NTS: reallocate const char * fields because the controllers may go out of scope
+            // after the invocation of the constructor and c_str() returns a pointer to the
+            // underlying string char array
             size_t N = p.address.size() + 1;
+            size_t M = p.transport.size() + 1;
             char *addr = new char[N];
+            char *transport = new char[M];
+
+            memset(addr, 0, N); // NTS: supposedly new char[N} zeroes out the memory, but apparently not
             p.address.copy(addr, N);
+
+            memset(transport, 0, M); // NTS: supposedly new char[N} zeroes out the memory, but apparently not
+            p.transport.copy(transport, M);
 
             list[ix].id = p.id;
             list[ix].address = addr;
+            list[ix].transport = transport;
             ix++;
         }
 

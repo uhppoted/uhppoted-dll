@@ -6,7 +6,7 @@
 #include "examples.h"
 #include "uhppoted.h"
 
-int getDevices(int argc, char **argv) {
+int getControllers(int argc, char **argv) {
     uint32_t *devices = NULL;
     int N;
 
@@ -33,7 +33,7 @@ int getDevices(int argc, char **argv) {
     return 0;
 }
 
-int getDevice(int argc, char **argv) {
+int getController(int argc, char **argv) {
     uint32_t deviceID = parse(argc, argv).device_id;
     struct device d;
 
@@ -52,7 +52,7 @@ int getDevice(int argc, char **argv) {
         {.field = "released", .type = "string", .value.string = d.date},
     };
 
-    display("get-device", sizeof(fields) / sizeof(field), fields);
+    display("get-controller", sizeof(fields) / sizeof(field), fields);
 
     return 0;
 }

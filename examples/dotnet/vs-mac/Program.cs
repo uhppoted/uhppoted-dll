@@ -49,7 +49,9 @@ class UhppotedDLLCLI
         }
         else
         {
-            Controller[] controllers = { };
+            Controller[] controllers = { new Controller(405419896, "192.168.1.100", "tcp"),
+                                         new Controller(303986753, "192.168.1.100") };
+
             Uhppoted u = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, true);
             string cmd = args[0] ?? "";
 

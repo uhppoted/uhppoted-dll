@@ -485,9 +485,12 @@ Container struct for use with the `uhppoted` _constructor_.
 typedef struct controller {
     uint32_t id;
     std::string address;
+    std::string transport;
 } controller;
 
 ```
+The _transport_ field is optional - valid values are "udp" or "tcp".
+
 
 ### `device`
 Container struct for the controller information retrieved by `get_device`

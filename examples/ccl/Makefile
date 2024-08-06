@@ -32,11 +32,11 @@ help: build
 invalid: build
 	$(CMD) mystery-meat
 
-get-devices: build
-	$(CMD) get-devices
+get-controllers: build
+	$(CMD) get-controllers
 
-get-device: build
-	$(CMD) get-device $(DEVICEID)
+get-controller: build
+	$(CMD) get-controller $(DEVICEID)
 
 set-address: build
 	$(CMD) set-address $(DEVICEID) --ip-address "192.168.1.100" --subnet-mask "255.255.255.0" --gateway-address "192.168.1.1"

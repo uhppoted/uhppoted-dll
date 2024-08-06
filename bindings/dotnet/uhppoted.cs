@@ -27,6 +27,7 @@ public class Uhppoted : IDisposable {
 
             list[ix].ID = c.ID;
             list[ix].address = c.address;
+            list[ix].transport = c.transport;
         }
 
         int sz = Marshal.SizeOf(typeof(udevice));
@@ -610,6 +611,7 @@ public class Uhppoted : IDisposable {
     struct udevice {
         public uint ID;
         public string address;
+        public string transport;
     }
 
     struct udevices {
@@ -728,10 +730,18 @@ public class Uhppoted : IDisposable {
 public class Controller {
     public uint ID;
     public string address;
+    public string transport;
 
     public Controller(uint ID, string address) {
         this.ID = ID;
         this.address = address;
+        this.transport = "udp";
+    }
+
+    public Controller(uint ID, string address, string transport) {
+        this.ID = ID;
+        this.address = address;
+        this.transport = transport;
     }
 }
 

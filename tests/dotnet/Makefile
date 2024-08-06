@@ -37,11 +37,11 @@ usage: build
 invalid: build
 	$(CMD) mystery-meat
 
-get-devices: build
-	$(CMD) get-devices
+get-controllers: build
+	$(CMD) get-controllers
 
-get-device: build
-	$(CMD) get-device
+get-controller: build
+	$(CMD) get-controller
 
 set-address: build
 	$(CMD) set-address

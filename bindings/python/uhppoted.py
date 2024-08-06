@@ -84,6 +84,7 @@ EVENT_REASON_REMOTE_OPEN_DOOR_USB_READER:     Final[int] = internationalisation.
 class Controller:
     id: int
     address: str
+    transport: str = ''
 
 
 @dataclass
@@ -769,7 +770,7 @@ def libfunctions():
 
 
 class GoController(Structure):
-    _fields_ = [('id', c_uint32), ('address', c_char_p)]
+    _fields_ = [('id', c_uint32), ('address', c_char_p), ('transport', c_char_p)]
 
 
 class GoControllers(Structure):
@@ -794,7 +795,8 @@ class GoUHPPOTE(Structure):
             list = GoControllers(N, (GoController * N)())
 
             for ix, c in enumerate(controllers):
-                list.devices[ix] = GoController(c.id, c_char_p(bytes(c.address, 'utf-8')))
+                list.devices[ix] = GoController(c.id, c_char_p(bytes(c.address, 'utf-8')),
+                                                c_char_p(bytes(c.transport, 'utf-8')))
 
             self.devices = pointer(list)
 
