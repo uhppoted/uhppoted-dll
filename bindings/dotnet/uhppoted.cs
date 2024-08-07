@@ -73,27 +73,29 @@ public class Uhppoted : IDisposable {
         int N = 0;
         int count = N;
         uint[] slice;
-        string err = new string('*', 256);
-        int errN = 0;
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
 
-        do {
-            N += 16;
-            count = N;
-            slice = new uint[N];
+        try {
+            do {
+                N += 16;
+                count = N;
+                slice = new uint[N];
 
-            int rc = GetDevices(ref this.u, ref count, slice, ref err, ref errN);
-            if (rc != 0) {
-                Console.WriteLine(">>>>>>>>>>>> ERR  {0}", err);
-                Console.WriteLine(">>>>>>>>>>>> ERRN {0}", errN);
-                throw new UhppotedException("eerererere");
-            }
-        } while (N < count);
+                if (GetDevices(ref this.u, ref count, slice, err, ref errN) != 0) {
+                    raise(err, errN);
+                }
 
-        uint[] list = new uint[count];
+            } while (N < count);
 
-        Array.Copy(slice, list, list.Length);
+            uint[] list = new uint[count];
 
-        return list;
+            Array.Copy(slice, list, list.Length);
+
+            return list;
+        } finally {
+            Marshal.FreeHGlobal(err);
+        }
     }
 
     public Device GetDevice(uint deviceID) {
@@ -511,10 +513,36 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    private void raise(IntPtr errmsg) {
+        if (errmsg == IntPtr.Zero) {
+            throw new UhppotedException("unknown error");
+        }
+
+        string? msg = Marshal.PtrToStringAnsi(errmsg);
+        if (msg == null) {
+            throw new UhppotedException("unknown error");
+        }
+
+        throw new UhppotedException(msg);
+    }
+
+    private void raise(IntPtr errmsg, int N) {
+        if (errmsg == IntPtr.Zero) {
+            throw new UhppotedException("unknown error");
+        }
+
+        string? msg = Marshal.PtrToStringAnsi(errmsg, N);
+        if (msg == null) {
+            throw new UhppotedException("unknown error");
+        }
+
+        throw new UhppotedException(msg);
+    }
+
     // Go FFI
 
     [DllImport("uhppoted.dll")]
-    private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, ref string err, ref int errN);
+    private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err, ref int errN);
 
     [DllImport("uhppoted.dll")]
     private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
