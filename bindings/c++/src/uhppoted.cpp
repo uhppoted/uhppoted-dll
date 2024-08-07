@@ -63,15 +63,20 @@ const char *EventReasonRemoteOpenDoor = "remote open door";
 const char *EventReasonRemoteOpenDoorUSBReader = "remote open door (USB reader)";
 const char *EventReasonUnknown = "unknown";
 
-// NTS: std::make_shared can throw an exception but there doesn't seem
-//      to be a clean alternative
 uhppoted_exception::uhppoted_exception(char *err) {
-    message = make_shared<char *>(err);
+    message = std::string(err);
+    free(err);
+}
+
+uhppoted_exception::uhppoted_exception(const char *err, int N) {
+    message = std::string(err, N);
 }
 
 uhppoted_exception::~uhppoted_exception() {}
 
-const char *uhppoted_exception::what() const noexcept { return *message; }
+const char *uhppoted_exception::what() const noexcept {
+    return message.c_str();
+}
 
 uhppoted::uhppoted() {
     u = nullptr;
@@ -160,9 +165,12 @@ vector<uint32_t> uhppoted::get_devices() {
         list.resize(allocated);
 
         int count = allocated;
-        char *err = GetDevices(u, &count, list.data());
-        if (err != nullptr) {
-            throw uhppoted_exception(err);
+        char err[256] = "";
+        int errN = sizeof(err);
+        int rc;
+
+        if ((rc = GetDevices(u, &count, list.data(), err, &errN)) != 0) {
+            throw uhppoted_exception(err, errN);
         }
 
         if (count <= allocated) {

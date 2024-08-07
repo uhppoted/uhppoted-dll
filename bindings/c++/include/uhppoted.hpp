@@ -168,10 +168,11 @@ class uhppoted {
 class uhppoted_exception : public virtual std::exception {
   public:
     uhppoted_exception(char *);
+    uhppoted_exception(const char *, int N);
     virtual ~uhppoted_exception();
 
     virtual const char *what() const noexcept;
 
   private:
-    std::shared_ptr<char *> message;
+    std::string message;
 };

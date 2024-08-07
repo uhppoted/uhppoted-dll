@@ -73,15 +73,19 @@ public class Uhppoted : IDisposable {
         int N = 0;
         int count = N;
         uint[] slice;
+        string err = new string('*', 256);
+        int errN = 0;
 
         do {
             N += 16;
             count = N;
             slice = new uint[N];
 
-            string err = GetDevices(ref this.u, ref count, slice);
-            if (err != null && err != "") {
-                throw new UhppotedException(err);
+            int rc = GetDevices(ref this.u, ref count, slice, ref err, ref errN);
+            if (rc != 0) {
+                Console.WriteLine(">>>>>>>>>>>> ERR  {0}", err);
+                Console.WriteLine(">>>>>>>>>>>> ERRN {0}", errN);
+                throw new UhppotedException("eerererere");
             }
         } while (N < count);
 
@@ -510,7 +514,7 @@ public class Uhppoted : IDisposable {
     // Go FFI
 
     [DllImport("uhppoted.dll")]
-    private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
+    private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, ref string err, ref int errN);
 
     [DllImport("uhppoted.dll")]
     private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);

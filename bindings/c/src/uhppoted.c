@@ -155,7 +155,7 @@ void teardown() {
     }
 }
 
-void set_error(char *errmsg) {
+void set_error(const char *errmsg, int errN) {
     unsigned l = strlen(errmsg) + 1;
 
     if (err != NULL) {
@@ -165,8 +165,6 @@ void set_error(char *errmsg) {
     if ((err = malloc(l)) != NULL) {
         snprintf(err, l, "%s", errmsg);
     }
-
-    free(errmsg);
 }
 
 int get_devices(uint32_t **devices, int *N) {
@@ -176,16 +174,21 @@ int get_devices(uint32_t **devices, int *N) {
     for (;;) {
         allocated += 16;
         if ((list = realloc(list, allocated * sizeof(uint32_t))) == NULL) {
+            char *errmsg = "Error allocating storage for slice";
+
             free(list);
-            set_error("Error allocating storage for slice");
+            set_error(errmsg, strlen(errmsg));
             return -1;
         }
 
         int count = allocated;
-        char *err = GetDevices(u, &count, list);
-        if (err != NULL) {
+        char err[256] = "";
+        int errN = sizeof(err);
+        int rc;
+
+        if ((rc = GetDevices(u, &count, list, err, &errN)) != 0) {
             free(list);
-            set_error(err);
+            set_error(err, errN);
             return -1;
         }
 
@@ -206,7 +209,8 @@ int get_device(uint32_t id, struct device *d) {
 
     char *err = GetDevice(u, &device, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -231,10 +235,10 @@ int get_device(uint32_t id, struct device *d) {
 
 int set_address(uint32_t id, const char *address, const char *subnet,
                 const char *gateway) {
-    char *err =
-        SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
+    char *err = SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -251,7 +255,8 @@ int get_status(uint32_t id, struct status *s) {
 
     char *err = GetStatus(u, &status, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         free(status.doors);
         free(status.buttons);
         return -1;
@@ -300,7 +305,8 @@ int get_time(uint32_t id, char **t) {
 
     char *err = GetTime(u, &datetime, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -314,7 +320,8 @@ int get_time(uint32_t id, char **t) {
 int set_time(uint32_t id, char *datetime) {
     char *err = SetTime(u, id, datetime);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -326,7 +333,8 @@ int get_listener(uint32_t id, char **t) {
 
     char *err = GetListener(u, &listener, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -340,7 +348,8 @@ int get_listener(uint32_t id, char **t) {
 int set_listener(uint32_t id, char *listener) {
     char *err = SetListener(u, id, listener);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -352,7 +361,8 @@ int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
 
     char *err = GetDoorControl(u, &control, id, door);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -365,7 +375,8 @@ int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
 int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
     char *err = SetDoorControl(u, id, door, mode, delay);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -375,7 +386,8 @@ int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
 int open_door(uint32_t id, uint8_t door) {
     char *err = OpenDoor(u, id, door);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -386,7 +398,8 @@ int get_cards(uint32_t id, int *N) {
     int cards;
     char *err = GetCards(u, &cards, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -402,7 +415,8 @@ int get_card(uint32_t id, uint32_t card_number, card *c) {
 
     char *err = GetCard(u, &card, id, card_number);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -432,7 +446,8 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
 
     char *err = GetCardByIndex(u, &card, id, index);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -458,7 +473,8 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
 int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4], const uint32_t PIN) {
     char *err = PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors, PIN);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -468,7 +484,8 @@ int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to
 int delete_card(uint32_t id, uint32_t card_number) {
     char *err = DeleteCard(u, id, card_number);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -478,7 +495,8 @@ int delete_card(uint32_t id, uint32_t card_number) {
 int delete_cards(uint32_t id) {
     char *err = DeleteCards(u, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -489,7 +507,8 @@ int get_event_index(uint32_t id, uint32_t *index) {
     uint32_t ix;
     char *err = GetEventIndex(u, &ix, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -501,7 +520,8 @@ int get_event_index(uint32_t id, uint32_t *index) {
 int set_event_index(uint32_t id, uint32_t index) {
     char *err = SetEventIndex(u, id, index);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -513,7 +533,8 @@ int get_event(uint32_t id, uint32_t index, event *e) {
 
     char *err = GetEvent(u, &event, id, index);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -534,7 +555,8 @@ int get_event(uint32_t id, uint32_t index, event *e) {
 int record_special_events(uint32_t id, bool enabled) {
     char *err = RecordSpecialEvents(u, id, enabled);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -546,7 +568,8 @@ int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
 
     char *err = GetTimeProfile(u, &profile, id, profile_id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -606,7 +629,8 @@ int set_time_profile(uint32_t id, time_profile *p) {
 
     char *err = SetTimeProfile(u, id, &profile);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -616,7 +640,8 @@ int set_time_profile(uint32_t id, time_profile *p) {
 int clear_time_profiles(uint32_t id) {
     char *err = ClearTimeProfiles(u, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -642,7 +667,8 @@ int add_task(uint32_t id, task *t) {
 
     char *err = AddTask(u, id, &task);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -652,7 +678,8 @@ int add_task(uint32_t id, task *t) {
 int refresh_tasklist(uint32_t id) {
     char *err = RefreshTaskList(u, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -662,7 +689,8 @@ int refresh_tasklist(uint32_t id) {
 int clear_tasklist(uint32_t id) {
     char *err = ClearTaskList(u, id);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -672,7 +700,8 @@ int clear_tasklist(uint32_t id) {
 int set_pc_control(uint32_t id, bool enabled) {
     char *err = SetPCControl(u, id, enabled);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -682,7 +711,8 @@ int set_pc_control(uint32_t id, bool enabled) {
 int set_interlock(uint32_t id, uint8_t interlock) {
     char *err = SetInterlock(u, id, interlock);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -692,7 +722,8 @@ int set_interlock(uint32_t id, uint8_t interlock) {
 int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4) {
     char *err = ActivateKeypads(u, id, reader1, reader2, reader3, reader4);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -702,7 +733,8 @@ int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool
 int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
     char *err = SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -712,7 +744,8 @@ int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, ui
 int restore_default_parameters(uint32_t controller) {
     char *err = RestoreDefaultParameters(u, controller);
     if (err != NULL) {
-        set_error(err);
+        set_error(err, strlen(err));
+        free(err);
         return -1;
     }
 
@@ -722,7 +755,8 @@ int restore_default_parameters(uint32_t controller) {
 int listen_events(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata) {
     int32_t err = Listen(u, handler, (uint8_t *)listening, (uint8_t *)stop, err_handler, userdata);
     if (err != 0) {
-        set_error("error starting event listener");
+        const char *errmsg = "error starting event listener";
+        set_error(errmsg, strlen(errmsg));
         return -1;
     }
 

@@ -131,15 +131,42 @@ var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
 
 func main() {}
 
-//export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getDevices(uu, N, list); err != nil {
-		return C.CString(err.Error())
+func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, errmsg *C.char, errlen *C.int) C.int {
+	g := func() error {
+		if uu, err := makeUHPPOTE(u); err != nil {
+			return err
+		} else if err := f(uu); err != nil {
+			return err
+		} else {
+			return nil
+		}
 	}
 
-	return nil
+	if err := g(); err != nil {
+		N := 256
+		if errlen != nil {
+			N = int(*errlen)
+		}
+
+		length := cstring(err, errmsg, N)
+
+		if errlen != nil {
+			*errlen = C.int(length)
+		}
+
+		return -1
+	}
+
+	return 0
+}
+
+//export GetDevices
+func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errmsg *C.char, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getDevices(uu, N, list)
+	}
+
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetDevice
@@ -774,14 +801,23 @@ func cbool(b bool) C.uchar {
 	}
 }
 
-func cstring(v any, c *C.char, N uint32) {
-	if c != nil {
-		s := C.CString(ellipsize(v, int(N)))
+func cstring(v any, c *C.char, N int) int {
+	if c != nil && N > 0 {
+		ellipsized := ellipsize(v, N)
+		s := C.CString(ellipsized)
 		l := C.size_t(N)
 
-		C.strncpy(c, s, l)
+		C.strncpy(c, s, l) // FIXME check error return
 		C.free(unsafe.Pointer(s))
+
+		if length := len(ellipsized); length < N {
+			return length
+		} else {
+			return N
+		}
 	}
+
+	return 0
 }
 
 // e.g. `你好你好你好你好你好你好你好你好你好你好`

@@ -188,7 +188,7 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern char* GetDevices(struct UHPPOTE* u, int* N, unsigned int* list);
+extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg, int* errN);
 extern char* GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID);
 extern char* SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway);
 extern char* GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID);

@@ -204,6 +204,7 @@ class Uhppote:
 
     def __init__(self, uhppote=None):
         self.ffi = FFI(self.errcheck)
+        self.ffix = FFIX(self.errcheckx)
         self._uhppote = None
         if uhppote:
             self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast, uhppote.listen,
@@ -226,14 +227,21 @@ class Uhppote:
 
         return args
 
+    @staticmethod
+    def errcheckx(err, func, args):
+        return args
+
     def get_devices(self):
         N = 0
         while True:
             N = N + 16
             count = ctypes.c_int(N)
             list = (c_uint32 * N)(*[0] * N)
+            errN = ctypes.c_int(256)
+            err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-            self.ffi.GetDevices(self._uhppote, byref(count), list)
+            if self.ffix.GetDevices(self._uhppote, byref(count), list, err, byref(errN)) != 0:
+                raise Exception(f"{err.value.decode('utf-8')}")
 
             if count.value <= N:
                 break
@@ -673,7 +681,7 @@ def lookup(category, code, locale):
 class FFI:
 
     def __init__(self, errcheck):
-        self.GetDevices = ffi('GetDevices', errcheck)
+        # self.GetDevices = ffi('GetDevices', errcheck)
         self.GetDevice = ffi('GetDevice', errcheck)
         self.SetAddress = ffi('SetAddress', errcheck)
         self.GetStatus = ffi('GetStatus', errcheck)
@@ -705,7 +713,13 @@ class FFI:
         self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
         self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
         self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
-        self.Listen = ffix('Listen', errcheck)
+        self.Listen = ffil('Listen', errcheck)
+
+
+class FFIX:
+
+    def __init__(self, errcheck):
+        self.GetDevices = ffix('GetDevices', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -722,6 +736,16 @@ def ffix(tag, errcheck):
     (ff, argtypes) = libfunctions()[tag]
 
     ff.argtypes = argtypes
+    ff.restype = ctypes.c_int
+    ff.errcheck = errcheck
+
+    return ff
+
+
+def ffil(tag, errcheck):
+    (ff, argtypes) = libfunctions()[tag]
+
+    ff.argtypes = argtypes
     ff.restype = ctypes.c_int32
     ff.errcheck = errcheck
 
@@ -732,7 +756,7 @@ def ffix(tag, errcheck):
 @cache
 def libfunctions():
     return {
-        'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32)]),
+        'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32), c_char_p, POINTER(ctypes.c_int)]),
         'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong]),
         'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]),
         'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]),

@@ -2,25 +2,41 @@
 
 - [x] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
-      - [x] Go
-      - [x] C
-      - [x] C++
-      - [x] .NET
-      - [x] Python
-      - [x] CCL
-      - [x] tests
-      - [x] documentation
-      - [x] CHANGELOG
-      - [x] README
-
-- [ ] .NET
-      - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/pinvoke
-      - [ ] Use CallingConvention and [[MarshalAs(UnmanagedType.LPUTF8Str)] ]
-            - https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
-            - https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api
-            - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.unmanagedtype?view=net-8.0
-            - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.ptrtostringansi?view=net-8.0
-
+- [ ] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
+      - [ ] cstring // FIXME check error return
+      - [ ] get-devices
+      - [ ] get-device
+      - [ ] set-address
+      - [ ] get-status
+      - [ ] get-time
+      - [ ] set-time
+      - [ ] get-listener
+      - [ ] set-listener
+      - [ ] get-door-control
+      - [ ] set-door-control
+      - [ ] open-door
+      - [ ] get-cards
+      - [ ] get-card
+      - [ ] get-card-by-index
+      - [ ] put-card
+      - [ ] delete-card
+      - [ ] delete-cards
+      - [ ] get-event-index
+      - [ ] set-event-index
+      - [ ] get-event
+      - [ ] record-special-events
+      - [ ] get-time-profile
+      - [ ] set-time-profile
+      - [ ] clear-time-profiles
+      - [ ] add-task
+      - [ ] refresh-tasklist
+      - [ ] clear-tasklist
+      - [ ] set-pc-control
+      - [ ] set-interlock
+      - [ ] activate-keypads
+      - [ ] set-door-passcodes
+      - [ ] restore-default-parameters
+      - [ ] listen
 
 ## TODO
 
@@ -48,4 +64,14 @@
       - (?) github actions
 
 - (?) lint
+
+## Notes
+
+1. .NET
+    - https://learn.microsoft.com/en-us/dotnet/standard/native-interop/pinvoke
+    - https://stackoverflow.com/questions/20752001/passing-strings-from-c-sharp-to-c-dll-and-back-minimal-example
+    - https://limbioliong.wordpress.com/2011/06/16/returning-strings-from-a-c-api
+    - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.unmanagedtype?view=net-8.0
+    - https://learn.microsoft.com/en-us/dotnet/api/system.runtime.interopservices.marshal.ptrtostringansi?view=net-8.0
+
 
