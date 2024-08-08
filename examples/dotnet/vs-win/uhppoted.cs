@@ -12,8 +12,7 @@ namespace uhppoted
 
         public Uhppoted() { }
 
-        public Uhppoted(string bind, string broadcast, string listen, int timeout,
-                        Controller[] controllers, bool debug)
+        public Uhppoted(string bind, string broadcast, string listen, int timeout, Controller[] controllers, bool debug)
         {
             this.u.bind = bind;
             this.u.broadcast = broadcast;
@@ -82,25 +81,33 @@ namespace uhppoted
             int N = 0;
             int count = N;
             uint[] slice;
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
-            do
+            try
             {
-                N += 16;
-                count = N;
-                slice = new uint[N];
-
-                string err = GetDevices(ref this.u, ref count, slice);
-                if (err != null && err != "")
+                do
                 {
-                    throw new UhppotedException(err);
-                }
-            } while (N < count);
+                    N += 16;
+                    count = N;
+                    slice = new uint[N];
 
-            uint[] list = new uint[count];
+                    if (GetDevices(ref this.u, ref count, slice, err, ref errN) != 0)
+                    {
+                        raise(err, errN);
+                    }
+                } while (N < count);
 
-            Array.Copy(slice, list, list.Length);
+                uint[] list = new uint[count];
 
-            return list;
+                Array.Copy(slice, list, list.Length);
+
+                return list;
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public Device GetDevice(uint deviceID)
@@ -558,11 +565,12 @@ namespace uhppoted
         public delegate void OnError(string err);
 
         delegate void OnListenEvent([In] GoListenEvent e, IntPtr userdata);
-        delegate void OnListenError([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err);
+        delegate void OnListenError([In][MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
         public void ListenEvents(OnEvent on_event, OnError on_error, CancellationToken token, ManualResetEvent stopped, IntPtr userdata)
         {
-            OnListenEvent onevent = ([In] GoListenEvent e, IntPtr userdata) => {
+            OnListenEvent onevent = ([In] GoListenEvent e, IntPtr userdata) =>
+            {
                 on_event(new ListenEvent(
                     e.controller,
                     e.timestamp,
@@ -576,7 +584,8 @@ namespace uhppoted
                 userdata);
             };
 
-            OnListenError onerror = ([In] [MarshalAs(UnmanagedType.LPUTF8Str)] string err) => {
+            OnListenError onerror = ([In][MarshalAs(UnmanagedType.LPUTF8Str)] string err) =>
+            {
                 on_error(err);
             };
 
@@ -584,12 +593,15 @@ namespace uhppoted
             byte listening = 0; // NTS C# bool is not uint8_t
             byte stop = 0;      // NTS C# bool is not uint8_t
 
-            token.Register(() => {
+            token.Register(() =>
+            {
                 Volatile.Write(ref stop, 1);
 
-                for (int count = 0; count < 5; count++) {
+                for (int count = 0; count < 5; count++)
+                {
                     Thread.Sleep(delay);
-                    if (Volatile.Read(ref listening) == 0) {
+                    if (Volatile.Read(ref listening) == 0)
+                    {
                         stopped.Set();
                         return;
                     }
@@ -597,13 +609,16 @@ namespace uhppoted
             });
 
             int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror, IntPtr.Zero);
-            if (err != 0) {
+            if (err != 0)
+            {
                 throw new UhppotedException("error listening for events");
             }
 
-            for (int count = 0; count < 5; count++) {
+            for (int count = 0; count < 5; count++)
+            {
                 Thread.Sleep(delay);
-                if (Volatile.Read(ref listening) == 1) {
+                if (Volatile.Read(ref listening) == 1)
+                {
                     return;
                 }
             }
@@ -611,24 +626,42 @@ namespace uhppoted
             throw new UhppotedException("error starting event listener");
         }
 
-        private void raise(IntPtr errmsg) 
+        private void raise(IntPtr errmsg)
         {
-            if (errmsg == IntPtr.Zero) {
+            if (errmsg == IntPtr.Zero)
+            {
                 throw new UhppotedException("unknown error");
-            } 
-            
+            }
+
             string? msg = Marshal.PtrToStringAnsi(errmsg);
-            if (msg == null){
+            if (msg == null)
+            {
                 throw new UhppotedException("unknown error");
-            } 
-              
-            throw new UhppotedException(msg);                    
+            }
+
+            throw new UhppotedException(msg);
+        }
+
+        private void raise(IntPtr errmsg, int N)
+        {
+            if (errmsg == IntPtr.Zero)
+            {
+                throw new UhppotedException("unknown error");
+            }
+
+            string? msg = Marshal.PtrToStringAnsi(errmsg, N);
+            if (msg == null)
+            {
+                throw new UhppotedException("unknown error");
+            }
+
+            throw new UhppotedException(msg);
         }
 
         // Go FFI
 
         [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-        private static extern string GetDevices(ref UHPPOTE u, ref int N, uint[] list);
+        private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err, ref int errN);
 
         [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
         private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
@@ -726,21 +759,24 @@ namespace uhppoted
         [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
         private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx, IntPtr userdata);
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        struct udevice {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        struct udevice
+        {
             public uint ID;
             public string address;
             public string transport;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        struct udevices {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        struct udevices
+        {
             public uint N;
             public IntPtr devices; // array of udevice *
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        struct UHPPOTE {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        struct UHPPOTE
+        {
             public string bind;
             public string broadcast;
             public string listen;
@@ -750,7 +786,7 @@ namespace uhppoted
             public bool debug;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoDevice
         {
             public uint ID;
@@ -762,7 +798,7 @@ namespace uhppoted
             public string date;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoEvent
         {
             public string timestamp;
@@ -775,7 +811,7 @@ namespace uhppoted
             public byte reason;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoStatus
         {
             public uint ID;
@@ -790,14 +826,14 @@ namespace uhppoted
             public IntPtr evt;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoDoorControl
         {
             public byte control;
             public byte delay;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoCard
         {
             public uint cardNumber;
@@ -807,7 +843,7 @@ namespace uhppoted
             public uint PIN;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoTimeProfile
         {
             public byte ID;
@@ -829,8 +865,9 @@ namespace uhppoted
             public string segment3end;
         }
 
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        struct GoTask {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        struct GoTask
+        {
             public byte task;
             public byte door;
             public string from;
@@ -847,8 +884,9 @@ namespace uhppoted
         }
 
 #pragma warning disable 649 // assigned in DLL
-        [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Ansi)]
-        struct GoListenEvent {
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        struct GoListenEvent
+        {
             public uint controller;
             [MarshalAs(UnmanagedType.LPUTF8Str)] public string timestamp;
             public uint index;
@@ -862,29 +900,34 @@ namespace uhppoted
 #pragma warning restore 649
     }
 
-    public class Controller {
+    public class Controller
+    {
         public uint ID;
         public string address;
         public string transport;
 
-        public Controller(uint ID, string address) {
+        public Controller(uint ID, string address)
+        {
             this.ID = ID;
             this.address = address;
             this.transport = "udp";
         }
 
-        public Controller(uint ID, string address, string transport) {
+        public Controller(uint ID, string address, string transport)
+        {
             this.ID = ID;
             this.address = address;
             this.transport = transport;
         }
     }
 
-    public class UhppotedException : Exception {
+    public class UhppotedException : Exception
+    {
         public UhppotedException(string message) : base(message) { }
     }
 
-    public class Device {
+    public class Device
+    {
         public uint ID;
         public string address;
         public string subnet;
@@ -893,7 +936,8 @@ namespace uhppoted
         public string version;
         public string date;
 
-        public Device(uint ID, string address, string subnet, string gateway, string MAC, string version, string date) {
+        public Device(uint ID, string address, string subnet, string gateway, string MAC, string version, string date)
+        {
             this.ID = ID;
             this.address = address;
             this.subnet = subnet;
@@ -904,7 +948,8 @@ namespace uhppoted
         }
     }
 
-    public class Event {
+    public class Event
+    {
         public string timestamp;
         public uint index;
         public byte eventType;
@@ -915,7 +960,8 @@ namespace uhppoted
         public byte reason;
 
         public Event(string timestamp, uint index, byte eventType, bool granted,
-                 byte door, byte direction, uint card, byte reason) {
+                 byte door, byte direction, uint card, byte reason)
+        {
             this.timestamp = timestamp;
             this.index = index;
             this.eventType = eventType;
@@ -927,7 +973,8 @@ namespace uhppoted
         }
     }
 
-    public class ListenEvent {
+    public class ListenEvent
+    {
         public uint controller;
         public string timestamp;
         public uint index;
@@ -946,7 +993,8 @@ namespace uhppoted
                            byte door,
                            byte direction,
                            uint card,
-                           byte reason) {
+                           byte reason)
+        {
             this.controller = controller;
             this.timestamp = timestamp;
             this.index = index;
@@ -959,7 +1007,8 @@ namespace uhppoted
         }
     }
 
-    public class Status {
+    public class Status
+    {
         public uint ID;
         public string sysdatetime;
         public bool[] doors;
@@ -971,11 +1020,12 @@ namespace uhppoted
         public uint seqno;
         public Event evt;
 
-        public Status(uint ID, 
-                      string sysdatetime, 
-                      bool[] doors, bool[] buttons, byte relays, byte inputs, 
+        public Status(uint ID,
+                      string sysdatetime,
+                      bool[] doors, bool[] buttons, byte relays, byte inputs,
                       byte syserror, byte info, uint seqno,
-                      Event evt) {
+                      Event evt)
+        {
             this.ID = ID;
             this.sysdatetime = sysdatetime;
             this.doors = doors;
@@ -989,24 +1039,28 @@ namespace uhppoted
         }
     }
 
-    public class DoorControl {
+    public class DoorControl
+    {
         public byte mode;
         public byte delay;
 
-    public DoorControl(byte mode, byte delay) {
+        public DoorControl(byte mode, byte delay)
+        {
             this.mode = mode;
             this.delay = delay;
         }
     }
 
-    public class Card {
+    public class Card
+    {
         public uint cardNumber;
         public string from;
         public string to;
         public byte[] doors;
         public uint PIN;
 
-    public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN) {
+        public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN)
+        {
             this.cardNumber = cardNumber;
             this.from = from;
             this.to = to;
@@ -1015,7 +1069,8 @@ namespace uhppoted
         }
     }
 
-public class TimeProfile {
+    public class TimeProfile
+    {
         public byte ID;
         public byte linked;
         public string from;
@@ -1038,7 +1093,8 @@ public class TimeProfile {
                            bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
                            string segment1start, string segment1end,
                            string segment2start, string segment2end,
-                       string segment3start, string segment3end) {
+                       string segment3start, string segment3end)
+        {
             this.ID = ID;
             this.linked = linked;
             this.from = from;
@@ -1061,7 +1117,8 @@ public class TimeProfile {
         }
     }
 
-public class Task {
+    public class Task
+    {
         public byte task;
         public byte door;
         public string from;
@@ -1079,7 +1136,8 @@ public class Task {
         public Task(byte task, byte door, string from, string to,
                     bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
                     string at,
-                byte cards) {
+                byte cards)
+        {
             this.task = task;
             this.door = door;
             this.from = from;
@@ -1098,7 +1156,8 @@ public class Task {
         }
     }
 
-public class lookup {
+    public class lookup
+    {
         public const string LOOKUP_MODE = "door.mode";
         public const string LOOKUP_DIRECTION = "event.direction";
         public const string LOOKUP_EVENT_TYPE = "event.type";
@@ -1226,12 +1285,15 @@ public class lookup {
         { LOOKUP_EVENT_REASON, EventReasonUnknown },
     };
 
-    public static string find(string category, uint code, string locale) {
-        Dictionary<uint, string>? dictionary;
-        string? s;
+        public static string find(string category, uint code, string locale)
+        {
+            Dictionary<uint, string>? dictionary;
+            string? s;
 
-        if (dictionaries.TryGetValue(category, out dictionary)) {
-            if (dictionary.TryGetValue(code, out s)) {
+            if (dictionaries.TryGetValue(category, out dictionary))
+            {
+                if (dictionary.TryGetValue(code, out s))
+                {
                     return s;
                 }
 

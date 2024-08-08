@@ -293,8 +293,9 @@ class UhppotedDLLCLI
         Status status = u.GetStatus(controller);
         string timestamp = status.evt.timestamp;
 
-        if (timestamp == "") {
-           timestamp = "-";
+        if (timestamp == "")
+        {
+            timestamp = "-";
         }
 
         WriteLine(Format("get-status ({0})", controller));
@@ -856,7 +857,8 @@ class UhppotedDLLCLI
         WriteLine(Format("   reader 4 {0}", reader4));
     }
 
-    static void SetDoorPasscodes(Uhppoted u, string[] args) {
+    static void SetDoorPasscodes(Uhppoted u, string[] args)
+    {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         byte door = ParseArgs(args, "--door", DOOR);
         string[] passcodes = ParseArgs(args, "--passcodes", "").Split(",");
@@ -892,7 +894,8 @@ class UhppotedDLLCLI
         WriteLine(Format("   passcode 4 {0}", passcode4));
     }
 
-    static void RestoreDefaultParameters(Uhppoted u, string[] args) {
+    static void RestoreDefaultParameters(Uhppoted u, string[] args)
+    {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
 
         u.RestoreDefaultParameters(controller);
@@ -900,12 +903,14 @@ class UhppotedDLLCLI
         WriteLine(Format("restore-default-parameters ({0})", controller));
     }
 
-    static void Listen(Uhppoted u, string[] args) {
+    static void Listen(Uhppoted u, string[] args)
+    {
         ManualResetEvent exitEvent = new ManualResetEvent(false);
         CancellationTokenSource cancel = new CancellationTokenSource();
         CancellationToken token = cancel.Token;
 
-        Console.CancelKeyPress += (sender, eventArgs) => {
+        Console.CancelKeyPress += (sender, eventArgs) =>
+        {
             eventArgs.Cancel = true;
             exitEvent.Set();
         };
@@ -923,7 +928,8 @@ class UhppotedDLLCLI
 
     static void listen(Uhppoted u, CancellationToken done)
     {
-        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
+        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) =>
+        {
             WriteLine("-- EVENT");
             WriteLine("   controller: {0}", e.controller);
             WriteLine("   timestamp:  {0}", e.timestamp);
@@ -937,7 +943,8 @@ class UhppotedDLLCLI
             WriteLine();
         };
 
-        Uhppoted.OnError onerror = (string err) => {
+        Uhppoted.OnError onerror = (string err) =>
+        {
             WriteLine("ERROR {0}", err);
         };
 
@@ -952,8 +959,9 @@ class UhppotedDLLCLI
         WriteLine("DEBUG .. stopping");
         stop.Cancel();
 
-        if (!stopped.WaitOne(delay)) {
-            WriteLine("ERROR timeout waiting for event listener to terminate");            
+        if (!stopped.WaitOne(delay))
+        {
+            WriteLine("ERROR timeout waiting for event listener to terminate");
         }
     }
 

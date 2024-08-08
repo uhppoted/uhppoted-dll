@@ -148,7 +148,11 @@ func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, errmsg *C.char
 			N = int(*errlen)
 		}
 
-		length := cstring(err, errmsg, N)
+		length := 0
+
+		if errmsg != nil {
+			length = cstring(err, errmsg, N)
+		}
 
 		if errlen != nil {
 			*errlen = C.int(length)

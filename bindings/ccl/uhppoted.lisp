@@ -309,17 +309,22 @@
 		  (T (uhppoted-get-devices uhppote (+ N 16))))))
 
 (defun uhppoted-get-devices-n (uhppote max) ""
-  (multiple-value-bind (array parray) (make-heap-ivector max '(unsigned-byte 32))
+    (multiple-value-bind (array  arrayp)  (make-heap-ivector max '(unsigned-byte 32))
+    (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
 	  (unwind-protect
-	    (rletz ((N :signed-long max))
+	    (rletz ((N    :signed-long max)
+              (errN :signed-long 256))
         (with-macptrs ((err (external-call "GetDevices" :address uhppote 
-										                                    :address N 
-                                                        :address parray 
-                                                        :address)))
-           (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-		       (list (%get-signed-long N) array)))
-	    (dispose-heap-ivector array))))
-
+	  									                                  :address N 
+                                                        :address arrayp 
+                                                        :address errmsgp
+                                                        :address errN
+                                                        :signed-long)))
+          ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+          (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+		      (list (%get-signed-long N) array)))
+      (dispose-heap-ivector errmsg)
+	    (dispose-heap-ivector array)))))
 
 (defun uhppoted-get-device (uhppote device-id) "Retrieves the device information for a controller"
   (rletz ((device (:struct :GoDevice)))

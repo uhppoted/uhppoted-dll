@@ -4,7 +4,14 @@
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 - [ ] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
       - [ ] cstring // FIXME check error return
-      - [ ] get-devices
+      - [x] get-devices
+          - [x] C
+          - [x] C++
+          - [x] Python
+          - [x] C#: mono
+          - [x] C#: vs-mac
+          - [x] C#: vs-win
+          - [x] CCL
       - [ ] get-device
       - [ ] set-address
       - [ ] get-status
