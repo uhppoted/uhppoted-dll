@@ -326,20 +326,49 @@
       (dispose-heap-ivector errmsg)
 	    (dispose-heap-ivector array)))))
 
+
 (defun uhppoted-get-device (uhppote device-id) "Retrieves the device information for a controller"
-  (rletz ((device (:struct :GoDevice)))
-    (with-macptrs ((err (external-call "GetDevice" :address uhppote 
-								                                   :address device 
-									                                 :unsigned-long device-id 
-                                                   :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-	    (make-device :id      (%get-unsigned-long device)
-                   :address (go-string (pref device :GoDevice.address))
-			  	         :subnet  (go-string (pref device :GoDevice.subnet))
-                   :gateway (go-string (pref device :GoDevice.gateway))
-                   :MAC     (go-string (pref device :GoDevice.MAC))
-                   :version (go-string (pref device :GoDevice.version))
-                   :date    (go-string (pref device :GoDevice.date))))))
+  (multiple-value-bind (address addressp) (make-heap-ivector 16  '(unsigned-byte 1))
+  (multiple-value-bind (subnet  subnetp)  (make-heap-ivector 16  '(unsigned-byte 1))
+  (multiple-value-bind (gateway gatewayp) (make-heap-ivector 16  '(unsigned-byte 1))
+  (multiple-value-bind (MAC     MACp)     (make-heap-ivector 18  '(unsigned-byte 1))
+  (multiple-value-bind (version versionp) (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (date    datep)    (make-heap-ivector 11  '(unsigned-byte 1))
+  (multiple-value-bind (errmsg  errmsgp)  (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rletz ((device (:struct :GoDevice))
+            (errN :signed-long 256))
+
+      (setf (pref device :GoDevice.address) addressp)
+      (setf (pref device :GoDevice.subnet)  subnetp)
+      (setf (pref device :GoDevice.gateway) gatewayp)
+      (setf (pref device :GoDevice.MAC)     MACp)
+      (setf (pref device :GoDevice.version) versionp)
+      (setf (pref device :GoDevice.date)    datep)
+
+      (with-macptrs ((err (external-call "GetDevice" :address uhppote 
+		  						                                   :address device 
+			  						                                 :unsigned-long device-id 
+                                                     :address errmsgp
+                                                     :address errN
+                                                     :signed-long)))
+        ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+	      (make-device :id      (%get-unsigned-long device)
+                     :address (%get-cstring (pref device :GoDevice.address))
+                     :subnet  (%get-cstring (pref device :GoDevice.subnet))
+                     :gateway (%get-cstring (pref device :GoDevice.gateway))
+                     :MAC     (%get-cstring (pref device :GoDevice.MAC))
+                     :version (%get-cstring (pref device :GoDevice.version))
+                     :date    (%get-cstring (pref device :GoDevice.date)))))
+
+      (dispose-heap-ivector address)
+      (dispose-heap-ivector subnet)
+      (dispose-heap-ivector gateway)
+      (dispose-heap-ivector MAC)
+      (dispose-heap-ivector version)
+      (dispose-heap-ivector date)
+      (dispose-heap-ivector errmsg))))))))))
 
 
 (defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) "Sets the controller IP address, subnet mask and gateway"

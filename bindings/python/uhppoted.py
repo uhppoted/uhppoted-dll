@@ -250,8 +250,11 @@ class Uhppote:
 
     def get_device(self, deviceID):
         device = GoDevice()
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-        self.ffi.GetDevice(self._uhppote, byref(device), deviceID)
+        if self.ffix.GetDevice(self._uhppote, byref(device), deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         return Device(device.ID, device.address.decode('utf-8'), device.subnet.decode('utf-8'),
                       device.gateway.decode('utf-8'), device.MAC.decode('utf-8'),
@@ -682,7 +685,7 @@ class FFI:
 
     def __init__(self, errcheck):
         # self.GetDevices = ffi('GetDevices', errcheck)
-        self.GetDevice = ffi('GetDevice', errcheck)
+        # self.GetDevice = ffi('GetDevice', errcheck)
         self.SetAddress = ffi('SetAddress', errcheck)
         self.GetStatus = ffi('GetStatus', errcheck)
         self.GetTime = ffi('GetTime', errcheck)
@@ -720,6 +723,7 @@ class FFIX:
 
     def __init__(self, errcheck):
         self.GetDevices = ffix('GetDevices', errcheck)
+        self.GetDevice = ffix('GetDevice', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -757,7 +761,7 @@ def ffil(tag, errcheck):
 def libfunctions():
     return {
         'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32), c_char_p, POINTER(ctypes.c_int)]),
-        'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong]),
+        'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]),
         'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]),
         'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
@@ -835,6 +839,16 @@ class GoDevice(Structure):
         ('version', c_char_p),
         ('date', c_char_p),
     ]
+
+    def __init__(self):
+        super(GoDevice, self).__init__()
+        self.ID = 0
+        self.address = c_char_p(bytes(' ' * 16, 'utf-8'))
+        self.subnet = c_char_p(bytes(' ' * 16, 'utf-8'))
+        self.gateway = c_char_p(bytes(' ' * 16, 'utf-8'))
+        self.MAC = c_char_p(bytes(' ' * 18, 'utf-8'))
+        self.version = c_char_p(bytes(' ' * 6, 'utf-8'))
+        self.date = c_char_p(bytes(' ' * 11, 'utf-8'))
 
 
 class GoEvent(Structure):

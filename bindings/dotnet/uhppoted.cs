@@ -10,8 +10,7 @@ public class Uhppoted : IDisposable {
 
     public Uhppoted() {}
 
-    public Uhppoted(string bind, string broadcast, string listen, int timeout,
-                    Controller[] controllers, bool debug) {
+    public Uhppoted(string bind, string broadcast, string listen, int timeout, Controller[] controllers, bool debug) {
         this.u.bind = bind;
         this.u.broadcast = broadcast;
         this.u.listen = listen;
@@ -100,18 +99,43 @@ public class Uhppoted : IDisposable {
 
     public Device GetDevice(uint deviceID) {
         GoDevice device = new GoDevice();
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
 
-        string err = GetDevice(ref this.u, ref device, deviceID);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        device.address = Marshal.AllocHGlobal(16);
+        device.subnet = Marshal.AllocHGlobal(16);
+        device.gateway = Marshal.AllocHGlobal(16);
+        device.MAC = Marshal.AllocHGlobal(18);
+        device.version = Marshal.AllocHGlobal(5);
+        device.date = Marshal.AllocHGlobal(11);
+
+        try {
+            if (GetDevice(ref this.u, ref device, deviceID, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+
+            uint ID = device.ID;
+            string address = Marshal.PtrToStringAnsi(device.address)!;
+            string netmask = Marshal.PtrToStringAnsi(device.subnet)!;
+            string gateway = Marshal.PtrToStringAnsi(device.gateway)!;
+            string MAC = Marshal.PtrToStringAnsi(device.MAC)!;
+            string version = Marshal.PtrToStringAnsi(device.version)!;
+            string date = Marshal.PtrToStringAnsi(device.date)!;
+
+            return new Device(ID, address, netmask, gateway, MAC, version, date);
+        } finally {
+            Marshal.FreeHGlobal(device.address);
+            Marshal.FreeHGlobal(device.subnet);
+            Marshal.FreeHGlobal(device.gateway);
+            Marshal.FreeHGlobal(device.MAC);
+            Marshal.FreeHGlobal(device.version);
+            Marshal.FreeHGlobal(device.date);
+
+            Marshal.FreeHGlobal(err);
         }
-
-        return new Device(device.ID, device.address, device.subnet, device.gateway,
-                          device.MAC, device.version, device.date);
     }
 
-    public void SetAddress(uint deviceID, string address, string subnet,
-                           string gateway) {
+    public void SetAddress(uint deviceID, string address, string subnet, string gateway) {
         string err = SetAddress(ref this.u, deviceID, address, subnet, gateway);
         if (err != null && err != "") {
             throw new UhppotedException(err);
@@ -141,21 +165,13 @@ public class Uhppoted : IDisposable {
         Marshal.Copy(status.doors, doors, 0, 4);
         Marshal.Copy(status.buttons, buttons, 0, 4);
 
-        Event e = new Event(evt.timestamp,
-                            evt.index,
-                            evt.eventType,
-                            evt.granted != 0,
-                            evt.door,
-                            evt.direction,
-                            evt.card,
-                            evt.reason);
+        Event e = new Event(evt.timestamp, evt.index, evt.eventType, evt.granted != 0, evt.door, evt.direction, evt.card, evt.reason);
 
         Marshal.FreeHGlobal(status.doors);
         Marshal.FreeHGlobal(status.buttons);
         Marshal.FreeHGlobal(status.evt);
 
-        return new Status(status.ID,
-                          status.sysdatetime,
+        return new Status(status.ID, status.sysdatetime,
                           new bool[] {
                               doors[0] == 1,
                               doors[1] == 1,
@@ -168,12 +184,7 @@ public class Uhppoted : IDisposable {
                               buttons[2] == 1,
                               buttons[3] == 1,
                           },
-                          status.relays,
-                          status.inputs,
-                          status.syserror,
-                          status.info,
-                          status.seqno,
-                          e);
+                          status.relays, status.inputs, status.syserror, status.info, status.seqno, e);
     }
 
     public string GetTime(uint deviceID) {
@@ -335,14 +346,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new Event(evt.timestamp,
-                         evt.index,
-                         evt.eventType,
-                         evt.granted == 1,
-                         evt.door,
-                         evt.direction,
-                         evt.card,
-                         evt.reason);
+        return new Event(evt.timestamp, evt.index, evt.eventType, evt.granted == 1, evt.door, evt.direction, evt.card, evt.reason);
     }
 
     public void RecordSpecialEvents(uint deviceID, bool enabled) {
@@ -360,19 +364,9 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new TimeProfile(profile.ID,
-                               profile.linked,
-                               profile.from,
-                               profile.to,
-                               profile.monday != 0,
-                               profile.tuesday != 0,
-                               profile.wednesday != 0,
-                               profile.thursday != 0,
-                               profile.friday != 0,
-                               profile.saturday != 0,
-                               profile.sunday != 0,
-                               profile.segment1start, profile.segment1end,
-                               profile.segment2start, profile.segment2end,
+        return new TimeProfile(profile.ID, profile.linked, profile.from, profile.to, profile.monday != 0, profile.tuesday != 0,
+                               profile.wednesday != 0, profile.thursday != 0, profile.friday != 0, profile.saturday != 0,
+                               profile.sunday != 0, profile.segment1start, profile.segment1end, profile.segment2start, profile.segment2end,
                                profile.segment3start, profile.segment3end);
     }
 
@@ -490,22 +484,12 @@ public class Uhppoted : IDisposable {
 
     public void ListenEvents(OnEvent on_event, OnError on_error, ref byte listening, ref byte stop, IntPtr userdata) {
         OnListenEvent onevent = (GoListenEvent e, IntPtr userdata) => {
-            on_event(new ListenEvent(
-                         e.controller,
-                         e.timestamp,
-                         e.index,
-                         e.eventType,
-                         e.granted == 1 ? true : false,
-                         e.door,
-                         e.direction,
-                         e.card,
-                         e.reason),
+            on_event(new ListenEvent(e.controller, e.timestamp, e.index, e.eventType, e.granted == 1 ? true : false, e.door, e.direction,
+                                     e.card, e.reason),
                      userdata);
         };
 
-        OnListenError onerror = (string err) => {
-            on_error(err);
-        };
+        OnListenError onerror = (string err) => { on_error(err); };
 
         int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror, userdata);
         if (err != 0) {
@@ -545,7 +529,7 @@ public class Uhppoted : IDisposable {
     private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err, ref int errN);
 
     [DllImport("uhppoted.dll")]
-    private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
+    private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr err, ref int errN);
 
     [DllImport("uhppoted.dll")]
     private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
@@ -632,13 +616,15 @@ public class Uhppoted : IDisposable {
     private static extern string ActivateKeypads(ref UHPPOTE u, uint controller, bool reader1, bool reader2, bool reader3, bool reader4);
 
     [DllImport("uhppoted.dll")]
-    private static extern string SetDoorPasscodes(ref UHPPOTE u, uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4);
+    private static extern string SetDoorPasscodes(ref UHPPOTE u, uint controller, byte door, uint passcode1, uint passcode2, uint passcode3,
+                                                  uint passcode4);
 
     [DllImport("uhppoted.dll")]
     private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
 
     [DllImport("uhppoted.dll")]
-    private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte listening, ref byte stop, OnListenError errx, IntPtr userdata);
+    private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte listening, ref byte stop, OnListenError errx,
+                                     IntPtr userdata);
 
     struct udevice {
         public uint ID;
@@ -663,12 +649,12 @@ public class Uhppoted : IDisposable {
 
     struct GoDevice {
         public uint ID;
-        public string address;
-        public string subnet;
-        public string gateway;
-        public string MAC;
-        public string version;
-        public string date;
+        public IntPtr address;
+        public IntPtr subnet;
+        public IntPtr gateway;
+        public IntPtr MAC;
+        public IntPtr version;
+        public IntPtr date;
     }
 
     struct GoEvent {
@@ -790,8 +776,7 @@ public class Device {
     public string version;
     public string date;
 
-    public Device(uint ID, string address, string subnet, string gateway,
-                  string MAC, string version, string date) {
+    public Device(uint ID, string address, string subnet, string gateway, string MAC, string version, string date) {
         this.ID = ID;
         this.address = address;
         this.subnet = subnet;
@@ -812,8 +797,7 @@ public class Event {
     public uint card;
     public byte reason;
 
-    public Event(string timestamp, uint index, byte eventType, bool granted,
-                 byte door, byte direction, uint card, byte reason) {
+    public Event(string timestamp, uint index, byte eventType, bool granted, byte door, byte direction, uint card, byte reason) {
         this.timestamp = timestamp;
         this.index = index;
         this.eventType = eventType;
@@ -848,14 +832,7 @@ public class ListenEvent {
         this.reason = 0;
     }
 
-    public ListenEvent(uint controller,
-                       string timestamp,
-                       uint index,
-                       byte eventType,
-                       bool granted,
-                       byte door,
-                       byte direction,
-                       uint card,
+    public ListenEvent(uint controller, string timestamp, uint index, byte eventType, bool granted, byte door, byte direction, uint card,
                        byte reason) {
         this.controller = controller;
         this.timestamp = timestamp;
@@ -881,8 +858,7 @@ public class Status {
     public uint seqno;
     public Event evt;
 
-    public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons,
-                  byte relays, byte inputs, byte syserror, byte info, uint seqno,
+    public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons, byte relays, byte inputs, byte syserror, byte info, uint seqno,
                   Event evt) {
         this.ID = ID;
         this.sysdatetime = sysdatetime;
@@ -942,10 +918,8 @@ public class TimeProfile {
     public string segment3start;
     public string segment3end;
 
-    public TimeProfile(byte ID, byte linked, string from, string to,
-                       bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
-                       string segment1start, string segment1end,
-                       string segment2start, string segment2end,
+    public TimeProfile(byte ID, byte linked, string from, string to, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday,
+                       bool saturday, bool sunday, string segment1start, string segment1end, string segment2start, string segment2end,
                        string segment3start, string segment3end) {
         this.ID = ID;
         this.linked = linked;
@@ -984,10 +958,8 @@ public class Task {
     public string at;
     public byte cards;
 
-    public Task(byte task, byte door, string from, string to,
-                bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
-                string at,
-                byte cards) {
+    public Task(byte task, byte door, string from, string to, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday,
+                bool saturday, bool sunday, string at, byte cards) {
         this.task = task;
         this.door = door;
         this.from = from;

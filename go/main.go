@@ -30,12 +30,12 @@ typedef struct UHPPOTE {
 
 typedef struct Device {
     uint32_t ID;
-	char *address;
-	char *subnet;
-	char *gateway;
-	char *MAC;
-	char *version;
-	char *date;
+	const char *address;  // expects at least char[16]
+	const char *subnet;   // expects at least char[16]
+	const char *gateway;  // expects at least char[16]
+	const char *MAC;      // expects at least char[18]
+	const char *version;  // expects at least char[6]
+	const char *date;     // expects at least char[11]
 } Device;
 
 typedef struct Event {
@@ -174,14 +174,12 @@ func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errmsg *C.char, err
 }
 
 //export GetDevice
-func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getDevice(uu, device, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, errmsg *C.char, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getDevice(uu, device, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export SetAddress

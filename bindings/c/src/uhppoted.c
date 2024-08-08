@@ -79,8 +79,7 @@ const char *errmsg() { return err; }
  * 1. https://wiki.sei.cmu.edu/confluence/display/cplusplus/EXP58-CPP.+Pass+an+object+of+the+correct+type+to+va_start
  * 2. https://www.linkedin.com/pulse/modern-c-variadic-functions-how-shoot-yourself-foot-avoid-zinin
  */
-void setup(const char *bind, const char *broadcast, const char *listen,
-           int timeout, int debug, ...) {
+void setup(const char *bind, const char *broadcast, const char *listen, int timeout, int debug, ...) {
     if (u != NULL) {
         teardown();
     }
@@ -205,12 +204,28 @@ int get_devices(uint32_t **devices, int *N) {
 }
 
 int get_device(uint32_t id, struct device *d) {
-    struct Device device;
+    char address[16];
+    char subnet[16];
+    char gateway[16];
+    char MAC[18];
+    char version[6];
+    char date[11];
 
-    char *err = GetDevice(u, &device, id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    struct Device device = {
+        .address = address,
+        .subnet = subnet,
+        .gateway = gateway,
+        .MAC = MAC,
+        .version = version,
+        .date = date,
+    };
+
+    if ((rc = GetDevice(u, &device, id, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -223,18 +238,10 @@ int get_device(uint32_t id, struct device *d) {
     snprintf(d->version, sizeof(d->version), "%s", device.version);
     snprintf(d->date, sizeof(d->date), "%s", device.date);
 
-    free(device.address);
-    free(device.subnet);
-    free(device.gateway);
-    free(device.MAC);
-    free(device.version);
-    free(device.date);
-
     return 0;
 }
 
-int set_address(uint32_t id, const char *address, const char *subnet,
-                const char *gateway) {
+int set_address(uint32_t id, const char *address, const char *subnet, const char *gateway) {
     char *err = SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
     if (err != NULL) {
         set_error(err, strlen(err));

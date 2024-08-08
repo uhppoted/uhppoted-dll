@@ -50,12 +50,12 @@ typedef struct UHPPOTE {
 
 typedef struct Device {
     uint32_t ID;
-	char *address;
-	char *subnet;
-	char *gateway;
-	char *MAC;
-	char *version;
-	char *date;
+	const char *address;  // expects at least char[16]
+	const char *subnet;   // expects at least char[16]
+	const char *gateway;  // expects at least char[16]
+	const char *MAC;      // expects at least char[18]
+	const char *version;  // expects at least char[6]
+	const char *date;     // expects at least char[11]
 } Device;
 
 typedef struct Event {
@@ -189,7 +189,7 @@ extern "C" {
 #endif
 
 extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg, int* errN);
-extern char* GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID);
+extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg, int* errN);
 extern char* SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway);
 extern char* GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID);
 extern char* GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID);

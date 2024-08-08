@@ -55,12 +55,13 @@ func getDevice(uu uhppote.IUHPPOTE, d *C.struct_Device, deviceID uint32) error {
 	}
 
 	d.ID = C.uint(deviceID)
-	d.address = C.CString(fmt.Sprintf("%v", response.IpAddress))
-	d.subnet = C.CString(fmt.Sprintf("%v", response.SubnetMask))
-	d.gateway = C.CString(fmt.Sprintf("%v", response.Gateway))
-	d.MAC = C.CString(fmt.Sprintf("%v", response.MacAddress))
-	d.version = C.CString(fmt.Sprintf("%v", response.Version))
-	d.date = C.CString(fmt.Sprintf("%v", response.Date))
+
+	cstring(response.IpAddress, d.address, 16)
+	cstring(response.SubnetMask, d.subnet, 16)
+	cstring(response.Gateway, d.gateway, 16)
+	cstring(response.MacAddress, d.MAC, 18)
+	cstring(response.Version, d.version, 6)
+	cstring(response.Date, d.date, 11)
 
 	return nil
 }

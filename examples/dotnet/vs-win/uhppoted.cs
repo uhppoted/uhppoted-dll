@@ -113,15 +113,44 @@ namespace uhppoted
         public Device GetDevice(uint deviceID)
         {
             GoDevice device = new GoDevice();
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
-            string err = GetDevice(ref this.u, ref device, deviceID);
-            if (err != null && err != "")
+            device.address = Marshal.AllocHGlobal(16);
+            device.subnet = Marshal.AllocHGlobal(16);
+            device.gateway = Marshal.AllocHGlobal(16);
+            device.MAC = Marshal.AllocHGlobal(18);
+            device.version = Marshal.AllocHGlobal(5);
+            device.date = Marshal.AllocHGlobal(11);
+
+            try
             {
-                throw new UhppotedException(err);
-            }
+                if (GetDevice(ref this.u, ref device, deviceID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
 
-            return new Device(device.ID, device.address, device.subnet, device.gateway,
-                              device.MAC, device.version, device.date);
+                uint ID = device.ID;
+                string address = Marshal.PtrToStringAnsi(device.address)!;
+                string netmask = Marshal.PtrToStringAnsi(device.subnet)!;
+                string gateway = Marshal.PtrToStringAnsi(device.gateway)!;
+                string MAC = Marshal.PtrToStringAnsi(device.MAC)!;
+                string version = Marshal.PtrToStringAnsi(device.version)!;
+                string date = Marshal.PtrToStringAnsi(device.date)!;
+
+                return new Device(ID, address, netmask, gateway, MAC, version, date);
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(device.address);
+                Marshal.FreeHGlobal(device.subnet);
+                Marshal.FreeHGlobal(device.gateway);
+                Marshal.FreeHGlobal(device.MAC);
+                Marshal.FreeHGlobal(device.version);
+                Marshal.FreeHGlobal(device.date);
+
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public void SetAddress(uint deviceID, string address, string subnet,
@@ -664,7 +693,7 @@ namespace uhppoted
         private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err, ref int errN);
 
         [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-        private static extern string GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID);
+        private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
         private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
@@ -790,12 +819,12 @@ namespace uhppoted
         struct GoDevice
         {
             public uint ID;
-            public string address;
-            public string subnet;
-            public string gateway;
-            public string MAC;
-            public string version;
-            public string date;
+            public IntPtr address;
+            public IntPtr subnet;
+            public IntPtr gateway;
+            public IntPtr MAC;
+            public IntPtr version;
+            public IntPtr date;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

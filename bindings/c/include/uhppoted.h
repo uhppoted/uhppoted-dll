@@ -110,8 +110,7 @@ const char *lookup(const char *, uint8_t, const char *);
 
 int get_devices(uint32_t **devices, int *N);
 int get_device(uint32_t id, struct device *);
-int set_address(uint32_t id, const char *address, const char *subnet,
-                const char *gateway);
+int set_address(uint32_t id, const char *address, const char *subnet, const char *gateway);
 int get_status(uint32_t id, struct status *);
 int get_time(uint32_t id, char **);
 int set_time(uint32_t id, char *);

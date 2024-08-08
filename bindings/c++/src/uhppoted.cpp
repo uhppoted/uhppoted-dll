@@ -185,11 +185,28 @@ vector<uint32_t> uhppoted::get_devices() {
 }
 
 struct device uhppoted::get_device(uint32_t id) {
-    struct Device device;
+    char address[16];
+    char subnet[16];
+    char gateway[16];
+    char MAC[18];
+    char version[6];
+    char date[11];
 
-    char *err = GetDevice(u, &device, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    struct Device device = {
+        .address = address,
+        .subnet = subnet,
+        .gateway = gateway,
+        .MAC = MAC,
+        .version = version,
+        .date = date,
+    };
+
+    if ((rc = GetDevice(u, &device, id, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
     struct device d;
@@ -201,13 +218,6 @@ struct device uhppoted::get_device(uint32_t id) {
     d.MAC = device.MAC;
     d.version = device.version;
     d.date = device.date;
-
-    free(device.address);
-    free(device.subnet);
-    free(device.gateway);
-    free(device.MAC);
-    free(device.version);
-    free(device.date);
 
     return d;
 }
