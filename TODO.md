@@ -7,7 +7,7 @@
       - [ ] CCL: return code is a pointer ??
       - [x] get-devices
       - [x] get-device
-          - [x] preallocate struct strings
+      - [x] set-address
           - [x] C
           - [x] C++
           - [x] Python
@@ -15,8 +15,8 @@
           - [x] C#: vs-mac
           - [x] C#: vs-win
           - [x] CCL
-      - [ ] set-address
       - [ ] get-status
+          - [ ] preallocate struct strings
       - [ ] get-time
       - [ ] set-time
       - [ ] get-listener

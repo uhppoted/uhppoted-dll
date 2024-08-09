@@ -107,16 +107,14 @@ typedef void (*on_error)(const char *err);
 class uhppoted {
   public:
     uhppoted();
-    uhppoted(const std::string &bind, const std::string &broadcast,
-             const std::string &listen, int timeout,
+    uhppoted(const std::string &bind, const std::string &broadcast, const std::string &listen, int timeout,
              const std::vector<controller> controllers, bool debug);
     virtual ~uhppoted();
 
   public:
     std::vector<uint32_t> get_devices();
     device get_device(uint32_t id);
-    void set_address(uint32_t id, std::string &address, std::string &subnet,
-                     std::string &gateway);
+    void set_address(uint32_t id, std::string &address, std::string &subnet, std::string &gateway);
     status get_status(uint32_t id);
     std::string get_time(uint32_t id);
     void set_time(uint32_t id, std::string &);
@@ -149,7 +147,8 @@ class uhppoted {
     void set_pc_control(uint32_t controller, bool enabled);
     void set_interlock(uint32_t controller, uint8_t interlock);
     void activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4);
-    void set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
+    void set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3,
+                            uint32_t passcode4);
     void restore_default_parameters(uint32_t controller);
 
     void listen(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata);

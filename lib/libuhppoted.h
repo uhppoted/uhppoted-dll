@@ -190,7 +190,7 @@ extern "C" {
 
 extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg, int* errN);
 extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg, int* errN);
-extern char* SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway);
+extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway, char* errmsg, int* errN);
 extern char* GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID);
 extern char* GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID);
 extern char* SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime);

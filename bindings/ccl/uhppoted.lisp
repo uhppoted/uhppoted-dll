@@ -353,7 +353,7 @@
                                                      :address errN
                                                      :signed-long)))
         ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
 	      (make-device :id      (%get-unsigned-long device)
                      :address (%get-cstring (pref device :GoDevice.address))
                      :subnet  (%get-cstring (pref device :GoDevice.subnet))
@@ -373,16 +373,22 @@
 
 (defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) "Sets the controller IP address, subnet mask and gateway"
   (with-cstrs ((address ip-addr)
-			   (subnet  subnet-mask)
-			   (gateway gateway-addr))
+               (subnet  subnet-mask)
+               (gateway gateway-addr))
+  (multiple-value-bind (errmsg  errmsgp)  (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN :signed-long 256))
     (with-macptrs ((err (external-call "SetAddress" :address uhppote 
-				                                					  :unsigned-long device-id 
-									                                  :address address  
+		  		                                					:unsigned-long device-id 
+			  						                                :address address  
                                                     :address subnet
                                                     :address gateway
-                                                    :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      t)))
+                                                    :address errmsgp
+                                                    :address errN
+                                                    :signed-long)))
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+      (dispose-heap-ivector errmsg)))))
 
 
 (defun uhppoted-get-status (uhppote device-id) "Retrieves a controller status information"

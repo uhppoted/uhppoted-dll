@@ -183,14 +183,12 @@ func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, er
 }
 
 //export SetAddress
-func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.char) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setAddress(uu, deviceID, addr, subnet, gateway); err != nil {
-		return C.CString(err.Error())
+func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.char, errmsg *C.char, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setAddress(uu, deviceID, addr, subnet, gateway)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetStatus

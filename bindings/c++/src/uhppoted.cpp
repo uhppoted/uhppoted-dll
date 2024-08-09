@@ -68,19 +68,13 @@ uhppoted_exception::uhppoted_exception(char *err) {
     free(err);
 }
 
-uhppoted_exception::uhppoted_exception(const char *err, int N) {
-    message = std::string(err, N);
-}
+uhppoted_exception::uhppoted_exception(const char *err, int N) { message = std::string(err, N); }
 
 uhppoted_exception::~uhppoted_exception() {}
 
-const char *uhppoted_exception::what() const noexcept {
-    return message.c_str();
-}
+const char *uhppoted_exception::what() const noexcept { return message.c_str(); }
 
-uhppoted::uhppoted() {
-    u = nullptr;
-}
+uhppoted::uhppoted() { u = nullptr; }
 
 /* (optional) setup for UHPPOTE network configuration. Defaults to:
  * - bind:        0.0.0.0:0
@@ -91,9 +85,9 @@ uhppoted::uhppoted() {
  * - debug:       false
  *
  */
-uhppoted::uhppoted(const string &_bind, const string &_broadcast,
-                   const string &_listen, int timeout,
-                   const vector<controller> controllers, bool debug) : bind_addr(_bind), broadcast_addr(_broadcast), listen_addr(_listen) {
+uhppoted::uhppoted(const string &_bind, const string &_broadcast, const string &_listen, int timeout, const vector<controller> controllers,
+                   bool debug)
+    : bind_addr(_bind), broadcast_addr(_broadcast), listen_addr(_listen) {
     if ((u = new UHPPOTE) != nullptr) {
         u->bind = this->bind_addr.c_str();
         u->broadcast = this->broadcast_addr.c_str();
@@ -222,12 +216,13 @@ struct device uhppoted::get_device(uint32_t id) {
     return d;
 }
 
-void uhppoted::set_address(uint32_t id, std::string &address,
-                           std::string &subnet, std::string &gateway) {
-    char *err = SetAddress(u, id, (char *)address.c_str(), (char *)subnet.c_str(),
-                           (char *)gateway.c_str());
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+void uhppoted::set_address(uint32_t id, std::string &address, std::string &subnet, std::string &gateway) {
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = SetAddress(u, id, (char *)address.c_str(), (char *)subnet.c_str(), (char *)gateway.c_str(), err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
@@ -620,7 +615,8 @@ void uhppoted::activate_keypads(uint32_t controller, bool reader1, bool reader2,
     }
 }
 
-void uhppoted::set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
+void uhppoted::set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3,
+                                  uint32_t passcode4) {
     char *err = SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4);
     if (err != nullptr) {
         throw uhppoted_exception(err);

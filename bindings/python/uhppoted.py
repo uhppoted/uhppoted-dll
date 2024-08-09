@@ -261,8 +261,16 @@ class Uhppote:
                       device.version.decode('utf-8'), device.date.decode('utf-8'))
 
     def set_address(self, deviceID, address, subnet, gateway):
-        self.ffi.SetAddress(self._uhppote, deviceID, c_char_p(bytes(address, 'utf-8')),
-                            c_char_p(bytes(subnet, 'utf-8')), c_char_p(bytes(gateway, 'utf-8')))
+        c_address = c_char_p(bytes(address, 'utf-8'))
+        c_subnet = c_char_p(bytes(subnet, 'utf-8'))
+        c_gateway = c_char_p(bytes(gateway, 'utf-8'))
+
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.SetAddress(self._uhppote, deviceID, c_address, c_subnet, c_gateway, err,
+                                byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_status(self, deviceID):
         status = GoStatus()
@@ -686,7 +694,7 @@ class FFI:
     def __init__(self, errcheck):
         # self.GetDevices = ffi('GetDevices', errcheck)
         # self.GetDevice = ffi('GetDevice', errcheck)
-        self.SetAddress = ffi('SetAddress', errcheck)
+        # self.SetAddress = ffi('SetAddress', errcheck)
         self.GetStatus = ffi('GetStatus', errcheck)
         self.GetTime = ffi('GetTime', errcheck)
         self.SetTime = ffi('SetTime', errcheck)
@@ -724,6 +732,7 @@ class FFIX:
     def __init__(self, errcheck):
         self.GetDevices = ffix('GetDevices', errcheck)
         self.GetDevice = ffix('GetDevice', errcheck)
+        self.SetAddress = ffix('SetAddress', errcheck)
 
 
 def ffi(tag, errcheck):

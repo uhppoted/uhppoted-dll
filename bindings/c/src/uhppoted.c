@@ -242,10 +242,12 @@ int get_device(uint32_t id, struct device *d) {
 }
 
 int set_address(uint32_t id, const char *address, const char *subnet, const char *gateway) {
-    char *err = SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 

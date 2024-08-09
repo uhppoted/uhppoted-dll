@@ -156,10 +156,12 @@ namespace uhppoted
         public void SetAddress(uint deviceID, string address, string subnet,
                                string gateway)
         {
-            string err = SetAddress(ref this.u, deviceID, address, subnet, gateway);
-            if (err != null && err != "")
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+
+            if (SetAddress(ref this.u, deviceID, address, subnet, gateway, err, ref errN) != 0) 
             {
-                throw new UhppotedException(err);
+                raise(err, errN);
             }
         }
 
@@ -696,7 +698,7 @@ namespace uhppoted
         private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-        private static extern string SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway);
+        private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, IntPtr err, ref int errN);
 
         [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
         private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
