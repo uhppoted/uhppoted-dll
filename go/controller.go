@@ -98,6 +98,10 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status struct")
 	}
 
+	if status.event == nil {
+		return fmt.Errorf("invalid argument (status) - expected valid pointer to Status.Event struct")
+	}
+
 	response, err := uu.GetStatus(deviceID)
 	if err != nil {
 		return err
@@ -110,7 +114,8 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	}
 
 	status.ID = C.uint(response.SerialNumber)
-	status.sysdatetime = C.CString(format(response.SystemDateTime))
+
+	cstring(response.SystemDateTime, status.sysdatetime, 20)
 
 	doors := unsafe.Slice(status.doors, 4)
 	buttons := unsafe.Slice(status.buttons, 4)
@@ -133,7 +138,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.info = C.uchar(response.SpecialInfo)
 
 	if response.Event.IsZero() {
-		status.event.timestamp = C.CString("")
+		cstring("", status.event.timestamp, 20)
 		status.event.index = C.uint(0)
 		status.event.eventType = C.uchar(0)
 		status.event.granted = cbool(false)
@@ -142,7 +147,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 		status.event.card = C.uint(0)
 		status.event.reason = C.uchar(0)
 	} else {
-		status.event.timestamp = C.CString(format(response.Event.Timestamp))
+		cstring(format(response.Event.Timestamp), status.event.timestamp, 20)
 		status.event.index = C.uint(response.Event.Index)
 		status.event.eventType = C.uchar(response.Event.Type)
 		status.event.granted = cbool(response.Event.Granted)

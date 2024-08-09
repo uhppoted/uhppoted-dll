@@ -249,9 +249,10 @@ class Uhppote:
         return list[0:count.value]
 
     def get_device(self, deviceID):
-        device = GoDevice()
         errN = ctypes.c_int(256)
         err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        device = GoDevice()
 
         if self.ffix.GetDevice(self._uhppote, byref(device), deviceID, err, byref(errN)) != 0:
             raise Exception(f"{err.value.decode('utf-8')}")
@@ -261,24 +262,25 @@ class Uhppote:
                       device.version.decode('utf-8'), device.date.decode('utf-8'))
 
     def set_address(self, deviceID, address, subnet, gateway):
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
         c_address = c_char_p(bytes(address, 'utf-8'))
         c_subnet = c_char_p(bytes(subnet, 'utf-8'))
         c_gateway = c_char_p(bytes(gateway, 'utf-8'))
-
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
         if self.ffix.SetAddress(self._uhppote, deviceID, c_address, c_subnet, c_gateway, err,
                                 byref(errN)) != 0:
             raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_status(self, deviceID):
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
         status = GoStatus()
-        status.doors = (c_ubyte * 4)(*[0] * 4)
-        status.buttons = (c_ubyte * 4)(*[0] * 4)
-        status.event = pointer(GoEvent())
 
-        self.ffi.GetStatus(self._uhppote, ctypes.byref(status), deviceID)
+        if self.ffix.GetStatus(self._uhppote, ctypes.byref(status), deviceID, err,
+                               byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         doors = [False, False, False, False]
         buttons = [False, False, False, False]
@@ -695,7 +697,7 @@ class FFI:
         # self.GetDevices = ffi('GetDevices', errcheck)
         # self.GetDevice = ffi('GetDevice', errcheck)
         # self.SetAddress = ffi('SetAddress', errcheck)
-        self.GetStatus = ffi('GetStatus', errcheck)
+        # self.GetStatus = ffi('GetStatus', errcheck)
         self.GetTime = ffi('GetTime', errcheck)
         self.SetTime = ffi('SetTime', errcheck)
         self.GetListener = ffi('GetListener', errcheck)
@@ -733,6 +735,7 @@ class FFIX:
         self.GetDevices = ffix('GetDevices', errcheck)
         self.GetDevice = ffix('GetDevice', errcheck)
         self.SetAddress = ffix('SetAddress', errcheck)
+        self.GetStatus = ffix('GetStatus', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -771,8 +774,8 @@ def libfunctions():
     return {
         'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32), c_char_p, POINTER(ctypes.c_int)]),
         'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p]),
-        'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong]),
+        'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
+        'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
         'SetTime':                  (lib.SetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
         'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
@@ -872,6 +875,10 @@ class GoEvent(Structure):
         ('reason', c_ubyte),
     ]
 
+    def __init__(self):
+        super(GoEvent, self).__init__()
+        self.timestamp = c_char_p(bytes(' ' * 20, 'utf-8'))
+
 
 class GoStatus(Structure):
     _fields_ = [
@@ -886,6 +893,14 @@ class GoStatus(Structure):
         ('seqno', c_uint32),
         ('event', POINTER(GoEvent)),
     ]
+
+    def __init__(self):
+        super(GoStatus, self).__init__()
+        self.ID = 0
+        self.sysdatetime = c_char_p(bytes(' ' * 20, 'utf-8'))
+        self.doors = (c_ubyte * 4)(*[0] * 4)
+        self.buttons = (c_ubyte * 4)(*[0] * 4)
+        self.event = pointer(GoEvent())
 
 
 class GoDoorControl(Structure):

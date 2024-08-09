@@ -59,7 +59,7 @@ typedef struct Device {
 } Device;
 
 typedef struct Event {
-	char  *timestamp;
+	const char *timestamp; // expects at least char[20]
     uint32_t index;
 	uint8_t eventType;
 	uint8_t granted;
@@ -71,9 +71,9 @@ typedef struct Event {
 
 typedef struct Status {
     uint32_t ID;
-	char *sysdatetime;
-	uint8_t  *doors;   // uint_8[4]
-	uint8_t  *buttons; // uint_8[4]
+	const char *sysdatetime; // expects at least char[20]
+	uint8_t  *doors;         // expects uint_8[4]
+	uint8_t  *buttons;       // expects uint_8[4]
 	uint8_t relays;
 	uint8_t inputs;
 	uint8_t syserror;
@@ -191,7 +191,7 @@ extern "C" {
 extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg, int* errN);
 extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg, int* errN);
 extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway, char* errmsg, int* errN);
-extern char* GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID);
+extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, char* errmsg, int* errN);
 extern char* GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID);
 extern char* SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime);
 extern char* GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID);

@@ -39,7 +39,7 @@ typedef struct Device {
 } Device;
 
 typedef struct Event {
-	char  *timestamp;
+	const char *timestamp; // expects at least char[20]
     uint32_t index;
 	uint8_t eventType;
 	uint8_t granted;
@@ -51,9 +51,9 @@ typedef struct Event {
 
 typedef struct Status {
     uint32_t ID;
-	char *sysdatetime;
-	uint8_t  *doors;   // uint_8[4]
-	uint8_t  *buttons; // uint_8[4]
+	const char *sysdatetime; // expects at least char[20]
+	uint8_t  *doors;         // expects uint_8[4]
+	uint8_t  *buttons;       // expects uint_8[4]
 	uint8_t relays;
 	uint8_t inputs;
 	uint8_t syserror;
@@ -192,14 +192,12 @@ func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.c
 }
 
 //export GetStatus
-func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getStatus(uu, status, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, errmsg *C.char, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getStatus(uu, status, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetTime

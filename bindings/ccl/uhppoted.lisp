@@ -386,47 +386,59 @@
                                                     :address errmsgp
                                                     :address errN
                                                     :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
       (dispose-heap-ivector errmsg)))))
 
 
 (defun uhppoted-get-status (uhppote device-id) "Retrieves a controller status information"
-  (%stack-block ((doors   4)
-				         (buttons 4))
-    (rletz ((event  (:struct :GoEvent))   
-            (status (:struct :GoStatus) :doors   doors
-					                              :buttons buttons
-					                              :event   event))
-      (with-macptrs ((err (external-call "GetStatus" :address uhppote 
-										                                 :address status
-										                                 :unsigned-long device-id 
-										                                 :address)))
-        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-        (make-status :id        (%get-unsigned-long status)
-					           :timestamp (go-string (pref status :GoStatus.timestamp))
-					           :doors     (list (if (equal 0 (%get-unsigned-byte doors 0)) nil T)
-									                    (if (equal 0 (%get-unsigned-byte doors 1)) nil T)
-									                    (if (equal 0 (%get-unsigned-byte doors 2)) nil T)
-									                    (if (equal 0 (%get-unsigned-byte doors 3)) nil T))
-					           :buttons   (list (if (equal 0 (%get-unsigned-byte buttons 0)) nil T)
-							                        (if (equal 0 (%get-unsigned-byte buttons 1)) nil T)
-									                    (if (equal 0 (%get-unsigned-byte buttons 2)) nil T)
-									                    (if (equal 0 (%get-unsigned-byte buttons 3)) nil T))
-					           :relays     (pref status :GoStatus.relays)
-					           :inputs     (pref status :GoStatus.inputs)
-					           :syserror   (pref status :GoStatus.syserror)
-					           :info       (pref status :GoStatus.info)
-					           :seqno      (pref status :GoStatus.seqno)
-					           :event      (make-event :timestamp (go-string (pref event :GoEvent.timestamp))
-										 :index      (pref event :GoEvent.index)
-										 :event-type (pref event :GoEvent.event-type)
-										 :granted    (pref event :GoEvent.granted)
-										 :door       (pref event :GoEvent.door)
-									   :direction  (pref event :GoEvent.direction)
-										 :card       (pref event :GoEvent.card)
-										 :reason     (pref event :GoEvent.reason)))))))
-
+  (multiple-value-bind (sysdatetime sysdatetimep) (make-heap-ivector 20  '(unsigned-byte 1))
+  (multiple-value-bind (timestamp   timestampp)   (make-heap-ivector 20  '(unsigned-byte 1))
+  (multiple-value-bind (errmsg      errmsgp)      (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (%stack-block ((doors   4)
+	  			         (buttons 4))
+      (rletz ((event  (:struct :GoEvent)  :timestamp timestampp)
+              (status (:struct :GoStatus) :timestamp sysdatetimep
+                                          :doors     doors
+			  		                              :buttons   buttons
+				  	                              :event     event)
+              (errN :signed-long 256))
+        (with-macptrs ((err (external-call "GetStatus" :address uhppote 
+			  							                                 :address status
+				  						                                 :unsigned-long device-id 
+                                                       :address errmsgp
+                                                       :address errN
+                                                       :signed-long)))
+          ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+          (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+          (make-status :id        (%get-unsigned-long status)
+			  		           :timestamp (%get-cstring (pref status :GoStatus.timestamp))
+				  	           :doors     (list (if (equal 0 (%get-unsigned-byte doors 0)) nil T)
+					  				                    (if (equal 0 (%get-unsigned-byte doors 1)) nil T)
+						  			                    (if (equal 0 (%get-unsigned-byte doors 2)) nil T)
+							  		                    (if (equal 0 (%get-unsigned-byte doors 3)) nil T))
+					             :buttons   (list (if (equal 0 (%get-unsigned-byte buttons 0)) nil T)
+							                          (if (equal 0 (%get-unsigned-byte buttons 1)) nil T)
+									                      (if (equal 0 (%get-unsigned-byte buttons 2)) nil T)
+									                      (if (equal 0 (%get-unsigned-byte buttons 3)) nil T))
+  					           :relays     (pref status :GoStatus.relays)
+	  				           :inputs     (pref status :GoStatus.inputs)
+		  			           :syserror   (pref status :GoStatus.syserror)
+			  		           :info       (pref status :GoStatus.info)
+				  	           :seqno      (pref status :GoStatus.seqno)
+					             :event      (make-event :timestamp (%get-cstring (pref event :GoEvent.timestamp))
+						  				 :index      (pref event :GoEvent.index)
+							  			 :event-type (pref event :GoEvent.event-type)
+								  		 :granted    (pref event :GoEvent.granted)
+									  	 :door       (pref event :GoEvent.door)
+									     :direction  (pref event :GoEvent.direction)
+  										 :card       (pref event :GoEvent.card)
+	  									 :reason     (pref event :GoEvent.reason))))))
+    (dispose-heap-ivector sysdatetime)
+    (dispose-heap-ivector timestamp)
+    (dispose-heap-ivector errmsg))))))
 
 (defun uhppoted-get-time (uhppote device-id) "Retrieves a controller date/time"
   (with-cstrs ((datetime ""))

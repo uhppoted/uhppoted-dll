@@ -145,48 +145,62 @@ public class Uhppoted : IDisposable {
     }
 
     public Status GetStatus(uint deviceID) {
-        GoStatus status = new GoStatus();
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
 
+        GoStatus status = new GoStatus();
+        GoEvent _evt = new GoEvent();
+
+        _evt.timestamp = Marshal.AllocHGlobal(20);
+
+        status.sysdatetime = Marshal.AllocHGlobal(20);
         status.doors = Marshal.AllocHGlobal(4);
         status.buttons = Marshal.AllocHGlobal(4);
         status.evt = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(GoEvent)));
 
-        string err = GetStatus(ref this.u, ref status, deviceID);
-        if (err != null && err != "") {
+        Marshal.StructureToPtr(_evt, status.evt, true);
+
+        try {
+            if (GetStatus(ref this.u, ref status, deviceID, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+
+            string sysdatetime = Marshal.PtrToStringAnsi(status.sysdatetime)!;
+            byte[] doors = new byte[4];
+            byte[] buttons = new byte[4];
+
+            Marshal.Copy(status.doors, doors, 0, 4);
+            Marshal.Copy(status.buttons, buttons, 0, 4);
+
+            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
+            string timestamp = Marshal.PtrToStringAnsi(evt.timestamp)!;
+            Event e = new Event(timestamp, evt.index, evt.eventType, evt.granted != 0, evt.door, evt.direction, evt.card, evt.reason);
+
+            return new Status(status.ID, sysdatetime,
+                              new bool[] {
+                                  doors[0] == 1,
+                                  doors[1] == 1,
+                                  doors[2] == 1,
+                                  doors[3] == 1,
+                              },
+                              new bool[] {
+                                  buttons[0] == 1,
+                                  buttons[1] == 1,
+                                  buttons[2] == 1,
+                                  buttons[3] == 1,
+                              },
+                              status.relays, status.inputs, status.syserror, status.info, status.seqno, e);
+
+        } finally {
+            Marshal.FreeHGlobal(status.sysdatetime);
             Marshal.FreeHGlobal(status.doors);
             Marshal.FreeHGlobal(status.buttons);
+
+            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
+
+            Marshal.FreeHGlobal(evt.timestamp);
             Marshal.FreeHGlobal(status.evt);
-
-            throw new UhppotedException(err);
         }
-
-        byte[] doors = new byte[4];
-        byte[] buttons = new byte[4];
-        GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
-
-        Marshal.Copy(status.doors, doors, 0, 4);
-        Marshal.Copy(status.buttons, buttons, 0, 4);
-
-        Event e = new Event(evt.timestamp, evt.index, evt.eventType, evt.granted != 0, evt.door, evt.direction, evt.card, evt.reason);
-
-        Marshal.FreeHGlobal(status.doors);
-        Marshal.FreeHGlobal(status.buttons);
-        Marshal.FreeHGlobal(status.evt);
-
-        return new Status(status.ID, status.sysdatetime,
-                          new bool[] {
-                              doors[0] == 1,
-                              doors[1] == 1,
-                              doors[2] == 1,
-                              doors[3] == 1,
-                          },
-                          new bool[] {
-                              buttons[0] == 1,
-                              buttons[1] == 1,
-                              buttons[2] == 1,
-                              buttons[3] == 1,
-                          },
-                          status.relays, status.inputs, status.syserror, status.info, status.seqno, e);
     }
 
     public string GetTime(uint deviceID) {
@@ -348,7 +362,9 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException(err);
         }
 
-        return new Event(evt.timestamp, evt.index, evt.eventType, evt.granted == 1, evt.door, evt.direction, evt.card, evt.reason);
+        string timestamp = Marshal.PtrToStringAnsi(evt.timestamp)!;
+
+        return new Event(timestamp, evt.index, evt.eventType, evt.granted == 1, evt.door, evt.direction, evt.card, evt.reason);
     }
 
     public void RecordSpecialEvents(uint deviceID, bool enabled) {
@@ -538,7 +554,7 @@ public class Uhppoted : IDisposable {
                                          ref int errN);
 
     [DllImport("uhppoted.dll")]
-    private static extern string GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID);
+    private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err, ref int errN);
 
     [DllImport("uhppoted.dll")]
     private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
@@ -661,7 +677,7 @@ public class Uhppoted : IDisposable {
     }
 
     struct GoEvent {
-        public string timestamp;
+        public IntPtr timestamp;
         public uint index;
         public byte eventType;
         public byte granted;
@@ -673,7 +689,7 @@ public class Uhppoted : IDisposable {
 
     struct GoStatus {
         public uint ID;
-        public string sysdatetime;
+        public IntPtr sysdatetime;
         public IntPtr doors;
         public IntPtr buttons;
         public byte relays;

@@ -179,16 +179,16 @@ vector<uint32_t> uhppoted::get_devices() {
 }
 
 struct device uhppoted::get_device(uint32_t id) {
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
     char address[16];
     char subnet[16];
     char gateway[16];
     char MAC[18];
     char version[6];
     char date[11];
-
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
 
     struct Device device = {
         .address = address,
@@ -227,18 +227,28 @@ void uhppoted::set_address(uint32_t id, std::string &address, std::string &subne
 }
 
 status uhppoted::get_status(unsigned id) {
-    struct Status status;
-    struct Event event;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    char sysdatetime[20];
     vector<uint8_t> doors(4);
     vector<uint8_t> buttons(4);
+    char timestamp[20];
 
-    status.doors = doors.data();
-    status.buttons = buttons.data();
-    status.event = &event;
+    struct Event event = {
+        .timestamp = timestamp,
+    };
 
-    char *err = GetStatus(u, &status, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    struct Status status = {
+        .sysdatetime = sysdatetime,
+        .doors = doors.data(),
+        .buttons = buttons.data(),
+        .event = &event,
+    };
+
+    if ((rc = GetStatus(u, &status, id, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
     struct status s;
@@ -272,9 +282,6 @@ status uhppoted::get_status(unsigned id) {
         s.evt.card = status.event->card;
         s.evt.reason = status.event->reason;
     }
-
-    free(status.sysdatetime);
-    free(event.timestamp);
 
     return s;
 }

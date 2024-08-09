@@ -255,17 +255,26 @@ int set_address(uint32_t id, const char *address, const char *subnet, const char
 }
 
 int get_status(uint32_t id, struct status *s) {
-    struct Status status;
-    struct Event event;
+    char sysdatetime[20] = "";
+    char timestamp[20] = "";
 
-    status.doors = malloc(4 * sizeof(uint8_t));
-    status.buttons = malloc(4 * sizeof(uint8_t));
-    status.event = &event;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
 
-    char *err = GetStatus(u, &status, id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    struct Event event = {
+        .timestamp = timestamp,
+    };
+
+    struct Status status = {
+        .sysdatetime = sysdatetime,
+        .doors = malloc(4 * sizeof(uint8_t)),
+        .buttons = malloc(4 * sizeof(uint8_t)),
+        .event = &event,
+    };
+
+    if ((rc = GetStatus(u, &status, id, err, &errN)) != 0) {
+        set_error(err, errN);
         free(status.doors);
         free(status.buttons);
         return -1;
@@ -301,10 +310,8 @@ int get_status(uint32_t id, struct status *s) {
         s->evt.reason = status.event->reason;
     }
 
-    free(status.sysdatetime);
     free(status.doors);
     free(status.buttons);
-    free(event.timestamp);
 
     return 0;
 }
