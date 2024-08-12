@@ -139,7 +139,8 @@ structs: build
 	$(CMD) structs
 
 all: build
-	$(CMD) all
+	# $(CMD) all
+	$(CMD) get-controllers
 
 tests: build
 	$(CMD)
