@@ -92,7 +92,7 @@ namespace uhppoted
                     count = N;
                     slice = new uint[N];
 
-                    if (GetDevices(ref this.u, ref count, slice, err, ref errN) != 0)
+                    if (GetDevices(ref this.u, slice, ref count, err, ref errN) != 0)
                     {
                         raise(err, errN);
                     }
@@ -723,7 +723,7 @@ namespace uhppoted
         // Go FFI
 
         [DllImport("libuhppoted.dylib", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err, ref int errN);
+        private static extern int GetDevices(ref UHPPOTE u, uint[] list, ref int N, IntPtr err, ref int errN);
 
         [DllImport("libuhppoted.dylib", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr err, ref int errN);

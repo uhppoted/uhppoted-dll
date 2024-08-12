@@ -185,7 +185,7 @@ int get_devices(uint32_t **devices, int *N) {
         int errN = sizeof(err);
         int rc;
 
-        if ((rc = GetDevices(u, &count, list, err, &errN)) != 0) {
+        if ((rc = GetDevices(u, list, &count, err, &errN)) != 0) {
             free(list);
             set_error(err, errN);
             return -1;

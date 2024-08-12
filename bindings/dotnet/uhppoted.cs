@@ -81,7 +81,7 @@ public class Uhppoted : IDisposable {
                 count = N;
                 slice = new uint[N];
 
-                if (GetDevices(ref this.u, ref count, slice, err, ref errN) != 0) {
+                if (GetDevices(ref this.u, slice, ref count, err, ref errN) != 0) {
                     raise(err, errN);
                 }
 
@@ -144,7 +144,7 @@ public class Uhppoted : IDisposable {
                 raise(err, errN);
             }
         } finally {
-            Marshal.FreeHGlobal(err);            
+            Marshal.FreeHGlobal(err);
         }
     }
 
@@ -556,7 +556,7 @@ public class Uhppoted : IDisposable {
     // Go FFI
 
     [DllImport("uhppoted.dll")]
-    private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err, ref int errN);
+    private static extern int GetDevices(ref UHPPOTE u, uint[] list, ref int N, IntPtr err, ref int errN);
 
     [DllImport("uhppoted.dll")]
     private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr err, ref int errN);

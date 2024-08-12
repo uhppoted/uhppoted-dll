@@ -3,25 +3,25 @@
 - [x] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 - [ ] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
-      - [ ] cstring // FIXME check error return
       - [ ] CCL: return code is a pointer ??
-      - [ ] Use C.cchar_t
-      - [ ] Fix parameters ordering
-
+      - [ ] CCL: fix stacked multiple-value-binds
       - [x] get-devices
+            - [ ] Fix parameters ordering
+            - [ ] Use C.cchar_t
+
       - [x] get-device
       - [x] set-address
       - [x] get-status
       - [x] get-time
-          - [x] preallocate struct strings
-          - [x] C
-          - [x] C++
-          - [x] Python
-          - [x] C#: mono
-          - [x] C#: vs-mac
-          - [x] C#: vs-win
-          - [x] CCL
       - [ ] set-time
+          - [ ] preallocate struct strings
+          - [ ] C
+          - [ ] C++
+          - [ ] Python
+          - [ ] C#: mono
+          - [ ] C#: vs-mac
+          - [ ] C#: vs-win
+          - [ ] CCL
       - [ ] get-listener
       - [ ] set-listener
       - [ ] get-door-control

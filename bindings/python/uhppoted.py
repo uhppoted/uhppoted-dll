@@ -240,7 +240,7 @@ class Uhppote:
             errN = ctypes.c_int(256)
             err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-            if self.ffix.GetDevices(self._uhppote, byref(count), list, err, byref(errN)) != 0:
+            if self.ffix.GetDevices(self._uhppote, list, byref(count), err, byref(errN)) != 0:
                 raise Exception(f"{err.value.decode('utf-8')}")
 
             if count.value <= N:
@@ -776,7 +776,7 @@ def ffil(tag, errcheck):
 @cache
 def libfunctions():
     return {
-        'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_int), POINTER(ctypes.c_uint32), c_char_p, POINTER(ctypes.c_int)]),
+        'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_uint32), POINTER(ctypes.c_int), c_char_p, POINTER(ctypes.c_int)]),
         'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
         'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong, c_char_p, POINTER(ctypes.c_int)]),

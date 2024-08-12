@@ -315,8 +315,8 @@
 	    (rletz ((N    :signed-long max)
               (errN :signed-long 256))
         (with-macptrs ((err (external-call "GetDevices" :address uhppote 
-	  									                                  :address N 
                                                         :address arrayp 
+	  									                                  :address N 
                                                         :address errmsgp
                                                         :address errN
                                                         :signed-long)))

@@ -190,7 +190,7 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg, int* errN);
+extern int GetDevices(struct UHPPOTE* u, unsigned int* list, int* N, cchar_t* errmsg, int* errN);
 extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg, int* errN);
 extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, char* errmsg, int* errN);
 extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, char* errmsg, int* errN);

@@ -167,7 +167,7 @@ func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, errmsg *C.char
 }
 
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, N *C.int, list *C.uint, errmsg *C.char, errN *C.int) C.int {
+func GetDevices(u *C.struct_UHPPOTE, list *C.uint, N *C.int, errmsg *C.cchar_t, errN *C.int) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getDevices(uu, N, list)
 	}
@@ -805,7 +805,7 @@ func cstring(v any, c *C.char, N int) int {
 		s := C.CString(ellipsized)
 		l := C.size_t(N)
 
-		C.strncpy(c, s, l) // FIXME check error return
+		C.strncpy(c, s, l)
 		C.free(unsafe.Pointer(s))
 
 		if length := len(ellipsized); length < N {

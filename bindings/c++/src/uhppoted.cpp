@@ -163,7 +163,7 @@ vector<uint32_t> uhppoted::get_devices() {
         int errN = sizeof(err);
         int rc;
 
-        if ((rc = GetDevices(u, &count, list.data(), err, &errN)) != 0) {
+        if ((rc = GetDevices(u, list.data(), &count, err, &errN)) != 0) {
             throw uhppoted_exception(err, errN);
         }
 
