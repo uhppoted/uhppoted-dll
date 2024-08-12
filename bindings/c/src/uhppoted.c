@@ -320,7 +320,7 @@ int get_time(uint32_t id, char **t) {
     char err[256] = "";
     int errN = sizeof(err);
     int rc;
-    char datetime[20];
+    char datetime[20] = "";
 
     if ((rc = GetTime(u, datetime, id, err, &errN)) != 0) {
         set_error(err, errN);

@@ -6,10 +6,9 @@
       - [ ] CCL: return code is a pointer ??
       - [ ] CCL: fix stacked multiple-value-binds
       - [x] get-devices
+      - [x] get-device
             - [ ] Fix parameters ordering
             - [ ] Use C.cchar_t
-
-      - [x] get-device
       - [x] set-address
       - [x] get-status
       - [x] get-time
