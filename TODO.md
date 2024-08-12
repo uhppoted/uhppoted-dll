@@ -5,6 +5,8 @@
 - [ ] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
       - [ ] CCL: return code is a pointer ??
       - [ ] CCL: fix stacked multiple-value-binds
+      - [ ] CCL: tests on github
+  
       - [x] get-devices
       - [x] get-device
             - [ ] Fix parameters ordering

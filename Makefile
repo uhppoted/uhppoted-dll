@@ -75,7 +75,7 @@ build-all: build test lint
 	make -C ./tests/c++            -f Makefile tests
 	make -C ./tests/dotnet         -f Makefile tests || true
 	make -C ./tests/python         -f Makefile tests
-	make -C ./tests/ccl            -f Makefile tests
+	# make -C ./tests/ccl            -f Makefile tests
 	make -C ./examples/c           -f Makefile build
 	make -C ./examples/c++         -f Makefile build
 	make -C ./examples/dotnet/mono -f Makefile build
