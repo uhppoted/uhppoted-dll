@@ -42,8 +42,8 @@ func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
 	return nil
 }
 
-func getDevice(uu uhppote.IUHPPOTE, d *C.struct_Device, deviceID uint32) error {
-	if d == nil {
+func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) error {
+	if device == nil {
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
 
@@ -54,14 +54,14 @@ func getDevice(uu uhppote.IUHPPOTE, d *C.struct_Device, deviceID uint32) error {
 		return fmt.Errorf("%v: no response to get-device", deviceID)
 	}
 
-	d.ID = C.uint(deviceID)
+	device.ID = C.uint(deviceID)
 
-	cstring(response.IpAddress, d.address, 16)
-	cstring(response.SubnetMask, d.subnet, 16)
-	cstring(response.Gateway, d.gateway, 16)
-	cstring(response.MacAddress, d.MAC, 18)
-	cstring(response.Version, d.version, 6)
-	cstring(response.Date, d.date, 11)
+	cstring(response.IpAddress, device.address, 16)
+	cstring(response.SubnetMask, device.subnet, 16)
+	cstring(response.Gateway, device.gateway, 16)
+	cstring(response.MacAddress, device.MAC, 18)
+	cstring(response.Version, device.version, 7)
+	cstring(response.Date, device.date, 11)
 
 	return nil
 }
@@ -160,9 +160,9 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	return nil
 }
 
-func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
+func getTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	if datetime == nil {
-		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
+		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to char[20]")
 	}
 
 	response, err := uu.GetTime(deviceID)
@@ -172,7 +172,7 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 		return fmt.Errorf("%v: no response to get-time", deviceID)
 	}
 
-	*datetime = C.CString(fmt.Sprintf("%v", response.DateTime))
+	cstring(response.DateTime, datetime, 20)
 
 	return nil
 }

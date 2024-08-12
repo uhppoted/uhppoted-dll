@@ -120,7 +120,7 @@ namespace uhppoted
             device.subnet = Marshal.AllocHGlobal(16);
             device.gateway = Marshal.AllocHGlobal(16);
             device.MAC = Marshal.AllocHGlobal(18);
-            device.version = Marshal.AllocHGlobal(5);
+            device.version = Marshal.AllocHGlobal(7);
             device.date = Marshal.AllocHGlobal(11);
 
             try
@@ -159,9 +159,16 @@ namespace uhppoted
             IntPtr err = Marshal.AllocHGlobal(256);
             int errN = 256;
 
-            if (SetAddress(ref this.u, deviceID, address, subnet, gateway, err, ref errN) != 0) 
+            try
             {
-                raise(err, errN);
+                if (SetAddress(ref this.u, deviceID, address, subnet, gateway, err, ref errN) != 0) 
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(err);
             }
         }
 
@@ -238,22 +245,31 @@ namespace uhppoted
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
-                
                 Marshal.FreeHGlobal(status.evt);
+                Marshal.FreeHGlobal(err);
             }
         }
 
         public string GetTime(uint deviceID)
         {
-            string datetime = "";
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+            IntPtr datetime = Marshal.AllocHGlobal(20);
 
-            string err = GetTime(ref this.u, ref datetime, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+            try
+            { 
+                if (GetTime(ref this.u, datetime, deviceID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+
+                return Marshal.PtrToStringAnsi(datetime)!;
             }
-
-            return datetime;
+            finally
+            {
+                Marshal.FreeHGlobal(datetime);
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public void SetTime(uint deviceID, string datetime)
@@ -706,103 +722,103 @@ namespace uhppoted
 
         // Go FFI
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetDevices(ref UHPPOTE u, ref int N, uint[] list, IntPtr err, ref int errN);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr err, ref int errN);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, IntPtr err, ref int errN);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err, ref int errN);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
-        private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern int GetTime(ref UHPPOTE u, IntPtr datetime, uint deviceID, IntPtr err, ref int errN);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetTime(ref UHPPOTE u, uint deviceID, string datetime);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetListener(ref UHPPOTE u, ref string listener, uint deviceID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetCards(ref UHPPOTE u, ref uint N, uint deviceID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string DeleteCards(ref UHPPOTE u, uint deviceID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetEventIndex(ref UHPPOTE u, uint deviceID, uint index);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string ClearTimeProfiles(ref UHPPOTE u, uint deviceID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string RefreshTaskList(ref UHPPOTE u, uint deviceID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string ClearTaskList(ref UHPPOTE u, uint deviceID);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string RestoreDefaultParameters(ref UHPPOTE u, uint controller);
 
-        [DllImport("uhppoted.dll", CallingConvention=CallingConvention.Cdecl, CharSet=CharSet.Ansi)]
+        [DllImport("uhppoted.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx, IntPtr userdata);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

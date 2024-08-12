@@ -95,7 +95,7 @@ int getStatus(int argc, char **argv) {
     const char *reason = lookup(LOOKUP_EVENT_REASON, s.evt.reason, locale);
     const char *timestamp = s.evt.timestamp;
 
-    if (strncmp(s.evt.timestamp, "", 0) == 0) {
+    if (strncmp(s.evt.timestamp, "", 20) == 0) {
         timestamp = "-";
     }
 

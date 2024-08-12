@@ -8,6 +8,8 @@ package main
 
 #include "dispatch.h"
 
+typedef const char cchar_t;
+
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
@@ -34,7 +36,7 @@ typedef struct Device {
 	const char *subnet;   // expects at least char[16]
 	const char *gateway;  // expects at least char[16]
 	const char *MAC;      // expects at least char[18]
-	const char *version;  // expects at least char[6]
+	const char *version;  // expects at least char[7]
 	const char *date;     // expects at least char[11]
 } Device;
 
@@ -183,7 +185,7 @@ func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, er
 }
 
 //export SetAddress
-func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.char, errmsg *C.char, errN *C.int) C.int {
+func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.cchar_t, errmsg *C.char, errN *C.int) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setAddress(uu, deviceID, addr, subnet, gateway)
 	}
@@ -201,14 +203,12 @@ func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, er
 }
 
 //export GetTime
-func GetTime(u *C.struct_UHPPOTE, datetime **C.char, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getTime(uu, datetime, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, errmsg *C.char, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getTime(uu, deviceID, datetime)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export SetTime

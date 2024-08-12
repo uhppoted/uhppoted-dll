@@ -306,9 +306,12 @@ class Uhppote:
                       status.inputs, status.syserror, status.seqno, status.info, event)
 
     def get_time(self, deviceID):
-        datetime = c_char_p()
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        datetime = c_char_p(bytes(' ' * 20, 'utf-8'))
 
-        self.ffi.GetTime(self._uhppote, byref(datetime), deviceID)
+        if self.ffix.GetTime(self._uhppote, datetime, deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         return datetime.value.decode('utf-8')
 
@@ -698,7 +701,7 @@ class FFI:
         # self.GetDevice = ffi('GetDevice', errcheck)
         # self.SetAddress = ffi('SetAddress', errcheck)
         # self.GetStatus = ffi('GetStatus', errcheck)
-        self.GetTime = ffi('GetTime', errcheck)
+        # self.GetTime = ffi('GetTime', errcheck)
         self.SetTime = ffi('SetTime', errcheck)
         self.GetListener = ffi('GetListener', errcheck)
         self.SetListener = ffi('SetListener', errcheck)
@@ -736,6 +739,7 @@ class FFIX:
         self.GetDevice = ffix('GetDevice', errcheck)
         self.SetAddress = ffix('SetAddress', errcheck)
         self.GetStatus = ffix('GetStatus', errcheck)
+        self.GetTime = ffix('GetTime', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -776,7 +780,7 @@ def libfunctions():
         'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
         'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
+        'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetTime':                  (lib.SetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
         'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
         'SetListener':              (lib.SetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
@@ -859,7 +863,7 @@ class GoDevice(Structure):
         self.subnet = c_char_p(bytes(' ' * 16, 'utf-8'))
         self.gateway = c_char_p(bytes(' ' * 16, 'utf-8'))
         self.MAC = c_char_p(bytes(' ' * 18, 'utf-8'))
-        self.version = c_char_p(bytes(' ' * 6, 'utf-8'))
+        self.version = c_char_p(bytes(' ' * 7, 'utf-8'))
         self.date = c_char_p(bytes(' ' * 11, 'utf-8'))
 
 

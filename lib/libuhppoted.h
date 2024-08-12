@@ -28,6 +28,8 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 #include "dispatch.h"
 
+typedef const char cchar_t;
+
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
@@ -54,7 +56,7 @@ typedef struct Device {
 	const char *subnet;   // expects at least char[16]
 	const char *gateway;  // expects at least char[16]
 	const char *MAC;      // expects at least char[18]
-	const char *version;  // expects at least char[6]
+	const char *version;  // expects at least char[7]
 	const char *date;     // expects at least char[11]
 } Device;
 
@@ -190,9 +192,9 @@ extern "C" {
 
 extern int GetDevices(struct UHPPOTE* u, int* N, unsigned int* list, char* errmsg, int* errN);
 extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg, int* errN);
-extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, char* addr, char* subnet, char* gateway, char* errmsg, int* errN);
+extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, char* errmsg, int* errN);
 extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, char* errmsg, int* errN);
-extern char* GetTime(struct UHPPOTE* u, char** datetime, GoUint32 deviceID);
+extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, char* errmsg, int* errN);
 extern char* SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime);
 extern char* GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID);
 extern char* SetListener(struct UHPPOTE* u, GoUint32 deviceID, char* listener);

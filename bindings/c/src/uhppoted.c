@@ -208,7 +208,7 @@ int get_device(uint32_t id, struct device *d) {
     char subnet[16];
     char gateway[16];
     char MAC[18];
-    char version[6];
+    char version[7];
     char date[11];
 
     char err[256] = "";
@@ -317,18 +317,17 @@ int get_status(uint32_t id, struct status *s) {
 }
 
 int get_time(uint32_t id, char **t) {
-    char *datetime;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+    char datetime[20];
 
-    char *err = GetTime(u, &datetime, id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    if ((rc = GetTime(u, datetime, id, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
     *t = strdup(datetime);
-
-    free(datetime);
 
     return 0;
 }
@@ -545,7 +544,10 @@ int set_event_index(uint32_t id, uint32_t index) {
 }
 
 int get_event(uint32_t id, uint32_t index, event *e) {
-    struct Event event;
+    char timestamp[20] = "";
+    struct Event event = {
+        .timestamp = timestamp,
+    };
 
     char *err = GetEvent(u, &event, id, index);
     if (err != NULL) {
@@ -562,8 +564,6 @@ int get_event(uint32_t id, uint32_t index, event *e) {
     e->direction = event.direction;
     e->card = event.card;
     e->reason = event.reason;
-
-    free(event.timestamp);
 
     return 0;
 }

@@ -332,7 +332,7 @@
   (multiple-value-bind (subnet  subnetp)  (make-heap-ivector 16  '(unsigned-byte 1))
   (multiple-value-bind (gateway gatewayp) (make-heap-ivector 16  '(unsigned-byte 1))
   (multiple-value-bind (MAC     MACp)     (make-heap-ivector 18  '(unsigned-byte 1))
-  (multiple-value-bind (version versionp) (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (version versionp) (make-heap-ivector 7   '(unsigned-byte 1))
   (multiple-value-bind (date    datep)    (make-heap-ivector 11  '(unsigned-byte 1))
   (multiple-value-bind (errmsg  errmsgp)  (make-heap-ivector 256 '(unsigned-byte 1))
   (unwind-protect
@@ -441,13 +441,22 @@
     (dispose-heap-ivector errmsg))))))
 
 (defun uhppoted-get-time (uhppote device-id) "Retrieves a controller date/time"
-  (with-cstrs ((datetime ""))
-     (with-macptrs ((err (external-call "GetTime" :address uhppote 
-                                                  :address datetime
-                                                  :unsigned-long device-id 
-                                                  :address)))
-       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-       (go-string (%get-ptr datetime)))))
+  (multiple-value-bind (datetime datetimep) (make-heap-ivector 20  '(unsigned-byte 1))
+  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (with-cstrs ((datetime ""))
+      (rlet ((errN :signed-long 256))
+        (with-macptrs ((err (external-call "GetTime" :address uhppote 
+                                                     :address datetimep
+                                                     :unsigned-long device-id 
+                                                     :address errmsgp
+                                                     :address errN
+                                                     :signed-long)))
+          ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+          (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+          (%get-cstring datetimep))))
+  (dispose-heap-ivector datetime)
+  (dispose-heap-ivector errmsg)))))
 
 
 (defun uhppoted-set-time (uhppote device-id datetime) "Sets a controller date/time"

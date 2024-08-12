@@ -187,7 +187,7 @@ struct device uhppoted::get_device(uint32_t id) {
     char subnet[16];
     char gateway[16];
     char MAC[18];
-    char version[6];
+    char version[7];
     char date[11];
 
     struct Device device = {
@@ -287,18 +287,16 @@ status uhppoted::get_status(unsigned id) {
 }
 
 string uhppoted::get_time(uint32_t id) {
-    char *datetime;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+    char datetime[20];
 
-    char *err = GetTime(u, &datetime, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = GetTime(u, datetime, id, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
-    string t = string(datetime);
-
-    free(datetime);
-
-    return t;
+    return string(datetime);
 }
 
 void uhppoted::set_time(uint32_t id, std::string &datetime) {

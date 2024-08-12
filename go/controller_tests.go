@@ -65,12 +65,12 @@ func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) er
 	}
 
 	device.ID = C.uint(deviceID)
-	device.address = C.CString("192.168.1.101")
-	device.subnet = C.CString("255.255.255.0")
-	device.gateway = C.CString("192.168.1.1")
-	device.MAC = C.CString("00:12:23:34:45:56")
-	device.version = C.CString("v8.92")
-	device.date = C.CString("2018-11-05")
+	cstring("192.168.1.101", device.address, 16)
+	cstring("255.255.255.0", device.subnet, 16)
+	cstring("192.168.1.1", device.gateway, 16)
+	cstring("00:12:23:34:45:56", device.MAC, 18)
+	cstring("v8.92", device.version, 7)
+	cstring("2018-11-05", device.date, 11)
 
 	return nil
 }
@@ -118,7 +118,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	}
 
 	status.ID = C.uint(deviceID)
-	status.sysdatetime = C.CString("2022-03-19 15:48:32")
+	cstring("2022-03-19 15:48:32", status.sysdatetime, 20)
 
 	doors := unsafe.Slice(status.doors, 4)
 	buttons := unsafe.Slice(status.buttons, 4)
@@ -141,7 +141,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	status.seqno = 9876
 
 	if deviceID == 405419896 {
-		status.event.timestamp = C.CString("2022-01-02 12:34:56")
+		cstring("2022-01-02 12:34:56", status.event.timestamp, 20)
 		status.event.index = 135
 		status.event.eventType = 0x06
 		status.event.granted = 1
@@ -152,7 +152,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	}
 
 	if deviceID == 303986753 {
-		status.event.timestamp = C.CString("")
+		cstring("", status.event.timestamp, 20)
 		status.event.index = 0
 		status.event.eventType = 0x00
 		status.event.granted = 0
@@ -165,7 +165,7 @@ func getStatus(uu uhppote.IUHPPOTE, status *C.struct_Status, deviceID uint32) er
 	return nil
 }
 
-func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
+func getTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	if datetime == nil {
 		return fmt.Errorf("invalid argument (datetime) - expected valid pointer to string")
 	}
@@ -174,7 +174,7 @@ func getTime(uu uhppote.IUHPPOTE, datetime **C.char, deviceID uint32) error {
 		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
 
-	*datetime = C.CString("2022-01-02 12:34:56")
+	cstring("2022-01-02 12:34:56", datetime, 20)
 
 	return nil
 }

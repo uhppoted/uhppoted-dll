@@ -29,9 +29,9 @@ void getController(uhppoted &u, int argc, char **argv) {
 
     vector<field> fields = {
         field("ID", deviceID),
-        field("IP", d.address),
-        field("IP", d.subnet),
-        field("IP", d.gateway),
+        field("address", d.address),
+        field("subnet", d.subnet),
+        field("gateway", d.gateway),
         field("MAC", d.MAC),
         field("version", d.version),
         field("released", d.date),

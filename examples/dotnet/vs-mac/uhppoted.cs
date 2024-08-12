@@ -120,7 +120,7 @@ namespace uhppoted
             device.subnet = Marshal.AllocHGlobal(16);
             device.gateway = Marshal.AllocHGlobal(16);
             device.MAC = Marshal.AllocHGlobal(18);
-            device.version = Marshal.AllocHGlobal(5);
+            device.version = Marshal.AllocHGlobal(7);
             device.date = Marshal.AllocHGlobal(11);
 
             try
@@ -159,9 +159,16 @@ namespace uhppoted
             IntPtr err = Marshal.AllocHGlobal(256);
             int errN = 256;
 
-            if (SetAddress(ref this.u, deviceID, address, subnet, gateway, err, ref errN) != 0) 
+            try
             {
-                raise(err, errN);
+                if (SetAddress(ref this.u, deviceID, address, subnet, gateway, err, ref errN) != 0) 
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(err);
             }
         }
 
@@ -238,22 +245,31 @@ namespace uhppoted
                 Marshal.FreeHGlobal(status.sysdatetime);
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
-                
                 Marshal.FreeHGlobal(status.evt);
+                Marshal.FreeHGlobal(err);
             }
         }
 
         public string GetTime(uint deviceID)
         {
-            string datetime = "";
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+            IntPtr datetime = Marshal.AllocHGlobal(20);
 
-            string err = GetTime(ref this.u, ref datetime, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+            try
+            { 
+                if (GetTime(ref this.u, datetime, deviceID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+
+                return Marshal.PtrToStringAnsi(datetime)!;
             }
-
-            return datetime;
+            finally
+            {
+                Marshal.FreeHGlobal(datetime);
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public void SetTime(uint deviceID, string datetime)
@@ -719,7 +735,7 @@ namespace uhppoted
         private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport("libuhppoted.dylib", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string GetTime(ref UHPPOTE u, ref string datetime, uint deviceID);
+        private static extern int GetTime(ref UHPPOTE u, IntPtr datetime, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport("libuhppoted.dylib", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetTime(ref UHPPOTE u, uint deviceID, string datetime);
