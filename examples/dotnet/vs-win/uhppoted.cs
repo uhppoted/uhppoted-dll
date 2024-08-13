@@ -315,10 +315,19 @@ namespace uhppoted
 
         public void SetListener(uint deviceID, string listener)
         {
-            string err = SetListener(ref this.u, deviceID, listener);
-            if (err != null && err != "")
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+
+            try
+            { 
+                if (SetListener(ref this.u, deviceID, listener, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
             {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(err);
             }
         }
 
@@ -763,7 +772,7 @@ namespace uhppoted
         private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);
+        private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);

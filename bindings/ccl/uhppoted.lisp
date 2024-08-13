@@ -494,13 +494,20 @@
 
 
 (defun uhppoted-set-listener (uhppote device-id listener) "Sets a controller's event listener address and port"
-  (with-cstrs ((addr listener))
-    (with-macptrs ((err (external-call "SetListener" :address uhppote 
-                                                     :unsigned-long device-id 
-                                                     :address addr
-                                                     :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      t)))
+  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (with-cstrs ((addr listener))
+    (rlet ((errN :signed-long 256))
+      (with-macptrs ((err (external-call "SetListener" :address uhppote 
+                                                       :unsigned-long device-id 
+                                                       :address addr
+                                                       :address errmsgp
+                                                       :address errN
+                                                       :signed-long)))
+        ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+        t)))
+  (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-get-door-control (uhppote device-id door) "Retrieves the door control state and open delay for a controller"

@@ -257,9 +257,15 @@ public class Uhppoted : IDisposable {
     }
 
     public void SetListener(uint deviceID, string listener) {
-        string err = SetListener(ref this.u, deviceID, listener);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
+
+        try {
+            if (SetListener(ref this.u, deviceID, listener, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+        } finally {
+            Marshal.FreeHGlobal(err);
         }
     }
 
@@ -590,7 +596,7 @@ public class Uhppoted : IDisposable {
     private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
-    private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);
+    private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
     private static extern string GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door);

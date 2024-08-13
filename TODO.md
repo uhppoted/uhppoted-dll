@@ -16,6 +16,7 @@
       - [x] get-time
       - [x] set-time
       - [x] get-listener
+      - [x] set-listener
           - [x] preallocate struct strings
           - [x] C
           - [x] C++
@@ -24,7 +25,6 @@
           - [x] C#: vs-mac
           - [x] C#: vs-win
           - [x] CCL
-      - [ ] set-listener
       - [ ] get-door-control
       - [ ] set-door-control
       - [ ] open-door

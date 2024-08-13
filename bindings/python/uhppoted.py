@@ -207,8 +207,7 @@ class Uhppote:
         self.ffix = FFIX(self.errcheckx)
         self._uhppote = None
         if uhppote:
-            self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast, uhppote.listen,
-                                      uhppote.timeout, uhppote.controllers, uhppote.debug)
+            self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast, uhppote.listen, uhppote.timeout, uhppote.controllers, uhppote.debug)
 
     @staticmethod
     def errcheck(err, func, args):
@@ -257,9 +256,8 @@ class Uhppote:
         if self.ffix.GetDevice(self._uhppote, byref(device), deviceID, err, byref(errN)) != 0:
             raise Exception(f"{err.value.decode('utf-8')}")
 
-        return Device(device.ID, device.address.decode('utf-8'), device.subnet.decode('utf-8'),
-                      device.gateway.decode('utf-8'), device.MAC.decode('utf-8'),
-                      device.version.decode('utf-8'), device.date.decode('utf-8'))
+        return Device(device.ID, device.address.decode('utf-8'), device.subnet.decode('utf-8'), device.gateway.decode('utf-8'),
+                      device.MAC.decode('utf-8'), device.version.decode('utf-8'), device.date.decode('utf-8'))
 
     def set_address(self, deviceID, address, subnet, gateway):
         errN = ctypes.c_int(256)
@@ -269,8 +267,7 @@ class Uhppote:
         c_subnet = c_char_p(bytes(subnet, 'utf-8'))
         c_gateway = c_char_p(bytes(gateway, 'utf-8'))
 
-        if self.ffix.SetAddress(self._uhppote, deviceID, c_address, c_subnet, c_gateway, err,
-                                byref(errN)) != 0:
+        if self.ffix.SetAddress(self._uhppote, deviceID, c_address, c_subnet, c_gateway, err, byref(errN)) != 0:
             raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_status(self, deviceID):
@@ -278,8 +275,7 @@ class Uhppote:
         err = c_char_p(bytes('*' * errN.value, 'utf-8'))
         status = GoStatus()
 
-        if self.ffix.GetStatus(self._uhppote, ctypes.byref(status), deviceID, err,
-                               byref(errN)) != 0:
+        if self.ffix.GetStatus(self._uhppote, ctypes.byref(status), deviceID, err, byref(errN)) != 0:
             raise Exception(f"{err.value.decode('utf-8')}")
 
         doors = [False, False, False, False]
@@ -302,8 +298,8 @@ class Uhppote:
             status.event.contents.reason,
         )
 
-        return Status(status.ID, status.sysdatetime.decode('utf-8'), doors, buttons, status.relays,
-                      status.inputs, status.syserror, status.seqno, status.info, event)
+        return Status(status.ID, status.sysdatetime.decode('utf-8'), doors, buttons, status.relays, status.inputs, status.syserror,
+                      status.seqno, status.info, event)
 
     def get_time(self, deviceID):
         errN = ctypes.c_int(256)
@@ -319,8 +315,7 @@ class Uhppote:
         errN = ctypes.c_int(256)
         err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-        if self.ffix.SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')), err,
-                             byref(errN)) != 0:
+        if self.ffix.SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')), err, byref(errN)) != 0:
             raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_listener(self, deviceID):
@@ -334,7 +329,11 @@ class Uhppote:
         return listener.value.decode('utf-8')
 
     def set_listener(self, deviceID, listener):
-        self.ffi.SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')))
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')), err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_door_control(self, deviceID, door):
         control = GoDoorControl()
@@ -366,8 +365,7 @@ class Uhppote:
         for i in range(4):
             doors[i] = card.doors[i]
 
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors,
-                    card.PIN)
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors, card.PIN)
 
     def get_card_by_index(self, deviceID, index):
         card = GoCard()
@@ -379,8 +377,7 @@ class Uhppote:
         for i in range(4):
             doors[i] = card.doors[i]
 
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors,
-                    card.PIN)
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors, card.PIN)
 
     def put_card(self, deviceID, cardNumber, start, end, doors, PIN):
         _doors = (c_ubyte * 4)(*[0] * 4)
@@ -389,8 +386,7 @@ class Uhppote:
         _doors[2] = doors[2]
         _doors[3] = doors[3]
 
-        self.ffi.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')),
-                         c_char_p(bytes(end, 'utf-8')), _doors, PIN)
+        self.ffi.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')), c_char_p(bytes(end, 'utf-8')), _doors, PIN)
 
     def delete_card(self, deviceID, cardNumber):
         self.ffi.DeleteCard(self._uhppote, deviceID, cardNumber)
@@ -413,8 +409,8 @@ class Uhppote:
 
         self.ffi.GetEvent(self._uhppote, byref(event), deviceID, index)
 
-        return Event(event.timestamp.decode('utf-8'), event.index, event.eventType, event.granted,
-                     event.door, event.direction, event.card, event.reason)
+        return Event(event.timestamp.decode('utf-8'), event.index, event.eventType, event.granted, event.door, event.direction, event.card,
+                     event.reason)
 
     def record_special_events(self, deviceID, enabled):
         self.ffi.RecordSpecialEvents(self._uhppote, deviceID, enabled)
@@ -424,25 +420,18 @@ class Uhppote:
 
         self.ffi.GetTimeProfile(self._uhppote, byref(profile), deviceID, profileID)
 
-        return TimeProfile(
-            profile.ID, profile.linked, profile.start.decode('utf-8'), profile.end.decode('utf-8'),
-            profile.monday != 0, profile.tuesday != 0, profile.wednesday != 0, profile.thursday
-            != 0, profile.friday != 0, profile.saturday != 0, profile.sunday != 0,
-            profile.segment1start.decode('utf-8'), profile.segment1end.decode('utf-8'),
-            profile.segment2start.decode('utf-8'), profile.segment2end.decode('utf-8'),
-            profile.segment3start.decode('utf-8'), profile.segment3end.decode('utf-8'))
+        return TimeProfile(profile.ID, profile.linked, profile.start.decode('utf-8'), profile.end.decode('utf-8'), profile.monday != 0,
+                           profile.tuesday != 0, profile.wednesday != 0, profile.thursday != 0, profile.friday != 0,
+                           profile.saturday != 0, profile.sunday != 0, profile.segment1start.decode('utf-8'),
+                           profile.segment1end.decode('utf-8'), profile.segment2start.decode('utf-8'), profile.segment2end.decode('utf-8'),
+                           profile.segment3start.decode('utf-8'), profile.segment3end.decode('utf-8'))
 
     def set_time_profile(self, deviceID, p):
-        profile = GoTimeProfile(p.ID, p.linked, c_char_p(bytes(p.start, 'utf-8')),
-                                c_char_p(bytes(p.end, 'utf-8')), 1 if p.monday else 0,
-                                1 if p.tuesday else 0, 1 if p.wednesday else 0,
-                                1 if p.thursday else 0, 1 if p.friday else 0,
-                                1 if p.saturday else 0, 1 if p.sunday else 0,
-                                c_char_p(bytes(p.segment1start, 'utf-8')),
-                                c_char_p(bytes(p.segment1end, 'utf-8')),
-                                c_char_p(bytes(p.segment2start, 'utf-8')),
-                                c_char_p(bytes(p.segment2end, 'utf-8')),
-                                c_char_p(bytes(p.segment3start, 'utf-8')),
+        profile = GoTimeProfile(p.ID, p.linked, c_char_p(bytes(p.start, 'utf-8')), c_char_p(bytes(p.end, 'utf-8')), 1 if p.monday else 0,
+                                1 if p.tuesday else 0, 1 if p.wednesday else 0, 1 if p.thursday else 0, 1 if p.friday else 0,
+                                1 if p.saturday else 0, 1 if p.sunday else 0, c_char_p(bytes(p.segment1start, 'utf-8')),
+                                c_char_p(bytes(p.segment1end, 'utf-8')), c_char_p(bytes(p.segment2start, 'utf-8')),
+                                c_char_p(bytes(p.segment2end, 'utf-8')), c_char_p(bytes(p.segment3start, 'utf-8')),
                                 c_char_p(bytes(p.segment3end, 'utf-8')))
 
         self.ffi.SetTimeProfile(self._uhppote, deviceID, byref(profile))
@@ -451,11 +440,9 @@ class Uhppote:
         self.ffi.ClearTimeProfiles(self._uhppote, deviceID)
 
     def add_task(self, deviceID, t):
-        task = GoTask(t.task, t.door, c_char_p(bytes(t.start, 'utf-8')),
-                      c_char_p(bytes(t.end, 'utf-8')), 1 if t.monday else 0, 1 if t.tuesday else 0,
-                      1 if t.wednesday else 0, 1 if t.thursday else 0,
-                      1 if t.friday else 0, 1 if t.saturday else 0, 1 if t.sunday else 0,
-                      c_char_p(bytes(t.at, 'utf-8')), t.cards)
+        task = GoTask(t.task, t.door, c_char_p(bytes(t.start, 'utf-8')), c_char_p(bytes(t.end, 'utf-8')), 1 if t.monday else 0,
+                      1 if t.tuesday else 0, 1 if t.wednesday else 0, 1 if t.thursday else 0, 1 if t.friday else 0, 1 if t.saturday else 0,
+                      1 if t.sunday else 0, c_char_p(bytes(t.at, 'utf-8')), t.cards)
 
         self.ffi.AddTask(self._uhppote, deviceID, byref(task))
 
@@ -712,7 +699,7 @@ class FFI:
         # self.GetTime = ffi('GetTime', errcheck)
         # self.SetTime = ffi('SetTime', errcheck)
         # self.GetListener = ffi('GetListener', errcheck)
-        self.SetListener = ffi('SetListener', errcheck)
+        # self.SetListener = ffi('SetListener', errcheck)
         self.GetDoorControl = ffi('GetDoorControl', errcheck)
         self.SetDoorControl = ffi('SetDoorControl', errcheck)
         self.OpenDoor = ffi('OpenDoor', errcheck)
@@ -750,6 +737,7 @@ class FFIX:
         self.GetTime = ffix('GetTime', errcheck)
         self.SetTime = ffix('SetTime', errcheck)
         self.GetListener = ffix('GetListener', errcheck)
+        self.SetListener = ffix('SetListener', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -793,7 +781,7 @@ def libfunctions():
         'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetTime':                  (lib.SetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
         'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'SetListener':              (lib.SetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
+        'SetListener':              (lib.SetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
         'GetDoorControl':           (lib.GetDoorControl,           [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]),
         'SetDoorControl':           (lib.SetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]),
         'OpenDoor':                 (lib.OpenDoor,                 [POINTER(GoUHPPOTE), c_ulong, c_ubyte]),
@@ -832,8 +820,8 @@ class GoControllers(Structure):
 
 
 class GoUHPPOTE(Structure):
-    _fields_ = [('bind', c_char_p), ('broadcast', c_char_p), ('listen', c_char_p),
-                ('timeout', c_int), ('devices', POINTER(GoControllers)), ('debug', c_bool)]
+    _fields_ = [('bind', c_char_p), ('broadcast', c_char_p), ('listen', c_char_p), ('timeout', c_int), ('devices', POINTER(GoControllers)),
+                ('debug', c_bool)]
 
     def __init__(self, bind, broadcast, listen, timeout, controllers, debug):
         super(GoUHPPOTE, self).__init__()
@@ -849,8 +837,7 @@ class GoUHPPOTE(Structure):
             list = GoControllers(N, (GoController * N)())
 
             for ix, c in enumerate(controllers):
-                list.devices[ix] = GoController(c.id, c_char_p(bytes(c.address, 'utf-8')),
-                                                c_char_p(bytes(c.transport, 'utf-8')))
+                list.devices[ix] = GoController(c.id, c_char_p(bytes(c.address, 'utf-8')), c_char_p(bytes(c.transport, 'utf-8')))
 
             self.devices = pointer(list)
 

@@ -323,10 +323,12 @@ string uhppoted::get_listener(uint32_t id) {
 }
 
 void uhppoted::set_listener(uint32_t id, std::string &listener) {
-    char *err = SetListener(u, id, (char *)listener.c_str());
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
 
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = SetListener(u, id, listener.c_str(), err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
