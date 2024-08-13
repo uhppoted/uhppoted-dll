@@ -8,7 +8,7 @@
       - [ ] CCL: tests on github
       - [ ] Reorder parameters
       - [ ] Use C.cchar_t
-  
+
       - [x] get-devices
       - [x] get-device
       - [x] set-address
@@ -17,15 +17,16 @@
       - [x] set-time
       - [x] get-listener
       - [x] set-listener
-          - [x] preallocate struct strings
-          - [x] C
-          - [x] C++
-          - [x] Python
-          - [x] C#: mono
-          - [x] C#: vs-mac
-          - [x] C#: vs-win
-          - [x] CCL
       - [ ] get-door-control
+          - [ ] preallocate struct strings
+          - [ ] Use C.cchar_t
+          - [ ] C
+          - [ ] C++
+          - [ ] Python
+          - [ ] C#: mono
+          - [ ] C#: vs-mac
+          - [ ] C#: vs-win
+          - [ ] CCL
       - [ ] set-door-control
       - [ ] open-door
       - [ ] get-cards

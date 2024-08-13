@@ -89,6 +89,13 @@ build-ccl: build test lint
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./go/...
 
 	make -C ./tests/ccl            -f Makefile get-controllers
+	make -C ./tests/ccl            -f Makefile get-controller
+	make -C ./tests/ccl            -f Makefile set-address
+	make -C ./tests/ccl            -f Makefile get-status
+	make -C ./tests/ccl            -f Makefile get-time
+	make -C ./tests/ccl            -f Makefile set-time
+	make -C ./tests/ccl            -f Makefile get-listener
+	make -C ./tests/ccl            -f Makefile set-listener
 	make -C ./tests/ccl            -f Makefile tests
 	make -C ./examples/ccl         -f Makefile build
 
