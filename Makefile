@@ -82,6 +82,16 @@ build-all: build test lint
 	make -C ./examples/python      -f Makefile build
 	make -C ./examples/ccl         -f Makefile build
 
+build-ccl: build test lint
+	go fmt ./go/...
+	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL)       ./go/...
+	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./go/...
+	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./go/...
+
+	make -C ./tests/ccl            -f Makefile get-controllers
+	make -C ./tests/ccl            -f Makefile tests
+	make -C ./examples/ccl         -f Makefile build
+
 build-debug: build
 	make -C ./tests/c++       -f Makefile tests
 
