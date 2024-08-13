@@ -300,10 +300,12 @@ string uhppoted::get_time(uint32_t id) {
 }
 
 void uhppoted::set_time(uint32_t id, std::string &datetime) {
-    char *err = SetTime(u, id, (char *)datetime.c_str());
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
 
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = SetTime(u, id, (char *)datetime.c_str(), err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 

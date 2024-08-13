@@ -176,7 +176,7 @@ func GetDevices(u *C.struct_UHPPOTE, list *C.uint, N *C.int, errmsg *C.cchar_t, 
 }
 
 //export GetDevice
-func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, errmsg *C.char, errN *C.int) C.int {
+func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getDevice(uu, device, deviceID)
 	}
@@ -185,7 +185,7 @@ func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, er
 }
 
 //export SetAddress
-func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.cchar_t, errmsg *C.char, errN *C.int) C.int {
+func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.cchar_t, errmsg *C.cchar_t, errN *C.int) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setAddress(uu, deviceID, addr, subnet, gateway)
 	}
@@ -194,7 +194,7 @@ func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.c
 }
 
 //export GetStatus
-func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, errmsg *C.char, errN *C.int) C.int {
+func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getStatus(uu, status, deviceID)
 	}
@@ -203,7 +203,7 @@ func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, er
 }
 
 //export GetTime
-func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, errmsg *C.char, errN *C.int) C.int {
+func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getTime(uu, deviceID, datetime)
 	}
@@ -212,14 +212,12 @@ func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, errmsg *
 }
 
 //export SetTime
-func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.char) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setTime(uu, deviceID, datetime); err != nil {
-		return C.CString(err.Error())
+func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.cchar_t, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setTime(uu, deviceID, datetime)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetListener

@@ -445,28 +445,35 @@
   (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 1))
   (unwind-protect
     (with-cstrs ((datetime ""))
-      (rlet ((errN :signed-long 256))
-        (with-macptrs ((err (external-call "GetTime" :address uhppote 
-                                                     :address datetimep
-                                                     :unsigned-long device-id 
-                                                     :address errmsgp
-                                                     :address errN
-                                                     :signed-long)))
-          ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-          (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-          (%get-cstring datetimep))))
+    (rlet ((errN :signed-long 256))
+      (with-macptrs ((err (external-call "GetTime" :address uhppote 
+                                                   :address datetimep
+                                                   :unsigned-long device-id 
+                                                   :address errmsgp
+                                                   :address errN
+                                                   :signed-long)))
+        ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+        (%get-cstring datetimep))))
   (dispose-heap-ivector datetime)
   (dispose-heap-ivector errmsg)))))
 
 
 (defun uhppoted-set-time (uhppote device-id datetime) "Sets a controller date/time"
-  (with-cstrs ((dt datetime))
-    (with-macptrs ((err (external-call "SetTime" :address uhppote 
-                                                 :unsigned-long device-id 
-                                                 :address dt
-                                                 :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      t)))
+  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (with-cstrs ((dt datetime))
+    (rlet ((errN :signed-long 256))
+      (with-macptrs ((err (external-call "SetTime" :address uhppote 
+                                                   :unsigned-long device-id 
+                                                   :address dt
+                                                   :address errmsgp
+                                                   :address errN
+                                                   :signed-long)))
+        ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+        t)))
+  (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-get-listener (uhppote device-id) "Retrieves the controller event listener address"

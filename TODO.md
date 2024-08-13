@@ -14,15 +14,15 @@
       - [x] set-address
       - [x] get-status
       - [x] get-time
-      - [ ] set-time
-          - [ ] preallocate struct strings
-          - [ ] C
-          - [ ] C++
-          - [ ] Python
-          - [ ] C#: mono
-          - [ ] C#: vs-mac
-          - [ ] C#: vs-win
-          - [ ] CCL
+      - [x] set-time
+          - [x] preallocate struct strings
+          - [x] C
+          - [x] C++
+          - [x] Python
+          - [x] C#: mono
+          - [x] C#: vs-mac
+          - [x] C#: vs-win
+          - [x] CCL
       - [ ] get-listener
       - [ ] set-listener
       - [ ] get-door-control

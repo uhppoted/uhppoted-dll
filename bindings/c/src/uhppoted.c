@@ -333,10 +333,12 @@ int get_time(uint32_t id, char **t) {
 }
 
 int set_time(uint32_t id, char *datetime) {
-    char *err = SetTime(u, id, datetime);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = SetTime(u, id, datetime, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 

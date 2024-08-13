@@ -191,11 +191,11 @@ extern "C" {
 #endif
 
 extern int GetDevices(struct UHPPOTE* u, unsigned int* list, int* N, cchar_t* errmsg, int* errN);
-extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, char* errmsg, int* errN);
-extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, char* errmsg, int* errN);
-extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, char* errmsg, int* errN);
-extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, char* errmsg, int* errN);
-extern char* SetTime(struct UHPPOTE* u, GoUint32 deviceID, char* datetime);
+extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, cchar_t* errmsg, int* errN);
+extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* datetime, cchar_t* errmsg, int* errN);
 extern char* GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID);
 extern char* SetListener(struct UHPPOTE* u, GoUint32 deviceID, char* listener);
 extern char* GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door);
