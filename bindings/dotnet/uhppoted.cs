@@ -240,14 +240,20 @@ public class Uhppoted : IDisposable {
     }
 
     public string GetListener(uint deviceID) {
-        string listener = "";
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
+        IntPtr listener = Marshal.AllocHGlobal(22);
 
-        string err = GetListener(ref this.u, ref listener, deviceID);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        try {
+            if (GetListener(ref this.u, listener, deviceID, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+
+            return Marshal.PtrToStringAnsi(listener)!;
+        } finally {
+            Marshal.FreeHGlobal(listener);
+            Marshal.FreeHGlobal(err);
         }
-
-        return listener;
     }
 
     public void SetListener(uint deviceID, string listener) {
@@ -581,7 +587,7 @@ public class Uhppoted : IDisposable {
     private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
-    private static extern string GetListener(ref UHPPOTE u, ref string listener, uint deviceID);
+    private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
     private static extern string SetListener(ref UHPPOTE u, uint deviceID, string listener);

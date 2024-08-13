@@ -196,7 +196,7 @@ extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar
 extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* datetime, cchar_t* errmsg, int* errN);
-extern char* GetListener(struct UHPPOTE* u, char** address, GoUint32 deviceID);
+extern int GetListener(struct UHPPOTE* u, cchar_t* address, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern char* SetListener(struct UHPPOTE* u, GoUint32 deviceID, char* listener);
 extern char* GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door);
 extern char* SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay);

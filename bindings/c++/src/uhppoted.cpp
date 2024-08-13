@@ -310,18 +310,16 @@ void uhppoted::set_time(uint32_t id, std::string &datetime) {
 }
 
 string uhppoted::get_listener(uint32_t id) {
-    char *listener;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+    char listener[22] = "";
 
-    char *err = GetListener(u, &listener, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = GetListener(u, listener, id, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
-    string l = string(listener);
-
-    free(listener);
-
-    return l;
+    return listener;
 }
 
 void uhppoted::set_listener(uint32_t id, std::string &listener) {

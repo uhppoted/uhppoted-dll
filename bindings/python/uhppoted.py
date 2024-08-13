@@ -324,9 +324,12 @@ class Uhppote:
             raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_listener(self, deviceID):
-        listener = c_char_p()
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        listener = c_char_p(bytes(' ' * 22, 'utf-8'))
 
-        self.ffi.GetListener(self._uhppote, byref(listener), deviceID)
+        if self.ffix.GetListener(self._uhppote, listener, deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         return listener.value.decode('utf-8')
 
@@ -708,7 +711,7 @@ class FFI:
         # self.GetStatus = ffi('GetStatus', errcheck)
         # self.GetTime = ffi('GetTime', errcheck)
         # self.SetTime = ffi('SetTime', errcheck)
-        self.GetListener = ffi('GetListener', errcheck)
+        # self.GetListener = ffi('GetListener', errcheck)
         self.SetListener = ffi('SetListener', errcheck)
         self.GetDoorControl = ffi('GetDoorControl', errcheck)
         self.SetDoorControl = ffi('SetDoorControl', errcheck)
@@ -746,6 +749,7 @@ class FFIX:
         self.GetStatus = ffix('GetStatus', errcheck)
         self.GetTime = ffix('GetTime', errcheck)
         self.SetTime = ffix('SetTime', errcheck)
+        self.GetListener = ffix('GetListener', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -788,7 +792,7 @@ def libfunctions():
         'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetTime':                  (lib.SetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
-        'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), POINTER(c_char_p), c_ulong]),
+        'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetListener':              (lib.SetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p]),
         'GetDoorControl':           (lib.GetDoorControl,           [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte]),
         'SetDoorControl':           (lib.SetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte]),

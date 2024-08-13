@@ -444,7 +444,6 @@
   (multiple-value-bind (datetime datetimep) (make-heap-ivector 20  '(unsigned-byte 1))
   (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 1))
   (unwind-protect
-    (with-cstrs ((datetime ""))
     (rlet ((errN :signed-long 256))
       (with-macptrs ((err (external-call "GetTime" :address uhppote 
                                                    :address datetimep
@@ -454,7 +453,7 @@
                                                    :signed-long)))
         ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
         (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-        (%get-cstring datetimep))))
+        (%get-cstring datetimep)))
   (dispose-heap-ivector datetime)
   (dispose-heap-ivector errmsg)))))
 
@@ -477,13 +476,21 @@
 
 
 (defun uhppoted-get-listener (uhppote device-id) "Retrieves the controller event listener address"
-  (with-cstrs ((listener ""))
-     (with-macptrs ((err (external-call "GetListener" :address uhppote 
-                                                      :address listener
-                                                      :unsigned-long device-id 
-                                                      :address)))
-       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-       (go-string (%get-ptr listener)))))
+  (multiple-value-bind (listener listenerp) (make-heap-ivector 22  '(unsigned-byte 1))
+  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN :signed-long 256))
+      (with-macptrs ((err (external-call "GetListener" :address uhppote 
+                                                       :address listenerp
+                                                       :unsigned-long device-id 
+                                                       :address errmsgp
+                                                       :address errN
+                                                       :signed-long)))
+        ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+        (%get-cstring listenerp)))
+  (dispose-heap-ivector listener)
+  (dispose-heap-ivector errmsg)))))
 
 
 (defun uhppoted-set-listener (uhppote device-id listener) "Sets a controller's event listener address and port"

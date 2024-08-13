@@ -196,9 +196,9 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	}
 }
 
-func getListener(uu uhppote.IUHPPOTE, listener **C.char, deviceID uint32) error {
-	if listener == nil {
-		return fmt.Errorf("invalid argument (address) - expected valid pointer to string")
+func getListener(uu uhppote.IUHPPOTE, address *C.char, deviceID uint32) error {
+	if address == nil {
+		return fmt.Errorf("invalid argument (address) - expected valid pointer to char[22]")
 	}
 
 	if v, err := uu.GetListener(deviceID); err != nil {
@@ -206,7 +206,7 @@ func getListener(uu uhppote.IUHPPOTE, listener **C.char, deviceID uint32) error 
 	} else if !v.IsValid() {
 		return fmt.Errorf("%v: invalid response to get-listener", deviceID)
 	} else {
-		*listener = C.CString(fmt.Sprintf("%v", v))
+		cstring(v, address, 22)
 	}
 
 	return nil

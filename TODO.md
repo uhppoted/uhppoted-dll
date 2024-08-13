@@ -6,15 +6,16 @@
       - [ ] CCL: return code is a pointer ??
       - [ ] CCL: fix stacked multiple-value-binds
       - [ ] CCL: tests on github
+      - [ ] Reorder parameters
+      - [ ] Use C.cchar_t
   
       - [x] get-devices
       - [x] get-device
-            - [ ] Fix parameters ordering
-            - [ ] Use C.cchar_t
       - [x] set-address
       - [x] get-status
       - [x] get-time
       - [x] set-time
+      - [x] get-listener
           - [x] preallocate struct strings
           - [x] C
           - [x] C++
@@ -23,7 +24,6 @@
           - [x] C#: vs-mac
           - [x] C#: vs-win
           - [x] CCL
-      - [ ] get-listener
       - [ ] set-listener
       - [ ] get-door-control
       - [ ] set-door-control

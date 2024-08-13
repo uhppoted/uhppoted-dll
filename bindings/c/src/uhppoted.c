@@ -346,18 +346,17 @@ int set_time(uint32_t id, char *datetime) {
 }
 
 int get_listener(uint32_t id, char **t) {
-    char *listener;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+    char listener[22] = "";
 
-    char *err = GetListener(u, &listener, id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    if ((rc = GetListener(u, listener, id, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
     *t = strdup(listener);
-
-    free(listener);
 
     return 0;
 }
