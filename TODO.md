@@ -19,6 +19,7 @@
       - [x] set-listener
       - [x] get-door-control
       - [x] set-door-control
+      - [x] open-door
           - [x] preallocate struct strings
           - [x] Use C.cchar_t
           - [x] C
@@ -28,7 +29,6 @@
           - [x] C#: vs-mac
           - [x] C#: vs-win
           - [x] CCL
-      - [ ] open-door
       - [ ] get-cards
       - [ ] get-card
       - [ ] get-card-by-index

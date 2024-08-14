@@ -405,10 +405,12 @@ int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
 }
 
 int open_door(uint32_t id, uint8_t door) {
-    char *err = OpenDoor(u, id, door);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = OpenDoor(u, id, door, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 

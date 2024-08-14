@@ -532,28 +532,35 @@
 (defun uhppoted-set-door-control (uhppote device-id door mode delay) "Sets the control mode and delay for a controller door"
   (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
   (unwind-protect
-    (rletz ((errN    :signed-long 256))
+    (rlet ((errN    :signed-long 256))
     (with-macptrs ((err (external-call "SetDoorControl" :address uhppote 
                                                         :unsigned-long device-id 
                                                         :unsigned-byte door
                                                         :unsigned-byte mode
                                                         :unsigned-byte delay
-                                                          :address errmsgp
-                                                          :address errN
-                                                          :signed-long)))
-        ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-        (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+                                                        :address errmsgp
+                                                        :address errN
+                                                        :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
   (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-open-door (uhppote device-id door) "Remotely opens a controller door"
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN    :signed-long 256))
     (with-macptrs ((err (external-call "OpenDoor" :address uhppote 
                                                   :unsigned-long device-id 
                                                   :unsigned-byte door
-                                                  :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+                                                        :address errmsgp
+                                                        :address errN
+                                                        :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
+  (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-get-cards (uhppote device-id) "Retrieves the number of cards stored on a controller"

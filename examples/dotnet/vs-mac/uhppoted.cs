@@ -357,7 +357,6 @@ namespace uhppoted
         {
             IntPtr err = Marshal.AllocHGlobal(256);
             int errN = 256;
-            GoDoorControl control = new GoDoorControl();
 
             try
             { 
@@ -374,10 +373,19 @@ namespace uhppoted
 
         public void OpenDoor(uint deviceID, byte door)
         {
-            string err = OpenDoor(ref this.u, deviceID, door);
-            if (err != null && err != "")
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+
+            try
+            { 
+                if (OpenDoor(ref this.u, deviceID, door, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
             {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(err);
             }
         }
 
@@ -800,7 +808,7 @@ namespace uhppoted
         private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);
+        private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetCards(ref UHPPOTE u, ref uint N, uint deviceID);
