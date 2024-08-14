@@ -337,7 +337,7 @@
   (multiple-value-bind (errmsg  errmsgp)  (make-heap-ivector 256 '(unsigned-byte 1))
   (unwind-protect
     (rletz ((device (:struct :GoDevice))
-            (errN :signed-long 256))
+            (errN   :signed-long 256))
 
       (setf (pref device :GoDevice.address) addressp)
       (setf (pref device :GoDevice.subnet)  subnetp)
@@ -346,11 +346,11 @@
       (setf (pref device :GoDevice.version) versionp)
       (setf (pref device :GoDevice.date)    datep)
 
-      (with-macptrs ((err (external-call "GetDevice" :address uhppote 
-		  						                                   :address device 
+      (with-macptrs ((err (external-call "GetDevice" :address       uhppote 
+		  						                                   :address       device 
 			  						                                 :unsigned-long device-id 
-                                                     :address errmsgp
-                                                     :address errN
+                                                     :address       errmsgp
+                                                     :address       errN
                                                      :signed-long)))
         ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
         (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
