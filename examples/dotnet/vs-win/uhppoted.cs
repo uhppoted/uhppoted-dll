@@ -412,45 +412,69 @@ namespace uhppoted
         public Card GetCard(uint deviceID, uint cardNumber)
         {
             GoCard card = new GoCard();
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
+            card.from = Marshal.AllocHGlobal(11);
+            card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
 
-            string err = GetCard(ref this.u, ref card, deviceID, cardNumber);
-            if (err != null && err != "")
-            {
-                Marshal.FreeHGlobal(card.doors);
+            try
+            { 
+                if (GetCard(ref this.u, ref card, deviceID, cardNumber, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
 
-                throw new UhppotedException(err);
+                string from = Marshal.PtrToStringAnsi(card.from)!;
+                string to = Marshal.PtrToStringAnsi(card.to)!;
+                byte[] doors = new byte[4];
+
+                Marshal.Copy(card.doors, doors, 0, 4);
+
+                return new Card(card.cardNumber, from, to, doors, card.PIN);
             }
-
-            byte[] doors = new byte[4];
-
-            Marshal.Copy(card.doors, doors, 0, 4);
-            Marshal.FreeHGlobal(card.doors);
-
-            return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
+            finally
+            {
+                Marshal.FreeHGlobal(card.from);
+                Marshal.FreeHGlobal(card.to);
+                Marshal.FreeHGlobal(card.doors);
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public Card GetCardByIndex(uint deviceID, uint index)
         {
             GoCard card = new GoCard();
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
+            card.from = Marshal.AllocHGlobal(11);
+            card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
 
-            string err = GetCardByIndex(ref this.u, ref card, deviceID, index);
-            if (err != null && err != "")
-            {
-                Marshal.FreeHGlobal(card.doors);
+            try
+            { 
+                if (GetCardByIndex(ref this.u, ref card, deviceID, index, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
 
-                throw new UhppotedException(err);
+                string from = Marshal.PtrToStringAnsi(card.from)!;
+                string to = Marshal.PtrToStringAnsi(card.to)!;
+                byte[] doors = new byte[4];
+
+                Marshal.Copy(card.doors, doors, 0, 4);
+
+                return new Card(card.cardNumber, from, to, doors, card.PIN);
             }
-
-            byte[] doors = new byte[4];
-
-            Marshal.Copy(card.doors, doors, 0, 4);
-            Marshal.FreeHGlobal(card.doors);
-
-            return new Card(card.cardNumber, card.from, card.to, doors, card.PIN);
+            finally
+            {
+                Marshal.FreeHGlobal(card.from);
+                Marshal.FreeHGlobal(card.to);
+                Marshal.FreeHGlobal(card.doors);
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN)
@@ -821,10 +845,10 @@ namespace uhppoted
         private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
+        private static extern int GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index);
+        private static extern int GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN);
@@ -961,8 +985,8 @@ namespace uhppoted
         struct GoCard
         {
             public uint cardNumber;
-            public string from;
-            public string to;
+            public IntPtr from;
+            public IntPtr to;
             public IntPtr doors;
             public uint PIN;
         }

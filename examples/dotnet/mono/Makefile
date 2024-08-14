@@ -2,7 +2,7 @@ LIB=../../../lib
 BINDINGS=../../../bindings/dotnet
 GO=GODEBUG=cgocheck=2 
 DEVICEID=--controller 405419896
-CARD=--card 8000001
+CARD=--card 10058400
 DOOR=--door 3
 
 ifeq ($(OS),Windows_NT)

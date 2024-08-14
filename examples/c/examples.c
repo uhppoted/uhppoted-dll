@@ -11,7 +11,7 @@ void help();
 
 const uint32_t DEVICE_ID = 405419896;
 const uint8_t DOOR = 4;
-const uint32_t CARD_NUMBER = 8000001;
+const uint32_t CARD_NUMBER = 10058400;
 const uint32_t CARD_INDEX = 7;
 const uint32_t EVENT_INDEX = 91;
 const uint8_t PROFILE_ID = 29;

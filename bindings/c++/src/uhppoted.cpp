@@ -371,10 +371,10 @@ void uhppoted::open_door(uint32_t id, uint8_t door) {
 }
 
 int uhppoted::get_cards(uint32_t id) {
+    int N;
     char err[256] = "";
     int errN = sizeof(err);
     int rc;
-    int N;
 
     if ((rc = GetCards(u, &N, id, err, &errN)) != 0) {
         throw uhppoted_exception(err, errN);
@@ -384,15 +384,21 @@ int uhppoted::get_cards(uint32_t id) {
 }
 
 card uhppoted::get_card(uint32_t id, uint32_t card_number) {
-    Card card;
-
+    char from[11] = "";
+    char to[11] = "";
     vector<uint8_t> doors(4);
+    Card card = {
+        .from = from,
+        .to = to,
+        .doors = doors.data(),
+    };
 
-    card.doors = doors.data();
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
 
-    char *err = GetCard(u, &card, id, card_number);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = GetCard(u, &card, id, card_number, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
     struct card c;
@@ -410,15 +416,21 @@ card uhppoted::get_card(uint32_t id, uint32_t card_number) {
 }
 
 card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
-    Card card;
-
+    char from[11] = "";
+    char to[11] = "";
     vector<uint8_t> doors(4);
+    Card card = {
+        .from = from,
+        .to = to,
+        .doors = doors.data(),
+    };
 
-    card.doors = doors.data();
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
 
-    char *err = GetCardByIndex(u, &card, id, index);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = GetCardByIndex(u, &card, id, index, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
     struct card c;

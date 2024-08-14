@@ -39,8 +39,8 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 	}
 
 	card.card_number = C.uint(8165538)
-	card.from = C.CString("2022-01-01")
-	card.to = C.CString("2022-12-31")
+	cstring("2022-01-01", card.from, 11)
+	cstring("2022-12-31", card.to, 11)
 	card.PIN = C.uint(7531)
 
 	doors := unsafe.Slice(card.doors, 4)
@@ -66,8 +66,8 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	}
 
 	card.card_number = C.uint(8165538)
-	card.from = C.CString("2022-01-01")
-	card.to = C.CString("2022-12-31")
+	cstring("2022-01-01", card.from, 11)
+	cstring("2022-12-31", card.to, 11)
 	card.PIN = C.uint(7531)
 
 	doors := unsafe.Slice(card.doors, 4)

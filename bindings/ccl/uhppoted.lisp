@@ -581,41 +581,67 @@
 
 
 (defun uhppoted-get-card (uhppote device-id card-number) "Retrieves card detail for a card stored on controller"
-  (%stack-block ((doors   4))
-    (rletz ((card (:struct :GoCard) :doors   doors))
+  (multiple-value-bind (from   fromp)   (make-heap-ivector 11  '(unsigned-byte 1))
+  (multiple-value-bind (to     top)     (make-heap-ivector 11  '(unsigned-byte 1))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (%stack-block ((doors   4))
+    (rletz ((card (:struct :GoCard) :from  fromp
+                                    :to    top
+                                    :doors doors)
+            (errN :signed-long 256))
       (with-macptrs ((err (external-call "GetCard" :address uhppote 
                                                    :address card
                                                    :unsigned-long device-id 
                                                    :unsigned-long card-number
-                                                   :address)))
-        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+                                                   :address errmsgp
+                                                   :address errN
+                                                   :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
         (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
-                   :from        (go-string (pref card :GoCard.from))
-                   :to          (go-string (pref card :GoCard.to))
+                   :from        (%get-cstring       (pref card :GoCard.from))
+                   :to          (%get-cstring       (pref card :GoCard.to))
                    :doors       (list (%get-unsigned-byte doors 0)
                                       (%get-unsigned-byte doors 1)
                                       (%get-unsigned-byte doors 2)
                                       (%get-unsigned-byte doors 3))
-                   :PIN         (pref card :GoCard.PIN))))))
+                   :PIN         (pref card :GoCard.PIN)))))
+  (dispose-heap-ivector from)
+  (dispose-heap-ivector to)
+  (dispose-heap-ivector errmsg))))))
 
 
 (defun uhppoted-get-card-by-index (uhppote device-id index) "Retrieves card detail for the card stored at an index on controller"
-  (%stack-block ((doors   4))
-    (rletz ((card (:struct :GoCard) :doors   doors))
+  (multiple-value-bind (from   fromp)   (make-heap-ivector 11  '(unsigned-byte 1))
+  (multiple-value-bind (to     top)     (make-heap-ivector 11  '(unsigned-byte 1))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (%stack-block ((doors   4))
+    (rletz ((card (:struct :GoCard) :from  fromp
+                                    :to    top
+                                    :doors doors)
+            (errN :signed-long 256))
       (with-macptrs ((err (external-call "GetCardByIndex" :address uhppote 
-                                                   :address card
-                                                   :unsigned-long device-id 
-                                                   :unsigned-long index
-                                                   :address)))
-        (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+                                                          :address card
+                                                          :unsigned-long device-id 
+                                                          :unsigned-long index
+                                                          :address errmsgp
+                                                          :address errN
+                                                          :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
         (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
-                   :from        (go-string (pref card :GoCard.from))
-                   :to          (go-string (pref card :GoCard.to))
+                   :from        (%get-cstring       (pref card :GoCard.from))
+                   :to          (%get-cstring       (pref card :GoCard.to))
                    :doors       (list (%get-unsigned-byte doors 0)
                                       (%get-unsigned-byte doors 1)
                                       (%get-unsigned-byte doors 2)
                                       (%get-unsigned-byte doors 3))
-                   :PIN         (pref card :GoCard.PIN))))))
+                   :PIN         (pref card :GoCard.PIN)))))
+  (dispose-heap-ivector from)
+  (dispose-heap-ivector to)
+  (dispose-heap-ivector errmsg))))))
 
 
 (defun uhppoted-put-card (uhppote device-id card-number from to doors PIN) "Adds or updates the card detail stored on a controller"

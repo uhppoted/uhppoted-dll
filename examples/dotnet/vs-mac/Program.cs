@@ -25,7 +25,7 @@ class UhppotedDLLCLI
     const byte DOOR = 1;
     const string DOOR_MODE = "controlled";
     const byte DOOR_DELAY = 5;
-    const uint CARD_NUMBER = 10058399;
+    const uint CARD_NUMBER = 10058400;
     const uint CARD_INDEX = 1;
     const string CARD_FROM = "2023-01-01";
     const string CARD_TO = "2024-12-31";

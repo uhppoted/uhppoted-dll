@@ -52,7 +52,7 @@ public class options {
 
 public class examples {
     const uint DEVICE_ID = 405419896;
-    const uint CARD_NUMBER = 8000001;
+    const uint CARD_NUMBER = 10058400;
     const uint CARD_INDEX = 7;
     const uint EVENT_INDEX = 43;
     const byte DOOR = 4;

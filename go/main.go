@@ -71,8 +71,8 @@ typedef struct DoorControl {
 
 typedef struct Card {
     uint32_t card_number;
-    char* from;
-    char* to;
+    char* from;     // expects at least char[11]
+    char* to;       // expects at least char[11]
 	uint8_t *doors; // uint_8[4]
     uint32_t PIN;
 } Card;
@@ -275,25 +275,21 @@ func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, errmsg *C.cchar_t,
 }
 
 //export GetCard
-func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getCard(uu, card, deviceID, cardNumber); err != nil {
-		return C.CString(err.Error())
+func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getCard(uu, card, deviceID, cardNumber)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetCardByIndex
-func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getCardByIndex(uu, card, deviceID, index); err != nil {
-		return C.CString(err.Error())
+func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getCardByIndex(uu, card, deviceID, index)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export PutCard

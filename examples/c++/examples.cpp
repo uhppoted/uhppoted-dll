@@ -12,7 +12,7 @@ void usage();
 void help();
 
 extern const uint32_t DEVICE_ID = 405419896;
-extern const uint32_t CARD_NUMBER = 8000001;
+extern const uint32_t CARD_NUMBER = 10058400;
 extern const uint32_t CARD_INDEX = 7;
 extern const uint32_t EVENT_INDEX = 7;
 extern const uint8_t DOOR = 4;

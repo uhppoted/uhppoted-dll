@@ -418,10 +418,10 @@ int open_door(uint32_t id, uint8_t door) {
 }
 
 int get_cards(uint32_t id, int *N) {
+    int cards;
     char err[256] = "";
     int errN = sizeof(err);
     int rc;
-    int cards;
 
     if ((rc = GetCards(u, &cards, id, err, &errN)) != 0) {
         set_error(err, errN);
@@ -434,63 +434,65 @@ int get_cards(uint32_t id, int *N) {
 }
 
 int get_card(uint32_t id, uint32_t card_number, card *c) {
-    struct Card card;
+    char from[11] = "";
+    char to[11] = "";
+    uint8_t doors[4] = {0, 0, 0, 0};
 
-    card.doors = malloc(4 * sizeof(uint8_t));
+    struct Card card = {
+        .from = from,
+        .to = to,
+        .doors = doors,
+    };
 
-    char *err = GetCard(u, &card, id, card_number);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = GetCard(u, &card, id, card_number, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
     c->card_number = card.card_number;
-
     snprintf(c->from, sizeof(c->from), "%s", card.from);
     snprintf(c->to, sizeof(c->to), "%s", card.to);
-
     c->doors[0] = card.doors[0];
     c->doors[1] = card.doors[1];
     c->doors[2] = card.doors[2];
     c->doors[3] = card.doors[3];
-
     c->PIN = card.PIN;
-
-    free(card.from);
-    free(card.to);
-    free(card.doors);
 
     return 0;
 }
 
 int get_card_by_index(uint32_t id, uint32_t index, card *c) {
-    struct Card card;
+    char from[11] = "";
+    char to[11] = "";
+    uint8_t doors[4] = {0, 0, 0, 0};
 
-    card.doors = malloc(4 * sizeof(uint8_t));
+    struct Card card = {
+        .from = from,
+        .to = to,
+        .doors = doors,
+    };
 
-    char *err = GetCardByIndex(u, &card, id, index);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = GetCardByIndex(u, &card, id, index, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
     c->card_number = card.card_number;
-
     snprintf(c->from, sizeof(c->from), "%s", card.from);
     snprintf(c->to, sizeof(c->to), "%s", card.to);
-
     c->doors[0] = card.doors[0];
     c->doors[1] = card.doors[1];
     c->doors[2] = card.doors[2];
     c->doors[3] = card.doors[3];
-
     c->PIN = card.PIN;
-
-    free(card.from);
-    free(card.to);
-    free(card.doors);
 
     return 0;
 }

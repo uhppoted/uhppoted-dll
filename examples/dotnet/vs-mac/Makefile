@@ -1,6 +1,7 @@
 DLL = ../../../lib
 CLI = export DYLD_LIBRARY_PATH=$(DLL) && ./bin/Debug/net7.0/uhppoted-dll-cli
-CONTROLLER = 405419896
+CONTROLLER ?= 405419896
+CARD ?= 10058400
 
 get-controllers:
 	$(CLI) get-controllers

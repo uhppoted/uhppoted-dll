@@ -360,9 +360,9 @@ class Uhppote:
             raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_cards(self, deviceID):
+        cards = ctypes.c_int(0)
         errN = ctypes.c_int(256)
         err = c_char_p(bytes('*' * errN.value, 'utf-8'))
-        cards = ctypes.c_int(0)
 
         if self.ffix.GetCards(self._uhppote, byref(cards), deviceID, err, byref(errN)) != 0:
             raise Exception(f"{err.value.decode('utf-8')}")
@@ -371,9 +371,11 @@ class Uhppote:
 
     def get_card(self, deviceID, cardNumber):
         card = GoCard()
-        card.doors = (c_ubyte * 4)(*[0] * 4)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-        self.ffi.GetCard(self._uhppote, byref(card), deviceID, cardNumber)
+        if self.ffix.GetCard(self._uhppote, byref(card), deviceID, cardNumber, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         doors = [0, 0, 0, 0]
         for i in range(4):
@@ -383,9 +385,11 @@ class Uhppote:
 
     def get_card_by_index(self, deviceID, index):
         card = GoCard()
-        card.doors = (c_ubyte * 4)(*[0] * 4)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-        self.ffi.GetCardByIndex(self._uhppote, byref(card), deviceID, index)
+        if self.ffix.GetCardByIndex(self._uhppote, byref(card), deviceID, index, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         doors = [0, 0, 0, 0]
         for i in range(4):
@@ -718,8 +722,8 @@ class FFI:
         # self.SetDoorControl = ffi('SetDoorControl', errcheck)
         # self.OpenDoor = ffi('OpenDoor', errcheck)
         # self.GetCards = ffi('GetCards', errcheck)
-        self.GetCard = ffi('GetCard', errcheck)
-        self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
+        # self.GetCard = ffi('GetCard', errcheck)
+        # self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
         self.PutCard = ffi('PutCard', errcheck)
         self.DeleteCard = ffi('DeleteCard', errcheck)
         self.DeleteCards = ffi('DeleteCards', errcheck)
@@ -756,6 +760,8 @@ class FFIX:
         self.SetDoorControl = ffix('SetDoorControl', errcheck)
         self.OpenDoor = ffix('OpenDoor', errcheck)
         self.GetCards = ffix('GetCards', errcheck)
+        self.GetCard = ffix('GetCard', errcheck)
+        self.GetCardByIndex = ffix('GetCardByIndex', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -804,8 +810,8 @@ def libfunctions():
         'SetDoorControl':           (lib.SetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
         'OpenDoor':                 (lib.OpenDoor,                 [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
         'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
-        'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
+        'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
+        'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong]),
         'DeleteCard':               (lib.DeleteCard,               [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
         'DeleteCards':              (lib.DeleteCards,              [POINTER(GoUHPPOTE), c_ulong]),
@@ -937,6 +943,14 @@ class GoCard(Structure):
         ('doors', POINTER(c_ubyte)),  # uint8_t[4]
         ('PIN', c_uint32),
     ]
+
+    def __init__(self):
+        super(GoCard, self).__init__()
+        self.cardNumber = 0
+        self.start = c_char_p(bytes(' ' * 11, 'utf-8'))
+        self.end = c_char_p(bytes(' ' * 11, 'utf-8'))
+        self.doors = (c_ubyte * 4)(*[0] * 4)
+        self.PIN = 0
 
 
 class GoTimeProfile(Structure):

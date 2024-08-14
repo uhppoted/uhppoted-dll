@@ -91,8 +91,8 @@ typedef struct DoorControl {
 
 typedef struct Card {
     uint32_t card_number;
-    char* from;
-    char* to;
+    char* from;     // expects at least char[11]
+    char* to;       // expects at least char[11]
 	uint8_t *doors; // uint_8[4]
     uint32_t PIN;
 } Card;
@@ -202,8 +202,8 @@ extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint
 extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, cchar_t* errmsg, int* errN);
 extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, cchar_t* errmsg, int* errN);
 extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern char* GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber);
-extern char* GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index);
+extern int GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* errmsg, int* errN);
+extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
 extern char* PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, char* from, char* to, GoUint8* doors, GoUint32 PIN);
 extern char* DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber);
 extern char* DeleteCards(struct UHPPOTE* u, GoUint32 deviceID);
