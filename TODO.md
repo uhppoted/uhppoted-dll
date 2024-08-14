@@ -17,16 +17,16 @@
       - [x] set-time
       - [x] get-listener
       - [x] set-listener
-      - [ ] get-door-control
-          - [ ] preallocate struct strings
-          - [ ] Use C.cchar_t
-          - [ ] C
-          - [ ] C++
-          - [ ] Python
-          - [ ] C#: mono
-          - [ ] C#: vs-mac
-          - [ ] C#: vs-win
-          - [ ] CCL
+      - [x] get-door-control
+          - [x] preallocate struct strings
+          - [x] Use C.cchar_t
+          - [x] C
+          - [x] C++
+          - [x] Python
+          - [x] C#: mono
+          - [x] C#: vs-mac
+          - [x] C#: vs-win
+          - [x] CCL
       - [ ] set-door-control
       - [ ] open-door
       - [ ] get-cards

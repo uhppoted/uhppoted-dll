@@ -333,17 +333,19 @@ void uhppoted::set_listener(uint32_t id, std::string &listener) {
 }
 
 struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
     struct DoorControl control;
 
-    char *err = GetDoorControl(u, &control, id, door);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = GetDoorControl(u, &control, id, door, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
-    struct door_control d;
-
-    d.mode = control.mode;
-    d.delay = control.delay;
+    struct door_control d = {
+        .mode = control.mode,
+        .delay = control.delay,
+    };
 
     return d;
 }

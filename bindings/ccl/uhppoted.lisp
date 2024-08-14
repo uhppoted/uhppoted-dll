@@ -494,7 +494,7 @@
 
 
 (defun uhppoted-set-listener (uhppote device-id listener) "Sets a controller's event listener address and port"
-  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 1))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
   (unwind-protect
     (with-cstrs ((addr listener))
     (rlet ((errN :signed-long 256))
@@ -511,15 +511,22 @@
 
 
 (defun uhppoted-get-door-control (uhppote device-id door) "Retrieves the door control state and open delay for a controller"
-  (rletz ((control (:struct :GoDoorControl)))
-    (with-macptrs ((err (external-call "GetDoorControl" :address uhppote 
-                                                        :address control 
-                                                        :unsigned-long device-id 
-                                                        :unsigned-byte door
-                                                        :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      (make-door-control :mode  (pref control :GoDoorControl.mode)
-                         :delay (pref control :GoDoorControl.delay)))))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rletz ((control (:struct :GoDoorControl))
+            (errN    :signed-long 256))
+      (with-macptrs ((err (external-call "GetDoorControl" :address uhppote 
+                                                          :address control 
+                                                          :unsigned-long device-id 
+                                                          :unsigned-byte door
+                                                          :address errmsgp
+                                                          :address errN
+                                                          :signed-long)))
+        ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+        (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+        (make-door-control :mode  (pref control :GoDoorControl.mode)
+                           :delay (pref control :GoDoorControl.delay))))
+  (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-set-door-control (uhppote device-id door mode delay) "Sets the control mode and delay for a controller door"

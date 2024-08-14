@@ -239,14 +239,12 @@ func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.cchar_t, errm
 }
 
 //export GetDoorControl
-func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getDoorControl(uu, control, deviceID, door); err != nil {
-		return C.CString(err.Error())
+func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getDoorControl(uu, control, deviceID, door)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export SetDoorControl

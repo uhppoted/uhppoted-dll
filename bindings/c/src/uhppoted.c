@@ -375,12 +375,13 @@ int set_listener(uint32_t id, char *listener) {
 }
 
 int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
     struct DoorControl control;
 
-    char *err = GetDoorControl(u, &control, id, door);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    if ((rc = GetDoorControl(u, &control, id, door, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
