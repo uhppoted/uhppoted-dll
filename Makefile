@@ -88,16 +88,21 @@ build-ccl: build test lint
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./go/...
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./go/...
 
-	make -C ./tests/ccl            -f Makefile get-controllers
-	# make -C ./tests/ccl            -f Makefile get-controller
-	make -C ./tests/ccl            -f Makefile set-address
-	make -C ./tests/ccl            -f Makefile get-status
-	make -C ./tests/ccl            -f Makefile get-time
-	make -C ./tests/ccl            -f Makefile set-time
-	make -C ./tests/ccl            -f Makefile get-listener
-	make -C ./tests/ccl            -f Makefile set-listener
-	make -C ./tests/ccl            -f Makefile tests
-	make -C ./examples/ccl         -f Makefile build
+	make -C ./tests/ccl    -f Makefile get-controllers
+#	make -C ./tests/ccl    -f Makefile get-controller
+	make -C ./tests/ccl    -f Makefile set-address
+	make -C ./tests/ccl    -f Makefile get-status
+	make -C ./tests/ccl    -f Makefile get-time
+	make -C ./tests/ccl    -f Makefile set-time
+	make -C ./tests/ccl    -f Makefile get-listener
+	make -C ./tests/ccl    -f Makefile set-listener
+	make -C ./tests/ccl    -f Makefile get-door-control
+	make -C ./tests/ccl    -f Makefile set-door-control
+	make -C ./tests/ccl    -f Makefile open-door
+	make -C ./tests/ccl    -f Makefile get-cards
+	make -C ./tests/ccl    -f Makefile get-card-by-index
+#	make -C ./tests/ccl    -f Makefile tests
+#	make -C ./examples/ccl -f Makefile build
 
 build-debug: build
 	make -C ./tests/c++       -f Makefile tests
