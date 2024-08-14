@@ -266,14 +266,12 @@ func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8, errmsg *C.cchar_
 }
 
 //export GetCards
-func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getCards(uu, N, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getCards(uu, N, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetCard

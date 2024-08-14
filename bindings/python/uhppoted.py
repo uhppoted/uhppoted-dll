@@ -360,9 +360,12 @@ class Uhppote:
             raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_cards(self, deviceID):
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
         cards = ctypes.c_int(0)
 
-        self.ffi.GetCards(self._uhppote, byref(cards), deviceID)
+        if self.ffix.GetCards(self._uhppote, byref(cards), deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         return cards.value
 
@@ -714,7 +717,7 @@ class FFI:
         # self.GetDoorControl = ffi('GetDoorControl', errcheck)
         # self.SetDoorControl = ffi('SetDoorControl', errcheck)
         # self.OpenDoor = ffi('OpenDoor', errcheck)
-        self.GetCards = ffi('GetCards', errcheck)
+        # self.GetCards = ffi('GetCards', errcheck)
         self.GetCard = ffi('GetCard', errcheck)
         self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
         self.PutCard = ffi('PutCard', errcheck)
@@ -752,6 +755,7 @@ class FFIX:
         self.GetDoorControl = ffix('GetDoorControl', errcheck)
         self.SetDoorControl = ffix('SetDoorControl', errcheck)
         self.OpenDoor = ffix('OpenDoor', errcheck)
+        self.GetCards = ffix('GetCards', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -799,7 +803,7 @@ def libfunctions():
         'GetDoorControl':           (lib.GetDoorControl,           [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
         'SetDoorControl':           (lib.SetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
         'OpenDoor':                 (lib.OpenDoor,                 [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
-        'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong]),
+        'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
         'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong]),
         'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong]),

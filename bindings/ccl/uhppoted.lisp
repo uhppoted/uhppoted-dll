@@ -554,9 +554,9 @@
     (with-macptrs ((err (external-call "OpenDoor" :address uhppote 
                                                   :unsigned-long device-id 
                                                   :unsigned-byte door
-                                                        :address errmsgp
-                                                        :address errN
-                                                        :signed-long)))
+                                                  :address errmsgp
+                                                  :address errN
+                                                  :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
@@ -564,13 +564,20 @@
 
 
 (defun uhppoted-get-cards (uhppote device-id) "Retrieves the number of cards stored on a controller"
-  (rletz ((N :signed-long 0))
-         (with-macptrs ((err (external-call "GetCards" :address uhppote 
-                                                       :address N 
-                                                       :unsigned-long device-id 
-                                                       :address)))
-          (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-          (%get-signed-long N))))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((N :signed-long 0)
+           (errN    :signed-long 256))
+    (with-macptrs ((err (external-call "GetCards" :address uhppote 
+                                                 :address N 
+                                                  :unsigned-long device-id 
+                                                  :address errmsgp
+                                                  :address errN
+                                                  :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (%get-signed-long N)))
+  (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-get-card (uhppote device-id card-number) "Retrieves card detail for a card stored on controller"

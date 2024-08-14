@@ -418,11 +418,13 @@ int open_door(uint32_t id, uint8_t door) {
 }
 
 int get_cards(uint32_t id, int *N) {
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
     int cards;
-    char *err = GetCards(u, &cards, id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+
+    if ((rc = GetCards(u, &cards, id, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 

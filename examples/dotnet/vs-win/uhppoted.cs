@@ -175,11 +175,10 @@ namespace uhppoted
 
         public Status GetStatus(uint deviceID)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
-
             GoStatus status = new GoStatus();
             GoEvent _evt = new GoEvent();
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
             _evt.timestamp = Marshal.AllocHGlobal(20);
 
@@ -253,9 +252,9 @@ namespace uhppoted
 
         public string GetTime(uint deviceID)
         {
+            IntPtr datetime = Marshal.AllocHGlobal(20);
             IntPtr err = Marshal.AllocHGlobal(256);
             int errN = 256;
-            IntPtr datetime = Marshal.AllocHGlobal(20);
 
             try
             { 
@@ -293,9 +292,9 @@ namespace uhppoted
 
         public string GetListener(uint deviceID)
         {
+            IntPtr listener = Marshal.AllocHGlobal(22);
             IntPtr err = Marshal.AllocHGlobal(256);
             int errN = 256;
-            IntPtr listener = Marshal.AllocHGlobal(22);
 
             try
             { 
@@ -333,9 +332,9 @@ namespace uhppoted
 
         public DoorControl GetDoorControl(uint deviceID, byte door)
         {
+            GoDoorControl control = new GoDoorControl();
             IntPtr err = Marshal.AllocHGlobal(256);
             int errN = 256;
-            GoDoorControl control = new GoDoorControl();
 
             try
             { 
@@ -392,14 +391,22 @@ namespace uhppoted
         public uint GetCards(uint deviceID)
         {
             uint N = 0;
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
-            string err = GetCards(ref this.u, ref N, deviceID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+            try
+            { 
+                if (GetCards(ref this.u, ref N, deviceID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+
+                return N;
             }
-
-            return N;
+            finally
+            {
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public Card GetCard(uint deviceID, uint cardNumber)
@@ -811,7 +818,7 @@ namespace uhppoted
         private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string GetCards(ref UHPPOTE u, ref uint N, uint deviceID);
+        private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);

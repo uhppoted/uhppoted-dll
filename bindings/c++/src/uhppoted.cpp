@@ -371,11 +371,13 @@ void uhppoted::open_door(uint32_t id, uint8_t door) {
 }
 
 int uhppoted::get_cards(uint32_t id) {
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
     int N;
 
-    char *err = GetCards(u, &N, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = GetCards(u, &N, id, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
     return N;

@@ -201,7 +201,7 @@ extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* listener, 
 extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door, cchar_t* errmsg, int* errN);
 extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, cchar_t* errmsg, int* errN);
 extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, cchar_t* errmsg, int* errN);
-extern char* GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID);
+extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern char* GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber);
 extern char* GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index);
 extern char* PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, char* from, char* to, GoUint8* doors, GoUint32 PIN);

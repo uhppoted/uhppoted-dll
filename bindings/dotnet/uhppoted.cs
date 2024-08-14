@@ -313,13 +313,18 @@ public class Uhppoted : IDisposable {
 
     public uint GetCards(uint deviceID) {
         uint N = 0;
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
 
-        string err = GetCards(ref this.u, ref N, deviceID);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        try {
+            if (GetCards(ref this.u, ref N, deviceID, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+
+            return N;
+        } finally {
+            Marshal.FreeHGlobal(err);
         }
-
-        return N;
     }
 
     public Card GetCard(uint deviceID, uint cardNumber) {
@@ -625,7 +630,7 @@ public class Uhppoted : IDisposable {
     private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
-    private static extern string GetCards(ref UHPPOTE u, ref uint N, uint deviceID);
+    private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
     private static extern string GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber);
