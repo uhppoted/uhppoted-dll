@@ -233,22 +233,20 @@ func getDoorControl(uu uhppote.IUHPPOTE, control *C.struct_DoorControl, deviceID
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to DoorControl struct")
 	}
 
-	response, err := uu.GetDoorControlState(deviceID, door)
-	if err != nil {
+	if response, err := uu.GetDoorControlState(deviceID, door); err != nil {
 		return err
 	} else if response == nil {
 		return fmt.Errorf("%v: no response to get-door-control-state", deviceID)
+	} else {
+		control.mode = C.uchar(response.ControlState)
+		control.delay = C.uchar(response.Delay)
 	}
-
-	control.mode = C.uchar(response.ControlState)
-	control.delay = C.uchar(response.Delay)
 
 	return nil
 }
 
 func setDoorControl(uu uhppote.IUHPPOTE, deviceID uint32, door uint8, mode types.ControlState, delay uint8) error {
-	response, err := uu.SetDoorControlState(deviceID, door, mode, delay)
-	if err != nil {
+	if response, err := uu.SetDoorControlState(deviceID, door, mode, delay); err != nil {
 		return err
 	} else if response == nil {
 		return fmt.Errorf("%v: no response to set-door-control-state", deviceID)

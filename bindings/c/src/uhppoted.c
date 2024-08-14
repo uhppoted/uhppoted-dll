@@ -392,10 +392,12 @@ int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
 }
 
 int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
-    char *err = SetDoorControl(u, id, door, mode, delay);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = SetDoorControl(u, id, door, mode, delay, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 

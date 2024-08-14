@@ -248,14 +248,12 @@ func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID
 }
 
 //export SetDoorControl
-func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8, delay uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setDoorControl(uu, deviceID, door, types.ControlState(mode), delay); err != nil {
-		return C.CString(err.Error())
+func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8, delay uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setDoorControl(uu, deviceID, door, types.ControlState(mode), delay)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export OpenDoor

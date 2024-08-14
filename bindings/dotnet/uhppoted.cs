@@ -286,9 +286,16 @@ public class Uhppoted : IDisposable {
     }
 
     public void SetDoorControl(uint deviceID, byte door, byte mode, byte delay) {
-        string err = SetDoorControl(ref this.u, deviceID, door, mode, delay);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
+        GoDoorControl control = new GoDoorControl();
+
+        try {
+            if (SetDoorControl(ref this.u, deviceID, door, mode, delay, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+        } finally {
+            Marshal.FreeHGlobal(err);
         }
     }
 
@@ -607,7 +614,7 @@ public class Uhppoted : IDisposable {
     private static extern int GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
-    private static extern string SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay);
+    private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
     private static extern string OpenDoor(ref UHPPOTE u, uint deviceID, byte door);

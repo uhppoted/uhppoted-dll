@@ -351,9 +351,12 @@ struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
 }
 
 void uhppoted::set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
-    char *err = SetDoorControl(u, id, door, mode, delay);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = SetDoorControl(u, id, door, mode, delay, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
