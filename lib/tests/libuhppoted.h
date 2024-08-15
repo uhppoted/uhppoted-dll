@@ -207,10 +207,10 @@ extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceI
 extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* from, cchar_t* to, GoUint8* doors, GoUint32 PIN, cchar_t* errmsg, int* errN);
 extern int DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* errmsg, int* errN);
 extern int DeleteCards(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern char* GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID);
-extern char* SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index);
-extern char* GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index);
-extern char* RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled);
+extern int GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
+extern int GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
+extern int RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled, cchar_t* errmsg, int* errN);
 extern char* GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID);
 extern char* SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile);
 extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);

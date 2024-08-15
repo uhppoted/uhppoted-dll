@@ -320,47 +320,39 @@ func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *
 }
 
 //export GetEventIndex
-func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getEventIndex(uu, index, deviceID); err != nil {
-		return C.CString(err.Error())
+func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getEventIndex(uu, index, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export SetEventIndex
-func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setEventIndex(uu, deviceID, index); err != nil {
-		return C.CString(err.Error())
+func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setEventIndex(uu, deviceID, index)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetEvent
-func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getEvent(uu, event, deviceID, index); err != nil {
-		return C.CString(err.Error())
+func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getEvent(uu, event, deviceID, index)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export RecordSpecialEvents
-func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := recordSpecialEvents(uu, deviceID, enabled); err != nil {
-		return C.CString(err.Error())
+func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return recordSpecialEvents(uu, deviceID, enabled)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetTimeProfile

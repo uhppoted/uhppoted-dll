@@ -48,7 +48,7 @@ func getEvent(uu uhppote.IUHPPOTE, event *C.struct_Event, deviceID uint32, index
 		return fmt.Errorf("%v: no response to get-event %v", deviceID, index)
 	}
 
-	event.timestamp = C.CString(fmt.Sprintf("%v", e.Timestamp))
+	cstring(e.Timestamp, event.timestamp, 20)
 	event.index = C.uint(e.Index)
 	event.eventType = C.uchar(e.Type)
 	event.granted = cbool(e.Granted)

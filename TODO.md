@@ -8,6 +8,7 @@
       - [ ] CCL: tests on github
       - [ ] Reorder parameters
       - [ ] Use C.cchar_t
+      - (?) Make errmsg a struct ??
 
       - [x] get-devices
       - [x] get-device
@@ -26,6 +27,11 @@
       - [x] put-card
       - [x] delete-card
       - [x] delete-cards
+      - [x] get-event-index
+      - [x] set-event-index
+      - [x] get-event
+          - [x] CCL
+      - [ ] record-special-events
           - [x] preallocate struct strings
           - [x] Use C.cchar_t
           - [x] C
@@ -34,11 +40,6 @@
           - [x] C#: mono
           - [x] C#: vs-mac
           - [x] C#: vs-win
-          - [x] CCL
-      - [ ] get-event-index
-      - [ ] set-event-index
-      - [ ] get-event
-      - [ ] record-special-events
       - [ ] get-time-profile
       - [ ] set-time-profile
       - [ ] clear-time-profiles

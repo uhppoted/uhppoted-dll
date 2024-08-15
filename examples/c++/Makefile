@@ -92,7 +92,7 @@ get-event-index: build
 	$(CMD) get-event-index $(DEVICEID)
 
 set-event-index: build
-	$(CMD) get-event-index $(DEVICEID)
+	$(CMD) set-event-index $(DEVICEID) --event-index 26
 
 get-event: build
 	$(CMD) get-event $(DEVICEID) --event-index 33

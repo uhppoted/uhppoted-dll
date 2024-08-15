@@ -479,28 +479,39 @@ void uhppoted::delete_cards(uint32_t id) {
 
 uint32_t uhppoted::get_event_index(uint32_t id) {
     uint32_t index;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
 
-    char *err = GetEventIndex(u, &index, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if ((rc = GetEventIndex(u, &index, id, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
     return index;
 }
 
 void uhppoted::set_event_index(uint32_t id, uint32_t index) {
-    char *err = SetEventIndex(u, id, index);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = SetEventIndex(u, id, index, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
 event uhppoted::get_event(uint32_t id, uint32_t index) {
-    Event event;
+    char timestamp[20] = "";
+    Event event = {
+        .timestamp = timestamp,
+    };
 
-    char *err = GetEvent(u, &event, id, index);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = GetEvent(u, &event, id, index, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 
     struct event e;
@@ -518,9 +529,12 @@ event uhppoted::get_event(uint32_t id, uint32_t index) {
 }
 
 void uhppoted::record_special_events(uint32_t id, bool enabled) {
-    char *err = RecordSpecialEvents(u, id, enabled);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = RecordSpecialEvents(u, id, enabled, err, &errN)) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
