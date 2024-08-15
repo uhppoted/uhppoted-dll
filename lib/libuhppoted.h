@@ -204,9 +204,9 @@ extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, cchar_t*
 extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern int GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* errmsg, int* errN);
 extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
-extern char* PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, char* from, char* to, GoUint8* doors, GoUint32 PIN);
-extern char* DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber);
-extern char* DeleteCards(struct UHPPOTE* u, GoUint32 deviceID);
+extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* from, cchar_t* to, GoUint8* doors, GoUint32 PIN, cchar_t* errmsg, int* errN);
+extern int DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* errmsg, int* errN);
+extern int DeleteCards(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern char* GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID);
 extern char* SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index);
 extern char* GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index);

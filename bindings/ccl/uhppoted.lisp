@@ -645,10 +645,12 @@
 
 
 (defun uhppoted-put-card (uhppote device-id card-number from to doors PIN) "Adds or updates the card detail stored on a controller"
-  (with-cstrs ((from_ from)
-               (to_   to))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+    (with-cstrs ((from_ from)
+                (to_   to))
     (multiple-value-bind (doors_ pdoors) (make-heap-ivector 4 '(unsigned-byte 1))
       (unwind-protect
+        (rlet ((errN :signed-long 256))
         (progn
           (setf (paref pdoors (:* :unsigned-byte) 0) (aref doors 0))
           (setf (paref pdoors (:* :unsigned-byte) 1) (aref doors 1))
@@ -661,27 +663,45 @@
                                                        :address       to_
                                                        :address       pdoors
                                                        :unsigned-long PIN
-                                                       :address)))
-            (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-            t)))
-      (dispose-heap-ivector doors_))))
+                                                       :address errmsgp
+                                                       :address errN
+                                                       :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)))
+    (dispose-heap-ivector doors_)
+    (dispose-heap-ivector errmsg))))))
 
 
 (defun uhppoted-delete-card (uhppote device-id card-number) "Deletes a card from a controller"
-  (with-macptrs ((err (external-call "DeleteCard" :address uhppote 
-                                                  :unsigned-long device-id 
-                                                  :unsigned-long card-number
-                                                  :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN :signed-long 256))
+    (with-macptrs ((err (external-call "DeleteCard" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :unsigned-long card-number
+                                                    :address errmsgp
+                                                    :address errN
+                                                    :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-delete-cards (uhppote device-id) "Deletes all cards from a controller"
-  (with-macptrs ((err (external-call "DeleteCards" :address uhppote 
-                                                   :unsigned-long device-id 
-                                                   :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN :signed-long 256))
+    (with-macptrs ((err (external-call "DeleteCards" :address uhppote 
+                                                     :unsigned-long device-id 
+                                                    :address errmsgp
+                                                    :address errN
+                                                    :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-get-event-index (uhppote device-id) "Retrieves the current event index from a controller"

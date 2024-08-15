@@ -22,16 +22,10 @@
       - [x] open-door
       - [x] get-cards
       - [x] get-card
-          - [x] preallocate struct strings
-          - [x] Use C.cchar_t
-          - [x] C
-          - [x] C++
-          - [x] Python
-          - [x] C#: mono
-          - [x] C#: vs-mac
-          - [x] C#: vs-win
-          - [x] CCL
       - [x] get-card-by-index
+      - [x] put-card
+      - [x] delete-card
+      - [x] delete-cards
           - [x] preallocate struct strings
           - [x] Use C.cchar_t
           - [x] C
@@ -41,9 +35,6 @@
           - [x] C#: vs-mac
           - [x] C#: vs-win
           - [x] CCL
-      - [ ] put-card
-      - [ ] delete-card
-      - [ ] delete-cards
       - [ ] get-event-index
       - [ ] set-event-index
       - [ ] get-event

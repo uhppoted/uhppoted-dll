@@ -404,13 +404,26 @@ class Uhppote:
         _doors[2] = doors[2]
         _doors[3] = doors[3]
 
-        self.ffi.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')), c_char_p(bytes(end, 'utf-8')), _doors, PIN)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')), c_char_p(bytes(end, 'utf-8')), _doors,
+                             PIN, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def delete_card(self, deviceID, cardNumber):
-        self.ffi.DeleteCard(self._uhppote, deviceID, cardNumber)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.DeleteCard(self._uhppote, deviceID, cardNumber, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def delete_cards(self, deviceID):
-        self.ffi.DeleteCards(self._uhppote, deviceID)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.DeleteCards(self._uhppote, deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def get_event_index(self, deviceID):
         index = ctypes.c_ulong(0)
@@ -724,9 +737,9 @@ class FFI:
         # self.GetCards = ffi('GetCards', errcheck)
         # self.GetCard = ffi('GetCard', errcheck)
         # self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
-        self.PutCard = ffi('PutCard', errcheck)
-        self.DeleteCard = ffi('DeleteCard', errcheck)
-        self.DeleteCards = ffi('DeleteCards', errcheck)
+        # self.PutCard = ffi('PutCard', errcheck)
+        # self.DeleteCard = ffi('DeleteCard', errcheck)
+        # self.DeleteCards = ffi('DeleteCards', errcheck)
         self.GetEventIndex = ffi('GetEventIndex', errcheck)
         self.SetEventIndex = ffi('SetEventIndex', errcheck)
         self.GetEvent = ffi('GetEvent', errcheck)
@@ -762,6 +775,9 @@ class FFIX:
         self.GetCards = ffix('GetCards', errcheck)
         self.GetCard = ffix('GetCard', errcheck)
         self.GetCardByIndex = ffix('GetCardByIndex', errcheck)
+        self.PutCard = ffix('PutCard', errcheck)
+        self.DeleteCard = ffix('DeleteCard', errcheck)
+        self.DeleteCards = ffix('DeleteCards', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -812,9 +828,9 @@ def libfunctions():
         'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong]),
-        'DeleteCard':               (lib.DeleteCard,               [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
-        'DeleteCards':              (lib.DeleteCards,              [POINTER(GoUHPPOTE), c_ulong]),
+        'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
+        'DeleteCard':               (lib.DeleteCard,               [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
+        'DeleteCards':              (lib.DeleteCards,              [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetEventIndex':            (lib.GetEventIndex,            [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong]),
         'SetEventIndex':            (lib.SetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, c_ulong]),
         'GetEvent':                 (lib.GetEvent,                 [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong]),

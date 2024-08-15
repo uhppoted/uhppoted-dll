@@ -386,23 +386,41 @@ public class Uhppoted : IDisposable {
     }
 
     public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN) {
-        string err = PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
+
+        try {
+            if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+        } finally {
+            Marshal.FreeHGlobal(err);
         }
     }
 
     public void DeleteCard(uint deviceID, uint cardNumber) {
-        string err = DeleteCard(ref this.u, deviceID, cardNumber);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
+
+        try {
+            if (DeleteCard(ref this.u, deviceID, cardNumber, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+        } finally {
+            Marshal.FreeHGlobal(err);
         }
     }
 
     public void DeleteCards(uint deviceID) {
-        string err = DeleteCards(ref this.u, deviceID);
-        if (err != null && err != "") {
-            throw new UhppotedException(err);
+        IntPtr err = Marshal.AllocHGlobal(256);
+        int errN = 256;
+
+        try {
+            if (DeleteCards(ref this.u, deviceID, err, ref errN) != 0) {
+                raise(err, errN);
+            }
+        } finally {
+            Marshal.FreeHGlobal(err);
         }
     }
 
@@ -657,13 +675,14 @@ public class Uhppoted : IDisposable {
     private static extern int GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
-    private static extern string PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN);
+    private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN,
+                                      IntPtr err, ref int errN);
 
     [DllImport(DLL)]
-    private static extern string DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber);
+    private static extern int DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
-    private static extern string DeleteCards(ref UHPPOTE u, uint deviceID);
+    private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
 
     [DllImport(DLL)]
     private static extern string GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID);

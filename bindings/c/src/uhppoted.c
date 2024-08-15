@@ -498,10 +498,12 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
 }
 
 int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4], const uint32_t PIN) {
-    char *err = PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors, PIN);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors, PIN, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -509,10 +511,12 @@ int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to
 }
 
 int delete_card(uint32_t id, uint32_t card_number) {
-    char *err = DeleteCard(u, id, card_number);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = DeleteCard(u, id, card_number, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -520,10 +524,12 @@ int delete_card(uint32_t id, uint32_t card_number) {
 }
 
 int delete_cards(uint32_t id) {
-    char *err = DeleteCards(u, id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = DeleteCards(u, id, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 

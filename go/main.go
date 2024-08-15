@@ -293,36 +293,30 @@ func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, i
 }
 
 //export PutCard
-func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := putCard(uu, deviceID, cardNumber, from, to, doors, PIN); err != nil {
-		return C.CString(err.Error())
+func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.cchar_t, doors *uint8, PIN uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return putCard(uu, deviceID, cardNumber, from, to, doors, PIN)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export DeleteCard
-func DeleteCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := deleteCard(uu, deviceID, cardNumber); err != nil {
-		return C.CString(err.Error())
+func DeleteCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return deleteCard(uu, deviceID, cardNumber)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export DeleteCards
-func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := deleteCards(uu, deviceID); err != nil {
-		return C.CString(err.Error())
+func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return deleteCards(uu, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export GetEventIndex
