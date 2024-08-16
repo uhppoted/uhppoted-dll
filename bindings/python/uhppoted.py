@@ -1052,6 +1052,7 @@ class GoTimeProfile(Structure):
                  segment3start=None,
                  segment3end=None):
         super(GoTimeProfile, self).__init__()
+
         self.ID = ID
         self.linked = linked
         self.start = c_char_p(bytes(start, 'utf-8')) if start else c_char_p(bytes(' ' * 11, 'utf-8'))
@@ -1068,7 +1069,7 @@ class GoTimeProfile(Structure):
         self.segment2start = c_char_p(bytes(segment1start, 'utf-8')) if segment2start else c_char_p(bytes('00:00', 'utf-8'))
         self.segment2end = c_char_p(bytes(segment1end, 'utf-8')) if segment2end else c_char_p(bytes('00:00', 'utf-8'))
         self.segment3start = c_char_p(bytes(segment1start, 'utf-8')) if segment3start else c_char_p(bytes('00:00', 'utf-8'))
-        self.segment3end = c_char_p(bytes(segment1end, 'utf-8')) if segment3end else c_char_p(bytes('00:00', 'utf-8'))
+        self.segment3end = c_char_p(bytes(segment3end, 'utf-8')) if segment3end else c_char_p(bytes('00:00', 'utf-8'))
 
 
 class GoTask(Structure):
