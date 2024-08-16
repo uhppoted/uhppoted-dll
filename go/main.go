@@ -71,17 +71,17 @@ typedef struct DoorControl {
 
 typedef struct Card {
     uint32_t card_number;
-    char* from;     // expects at least char[11]
-    char* to;       // expects at least char[11]
-	uint8_t *doors; // uint_8[4]
+    const char *from;      // expects at least char[11]
+    const char *to;        // expects at least char[11]
+	uint8_t *doors;        // uint_8[4]
     uint32_t PIN;
 } Card;
 
 typedef struct TimeProfile {
     uint8_t ID;
     uint8_t linked;
-    char *from;
-    char *to;
+    const char *from;      // expects at least char[11]
+    const char *to;        // expects at least char[20]
     uint8_t monday;
     uint8_t tuesday;
     uint8_t wednesday;
@@ -89,12 +89,12 @@ typedef struct TimeProfile {
     uint8_t friday;
     uint8_t saturday;
     uint8_t sunday;
-    char * segment1start;
-    char * segment1end;
-    char * segment2start;
-    char * segment2end;
-    char * segment3start;
-    char * segment3end;
+    char * segment1start;   // expects at least char[6]
+    char * segment1end;     // expects at least char[6]
+    char * segment2start;   // expects at least char[6]
+    char * segment2end;     // expects at least char[6]
+    char * segment3start;   // expects at least char[6]
+    char * segment3end;     // expects at least char[6]
 } TimeProfile;
 
 typedef struct Task {
@@ -356,36 +356,30 @@ func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, err
 }
 
 //export GetTimeProfile
-func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := getTimeProfile(uu, profile, deviceID, profileID); err != nil {
-		return C.CString(err.Error())
+func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getTimeProfile(uu, profile, deviceID, profileID)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export SetTimeProfile
-func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setTimeProfile(uu, deviceID, profile); err != nil {
-		return C.CString(err.Error())
+func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setTimeProfile(uu, deviceID, profile)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export ClearTimeProfiles
-func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := clearTimeProfiles(uu, deviceID); err != nil {
-		return C.CString(err.Error())
+func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return clearTimeProfiles(uu, deviceID)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export AddTask

@@ -462,8 +462,11 @@ class Uhppote:
 
     def get_time_profile(self, deviceID, profileID):
         profile = GoTimeProfile()
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-        self.ffi.GetTimeProfile(self._uhppote, byref(profile), deviceID, profileID)
+        if self.ffix.GetTimeProfile(self._uhppote, byref(profile), deviceID, profileID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
         return TimeProfile(profile.ID, profile.linked, profile.start.decode('utf-8'), profile.end.decode('utf-8'), profile.monday != 0,
                            profile.tuesday != 0, profile.wednesday != 0, profile.thursday != 0, profile.friday != 0,
@@ -472,17 +475,36 @@ class Uhppote:
                            profile.segment3start.decode('utf-8'), profile.segment3end.decode('utf-8'))
 
     def set_time_profile(self, deviceID, p):
-        profile = GoTimeProfile(p.ID, p.linked, c_char_p(bytes(p.start, 'utf-8')), c_char_p(bytes(p.end, 'utf-8')), 1 if p.monday else 0,
-                                1 if p.tuesday else 0, 1 if p.wednesday else 0, 1 if p.thursday else 0, 1 if p.friday else 0,
-                                1 if p.saturday else 0, 1 if p.sunday else 0, c_char_p(bytes(p.segment1start, 'utf-8')),
-                                c_char_p(bytes(p.segment1end, 'utf-8')), c_char_p(bytes(p.segment2start, 'utf-8')),
-                                c_char_p(bytes(p.segment2end, 'utf-8')), c_char_p(bytes(p.segment3start, 'utf-8')),
-                                c_char_p(bytes(p.segment3end, 'utf-8')))
+        profile = GoTimeProfile(ID=p.ID,
+                                linked=p.linked,
+                                start=p.start,
+                                end=p.end,
+                                monday=p.monday,
+                                tuesday=p.tuesday,
+                                wednesday=p.wednesday,
+                                thursday=p.thursday,
+                                friday=p.friday,
+                                saturday=p.saturday,
+                                sunday=p.sunday,
+                                segment1start=p.segment1start,
+                                segment1end=p.segment1end,
+                                segment2start=p.segment2start,
+                                segment2end=p.segment2end,
+                                segment3start=p.segment3start,
+                                segment3end=p.segment3end)
 
-        self.ffi.SetTimeProfile(self._uhppote, deviceID, byref(profile))
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.SetTimeProfile(self._uhppote, deviceID, byref(profile), err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def clear_time_profiles(self, deviceID):
-        self.ffi.ClearTimeProfiles(self._uhppote, deviceID)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.ClearTimeProfiles(self._uhppote, deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def add_task(self, deviceID, t):
         task = GoTask(t.task, t.door, c_char_p(bytes(t.start, 'utf-8')), c_char_p(bytes(t.end, 'utf-8')), 1 if t.monday else 0,
@@ -758,9 +780,9 @@ class FFI:
         # self.SetEventIndex = ffi('SetEventIndex', errcheck)
         # self.GetEvent = ffi('GetEvent', errcheck)
         # self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
-        self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
-        self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
-        self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
+        # self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
+        # self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
+        # self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
         self.AddTask = ffi('AddTask', errcheck)
         self.RefreshTaskList = ffi('RefreshTaskList', errcheck)
         self.ClearTaskList = ffi('ClearTaskList', errcheck)
@@ -796,6 +818,9 @@ class FFIX:
         self.SetEventIndex = ffix('SetEventIndex', errcheck)
         self.GetEvent = ffix('GetEvent', errcheck)
         self.RecordSpecialEvents = ffix('RecordSpecialEvents', errcheck)
+        self.GetTimeProfile = ffix('GetTimeProfile', errcheck)
+        self.SetTimeProfile = ffix('SetTimeProfile', errcheck)
+        self.ClearTimeProfiles = ffix('ClearTimeProfiles', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -853,9 +878,9 @@ def libfunctions():
         'SetEventIndex':            (lib.SetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetEvent':                 (lib.GetEvent,                 [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'RecordSpecialEvents':      (lib.RecordSpecialEvents,      [POINTER(GoUHPPOTE), c_ulong, c_bool, c_char_p, POINTER(ctypes.c_int)]),
-        'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte]),
-        'SetTimeProfile':           (lib.SetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile)]),
-        'ClearTimeProfiles':        (lib.ClearTimeProfiles,        [POINTER(GoUHPPOTE), c_ulong]),
+        'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
+        'SetTimeProfile':           (lib.SetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile), c_char_p, POINTER(ctypes.c_int)]),
+        'ClearTimeProfiles':        (lib.ClearTimeProfiles,        [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'AddTask':                  (lib.AddTask,                  [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask)]),
         'RefreshTaskList':          (lib.RefreshTaskList,          [POINTER(GoUHPPOTE), c_ulong]),
         'ClearTaskList':            (lib.ClearTaskList,            [POINTER(GoUHPPOTE), c_ulong]),
@@ -1007,6 +1032,43 @@ class GoTimeProfile(Structure):
         ('segment3start', c_char_p),
         ('segment3end', c_char_p),
     ]
+
+    def __init__(self,
+                 ID=0,
+                 linked=0,
+                 start=None,
+                 end=None,
+                 monday=False,
+                 tuesday=False,
+                 wednesday=False,
+                 thursday=False,
+                 friday=False,
+                 saturday=False,
+                 sunday=False,
+                 segment1start=None,
+                 segment1end=None,
+                 segment2start=None,
+                 segment2end=None,
+                 segment3start=None,
+                 segment3end=None):
+        super(GoTimeProfile, self).__init__()
+        self.ID = ID
+        self.linked = linked
+        self.start = c_char_p(bytes(start, 'utf-8')) if start else c_char_p(bytes(' ' * 11, 'utf-8'))
+        self.end = c_char_p(bytes(end, 'utf-8')) if end else c_char_p(bytes(' ' * 11, 'utf-8'))
+        self.monday = 1 if monday else 0
+        self.tuesday = 1 if tuesday else 0
+        self.wednesday = 1 if wednesday else 0
+        self.thursday = 1 if thursday else 0
+        self.friday = 1 if friday else 0
+        self.saturday = 1 if saturday else 0
+        self.sunday = 1 if sunday else 0
+        self.segment1start = c_char_p(bytes(segment1start, 'utf-8')) if segment1start else c_char_p(bytes('00:00', 'utf-8'))
+        self.segment1end = c_char_p(bytes(segment1end, 'utf-8')) if segment1end else c_char_p(bytes('00:00', 'utf-8'))
+        self.segment2start = c_char_p(bytes(segment1start, 'utf-8')) if segment2start else c_char_p(bytes('00:00', 'utf-8'))
+        self.segment2end = c_char_p(bytes(segment1end, 'utf-8')) if segment2end else c_char_p(bytes('00:00', 'utf-8'))
+        self.segment3start = c_char_p(bytes(segment1start, 'utf-8')) if segment3start else c_char_p(bytes('00:00', 'utf-8'))
+        self.segment3end = c_char_p(bytes(segment1end, 'utf-8')) if segment3end else c_char_p(bytes('00:00', 'utf-8'))
 
 
 class GoTask(Structure):

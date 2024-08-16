@@ -30,8 +30,10 @@
       - [x] get-event-index
       - [x] set-event-index
       - [x] get-event
-          - [x] CCL
-      - [ ] record-special-events
+      - [x] record-special-events
+      - [x] get-time-profile
+      - [x] set-time-profile
+      - [x] clear-time-profiles
           - [x] preallocate struct strings
           - [x] Use C.cchar_t
           - [x] C
@@ -40,9 +42,7 @@
           - [x] C#: mono
           - [x] C#: vs-mac
           - [x] C#: vs-win
-      - [ ] get-time-profile
-      - [ ] set-time-profile
-      - [ ] clear-time-profiles
+          - [x] CCL
       - [ ] add-task
       - [ ] refresh-tasklist
       - [ ] clear-tasklist

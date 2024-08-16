@@ -25,8 +25,8 @@ func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID
 
 	profile.ID = 49
 	profile.linked = 71
-	profile.from = C.CString("2022-02-01")
-	profile.to = C.CString("2022-06-30")
+	cstring("2022-02-01", profile.from, 11)
+	cstring("2022-06-30", profile.to, 11)
 
 	profile.monday = cbool(true)
 	profile.tuesday = cbool(false)
@@ -36,12 +36,12 @@ func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID
 	profile.saturday = cbool(false)
 	profile.sunday = cbool(true)
 
-	profile.segment1start = C.CString("08:30")
-	profile.segment1end = C.CString("11:30")
-	profile.segment2start = C.CString("00:00")
-	profile.segment2end = C.CString("00:00")
-	profile.segment3start = C.CString("00:00")
-	profile.segment3end = C.CString("18:00")
+	cstring("08:30", profile.segment1start, 6)
+	cstring("11:30", profile.segment1end, 6)
+	cstring("00:00", profile.segment2start, 6)
+	cstring("00:00", profile.segment2end, 6)
+	cstring("00:00", profile.segment3start, 6)
+	cstring("18:00", profile.segment3end, 6)
 
 	return nil
 }

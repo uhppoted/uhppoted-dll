@@ -571,6 +571,7 @@ int get_event(uint32_t id, uint32_t index, event *e) {
         .timestamp = timestamp,
     };
 
+    char err[256] = "";
     int errN = sizeof(err);
     int rc;
 
@@ -592,6 +593,7 @@ int get_event(uint32_t id, uint32_t index, event *e) {
 }
 
 int record_special_events(uint32_t id, bool enabled) {
+    char err[256] = "";
     int errN = sizeof(err);
     int rc;
 
@@ -604,12 +606,32 @@ int record_special_events(uint32_t id, bool enabled) {
 }
 
 int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
-    struct TimeProfile profile;
+    char from[11] = "";
+    char to[11] = "";
+    char segment1start[6] = "";
+    char segment1end[6] = "";
+    char segment2start[6] = "";
+    char segment2end[6] = "";
+    char segment3start[6] = "";
+    char segment3end[6] = "";
 
-    char *err = GetTimeProfile(u, &profile, id, profile_id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    struct TimeProfile profile = {
+        .from = from,
+        .to = to,
+        .segment1start = segment1start,
+        .segment1end = segment1end,
+        .segment2start = segment2start,
+        .segment2end = segment2end,
+        .segment3start = segment3start,
+        .segment3end = segment3end,
+    };
+
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = GetTimeProfile(u, &profile, id, profile_id, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -634,20 +656,14 @@ int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
     snprintf(p->segment3start, sizeof(p->segment3start), "%s", profile.segment3start);
     snprintf(p->segment3end, sizeof(p->segment3end), "%s", profile.segment3end);
 
-    free(profile.from);
-    free(profile.to);
-    free(profile.segment1start);
-    free(profile.segment1end);
-    free(profile.segment2start);
-    free(profile.segment2end);
-    free(profile.segment3start);
-    free(profile.segment3end);
-
     return 0;
 }
 
 int set_time_profile(uint32_t id, time_profile *p) {
     struct TimeProfile profile;
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
 
     profile.ID = p->ID;
     profile.linked = p->linked;
@@ -667,10 +683,8 @@ int set_time_profile(uint32_t id, time_profile *p) {
     profile.segment3start = p->segment3start;
     profile.segment3end = p->segment3end;
 
-    char *err = SetTimeProfile(u, id, &profile);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    if ((rc = SetTimeProfile(u, id, &profile, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -678,10 +692,12 @@ int set_time_profile(uint32_t id, time_profile *p) {
 }
 
 int clear_time_profiles(uint32_t id) {
-    char *err = ClearTimeProfiles(u, id);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+    int rc;
+
+    if ((rc = ClearTimeProfiles(u, id, err, &errN)) != 0) {
+        set_error(err, errN);
         return -1;
     }
 

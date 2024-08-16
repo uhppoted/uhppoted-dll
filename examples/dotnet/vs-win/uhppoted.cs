@@ -624,37 +624,74 @@ namespace uhppoted
         public TimeProfile GetTimeProfile(uint deviceID, byte profileID)
         {
             GoTimeProfile profile = new GoTimeProfile();
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
-            string err = GetTimeProfile(ref this.u, ref profile, deviceID, profileID);
-            if (err != null && err != "")
-            {
-                throw new UhppotedException(err);
+            profile.from = Marshal.AllocHGlobal(11);
+            profile.to = Marshal.AllocHGlobal(11);
+            profile.segment1start = Marshal.AllocHGlobal(6);
+            profile.segment1end = Marshal.AllocHGlobal(6);
+            profile.segment2start = Marshal.AllocHGlobal(6);
+            profile.segment2end = Marshal.AllocHGlobal(6);
+            profile.segment3start = Marshal.AllocHGlobal(6);
+            profile.segment3end = Marshal.AllocHGlobal(6);
+
+            try
+            { 
+                if (GetTimeProfile(ref this.u, ref profile, deviceID, profileID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+
+                string from = Marshal.PtrToStringAnsi(profile.from)!;
+                string to = Marshal.PtrToStringAnsi(profile.to)!;
+                string segment1start = Marshal.PtrToStringAnsi(profile.segment1start)!;
+                string segment1end = Marshal.PtrToStringAnsi(profile.segment1end)!;
+                string segment2start = Marshal.PtrToStringAnsi(profile.segment2start)!;
+                string segment2end = Marshal.PtrToStringAnsi(profile.segment2end)!;
+                string segment3start = Marshal.PtrToStringAnsi(profile.segment3start)!;
+                string segment3end = Marshal.PtrToStringAnsi(profile.segment3end)!;
+
+                return new TimeProfile(profile.ID,
+                                       profile.linked,
+                                       from,
+                                       to,
+                                       profile.monday != 0,
+                                       profile.tuesday != 0,
+                                       profile.wednesday != 0,
+                                       profile.thursday != 0,
+                                       profile.friday != 0,
+                                       profile.saturday != 0,
+                                       profile.sunday != 0,
+                                       segment1start, segment1end,
+                                       segment2start, segment2end,
+                                       segment3start, segment3end);
             }
+            finally
+            {
+                Marshal.FreeHGlobal(profile.from);
+                Marshal.FreeHGlobal(profile.to);
+                Marshal.FreeHGlobal(profile.segment1start);
+                Marshal.FreeHGlobal(profile.segment1end);
+                Marshal.FreeHGlobal(profile.segment2start);
+                Marshal.FreeHGlobal(profile.segment2end);
+                Marshal.FreeHGlobal(profile.segment3start);
+                Marshal.FreeHGlobal(profile.segment3end);
 
-            return new TimeProfile(profile.ID,
-                                   profile.linked,
-                                   profile.from,
-                                   profile.to,
-                                   profile.monday != 0,
-                                   profile.tuesday != 0,
-                                   profile.wednesday != 0,
-                                   profile.thursday != 0,
-                                   profile.friday != 0,
-                                   profile.saturday != 0,
-                                   profile.sunday != 0,
-                                   profile.segment1start, profile.segment1end,
-                                   profile.segment2start, profile.segment2end,
-                                   profile.segment3start, profile.segment3end);
+                Marshal.FreeHGlobal(err);
+            }
         }
 
         public void SetTimeProfile(uint deviceID, TimeProfile p)
         {
             GoTimeProfile profile = new GoTimeProfile();
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
             profile.ID = p.ID;
             profile.linked = p.linked;
-            profile.from = p.from;
-            profile.to = p.to;
+            profile.from = Marshal.StringToHGlobalAnsi(p.from);
+            profile.to = Marshal.StringToHGlobalAnsi(p.to);
             profile.monday = p.monday ? (byte)1 : (byte)0;
             profile.tuesday = p.tuesday ? (byte)1 : (byte)0;
             profile.wednesday = p.wednesday ? (byte)1 : (byte)0;
@@ -662,26 +699,50 @@ namespace uhppoted
             profile.friday = p.friday ? (byte)1 : (byte)0;
             profile.saturday = p.saturday ? (byte)1 : (byte)0;
             profile.sunday = p.sunday ? (byte)1 : (byte)0;
-            profile.segment1start = p.segment1start;
-            profile.segment1end = p.segment1end;
-            profile.segment2start = p.segment2start;
-            profile.segment2end = p.segment2end;
-            profile.segment3start = p.segment3start;
-            profile.segment3end = p.segment3end;
+            profile.segment1start = Marshal.StringToHGlobalAnsi(p.segment1start);
+            profile.segment1end = Marshal.StringToHGlobalAnsi(p.segment1end);
+            profile.segment2start = Marshal.StringToHGlobalAnsi(p.segment2start);
+            profile.segment2end = Marshal.StringToHGlobalAnsi(p.segment2end);
+            profile.segment3start = Marshal.StringToHGlobalAnsi(p.segment3start);
+            profile.segment3end = Marshal.StringToHGlobalAnsi(p.segment3end);
 
-            string err = SetTimeProfile(ref this.u, deviceID, ref profile);
-            if (err != null && err != "")
+            try
+            { 
+                if (SetTimeProfile(ref this.u, deviceID, ref profile, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
             {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(profile.from);
+                Marshal.FreeHGlobal(profile.to);
+                Marshal.FreeHGlobal(profile.segment1start);
+                Marshal.FreeHGlobal(profile.segment1end);
+                Marshal.FreeHGlobal(profile.segment2start);
+                Marshal.FreeHGlobal(profile.segment2end);
+                Marshal.FreeHGlobal(profile.segment3start);
+                Marshal.FreeHGlobal(profile.segment3end);
+
+                Marshal.FreeHGlobal(err);
             }
         }
 
         public void ClearTimeProfiles(uint deviceID)
         {
-            string err = ClearTimeProfiles(ref this.u, deviceID);
-            if (err != null && err != "")
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+
+            try
+            { 
+                if (ClearTimeProfiles(ref this.u, deviceID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
             {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(err);
             }
         }
 
@@ -936,13 +997,13 @@ namespace uhppoted
         private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID);
+        private static extern int GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile);
+        private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string ClearTimeProfiles(ref UHPPOTE u, uint deviceID);
+        private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task);
@@ -1060,8 +1121,8 @@ namespace uhppoted
         {
             public byte ID;
             public byte linked;
-            public string from;
-            public string to;
+            public IntPtr from;
+            public IntPtr to;
             public byte monday;
             public byte tuesday;
             public byte wednesday;
@@ -1069,12 +1130,12 @@ namespace uhppoted
             public byte friday;
             public byte saturday;
             public byte sunday;
-            public string segment1start;
-            public string segment1end;
-            public string segment2start;
-            public string segment2end;
-            public string segment3start;
-            public string segment3end;
+            public IntPtr segment1start;
+            public IntPtr segment1end;
+            public IntPtr segment2start;
+            public IntPtr segment2end;
+            public IntPtr segment3start;
+            public IntPtr segment3end;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]

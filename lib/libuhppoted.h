@@ -91,17 +91,17 @@ typedef struct DoorControl {
 
 typedef struct Card {
     uint32_t card_number;
-    char* from;     // expects at least char[11]
-    char* to;       // expects at least char[11]
-	uint8_t *doors; // uint_8[4]
+    const char *from;      // expects at least char[11]
+    const char *to;        // expects at least char[11]
+	uint8_t *doors;        // uint_8[4]
     uint32_t PIN;
 } Card;
 
 typedef struct TimeProfile {
     uint8_t ID;
     uint8_t linked;
-    char *from;
-    char *to;
+    const char *from;      // expects at least char[11]
+    const char *to;        // expects at least char[20]
     uint8_t monday;
     uint8_t tuesday;
     uint8_t wednesday;
@@ -109,12 +109,12 @@ typedef struct TimeProfile {
     uint8_t friday;
     uint8_t saturday;
     uint8_t sunday;
-    char * segment1start;
-    char * segment1end;
-    char * segment2start;
-    char * segment2end;
-    char * segment3start;
-    char * segment3end;
+    char * segment1start;   // expects at least char[6]
+    char * segment1end;     // expects at least char[6]
+    char * segment2start;   // expects at least char[6]
+    char * segment2end;     // expects at least char[6]
+    char * segment3start;   // expects at least char[6]
+    char * segment3end;     // expects at least char[6]
 } TimeProfile;
 
 typedef struct Task {
@@ -211,9 +211,9 @@ extern int GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID, 
 extern int SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
 extern int GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
 extern int RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled, cchar_t* errmsg, int* errN);
-extern char* GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID);
-extern char* SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile);
-extern char* ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID);
+extern int GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID, cchar_t* errmsg, int* errN);
+extern int SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile, cchar_t* errmsg, int* errN);
+extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern char* AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task);
 extern char* RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID);
 extern char* ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID);

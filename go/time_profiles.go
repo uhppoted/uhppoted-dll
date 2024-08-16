@@ -24,8 +24,8 @@ func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID
 
 	profile.ID = C.uchar(p.ID)
 	profile.linked = C.uchar(p.LinkedProfileID)
-	profile.from = C.CString(fmt.Sprintf("%v", p.From))
-	profile.to = C.CString(fmt.Sprintf("%v", p.To))
+	cstring(p.From, profile.from, 11)
+	cstring(p.To, profile.to, 11)
 
 	profile.monday = cbool(p.Weekdays[time.Monday])
 	profile.tuesday = cbool(p.Weekdays[time.Tuesday])
@@ -35,12 +35,12 @@ func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID
 	profile.saturday = cbool(p.Weekdays[time.Saturday])
 	profile.sunday = cbool(p.Weekdays[time.Sunday])
 
-	profile.segment1start = C.CString(fmt.Sprintf("%v", p.Segments[1].Start))
-	profile.segment1end = C.CString(fmt.Sprintf("%v", p.Segments[1].End))
-	profile.segment2start = C.CString(fmt.Sprintf("%v", p.Segments[2].Start))
-	profile.segment2end = C.CString(fmt.Sprintf("%v", p.Segments[2].End))
-	profile.segment3start = C.CString(fmt.Sprintf("%v", p.Segments[3].Start))
-	profile.segment3end = C.CString(fmt.Sprintf("%v", p.Segments[3].End))
+	cstring(p.Segments[1].Start, profile.segment1start, 6)
+	cstring(p.Segments[1].End, profile.segment1end, 6)
+	cstring(p.Segments[2].Start, profile.segment2start, 6)
+	cstring(p.Segments[2].End, profile.segment2end, 6)
+	cstring(p.Segments[3].Start, profile.segment3start, 6)
+	cstring(p.Segments[3].End, profile.segment3end, 6)
 
 	return nil
 }

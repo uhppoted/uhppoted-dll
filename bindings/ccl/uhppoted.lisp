@@ -771,9 +771,9 @@
     (with-macptrs ((err (external-call "RecordSpecialEvents" :address uhppote 
                                                              :unsigned-long device-id 
                                                              :unsigned-byte (if enabled 1 0)
-                                                  :address errmsgp
-                                                  :address errN
-                                                  :signed-long)))
+                                                             :address errmsgp
+                                                             :address errN
+                                                             :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
@@ -781,17 +781,38 @@
 
 
 (defun uhppoted-get-time-profile (uhppote device-id profile-id) "Retrieves a time profile from a controller"
-  (rletz ((profile (:struct :GoTimeProfile)))
+  (multiple-value-bind (from          fromp)          (make-heap-ivector 11  '(unsigned-byte 1))
+  (multiple-value-bind (to            top)            (make-heap-ivector 11  '(unsigned-byte 1))
+  (multiple-value-bind (segment1start segment1startp) (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (segment1end   segment1endp)   (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (segment2start segment2startp) (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (segment2end   segment2endp)   (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (segment3start segment3startp) (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (segment3end   segment3endp)   (make-heap-ivector 6   '(unsigned-byte 1))
+  (multiple-value-bind (errmsg        errmsgp)        (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rletz ((profile (:struct :GoTimeProfile) :from fromp
+                                              :to   top
+                                              :segment1start segment1startp
+                                              :segment1end   segment1endp
+                                              :segment2start segment2startp
+                                              :segment2end   segment2endp
+                                              :segment3start segment3startp
+                                              :segment3end   segment3endp)
+            (errN  :signed-long 256))
     (with-macptrs ((err (external-call "GetTimeProfile" :address uhppote 
                                                         :address profile
                                                         :unsigned-long device-id 
                                                         :unsigned-byte profile-id
-                                                        :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+                                                        :address errmsgp
+                                                        :address errN
+                                                        :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-time-profile :ID            (pref profile :GoTimeProfile.ID)
                          :linked        (pref profile :GoTimeProfile.linked)
-                         :from          (go-string (pref profile :GoTimeProfile.from))
-                         :to            (go-string (pref profile :GoTimeProfile.to))
+                         :from          (%get-cstring (pref profile :GoTimeProfile.from))
+                         :to            (%get-cstring (pref profile :GoTimeProfile.to))
                          :monday        (/= 0 (pref profile :GoTimeProfile.monday))
                          :tuesday       (/= 0 (pref profile :GoTimeProfile.tuesday))
                          :wednesday     (/= 0 (pref profile :GoTimeProfile.wednesday))
@@ -799,54 +820,77 @@
                          :friday        (/= 0 (pref profile :GoTimeProfile.friday))
                          :saturday      (/= 0 (pref profile :GoTimeProfile.saturday))
                          :sunday        (/= 0 (pref profile :GoTimeProfile.sunday))
-                         :segment1start (go-string (pref profile :GoTimeProfile.segment1start))
-                         :segment1end   (go-string (pref profile :GoTimeProfile.segment1end))
-                         :segment2start (go-string (pref profile :GoTimeProfile.segment2start))
-                         :segment2end   (go-string (pref profile :GoTimeProfile.segment2end))
-                         :segment3start (go-string (pref profile :GoTimeProfile.segment3start))
-                         :segment3end   (go-string (pref profile :GoTimeProfile.segment3end))))))
+                         :segment1start (%get-cstring (pref profile :GoTimeProfile.segment1start))
+                         :segment1end   (%get-cstring (pref profile :GoTimeProfile.segment1end))
+                         :segment2start (%get-cstring (pref profile :GoTimeProfile.segment2start))
+                         :segment2end   (%get-cstring (pref profile :GoTimeProfile.segment2end))
+                         :segment3start (%get-cstring (pref profile :GoTimeProfile.segment3start))
+                         :segment3end   (%get-cstring (pref profile :GoTimeProfile.segment3end)))))
+    (dispose-heap-ivector from)
+    (dispose-heap-ivector to)
+    (dispose-heap-ivector segment1start)
+    (dispose-heap-ivector segment1end)
+    (dispose-heap-ivector segment2start)
+    (dispose-heap-ivector segment2end)
+    (dispose-heap-ivector segment3start)
+    (dispose-heap-ivector segment3end)
+    (dispose-heap-ivector errmsg))))))))))))
 
 
 (defun uhppoted-set-time-profile (uhppote device-id profile) "Adds or update a time profile on a controller"
-  (with-cstrs ((from          (time-profile-from          profile))
-               (to            (time-profile-to            profile))
-               (segment1start (time-profile-segment1start profile))
-               (segment1end   (time-profile-segment1end   profile))
-               (segment2start (time-profile-segment2start profile))
-               (segment2end   (time-profile-segment2end   profile))
-               (segment3start (time-profile-segment3start profile))
-               (segment3end   (time-profile-segment3end   profile)))
-  (rletz ((p (:struct :GoTimeProfile) :ID         (time-profile-id     profile)
-                                       :linked    (time-profile-linked profile)
-                                       :from      from
-                                       :to        to
-                                       :monday    (if (time-profile-monday    profile) 1 0)
-                                       :tuesday   (if (time-profile-tuesday   profile) 1 0)
-                                       :wednesday (if (time-profile-wednesday profile) 1 0)
-                                       :thursday  (if (time-profile-thursday  profile) 1 0)
-                                       :friday    (if (time-profile-friday    profile) 1 0)
-                                       :saturday  (if (time-profile-saturday  profile) 1 0)
-                                       :sunday    (if (time-profile-sunday    profile) 1 0)
-                                       :segment1start segment1start
-                                       :segment1end   segment1end
-                                       :segment2start segment2start
-                                       :segment2end   segment2end
-                                       :segment3start segment3start
-                                       :segment3end   segment3end))
+  (multiple-value-bind (errmsg        errmsgp)        (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (with-cstrs ((from          (time-profile-from          profile))
+                 (to            (time-profile-to            profile))
+                 (segment1start (time-profile-segment1start profile))
+                 (segment1end   (time-profile-segment1end   profile))
+                 (segment2start (time-profile-segment2start profile))
+                 (segment2end   (time-profile-segment2end   profile))
+                 (segment3start (time-profile-segment3start profile))
+                 (segment3end   (time-profile-segment3end   profile)))
+    (rletz ((p (:struct :GoTimeProfile) :ID         (time-profile-id     profile)
+                                        :linked    (time-profile-linked profile)
+                                        :from      from
+                                        :to        to
+                                        :monday    (if (time-profile-monday    profile) 1 0)
+                                        :tuesday   (if (time-profile-tuesday   profile) 1 0)
+                                        :wednesday (if (time-profile-wednesday profile) 1 0)
+                                        :thursday  (if (time-profile-thursday  profile) 1 0)
+                                        :friday    (if (time-profile-friday    profile) 1 0)
+                                        :saturday  (if (time-profile-saturday  profile) 1 0)
+                                        :sunday    (if (time-profile-sunday    profile) 1 0)
+                                        :segment1start segment1start
+                                        :segment1end   segment1end
+                                        :segment2start segment2start
+                                        :segment2end   segment2end
+                                        :segment3start segment3start
+                                        :segment3end   segment3end)
+            (errN  :signed-long 256))
     (with-macptrs ((err (external-call "SetTimeProfile" :address       uhppote 
                                                         :unsigned-long device-id 
                                                         :address       p
-                                                        :address)))
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-      t))))
+                                                        :address       errmsgp
+                                                        :address       errN
+                                                        :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)))
+    (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-clear-time-profiles (uhppote device-id) "Deletes all time profiles from a controller"
-  (with-macptrs ((err (external-call "ClearTimeProfiles" :address uhppote 
-                                                         :unsigned-long device-id 
-                                                         :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg        errmsgp)        (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+    (with-macptrs ((err (external-call "ClearTimeProfiles" :address uhppote 
+                                                           :unsigned-long device-id 
+                                                        :address       errmsgp
+                                                        :address       errN
+                                                        :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-add-task (uhppote device-id task) "Adds a scheduled task to a controller"
