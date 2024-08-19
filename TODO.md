@@ -6,9 +6,10 @@
       - [ ] CCL: return code is a pointer ??
       - [ ] CCL: fix stacked multiple-value-binds
       - [ ] CCL: tests on github
+      - [ ] CCL: fix all make-heap-ivector
       - [ ] Reorder parameters
-      - [ ] Use C.cchar_t
       - [ ] Make errmsg a struct ??
+      - [x] Use C.cchar_t
 
       - [x] get-devices
       - [x] get-device
