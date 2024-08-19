@@ -3,6 +3,7 @@ GO=GODEBUG=cgocheck=2
 CMD=python3 examples.py 
 CONTROLLER ?= 405419896
 CARD ?= 10058400
+DOOR ?= 3
 INTERLOCK  ?=3
 
 ifeq ($(OS),Windows_NT)

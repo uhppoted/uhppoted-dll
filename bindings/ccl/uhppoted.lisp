@@ -946,59 +946,94 @@
     (rlet ((errN  :signed-long 256))
     (with-macptrs ((err (external-call "ClearTaskList" :address uhppote 
                                                        :unsigned-long device-id 
-                                                           :address       errmsgp
-                                                           :address       errN
-                                                           :signed-long)))
+                                                       :address       errmsgp
+                                                       :address       errN
+                                                       :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-set-pc-control (uhppote device-id enabled) "Enables/disables controller remote access control"
-  (with-macptrs ((err (external-call "SetPCControl" :address uhppote 
-                                                    :unsigned-long device-id 
-                                                    :unsigned-byte (if enabled 1 0)
-                                                    :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+    (with-macptrs ((err (external-call "SetPCControl" :address uhppote 
+                                                      :unsigned-long device-id 
+                                                      :unsigned-byte (if enabled 1 0)
+                                                      :address       errmsgp
+                                                      :address       errN
+                                                      :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-set-interlock (uhppote device-id interlock) "Sets a controller interlock mode"
-  (with-macptrs ((err (external-call "SetInterlock" :address uhppote 
-                                                    :unsigned-long device-id 
-                                                    :unsigned-byte interlock
-                                                    :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+    (with-macptrs ((err (external-call "SetInterlock" :address uhppote 
+                                                      :unsigned-long device-id 
+                                                      :unsigned-byte interlock
+                                                      :address       errmsgp
+                                                      :address       errN
+                                                      :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-activate-keypads (uhppote device-id reader1 reader2 reader3 reader4) "Activates and deactivates a controller reader access keypads"
-  (with-macptrs ((err (external-call "ActivateKeypads" :address uhppote 
-                                                       :unsigned-long device-id 
-                                                       :unsigned-byte (if reader1 1 0)
-                                                       :unsigned-byte (if reader2 1 0)
-                                                       :unsigned-byte (if reader3 1 0)
-                                                       :unsigned-byte (if reader4 1 0)
-                                                       :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+    (with-macptrs ((err (external-call "ActivateKeypads" :address uhppote 
+                                                         :unsigned-long device-id 
+                                                         :unsigned-byte (if reader1 1 0)
+                                                         :unsigned-byte (if reader2 1 0)
+                                                         :unsigned-byte (if reader3 1 0)
+                                                         :unsigned-byte (if reader4 1 0)
+                                                         :address       errmsgp
+                                                         :address       errN
+                                                         :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-set-door-passcodes (uhppote device-id door passcode1 passcode2 passcode3 passcode4) "Sets the supervisor keypad passcodes for a door"
-  (with-macptrs ((err (external-call "SetDoorPasscodes" :address uhppote 
-                                                        :unsigned-long device-id 
-                                                        :unsigned-byte door
-                                                        :unsigned-long passcode1
-                                                        :unsigned-long passcode2
-                                                        :unsigned-long passcode3
-                                                        :unsigned-long passcode4
-                                                        :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+    (with-macptrs ((err (external-call "SetDoorPasscodes" :address uhppote 
+                                                          :unsigned-long device-id 
+                                                          :unsigned-byte door
+                                                          :unsigned-long passcode1
+                                                          :unsigned-long passcode2
+                                                          :unsigned-long passcode3
+                                                          :unsigned-long passcode4
+                                                          :address       errmsgp
+                                                          :address       errN
+                                                          :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
     t))
+    (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-restore-default-parameters (uhppote device-id) "Resets a controller to the manufacturer default configuration"
-  (with-macptrs ((err (external-call "RestoreDefaultParameters" :address uhppote 
-                                                                :unsigned-long device-id 
-                                                                :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+    (with-macptrs ((err (external-call "RestoreDefaultParameters" :address uhppote 
+                                                                  :unsigned-long device-id 
+                                                          :address       errmsgp
+                                                          :address       errN
+                                                          :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 (defparameter *uhppoted-event-handler* nil)
 (defparameter *uhppoted-error-handler* nil)

@@ -675,38 +675,48 @@ void uhppoted::clear_tasklist(uint32_t id) {
 }
 
 void uhppoted::set_pc_control(uint32_t controller, bool enabled) {
-    char *err = SetPCControl(u, controller, enabled);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (SetPCControl(u, controller, enabled, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
 void uhppoted::set_interlock(uint32_t controller, uint8_t interlock) {
-    char *err = SetInterlock(u, controller, interlock);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (SetInterlock(u, controller, interlock, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
 void uhppoted::activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4) {
-    char *err = ActivateKeypads(u, controller, reader1, reader2, reader3, reader4);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (ActivateKeypads(u, controller, reader1, reader2, reader3, reader4, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
 void uhppoted::set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3,
                                   uint32_t passcode4) {
-    char *err = SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
 void uhppoted::restore_default_parameters(uint32_t controller) {
-    char *err = RestoreDefaultParameters(u, controller);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (RestoreDefaultParameters(u, controller, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 

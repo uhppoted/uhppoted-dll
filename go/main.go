@@ -410,36 +410,30 @@ func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN
 }
 
 //export SetPCControl
-func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setPCControl(uu, controller, enabled); err != nil {
-		return C.CString(err.Error())
+func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setPCControl(uu, controller, enabled)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export SetInterlock
-func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setInterlock(uu, controller, interlock); err != nil {
-		return C.CString(err.Error())
+func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setInterlock(uu, controller, interlock)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export ActivateKeypads
-func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := activateKeypads(uu, controller, reader1, reader2, reader3, reader4); err != nil {
-		return C.CString(err.Error())
+func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return activateKeypads(uu, controller, reader1, reader2, reader3, reader4)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 // Sets the supervisor passcodes for a door managed by the controller.
@@ -448,27 +442,23 @@ func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, r
 // a 0 (no code).
 //
 //export SetDoorPasscodes
-func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4); err != nil {
-		return C.CString(err.Error())
+func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 // Resets a controller to the manufacturer default configuration.
 //
 //export RestoreDefaultParameters
-func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := restoreDefaultParameters(uu, controller); err != nil {
-		return C.CString(err.Error())
+func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return restoreDefaultParameters(uu, controller)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 // Listens for events and invokes a callback function.

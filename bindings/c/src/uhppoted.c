@@ -756,10 +756,11 @@ int clear_tasklist(uint32_t id) {
 }
 
 int set_pc_control(uint32_t id, bool enabled) {
-    char *err = SetPCControl(u, id, enabled);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (SetPCControl(u, id, enabled, err, &errN) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -767,10 +768,11 @@ int set_pc_control(uint32_t id, bool enabled) {
 }
 
 int set_interlock(uint32_t id, uint8_t interlock) {
-    char *err = SetInterlock(u, id, interlock);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (SetInterlock(u, id, interlock, err, &errN) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -778,10 +780,11 @@ int set_interlock(uint32_t id, uint8_t interlock) {
 }
 
 int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool reader4) {
-    char *err = ActivateKeypads(u, id, reader1, reader2, reader3, reader4);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (ActivateKeypads(u, id, reader1, reader2, reader3, reader4, err, &errN) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -789,10 +792,11 @@ int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool
 }
 
 int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
-    char *err = SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4, err, &errN) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
@@ -800,10 +804,11 @@ int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, ui
 }
 
 int restore_default_parameters(uint32_t controller) {
-    char *err = RestoreDefaultParameters(u, controller);
-    if (err != NULL) {
-        set_error(err, strlen(err));
-        free(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (RestoreDefaultParameters(u, controller, err, &errN) != 0) {
+        set_error(err, errN);
         return -1;
     }
 
