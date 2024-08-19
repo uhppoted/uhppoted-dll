@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c
 GO=GODEBUG=cgocheck=2
-SRC=tests.c controller.c cards.c events.c time_profiles.c tasks.c lookup.c structs.c
+SRC=tests.c controller.c cards.c events.c time_profiles.c tasks.c lookup.c structs.c errors.c
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -139,6 +139,9 @@ listen: build
 
 lookup: build
 	$(CMD) lookup
+
+errors: build
+	$(CMD) errors
 
 structs: build
 	$(CMD) structs

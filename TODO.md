@@ -42,16 +42,7 @@
       - [x] activate-keypads
       - [x] set-door-passcodes
       - [x] restore-default-parameters
-      - [ ] listen
-          - [ ] preallocate struct strings
-          - [ ] Use C.cchar_t
-          - [ ] C
-          - [ ] C++
-          - [ ] Python
-          - [ ] C#: mono
-          - [ ] C#: vs-mac
-          - [ ] C#: vs-win
-          - [ ] CCL
+      - [x] listen
 
 ## TODO
 

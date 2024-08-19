@@ -78,6 +78,7 @@ extern bool listen();
 
 extern bool internationalisation();
 extern bool structs();
+extern bool errors();
 
 extern const uint32_t DEVICE_ID;
 extern const uint32_t DEVICE_ID2;
