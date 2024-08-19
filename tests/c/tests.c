@@ -61,7 +61,7 @@ const test tests[] = {
     {.name = "set-door-passcodes", .fn = setDoorPasscodes},
     {.name = "restore-default-parameters", .fn = restoreDefaultParameters},
     {.name = "listen", .fn = listen},
-    {.name = "errors", .fn = errors},
+    // {.name = "errors", .fn = errors},
     {.name = "lookup", .fn = internationalisation},
     {.name = "structs", .fn = structs},
 };

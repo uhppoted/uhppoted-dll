@@ -11,6 +11,15 @@
       - [ ] Make errmsg a struct ??
       - [x] Use C.cchar_t
 
+      - [ ] C test error
+```
+free(): double free detected in tcache 2
+Aborted (core dumped)
+make[1]: *** [Makefile:153: tests] Error 134
+make[1]: Leaving directory '/home/runner/work/uhppoted-dll/uhppoted-dll/tests/c'
+make: *** [Makefile:73: build-all] Error 2
+```
+
       - [x] get-devices
       - [x] get-device
       - [x] set-address
