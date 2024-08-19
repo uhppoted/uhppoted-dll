@@ -383,42 +383,30 @@ func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, 
 }
 
 //export AddTask
-func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task) *C.char {
-	if uu, err := makeUHPPOTE(u); err != nil {
-		return C.CString(err.Error())
-	} else if err := addTask(uu, deviceID, task); err != nil {
-		return C.CString(err.Error())
+func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return addTask(uu, deviceID, task)
 	}
 
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export RefreshTaskList
-func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
-		return C.CString(err.Error())
+func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return refreshTaskList(uu, deviceID)
 	}
 
-	if err := refreshTaskList(uu, deviceID); err != nil {
-		return C.CString(err.Error())
-	}
-
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export ClearTaskList
-func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32) *C.char {
-	uu, err := makeUHPPOTE(u)
-	if err != nil {
-		return C.CString(err.Error())
+func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return clearTaskList(uu, deviceID)
 	}
 
-	if err := clearTaskList(uu, deviceID); err != nil {
-		return C.CString(err.Error())
-	}
-
-	return nil
+	return exec(u, f, errmsg, errN)
 }
 
 //export SetPCControl

@@ -879,14 +879,14 @@
 
 
 (defun uhppoted-clear-time-profiles (uhppote device-id) "Deletes all time profiles from a controller"
-  (multiple-value-bind (errmsg        errmsgp)        (make-heap-ivector 256 '(unsigned-byte 1))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
   (unwind-protect
     (rlet ((errN  :signed-long 256))
     (with-macptrs ((err (external-call "ClearTimeProfiles" :address uhppote 
                                                            :unsigned-long device-id 
-                                                        :address       errmsgp
-                                                        :address       errN
-                                                        :signed-long)))
+                                                           :address       errmsgp
+                                                           :address       errN
+                                                           :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
       (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
@@ -894,9 +894,11 @@
 
 
 (defun uhppoted-add-task (uhppote device-id task) "Adds a scheduled task to a controller"
-  (with-cstrs ((from (task-from task))
-               (to   (task-to   task))
-               (at   (task-at   task)))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (with-cstrs ((from (task-from task))
+                 (to   (task-to   task))
+                 (at   (task-at   task)))
     (rletz ((tt (:struct :GoTask) :task      (task-task task)
                                   :door      (task-door task)
                                   :from      from
@@ -909,29 +911,48 @@
                                   :saturday  (if (task-saturday  task) 1 0)
                                   :sunday    (if (task-sunday    task) 1 0)
                                   :at at
-                                  :cards     (task-cards task)))
+                                  :cards     (task-cards task))
+            (errN  :signed-long 256))
      (with-macptrs ((err (external-call "AddTask" :address       uhppote 
                                                   :unsigned-long device-id 
                                                   :address       tt
-                                                  :address)))
-       (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-       t))))
+                                                  :address       errmsgp
+                                                  :address       errN
+                                                  :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+       t)))
+    (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-refresh-tasklist (uhppote device-id) "Refreshes a controller task list to activate added tasks"
-  (with-macptrs ((err (external-call "RefreshTaskList" :address uhppote 
-                                                       :unsigned-long device-id 
-                                                       :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+      (with-macptrs ((err (external-call "RefreshTaskList" :address uhppote 
+                                                           :unsigned-long device-id 
+                                                           :address       errmsgp
+                                                           :address       errN
+                                                           :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 
 (defun uhppoted-clear-tasklist (uhppote device-id) "Clears a controller task list"
-  (with-macptrs ((err (external-call "ClearTaskList" :address uhppote 
-                                                     :unsigned-long device-id 
-                                                     :address)))
-    (unless (%null-ptr-p err) (error 'uhppoted-error :message (go-error err)))
-    t))
+  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 1))
+  (unwind-protect
+    (rlet ((errN  :signed-long 256))
+    (with-macptrs ((err (external-call "ClearTaskList" :address uhppote 
+                                                       :unsigned-long device-id 
+                                                           :address       errmsgp
+                                                           :address       errN
+                                                           :signed-long)))
+      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
+      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
+    (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-set-pc-control (uhppote device-id enabled) "Enables/disables controller remote access control"
   (with-macptrs ((err (external-call "SetPCControl" :address uhppote 

@@ -634,6 +634,8 @@ void uhppoted::clear_time_profiles(uint32_t id) {
 
 void uhppoted::add_task(uint32_t id, const task &t) {
     Task task;
+    char err[256] = "";
+    int errN = sizeof(err);
 
     task.task = t.task;
     task.door = t.door;
@@ -649,23 +651,26 @@ void uhppoted::add_task(uint32_t id, const task &t) {
     task.at = (char *)t.at.c_str();
     task.cards = t.cards;
 
-    char *err = AddTask(u, id, &task);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    if (AddTask(u, id, &task, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
 void uhppoted::refresh_tasklist(uint32_t id) {
-    char *err = RefreshTaskList(u, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (RefreshTaskList(u, id, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 
 void uhppoted::clear_tasklist(uint32_t id) {
-    char *err = ClearTaskList(u, id);
-    if (err != nullptr) {
-        throw uhppoted_exception(err);
+    char err[256] = "";
+    int errN = sizeof(err);
+
+    if (ClearTaskList(u, id, err, &errN) != 0) {
+        throw uhppoted_exception(err, errN);
     }
 }
 

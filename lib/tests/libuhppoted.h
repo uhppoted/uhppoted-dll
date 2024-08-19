@@ -214,9 +214,9 @@ extern int RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 ena
 extern int GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID, cchar_t* errmsg, int* errN);
 extern int SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile, cchar_t* errmsg, int* errN);
 extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern char* AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task);
-extern char* RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID);
-extern char* ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID);
+extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, cchar_t* errmsg, int* errN);
+extern int RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern char* SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled);
 extern char* SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock);
 extern char* ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4);

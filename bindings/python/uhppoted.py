@@ -510,14 +510,25 @@ class Uhppote:
         task = GoTask(t.task, t.door, c_char_p(bytes(t.start, 'utf-8')), c_char_p(bytes(t.end, 'utf-8')), 1 if t.monday else 0,
                       1 if t.tuesday else 0, 1 if t.wednesday else 0, 1 if t.thursday else 0, 1 if t.friday else 0, 1 if t.saturday else 0,
                       1 if t.sunday else 0, c_char_p(bytes(t.at, 'utf-8')), t.cards)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-        self.ffi.AddTask(self._uhppote, deviceID, byref(task))
+        if self.ffix.AddTask(self._uhppote, deviceID, byref(task), err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def refresh_tasklist(self, deviceID):
-        self.ffi.RefreshTaskList(self._uhppote, deviceID)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.RefreshTaskList(self._uhppote, deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def clear_tasklist(self, deviceID):
-        self.ffi.ClearTaskList(self._uhppote, deviceID)
+        errN = ctypes.c_int(256)
+        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+
+        if self.ffix.ClearTaskList(self._uhppote, deviceID, err, byref(errN)) != 0:
+            raise Exception(f"{err.value.decode('utf-8')}")
 
     def set_pc_control(self, deviceID, enabled):
         self.ffi.SetPCControl(self._uhppote, deviceID, enabled)
@@ -783,9 +794,9 @@ class FFI:
         # self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
         # self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
         # self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
-        self.AddTask = ffi('AddTask', errcheck)
-        self.RefreshTaskList = ffi('RefreshTaskList', errcheck)
-        self.ClearTaskList = ffi('ClearTaskList', errcheck)
+        # self.AddTask = ffi('AddTask', errcheck)
+        # self.RefreshTaskList = ffi('RefreshTaskList', errcheck)
+        # self.ClearTaskList = ffi('ClearTaskList', errcheck)
         self.SetPCControl = ffi('SetPCControl', errcheck)
         self.SetInterlock = ffi('SetInterlock', errcheck)
         self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
@@ -821,6 +832,9 @@ class FFIX:
         self.GetTimeProfile = ffix('GetTimeProfile', errcheck)
         self.SetTimeProfile = ffix('SetTimeProfile', errcheck)
         self.ClearTimeProfiles = ffix('ClearTimeProfiles', errcheck)
+        self.AddTask = ffix('AddTask', errcheck)
+        self.RefreshTaskList = ffix('RefreshTaskList', errcheck)
+        self.ClearTaskList = ffix('ClearTaskList', errcheck)
 
 
 def ffi(tag, errcheck):
@@ -881,9 +895,9 @@ def libfunctions():
         'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
         'SetTimeProfile':           (lib.SetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile), c_char_p, POINTER(ctypes.c_int)]),
         'ClearTimeProfiles':        (lib.ClearTimeProfiles,        [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'AddTask':                  (lib.AddTask,                  [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask)]),
-        'RefreshTaskList':          (lib.RefreshTaskList,          [POINTER(GoUHPPOTE), c_ulong]),
-        'ClearTaskList':            (lib.ClearTaskList,            [POINTER(GoUHPPOTE), c_ulong]),
+        'AddTask':                  (lib.AddTask,                  [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask), c_char_p, POINTER(ctypes.c_int)]),
+        'RefreshTaskList':          (lib.RefreshTaskList,          [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
+        'ClearTaskList':            (lib.ClearTaskList,            [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'SetPCControl':             (lib.SetPCControl,             [POINTER(GoUHPPOTE), c_ulong, c_bool]),
         'SetInterlock':             (lib.SetInterlock,             [POINTER(GoUHPPOTE), c_ulong, c_ubyte]),
         'ActivateKeypads':          (lib.ActivateKeypads,          [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool]),

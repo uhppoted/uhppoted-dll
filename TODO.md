@@ -8,7 +8,7 @@
       - [ ] CCL: tests on github
       - [ ] Reorder parameters
       - [ ] Use C.cchar_t
-      - (?) Make errmsg a struct ??
+      - [ ] Make errmsg a struct ??
 
       - [x] get-devices
       - [x] get-device
@@ -34,6 +34,9 @@
       - [x] get-time-profile
       - [x] set-time-profile
       - [x] clear-time-profiles
+      - [x] add-task
+      - [x] refresh-tasklist
+      - [x] clear-tasklist
           - [x] preallocate struct strings
           - [x] Use C.cchar_t
           - [x] C
@@ -43,9 +46,6 @@
           - [x] C#: vs-mac
           - [x] C#: vs-win
           - [x] CCL
-      - [ ] add-task
-      - [ ] refresh-tasklist
-      - [ ] clear-tasklist
       - [ ] set-pc-control
       - [ ] set-interlock
       - [ ] activate-keypads

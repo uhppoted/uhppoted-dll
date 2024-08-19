@@ -749,6 +749,8 @@ namespace uhppoted
         public void AddTask(uint deviceID, Task t)
         {
             GoTask task = new GoTask();
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
 
             task.task = t.task;
             task.door = t.door;
@@ -764,28 +766,52 @@ namespace uhppoted
             task.at = t.at;
             task.cards = t.cards;
 
-            string err = AddTask(ref this.u, deviceID, ref task);
-            if (err != null && err != "")
+            try
+            { 
+                if (AddTask(ref this.u, deviceID, ref task, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
             {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(err);
             }
         }
 
         public void RefreshTaskList(uint deviceID)
         {
-            string err = RefreshTaskList(ref this.u, deviceID);
-            if (err != null && err != "")
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+
+            try
+            { 
+                if (RefreshTaskList(ref this.u, deviceID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
             {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(err);
             }
         }
 
         public void ClearTaskList(uint deviceID)
         {
-            string err = ClearTaskList(ref this.u, deviceID);
-            if (err != null && err != "")
+            IntPtr err = Marshal.AllocHGlobal(256);
+            int errN = 256;
+
+            try
+            { 
+                if (ClearTaskList(ref this.u, deviceID, err, ref errN) != 0)
+                {
+                    raise(err, errN);
+                }
+            }
+            finally
             {
-                throw new UhppotedException(err);
+                Marshal.FreeHGlobal(err);
             }
         }
 
@@ -1006,13 +1032,13 @@ namespace uhppoted
         private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task);
+        private static extern int AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string RefreshTaskList(ref UHPPOTE u, uint deviceID);
+        private static extern int RefreshTaskList(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern string ClearTaskList(ref UHPPOTE u, uint deviceID);
+        private static extern int ClearTaskList(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern string SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled);
