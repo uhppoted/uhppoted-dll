@@ -3,15 +3,15 @@
 - [x] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 - [ ] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
+      - [x] CCL: fix all make-heap-ivector
+      - [x] CCL: tests on github
       - [ ] CCL: return code is a pointer ??
       - [ ] CCL: fix stacked multiple-value-binds
-      - [ ] CCL: tests on github
-      - [ ] CCL: fix all make-heap-ivector
       - [ ] Reorder parameters
       - [ ] Make errmsg a struct ??
       - [x] Use C.cchar_t
 
-      - [ ] C test error
+      - [ ] C test errors
 ```
 free(): double free detected in tcache 2
 Aborted (core dumped)

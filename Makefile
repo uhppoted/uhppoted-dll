@@ -75,34 +75,12 @@ build-all: build test lint
 	make -C ./tests/c++            -f Makefile tests
 	make -C ./tests/dotnet         -f Makefile tests || true
 	make -C ./tests/python         -f Makefile tests
-	# make -C ./tests/ccl            -f Makefile tests
+	make -C ./tests/ccl            -f Makefile tests
 	make -C ./examples/c           -f Makefile build
 	make -C ./examples/c++         -f Makefile build
 	make -C ./examples/dotnet/mono -f Makefile build
 	make -C ./examples/python      -f Makefile build
 	make -C ./examples/ccl         -f Makefile build
-
-build-ccl: build test lint
-	go fmt ./go/...
-	env GOWORK=off go build -trimpath -buildmode=c-shared             -o $(LIB)/$(DLL)       ./go/...
-	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./go/...
-	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./go/...
-
-# 	make -C ./tests/ccl    -f Makefile get-controllers
-	make -C ./tests/ccl    -f Makefile get-controller
-# 	make -C ./tests/ccl    -f Makefile set-address
-# 	make -C ./tests/ccl    -f Makefile get-status
-# 	make -C ./tests/ccl    -f Makefile get-time
-# 	make -C ./tests/ccl    -f Makefile set-time
-# 	make -C ./tests/ccl    -f Makefile get-listener
-# 	make -C ./tests/ccl    -f Makefile set-listener
-# 	make -C ./tests/ccl    -f Makefile get-door-control
-# 	make -C ./tests/ccl    -f Makefile set-door-control
-# 	make -C ./tests/ccl    -f Makefile open-door
-# 	make -C ./tests/ccl    -f Makefile get-cards
-# 	make -C ./tests/ccl    -f Makefile get-card-by-index
-# #	make -C ./tests/ccl    -f Makefile tests
-# #	make -C ./examples/ccl -f Makefile build
 
 build-debug: build
 	make -C ./tests/c++       -f Makefile tests
