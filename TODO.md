@@ -13,10 +13,10 @@
 
       - [x] error handling tests
             - [x] C
-            - [ ] C++
-            - [ ] Python
-            - [ ] C# mono
-            - [ ] CCL
+            - [x] C++
+            - [x] Python
+            - [x] C#
+            - [x] CCL
 
       - [x] get-devices
       - [x] get-device

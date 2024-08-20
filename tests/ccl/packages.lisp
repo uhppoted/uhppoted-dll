@@ -39,6 +39,7 @@
            restore-default-parameters
            listen-events
            internationalisation
+           errors
            structs
            failed
            message))

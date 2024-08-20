@@ -1,7 +1,7 @@
 LIB=../../lib/tests
 BINDINGS=../../bindings/c++
 GO=GODEBUG=cgocheck=2
-SRC=tests.cpp controller.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp lookup.cpp structs.cpp
+SRC=tests.cpp controller.cpp cards.cpp events.cpp time_profiles.cpp tasks.cpp lookup.cpp errors.cpp structs.cpp
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -135,14 +135,17 @@ set-door-passcodes: build
 restore-default-parameters: build
 	$(CMD) restore-default-parameters
 
-listen: build
-	$(CMD) listen
-
 lookup: build
 	$(CMD) lookup
 
+errors: build
+	$(CMD) errors
+
 structs: build
 	$(CMD) structs
+
+listen: build
+	$(CMD) listen
 
 all: build
 	$(CMD) all

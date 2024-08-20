@@ -1,13 +1,14 @@
 (in-package :tests)
 
-(defconstant TEST-DEVICE-ID   405419896)
-(defconstant TEST-DEVICE-ID2  303986753)
-(defconstant TEST-CARD-NUMBER 8165538)
-(defconstant TEST-CARD-INDEX  19)
-(defconstant TEST-PIN         7531)
-(defconstant TEST-EVENT-INDEX 51)
-(defconstant TEST-DOOR        4)
-(defconstant TEST-PROFILE-ID  49)
+(defconstant TEST-DEVICE-ID         405419896)
+(defconstant TEST-DEVICE-ID2        303986753)
+(defconstant TEST-INVALID-DEVICE-ID 987654321)
+(defconstant TEST-CARD-NUMBER       8165538)
+(defconstant TEST-CARD-INDEX        19)
+(defconstant TEST-PIN               7531)
+(defconstant TEST-EVENT-INDEX       51)
+(defconstant TEST-DOOR              4)
+(defconstant TEST-PROFILE-ID        49)
 
 (defstruct result field
                   expected
@@ -441,6 +442,21 @@
                 (make-result :field "remote-open-door"                :expected "remote open door"                  :value remote-open-door)
                 (make-result :field "remote-open-door-usb-reader"     :expected "remote open door (USB reader)"     :value remote-open-door-usb-reader)))))
 
+
+(defun errors () "" 
+  (let ((failed (list (cons 'get-controller nil))))
+    (handler-case
+      (progn
+        (uhppoted #'(lambda (u) (uhppoted-get-device u TEST-INVALID-DEVICE-ID)) 
+                  :bind-addr      "0.0.0.0"
+                  :broadcast-addr "255.255.255.255"
+                  :listen-addr    "0.0.0.0:60001"
+                  :timeout        2500
+                  :debug          t))
+      (error () (setf (cdr (assoc 'get-controller failed)) t)))
+    (evaluate "errors" 
+                (list 
+                  (make-result :field "get-controller" :expected t :value (cdr (assoc 'get-controller failed)))))))
 
 (defun structs () "" 
   (handler-bind

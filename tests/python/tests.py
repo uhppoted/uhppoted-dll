@@ -31,6 +31,7 @@ from uhppoted import LOOKUP_EVENT_REASON
 
 DEVICE_ID = 405419896
 DEVICE_ID2 = 303986753
+INVALID_DEVICE_ID = 987654321
 CARD_NUMBER = 8165538
 CARD_INDEX = 19
 EVENT_INDEX = 51
@@ -73,9 +74,10 @@ def tests():
         'activate-keypads': activate_keypads,
         'set-door-passcodes': set_door_passcodes,
         'restore-default-parameters': restore_default_parameters,
-        'listen': listen,
         'lookup': internationalisation,
+        'errors': errors,
         'structs': structs,
+        'listen': listen,
     }
 
 
@@ -600,6 +602,21 @@ def internationalisation(u):
         ('emergency', 'emergency', emergency),
         ('remote_open_door', 'remote open door', remote_open_door),
         ('remote_open_door_usb_reader', 'remote open door (USB reader)', remote_open_door_usb_reader),
+    ])
+
+
+def errors(u):
+    failed = {
+        'get-controller': False,
+    }
+
+    try:
+        u.get_device(INVALID_DEVICE_ID)
+    except Exception as e:
+        failed['get-controller'] = True
+
+    return evaluate('errors', [
+        ('get-controller', True, failed['get-controller']),
     ])
 
 

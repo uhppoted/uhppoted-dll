@@ -61,6 +61,7 @@ extern bool restoreDefaultParameters(uhppoted &);
 extern bool listen(uhppoted &);
 
 extern bool internationalisation(uhppoted &);
+extern bool errors(uhppoted &);
 extern bool structs(uhppoted &);
 
 extern bool evaluate(const std::string &, const std::vector<result> &);

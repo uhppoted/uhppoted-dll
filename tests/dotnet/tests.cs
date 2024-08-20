@@ -23,6 +23,7 @@ public class test {
 public class Tests {
     const uint DEVICE_ID = 405419896;
     const uint DEVICE_ID2 = 303986753;
+    const uint INVALID_DEVICE_ID = 987654321;
     const uint CARD_NUMBER = 8165538;
     const uint CARD_INDEX = 19;
     const uint EVENT_INDEX = 51;
@@ -68,9 +69,10 @@ public class Tests {
         new test("activate-keypads", ActivateKeypads),
         new test("set-door-passcodes", SetDoorPasscodes),
         new test("restore-default-parameters", RestoreDefaultParameters),
-        new test("listen", Listen),
         new test("lookup", Internationalisation),
+        new test("errors", Errors),
         new test("structs", Structs),
+        new test("listen", Listen),
     };
 
     public static void Main(string[] args) {
@@ -718,6 +720,24 @@ public class Tests {
         };
 
         return evaluate("lookup", resultset);
+    }
+
+    static bool Errors(Uhppoted u) {
+        Dictionary<string, bool> failed = new Dictionary<string, bool> {
+            { "get-controller", false },
+        };
+
+        try {
+            u.GetDevice(INVALID_DEVICE_ID);
+        } catch (Exception e) {
+            failed["get-controller"] = true;
+        }
+
+        result[] resultset = {
+            new boolResult("get-controller", true, failed["get-controller"]),
+        };
+
+        return evaluate("errors", resultset);
     }
 
     static bool Structs(Uhppoted u) {

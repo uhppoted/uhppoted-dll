@@ -60,10 +60,10 @@ const test tests[] = {
     {.name = "activate-keypads", .fn = activateKeypads},
     {.name = "set-door-passcodes", .fn = setDoorPasscodes},
     {.name = "restore-default-parameters", .fn = restoreDefaultParameters},
-    {.name = "listen", .fn = listen},
     {.name = "errors", .fn = errors},
     {.name = "lookup", .fn = internationalisation},
     {.name = "structs", .fn = structs},
+    {.name = "listen", .fn = listen},
 };
 
 controller ALPHA = {.id = 405419896, .address = "192.168.1.100", "tcp"};

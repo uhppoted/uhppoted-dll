@@ -49,9 +49,10 @@ vector<test> tests = {
     {"activate-keypads", activateKeypads},
     {"set-door-passcodes", setDoorPasscodes},
     {"restore-default-parameters", restoreDefaultParameters},
-    {"listen", listen},
+    {"errors", errors},
     {"lookup", internationalisation},
     {"structs", structs},
+    {"listen", listen},
 };
 
 extern const uint32_t DEVICE_ID = 405419896;

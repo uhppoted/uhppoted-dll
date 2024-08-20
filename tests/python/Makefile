@@ -132,6 +132,9 @@ listen: build
 lookup: build
 	$(CMD) lookup
 
+errors: build
+	$(CMD) errors
+
 structs: build
 	$(CMD) structs
 
