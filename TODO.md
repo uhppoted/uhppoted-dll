@@ -11,14 +11,12 @@
       - [ ] Reorder parameters
       - [ ] Make errmsg a struct ??
 
-      - [ ] C test errors
-```
-free(): double free detected in tcache 2
-Aborted (core dumped)
-make[1]: *** [Makefile:153: tests] Error 134
-make[1]: Leaving directory '/home/runner/work/uhppoted-dll/uhppoted-dll/tests/c'
-make: *** [Makefile:73: build-all] Error 2
-```
+      - [x] error handling tests
+            - [x] C
+            - [ ] C++
+            - [ ] Python
+            - [ ] C# mono
+            - [ ] CCL
 
       - [x] get-devices
       - [x] get-device

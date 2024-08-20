@@ -149,21 +149,21 @@ void teardown() {
         }
     }
 
-    if (err != NULL) {
-        free(err);
+    char *p;
+    if ((p = err) != NULL) {
+        err = NULL;
+        free(p);
     }
 }
 
-void set_error(const char *errmsg, int errN) {
-    unsigned l = strlen(errmsg) + 1;
-
-    if (err != NULL) {
-        free(err);
+void set_error(const char *errmsg, int N) {
+    char *p;
+    if ((p = err) != NULL) {
+        err = NULL;
+        free(p);
     }
 
-    if ((err = malloc(l)) != NULL) {
-        snprintf(err, l, "%s", errmsg);
-    }
+    err = strndup(errmsg, N);
 }
 
 int get_devices(uint32_t **devices, int *N) {
