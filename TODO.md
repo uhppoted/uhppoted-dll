@@ -7,9 +7,9 @@
       - [x] CCL: tests on github
       - [ ] CCL: return code is a pointer ??
       - [ ] CCL: fix stacked multiple-value-binds
+      - [x] Use C.cchar_t
       - [ ] Reorder parameters
       - [ ] Make errmsg a struct ??
-      - [x] Use C.cchar_t
 
       - [ ] C test errors
 ```

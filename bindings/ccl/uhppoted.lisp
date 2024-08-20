@@ -303,16 +303,16 @@
 
 
 (defun uhppoted-get-devices (uhppote &optional (N 16)) "Retrieves a list of device IDs on the local LAN"
-  (destructuring-bind  (p q) (uhppoted-get-devices-n uhppote N)
+  (destructuring-bind (p q) (uhppoted-get-devices-n uhppote N)
     (cond ((>= N p) (subseq q 0 p))
           (T (uhppoted-get-devices uhppote (+ N 16))))))
 
 (defun uhppoted-get-devices-n (uhppote max) ""
-    (multiple-value-bind (array  arrayp)  (make-heap-ivector max '(unsigned-byte 32))
-    (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (array  arrayp)         (make-heap-ivector max '(unsigned-byte 32))
     (unwind-protect
       (rletz ((N    :signed-long max)
-              (errN :signed-long 256))
+              (errN :signed-long errlen))
         (with-macptrs ((err (external-call "GetDevices" :address uhppote 
                                                         :address arrayp 
                                                         :address N 
@@ -327,13 +327,13 @@
 
 
 (defun uhppoted-get-device (uhppote device-id) "Retrieves the device information for a controller"
+  (multiple-value-bind (errmsg  errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (multiple-value-bind (address addressp)       (make-heap-ivector 16  '(unsigned-byte 8))
   (multiple-value-bind (subnet  subnetp)        (make-heap-ivector 16  '(unsigned-byte 8))
   (multiple-value-bind (gateway gatewayp)       (make-heap-ivector 16  '(unsigned-byte 8))
   (multiple-value-bind (MAC     MACp)           (make-heap-ivector 18  '(unsigned-byte 8))
   (multiple-value-bind (version versionp)       (make-heap-ivector 7   '(unsigned-byte 8))
   (multiple-value-bind (date    datep)          (make-heap-ivector 11  '(unsigned-byte 8))
-  (multiple-value-bind (errmsg  errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
     (unwind-protect
       (rletz ((device (:struct :GoDevice))
               (errN   :signed-long errlen))
@@ -369,12 +369,12 @@
 
 
 (defun uhppoted-set-address (uhppote device-id ip-addr subnet-mask gateway-addr) "Sets the controller IP address, subnet mask and gateway"
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (with-cstrs ((address ip-addr)
                (subnet  subnet-mask)
                (gateway gateway-addr))
-  (multiple-value-bind (errmsg  errmsgp)  (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
       (with-macptrs ((err (external-call "SetAddress" :address uhppote 
                                                       :unsigned-long device-id 
                                                       :address address  
@@ -390,9 +390,9 @@
 
 
 (defun uhppoted-get-status (uhppote device-id) "Retrieves a controller status information"
-  (multiple-value-bind (sysdatetime sysdatetimep) (make-heap-ivector 20  '(unsigned-byte 8))
-  (multiple-value-bind (timestamp   timestampp)   (make-heap-ivector 20  '(unsigned-byte 8))
-  (multiple-value-bind (errmsg      errmsgp)      (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg      errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (sysdatetime sysdatetimep)   (make-heap-ivector 20  '(unsigned-byte 8))
+  (multiple-value-bind (timestamp   timestampp)     (make-heap-ivector 20  '(unsigned-byte 8))
   (unwind-protect
     (%stack-block ((doors   4)
                    (buttons 4))
@@ -401,7 +401,7 @@
                                           :doors     doors
                                           :buttons   buttons
                                           :event     event)
-              (errN :signed-long 256))
+              (errN :signed-long errlen))
         (with-macptrs ((err (external-call "GetStatus" :address uhppote 
                                                        :address status
                                                        :unsigned-long device-id 
@@ -438,10 +438,10 @@
     (dispose-heap-ivector errmsg))))))
 
 (defun uhppoted-get-time (uhppote device-id) "Retrieves a controller date/time"
-  (multiple-value-bind (datetime datetimep) (make-heap-ivector 20  '(unsigned-byte 8))
-  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg   errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (datetime datetimep)      (make-heap-ivector 20  '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
       (with-macptrs ((err (external-call "GetTime" :address uhppote 
                                                    :address datetimep
                                                    :unsigned-long device-id 
@@ -456,10 +456,10 @@
 
 
 (defun uhppoted-set-time (uhppote device-id datetime) "Sets a controller date/time"
-  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (with-cstrs ((dt datetime))
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
       (with-macptrs ((err (external-call "SetTime" :address uhppote 
                                                    :unsigned-long device-id 
                                                    :address dt
@@ -473,10 +473,10 @@
 
 
 (defun uhppoted-get-listener (uhppote device-id) "Retrieves the controller event listener address"
-  (multiple-value-bind (listener listenerp) (make-heap-ivector 22  '(unsigned-byte 8))
-  (multiple-value-bind (errmsg   errmsgp)   (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg   errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (listener listenerp)      (make-heap-ivector 22  '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
       (with-macptrs ((err (external-call "GetListener" :address uhppote 
                                                        :address listenerp
                                                        :unsigned-long device-id 
@@ -491,10 +491,10 @@
 
 
 (defun uhppoted-set-listener (uhppote device-id listener) "Sets a controller's event listener address and port"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (with-cstrs ((addr listener))
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
       (with-macptrs ((err (external-call "SetListener" :address uhppote 
                                                        :unsigned-long device-id 
                                                        :address addr
@@ -508,10 +508,10 @@
 
 
 (defun uhppoted-get-door-control (uhppote device-id door) "Retrieves the door control state and open delay for a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rletz ((control (:struct :GoDoorControl))
-            (errN    :signed-long 256))
+            (errN :signed-long errlen))
       (with-macptrs ((err (external-call "GetDoorControl" :address uhppote 
                                                           :address control 
                                                           :unsigned-long device-id 
@@ -527,9 +527,9 @@
 
 
 (defun uhppoted-set-door-control (uhppote device-id door mode delay) "Sets the control mode and delay for a controller door"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN    :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "SetDoorControl" :address uhppote 
                                                         :unsigned-long device-id 
                                                         :unsigned-byte door
@@ -545,9 +545,9 @@
 
 
 (defun uhppoted-open-door (uhppote device-id door) "Remotely opens a controller door"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN    :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "OpenDoor" :address uhppote 
                                                   :unsigned-long device-id 
                                                   :unsigned-byte door
@@ -561,10 +561,10 @@
 
 
 (defun uhppoted-get-cards (uhppote device-id) "Retrieves the number of cards stored on a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rlet ((N :signed-long 0)
-           (errN    :signed-long 256))
+           (errN :signed-long errlen))
     (with-macptrs ((err (external-call "GetCards" :address uhppote 
                                                  :address N 
                                                   :unsigned-long device-id 
@@ -578,15 +578,15 @@
 
 
 (defun uhppoted-get-card (uhppote device-id card-number) "Retrieves card detail for a card stored on controller"
-  (multiple-value-bind (from   fromp)   (make-heap-ivector 11  '(unsigned-byte 8))
-  (multiple-value-bind (to     top)     (make-heap-ivector 11  '(unsigned-byte 8))
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (from   fromp)          (make-heap-ivector 11  '(unsigned-byte 8))
+  (multiple-value-bind (to     top)            (make-heap-ivector 11  '(unsigned-byte 8))
   (unwind-protect
     (%stack-block ((doors   4))
     (rletz ((card (:struct :GoCard) :from  fromp
                                     :to    top
                                     :doors doors)
-            (errN :signed-long 256))
+            (errN :signed-long errlen))
       (with-macptrs ((err (external-call "GetCard" :address uhppote 
                                                    :address card
                                                    :unsigned-long device-id 
@@ -610,15 +610,15 @@
 
 
 (defun uhppoted-get-card-by-index (uhppote device-id index) "Retrieves card detail for the card stored at an index on controller"
-  (multiple-value-bind (from   fromp)   (make-heap-ivector 11  '(unsigned-byte 8))
-  (multiple-value-bind (to     top)     (make-heap-ivector 11  '(unsigned-byte 8))
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (from   fromp)          (make-heap-ivector 11  '(unsigned-byte 8))
+  (multiple-value-bind (to     top)            (make-heap-ivector 11  '(unsigned-byte 8))
   (unwind-protect
     (%stack-block ((doors   4))
     (rletz ((card (:struct :GoCard) :from  fromp
                                     :to    top
                                     :doors doors)
-            (errN :signed-long 256))
+            (errN :signed-long errlen))
       (with-macptrs ((err (external-call "GetCardByIndex" :address uhppote 
                                                           :address card
                                                           :unsigned-long device-id 
@@ -642,12 +642,12 @@
 
 
 (defun uhppoted-put-card (uhppote device-id card-number from to doors PIN) "Adds or updates the card detail stored on a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
     (with-cstrs ((from_ from)
-                (to_   to))
+                 (to_   to))
     (multiple-value-bind (doors_ pdoors) (make-heap-ivector 4 '(unsigned-byte 8))
       (unwind-protect
-        (rlet ((errN :signed-long 256))
+        (rlet ((errN :signed-long errlen))
         (progn
           (setf (paref pdoors (:* :unsigned-byte) 0) (aref doors 0))
           (setf (paref pdoors (:* :unsigned-byte) 1) (aref doors 1))
@@ -671,9 +671,9 @@
 
 
 (defun uhppoted-delete-card (uhppote device-id card-number) "Deletes a card from a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "DeleteCard" :address uhppote 
                                                     :unsigned-long device-id 
                                                     :unsigned-long card-number
@@ -687,9 +687,9 @@
 
 
 (defun uhppoted-delete-cards (uhppote device-id) "Deletes all cards from a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "DeleteCards" :address uhppote 
                                                      :unsigned-long device-id 
                                                      :address errmsgp
@@ -702,10 +702,10 @@
 
 
 (defun uhppoted-get-event-index (uhppote device-id) "Retrieves the current event index from a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rlet ((index :signed-long 0)
-           (errN :signed-long 256))
+           (errN :signed-long errlen))
     (with-macptrs ((err (external-call "GetEventIndex" :address uhppote 
                                                        :address index
                                                        :unsigned-long device-id 
@@ -719,9 +719,9 @@
 
 
 (defun uhppoted-set-event-index (uhppote device-id index) "Retrieves the current event index from a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "SetEventIndex" :address uhppote 
                                                        :unsigned-long device-id 
                                                        :unsigned-long index
@@ -735,11 +735,11 @@
 
 
 (defun uhppoted-get-event (uhppote device-id index) "Retrieves the event at the index from on controller"
-  (multiple-value-bind (timestamp   timestampp)   (make-heap-ivector 20  '(unsigned-byte 8))
-  (multiple-value-bind (errmsg    errmsgp)    (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg    errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (timestamp timestampp)     (make-heap-ivector 20  '(unsigned-byte 8))
   (unwind-protect
-    (rletz ((event (:struct :GoEvent)  :timestamp timestampp)
-            (errN  :signed-long 256))
+    (rletz ((event (:struct :GoEvent) :timestamp timestampp)
+            (errN :signed-long errlen))
     (with-macptrs ((err (external-call "GetEvent" :address uhppote 
                                                   :address event
                                                   :unsigned-long device-id 
@@ -762,9 +762,9 @@
 
 
 (defun uhppoted-record-special-events (uhppote device-id enabled) "Enables/disables recording additional events for a controller"
-  (multiple-value-bind (errmsg    errmsgp)    (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rletz ((errN  :signed-long 256))
+    (rletz ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "RecordSpecialEvents" :address uhppote 
                                                              :unsigned-long device-id 
                                                              :unsigned-byte (if enabled 1 0)
@@ -778,6 +778,7 @@
 
 
 (defun uhppoted-get-time-profile (uhppote device-id profile-id) "Retrieves a time profile from a controller"
+  (multiple-value-bind (errmsg        errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (multiple-value-bind (from          fromp)          (make-heap-ivector 11  '(unsigned-byte 8))
   (multiple-value-bind (to            top)            (make-heap-ivector 11  '(unsigned-byte 8))
   (multiple-value-bind (segment1start segment1startp) (make-heap-ivector 6   '(unsigned-byte 8))
@@ -786,7 +787,6 @@
   (multiple-value-bind (segment2end   segment2endp)   (make-heap-ivector 6   '(unsigned-byte 8))
   (multiple-value-bind (segment3start segment3startp) (make-heap-ivector 6   '(unsigned-byte 8))
   (multiple-value-bind (segment3end   segment3endp)   (make-heap-ivector 6   '(unsigned-byte 8))
-  (multiple-value-bind (errmsg        errmsgp)        (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rletz ((profile (:struct :GoTimeProfile) :from fromp
                                               :to   top
@@ -796,7 +796,7 @@
                                               :segment2end   segment2endp
                                               :segment3start segment3startp
                                               :segment3end   segment3endp)
-            (errN  :signed-long 256))
+            (errN :signed-long errlen))
     (with-macptrs ((err (external-call "GetTimeProfile" :address uhppote 
                                                         :address profile
                                                         :unsigned-long device-id 
@@ -835,7 +835,7 @@
 
 
 (defun uhppoted-set-time-profile (uhppote device-id profile) "Adds or update a time profile on a controller"
-  (multiple-value-bind (errmsg        errmsgp)        (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (with-cstrs ((from          (time-profile-from          profile))
                  (to            (time-profile-to            profile))
@@ -862,7 +862,7 @@
                                         :segment2end   segment2end
                                         :segment3start segment3start
                                         :segment3end   segment3end)
-            (errN  :signed-long 256))
+            (errN :signed-long errlen))
     (with-macptrs ((err (external-call "SetTimeProfile" :address       uhppote 
                                                         :unsigned-long device-id 
                                                         :address       p
@@ -876,9 +876,9 @@
 
 
 (defun uhppoted-clear-time-profiles (uhppote device-id) "Deletes all time profiles from a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "ClearTimeProfiles" :address uhppote 
                                                            :unsigned-long device-id 
                                                            :address       errmsgp
@@ -891,7 +891,7 @@
 
 
 (defun uhppoted-add-task (uhppote device-id task) "Adds a scheduled task to a controller"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (with-cstrs ((from (task-from task))
                  (to   (task-to   task))
@@ -909,7 +909,7 @@
                                   :sunday    (if (task-sunday    task) 1 0)
                                   :at at
                                   :cards     (task-cards task))
-            (errN  :signed-long 256))
+            (errN :signed-long errlen))
      (with-macptrs ((err (external-call "AddTask" :address       uhppote 
                                                   :unsigned-long device-id 
                                                   :address       tt
@@ -923,9 +923,9 @@
 
 
 (defun uhppoted-refresh-tasklist (uhppote device-id) "Refreshes a controller task list to activate added tasks"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
       (with-macptrs ((err (external-call "RefreshTaskList" :address uhppote 
                                                            :unsigned-long device-id 
                                                            :address       errmsgp
@@ -938,9 +938,9 @@
 
 
 (defun uhppoted-clear-tasklist (uhppote device-id) "Clears a controller task list"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "ClearTaskList" :address uhppote 
                                                        :unsigned-long device-id 
                                                        :address       errmsgp
@@ -952,9 +952,9 @@
     (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-set-pc-control (uhppote device-id enabled) "Enables/disables controller remote access control"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "SetPCControl" :address uhppote 
                                                       :unsigned-long device-id 
                                                       :unsigned-byte (if enabled 1 0)
@@ -967,9 +967,9 @@
     (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-set-interlock (uhppote device-id interlock) "Sets a controller interlock mode"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "SetInterlock" :address uhppote 
                                                       :unsigned-long device-id 
                                                       :unsigned-byte interlock
@@ -982,9 +982,9 @@
     (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-activate-keypads (uhppote device-id reader1 reader2 reader3 reader4) "Activates and deactivates a controller reader access keypads"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "ActivateKeypads" :address uhppote 
                                                          :unsigned-long device-id 
                                                          :unsigned-byte (if reader1 1 0)
@@ -1000,9 +1000,9 @@
     (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-set-door-passcodes (uhppote device-id door passcode1 passcode2 passcode3 passcode4) "Sets the supervisor keypad passcodes for a door"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "SetDoorPasscodes" :address uhppote 
                                                           :unsigned-long device-id 
                                                           :unsigned-byte door
@@ -1019,9 +1019,9 @@
     (dispose-heap-ivector errmsg))))
 
 (defun uhppoted-restore-default-parameters (uhppote device-id) "Resets a controller to the manufacturer default configuration"
-  (multiple-value-bind (errmsg errmsgp) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN  :signed-long 256))
+    (rlet ((errN :signed-long errlen))
     (with-macptrs ((err (external-call "RestoreDefaultParameters" :address uhppote 
                                                                   :unsigned-long device-id 
                                                           :address       errmsgp
