@@ -30,6 +30,11 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 typedef const char cchar_t;
 
+typedef struct error {
+	int size;
+	const char *message;
+} error;
+
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
@@ -190,8 +195,8 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
-extern int GetDevices(struct UHPPOTE* u, unsigned int* list, int* N, cchar_t* errmsg, int* errN);
-extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int GetDevices(struct UHPPOTE* u, unsigned int* list, int* N, error* err);
+extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, error* err);
 extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, cchar_t* errmsg, int* errN);
 extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, cchar_t* errmsg, int* errN);

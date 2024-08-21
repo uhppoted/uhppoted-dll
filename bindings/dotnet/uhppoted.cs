@@ -73,8 +73,10 @@ public class Uhppoted : IDisposable {
         int N = 0;
         int count = N;
         uint[] slice;
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.size = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
             do {
@@ -82,8 +84,8 @@ public class Uhppoted : IDisposable {
                 count = N;
                 slice = new uint[N];
 
-                if (GetDevices(ref this.u, slice, ref count, err, ref errN) != 0) {
-                    raise(err, errN);
+                if (GetDevices(ref this.u, slice, ref count, ref err) != 0) {
+                    raise(err);
                 }
 
             } while (N < count);
@@ -94,14 +96,13 @@ public class Uhppoted : IDisposable {
 
             return list;
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public Device GetDevice(uint deviceID) {
         GoDevice device = new GoDevice();
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
 
         device.address = Marshal.AllocHGlobal(16);
         device.subnet = Marshal.AllocHGlobal(16);
@@ -110,9 +111,12 @@ public class Uhppoted : IDisposable {
         device.version = Marshal.AllocHGlobal(7);
         device.date = Marshal.AllocHGlobal(11);
 
+        err.size = 256;
+        err.message = Marshal.AllocHGlobal(256);
+
         try {
-            if (GetDevice(ref this.u, ref device, deviceID, err, ref errN) != 0) {
-                raise(err, errN);
+            if (GetDevice(ref this.u, ref device, deviceID, ref err) != 0) {
+                raise(err);
             }
 
             uint ID = device.ID;
@@ -132,7 +136,7 @@ public class Uhppoted : IDisposable {
             Marshal.FreeHGlobal(device.version);
             Marshal.FreeHGlobal(device.date);
 
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
@@ -752,13 +756,26 @@ public class Uhppoted : IDisposable {
         throw new UhppotedException(msg);
     }
 
+    private void raise(GoError err) {
+        if (err.message == IntPtr.Zero) {
+            throw new UhppotedException("unknown error");
+        }
+
+        string? msg = Marshal.PtrToStringAnsi(err.message, err.size);
+        if (msg == null) {
+            throw new UhppotedException("unknown error");
+        }
+
+        throw new UhppotedException(msg);
+    }
+
     // Go FFI
 
     [DllImport(DLL)]
-    private static extern int GetDevices(ref UHPPOTE u, uint[] list, ref int N, IntPtr err, ref int errN);
+    private static extern int GetDevices(ref UHPPOTE u, uint[] list, ref int N, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, IntPtr err, ref int errN);
+    private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, ref GoError err);
 
     [DllImport(DLL)]
     private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, IntPtr err,
@@ -878,6 +895,12 @@ public class Uhppoted : IDisposable {
         public IntPtr devices; // udevices * (optional list of non-local controller
                                // ID + address pairs)
         public bool debug;
+    }
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+    struct GoError {
+        public int size;
+        public IntPtr message; // array of char
     }
 
     struct GoDevice {

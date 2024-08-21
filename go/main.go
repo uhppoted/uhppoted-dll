@@ -10,6 +10,11 @@ package main
 
 typedef const char cchar_t;
 
+typedef struct error {
+	int size;
+	const char *message;
+} error;
+
 typedef struct udevice {
 	uint32_t    id;
 	const char *address;
@@ -166,22 +171,45 @@ func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, errmsg *C.char
 	return 0
 }
 
+func exex(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, err *C.error) C.int {
+	g := func() error {
+		if uu, _err := makeUHPPOTE(u); _err != nil {
+			return _err
+		} else if _err := f(uu); _err != nil {
+			return _err
+		} else {
+			return nil
+		}
+	}
+
+	if _err := g(); _err != nil {
+		if err != nil {
+			len := cstring(_err, err.message, int(err.size))
+			err.size = C.int(len)
+		}
+
+		return -1
+	}
+
+	return 0
+}
+
 //export GetDevices
-func GetDevices(u *C.struct_UHPPOTE, list *C.uint, N *C.int, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetDevices(u *C.struct_UHPPOTE, list *C.uint, N *C.int, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getDevices(uu, N, list)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetDevice
-func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getDevice(uu, device, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetAddress

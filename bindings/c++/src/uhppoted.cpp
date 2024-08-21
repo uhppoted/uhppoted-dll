@@ -70,6 +70,8 @@ uhppoted_exception::uhppoted_exception(char *err) {
 
 uhppoted_exception::uhppoted_exception(const char *err, int N) { message = std::string(err, N); }
 
+uhppoted_exception::uhppoted_exception(const error &err) { message = std::string(err.message, err.size); }
+
 uhppoted_exception::~uhppoted_exception() {}
 
 const char *uhppoted_exception::what() const noexcept { return message.c_str(); }
@@ -153,18 +155,21 @@ uhppoted::~uhppoted() {
 vector<uint32_t> uhppoted::get_devices() {
     vector<uint32_t> list;
     int allocated = 0;
+    char errmsg[256] = "";
+
+    error err = {
+        .size = sizeof(errmsg),
+        .message = errmsg,
+    };
 
     for (;;) {
         allocated += 16;
         list.resize(allocated);
 
         int count = allocated;
-        char err[256] = "";
-        int errN = sizeof(err);
-        int rc;
 
-        if ((rc = GetDevices(u, list.data(), &count, err, &errN)) != 0) {
-            throw uhppoted_exception(err, errN);
+        if (GetDevices(u, list.data(), &count, &err) != 0) {
+            throw uhppoted_exception(err);
         }
 
         if (count <= allocated) {
@@ -179,10 +184,7 @@ vector<uint32_t> uhppoted::get_devices() {
 }
 
 struct device uhppoted::get_device(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
-
+    char errmsg[256] = "";
     char address[16];
     char subnet[16];
     char gateway[16];
@@ -199,8 +201,13 @@ struct device uhppoted::get_device(uint32_t id) {
         .date = date,
     };
 
-    if ((rc = GetDevice(u, &device, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .size = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetDevice(u, &device, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     struct device d;

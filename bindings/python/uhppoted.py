@@ -211,18 +211,18 @@ class Uhppote:
 
     @staticmethod
     def errcheck(err, func, args):
-        # error code
-        if isinstance(err, int):
-            if err != 0:
-                raise Exception(f'error code {err}')
-
-        # UTF-8 error message
-        if err and isinstance(err, bytes):
-            raise Exception(f"{err.decode('utf-8')}")
-
-        # other error
-        if err:
-            raise Exception(f'{err}')
+        # # error code
+        # if isinstance(err, int):
+        #     if err != 0:
+        #         raise Exception(f'error code {err}')
+        #
+        # # UTF-8 error message
+        # if err and isinstance(err, bytes):
+        #     raise Exception(f"{err.decode('utf-8')}")
+        #
+        # # other error
+        # if err:
+        #     raise Exception(f'{err}')
 
         return args
 
@@ -231,16 +231,16 @@ class Uhppote:
         return args
 
     def get_devices(self):
+        err = GoError()
         N = 0
+
         while True:
             N = N + 16
             count = ctypes.c_int(N)
             list = (c_uint32 * N)(*[0] * N)
-            errN = ctypes.c_int(256)
-            err = c_char_p(bytes('*' * errN.value, 'utf-8'))
 
-            if self.ffix.GetDevices(self._uhppote, list, byref(count), err, byref(errN)) != 0:
-                raise Exception(f"{err.value.decode('utf-8')}")
+            if self.ffi.GetDevices(self._uhppote, list, byref(count), byref(err)) != 0:
+                raise Exception(f"{err.message.decode('utf-8')}")
 
             if count.value <= N:
                 break
@@ -248,13 +248,11 @@ class Uhppote:
         return list[0:count.value]
 
     def get_device(self, deviceID):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
-
+        err = GoError()
         device = GoDevice()
 
-        if self.ffix.GetDevice(self._uhppote, byref(device), deviceID, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetDevice(self._uhppote, byref(device), deviceID, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         return Device(device.ID, device.address.decode('utf-8'), device.subnet.decode('utf-8'), device.gateway.decode('utf-8'),
                       device.MAC.decode('utf-8'), device.version.decode('utf-8'), device.date.decode('utf-8'))
@@ -579,7 +577,7 @@ class Uhppote:
             p = pointer(ctypes.py_object(v))
 
         try:
-            self.ffi.Listen(self._uhppote, callback, byref(listening), byref(stop), err_handler, p)
+            self.ffix.Listen(self._uhppote, callback, byref(listening), byref(stop), err_handler, p)
             count = 0
             while (not listening) and (count < 10):
                 print(f' ... waiting {count}')
@@ -790,8 +788,9 @@ def lookup(category, code, locale):
 class FFI:
 
     def __init__(self, errcheck):
-        # self.GetDevices = ffi('GetDevices', errcheck)
-        # self.GetDevice = ffi('GetDevice', errcheck)
+        pass
+        self.GetDevices = ffi('GetDevices', errcheck)
+        self.GetDevice = ffi('GetDevice', errcheck)
         # self.SetAddress = ffi('SetAddress', errcheck)
         # self.GetStatus = ffi('GetStatus', errcheck)
         # self.GetTime = ffi('GetTime', errcheck)
@@ -822,14 +821,12 @@ class FFI:
         # self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
         # self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
         # self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
-        self.Listen = ffil('Listen', errcheck)
+        # self.Listen = ffil('Listen', errcheck)
 
 
 class FFIX:
 
     def __init__(self, errcheck):
-        self.GetDevices = ffix('GetDevices', errcheck)
-        self.GetDevice = ffix('GetDevice', errcheck)
         self.SetAddress = ffix('SetAddress', errcheck)
         self.GetStatus = ffix('GetStatus', errcheck)
         self.GetTime = ffix('GetTime', errcheck)
@@ -860,13 +857,14 @@ class FFIX:
         self.ActivateKeypads = ffix('ActivateKeypads', errcheck)
         self.SetDoorPasscodes = ffix('SetDoorPasscodes', errcheck)
         self.RestoreDefaultParameters = ffix('RestoreDefaultParameters', errcheck)
+        self.Listen = ffix('Listen', errcheck)
 
 
 def ffi(tag, errcheck):
     (ff, argtypes) = libfunctions()[tag]
 
     ff.argtypes = argtypes
-    ff.restype = ctypes.c_char_p
+    ff.restype = ctypes.c_int
     ff.errcheck = errcheck
 
     return ff
@@ -882,22 +880,12 @@ def ffix(tag, errcheck):
     return ff
 
 
-def ffil(tag, errcheck):
-    (ff, argtypes) = libfunctions()[tag]
-
-    ff.argtypes = argtypes
-    ff.restype = ctypes.c_int32
-    ff.errcheck = errcheck
-
-    return ff
-
-
 # yapf: disable
 @cache
 def libfunctions():
     return {
-        'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_uint32), POINTER(ctypes.c_int), c_char_p, POINTER(ctypes.c_int)]),
-        'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, c_char_p, POINTER(ctypes.c_int)]),
+        'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_uint32), POINTER(ctypes.c_int), POINTER(GoError)]),
+        'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, POINTER(GoError)]),
         'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
         'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
@@ -931,6 +919,18 @@ def libfunctions():
         'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), on_event, POINTER(c_bool), POINTER(c_bool), on_error, c_void_p]),
     }
 # yapf: enable
+
+
+class GoError(Structure):
+    _fields_ = [
+        ('size', c_int),
+        ('message', c_char_p),
+    ]
+
+    def __init__(self):
+        super(GoError, self).__init__()
+        self.size = 256
+        self.message = c_char_p(bytes(' ' * 256, 'utf-8'))
 
 
 class GoController(Structure):

@@ -6,17 +6,45 @@
       - [x] CCL: fix all make-heap-ivector
       - [x] CCL: tests on github
       - [ ] CCL: return code is a pointer ??
-      - [ ] CCL: fix stacked multiple-value-binds
-      - [x] Use C.cchar_t
-      - [ ] Reorder parameters
-      - [ ] Make errmsg a struct ??
 
+      - [x] Use C.cchar_t
       - [x] error handling tests
-            - [x] C
-            - [x] C++
-            - [x] Python
-            - [x] C#
-            - [x] CCL
+      - [ ] Make errmsg a struct
+            - [ ] get-devices
+            - [ ] get-device
+            - [ ] set-address
+            - [ ] get-status
+            - [ ] get-time
+            - [ ] set-time
+            - [ ] get-listener
+            - [ ] set-listener
+            - [ ] get-door-control
+            - [ ] set-door-control
+            - [ ] open-door
+            - [ ] get-cards
+            - [ ] get-card
+            - [ ] get-card-by-index
+            - [ ] put-card
+            - [ ] delete-card
+            - [ ] delete-cards
+            - [ ] get-event-index
+            - [ ] set-event-index
+            - [ ] get-event
+            - [ ] record-special-events
+            - [ ] get-time-profile
+            - [ ] set-time-profile
+            - [ ] clear-time-profiles
+            - [ ] add-task
+            - [ ] refresh-tasklist
+            - [ ] clear-tasklist
+            - [ ] set-pc-control
+            - [ ] set-interlock
+            - [ ] activate-keypads
+            - [ ] set-door-passcodes
+            - [ ] restore-default-parameters
+            - [ ] listen
+
+      - [ ] Reorder parameters
 
       - [x] get-devices
       - [x] get-device

@@ -169,6 +169,12 @@ void set_error(const char *errmsg, int N) {
 int get_devices(uint32_t **devices, int *N) {
     uint32_t *list = NULL;
     int allocated = 0;
+    char errmsg[256] = "";
+
+    error err = {
+        .size = sizeof(errmsg),
+        .message = errmsg,
+    };
 
     for (;;) {
         allocated += 16;
@@ -181,13 +187,10 @@ int get_devices(uint32_t **devices, int *N) {
         }
 
         int count = allocated;
-        char err[256] = "";
-        int errN = sizeof(err);
-        int rc;
 
-        if ((rc = GetDevices(u, list, &count, err, &errN)) != 0) {
+        if (GetDevices(u, list, &count, &err) != 0) {
             free(list);
-            set_error(err, errN);
+            set_error(err.message, err.size);
             return -1;
         }
 
@@ -210,10 +213,12 @@ int get_device(uint32_t id, struct device *d) {
     char MAC[18];
     char version[7];
     char date[11];
+    char errmsg[256] = "";
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    error err = {
+        .size = sizeof(errmsg),
+        .message = errmsg,
+    };
 
     struct Device device = {
         .address = address,
@@ -224,8 +229,8 @@ int get_device(uint32_t id, struct device *d) {
         .date = date,
     };
 
-    if ((rc = GetDevice(u, &device, id, err, &errN)) != 0) {
-        set_error(err, errN);
+    if (GetDevice(u, &device, id, &err) != 0) {
+        set_error(err.message, err.size);
         return -1;
     }
 

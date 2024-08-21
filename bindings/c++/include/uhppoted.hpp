@@ -168,6 +168,7 @@ class uhppoted_exception : public virtual std::exception {
   public:
     uhppoted_exception(char *);
     uhppoted_exception(const char *, int N);
+    uhppoted_exception(const error &);
     virtual ~uhppoted_exception();
 
     virtual const char *what() const noexcept;
