@@ -31,7 +31,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 typedef const char cchar_t;
 
 typedef struct error {
-	int size;
+	int len;
 	const char *message;
 } error;
 
@@ -197,15 +197,15 @@ extern "C" {
 
 extern int GetDevices(struct UHPPOTE* u, unsigned int* list, int* N, error* err);
 extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, error* err);
-extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, cchar_t* errmsg, int* errN);
-extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* datetime, cchar_t* errmsg, int* errN);
-extern int GetListener(struct UHPPOTE* u, cchar_t* address, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* listener, cchar_t* errmsg, int* errN);
-extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door, cchar_t* errmsg, int* errN);
-extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, cchar_t* errmsg, int* errN);
-extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, cchar_t* errmsg, int* errN);
+extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, error* err);
+extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, error* err);
+extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, error* err);
+extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* datetime, error* err);
+extern int GetListener(struct UHPPOTE* u, cchar_t* address, GoUint32 deviceID, error* err);
+extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* listener, error* err);
+extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door, error* err);
+extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, error* err);
+extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, error* err);
 extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern int GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* errmsg, int* errN);
 extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);

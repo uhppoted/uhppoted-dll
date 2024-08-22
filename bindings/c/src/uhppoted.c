@@ -172,7 +172,7 @@ int get_devices(uint32_t **devices, int *N) {
     char errmsg[256] = "";
 
     error err = {
-        .size = sizeof(errmsg),
+        .len = sizeof(errmsg),
         .message = errmsg,
     };
 
@@ -190,7 +190,7 @@ int get_devices(uint32_t **devices, int *N) {
 
         if (GetDevices(u, list, &count, &err) != 0) {
             free(list);
-            set_error(err.message, err.size);
+            set_error(err.message, err.len);
             return -1;
         }
 
@@ -216,7 +216,7 @@ int get_device(uint32_t id, struct device *d) {
     char errmsg[256] = "";
 
     error err = {
-        .size = sizeof(errmsg),
+        .len = sizeof(errmsg),
         .message = errmsg,
     };
 
@@ -230,7 +230,7 @@ int get_device(uint32_t id, struct device *d) {
     };
 
     if (GetDevice(u, &device, id, &err) != 0) {
-        set_error(err.message, err.size);
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -247,12 +247,15 @@ int get_device(uint32_t id, struct device *d) {
 }
 
 int set_address(uint32_t id, const char *address, const char *subnet, const char *gateway) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetAddress(u, id, (char *)address, (char *)subnet, (char *)gateway, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -262,10 +265,12 @@ int set_address(uint32_t id, const char *address, const char *subnet, const char
 int get_status(uint32_t id, struct status *s) {
     char sysdatetime[20] = "";
     char timestamp[20] = "";
+    char errmsg[256] = "";
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
 
     struct Event event = {
         .timestamp = timestamp,
@@ -278,8 +283,8 @@ int get_status(uint32_t id, struct status *s) {
         .event = &event,
     };
 
-    if ((rc = GetStatus(u, &status, id, err, &errN)) != 0) {
-        set_error(err, errN);
+    if (GetStatus(u, &status, id, &err) != 0) {
+        set_error(err.message, err.len);
         free(status.doors);
         free(status.buttons);
         return -1;
@@ -322,13 +327,16 @@ int get_status(uint32_t id, struct status *s) {
 }
 
 int get_time(uint32_t id, char **t) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
     char datetime[20] = "";
+    char errmsg[256] = "";
 
-    if ((rc = GetTime(u, datetime, id, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetTime(u, datetime, id, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -338,12 +346,15 @@ int get_time(uint32_t id, char **t) {
 }
 
 int set_time(uint32_t id, char *datetime) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetTime(u, id, datetime, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetTime(u, id, datetime, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -351,13 +362,16 @@ int set_time(uint32_t id, char *datetime) {
 }
 
 int get_listener(uint32_t id, char **t) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
     char listener[22] = "";
+    char errmsg[256] = "";
 
-    if ((rc = GetListener(u, listener, id, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetListener(u, listener, id, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -367,12 +381,15 @@ int get_listener(uint32_t id, char **t) {
 }
 
 int set_listener(uint32_t id, char *listener) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetListener(u, id, listener, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetListener(u, id, listener, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -380,13 +397,16 @@ int set_listener(uint32_t id, char *listener) {
 }
 
 int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
     struct DoorControl control;
+    char errmsg[256] = "";
 
-    if ((rc = GetDoorControl(u, &control, id, door, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetDoorControl(u, &control, id, door, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -397,12 +417,15 @@ int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
 }
 
 int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetDoorControl(u, id, door, mode, delay, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetDoorControl(u, id, door, mode, delay, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -410,12 +433,15 @@ int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
 }
 
 int open_door(uint32_t id, uint8_t door) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = OpenDoor(u, id, door, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (OpenDoor(u, id, door, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 

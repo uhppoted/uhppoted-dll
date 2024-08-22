@@ -11,7 +11,7 @@ package main
 typedef const char cchar_t;
 
 typedef struct error {
-	int size;
+	int len;
 	const char *message;
 } error;
 
@@ -184,8 +184,7 @@ func exex(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, err *C.error) 
 
 	if _err := g(); _err != nil {
 		if err != nil {
-			len := cstring(_err, err.message, int(err.size))
-			err.size = C.int(len)
+			err.len = C.int(cstring(_err, err.message, int(err.len)))
 		}
 
 		return -1
@@ -213,84 +212,84 @@ func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, er
 }
 
 //export SetAddress
-func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.cchar_t, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.cchar_t, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setAddress(uu, deviceID, addr, subnet, gateway)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetStatus
-func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getStatus(uu, status, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetTime
-func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getTime(uu, deviceID, datetime)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetTime
-func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.cchar_t, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.cchar_t, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setTime(uu, deviceID, datetime)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetListener
-func GetListener(u *C.struct_UHPPOTE, address *C.cchar_t, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetListener(u *C.struct_UHPPOTE, address *C.cchar_t, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getListener(uu, address, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetListener
-func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.cchar_t, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.cchar_t, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setListener(uu, deviceID, listener)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetDoorControl
-func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getDoorControl(uu, control, deviceID, door)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetDoorControl
-func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8, delay uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8, delay uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setDoorControl(uu, deviceID, door, types.ControlState(mode), delay)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export OpenDoor
-func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return openDoor(uu, deviceID, door)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetCards

@@ -258,23 +258,21 @@ class Uhppote:
                       device.MAC.decode('utf-8'), device.version.decode('utf-8'), device.date.decode('utf-8'))
 
     def set_address(self, deviceID, address, subnet, gateway):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
         c_address = c_char_p(bytes(address, 'utf-8'))
         c_subnet = c_char_p(bytes(subnet, 'utf-8'))
         c_gateway = c_char_p(bytes(gateway, 'utf-8'))
 
-        if self.ffix.SetAddress(self._uhppote, deviceID, c_address, c_subnet, c_gateway, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetAddress(self._uhppote, deviceID, c_address, c_subnet, c_gateway, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def get_status(self, deviceID):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
         status = GoStatus()
 
-        if self.ffix.GetStatus(self._uhppote, ctypes.byref(status), deviceID, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetStatus(self._uhppote, ctypes.byref(status), deviceID, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         doors = [False, False, False, False]
         buttons = [False, False, False, False]
@@ -300,62 +298,55 @@ class Uhppote:
                       status.seqno, status.info, event)
 
     def get_time(self, deviceID):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
         datetime = c_char_p(bytes(' ' * 20, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.GetTime(self._uhppote, datetime, deviceID, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetTime(self._uhppote, datetime, deviceID, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         return datetime.value.decode('utf-8')
 
     def set_time(self, deviceID, datetime):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')), err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetTime(self._uhppote, deviceID, c_char_p(bytes(datetime, 'utf-8')), byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def get_listener(self, deviceID):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
         listener = c_char_p(bytes(' ' * 22, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.GetListener(self._uhppote, listener, deviceID, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetListener(self._uhppote, listener, deviceID, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         return listener.value.decode('utf-8')
 
     def set_listener(self, deviceID, listener):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')), err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetListener(self._uhppote, deviceID, c_char_p(bytes(listener, 'utf-8')), byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def get_door_control(self, deviceID, door):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
         control = GoDoorControl()
+        err = GoError()
 
-        if self.ffix.GetDoorControl(self._uhppote, byref(control), deviceID, door, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetDoorControl(self._uhppote, byref(control), deviceID, door, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         return DoorControl(control.control, control.delay)
 
     def set_door_control(self, deviceID, door, mode, delay):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetDoorControl(self._uhppote, deviceID, door, mode, delay, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetDoorControl(self._uhppote, deviceID, door, mode, delay, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def open_door(self, deviceID, door):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.OpenDoor(self._uhppote, deviceID, door, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.OpenDoor(self._uhppote, deviceID, door, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def get_cards(self, deviceID):
         cards = ctypes.c_int(0)
@@ -791,15 +782,15 @@ class FFI:
         pass
         self.GetDevices = ffi('GetDevices', errcheck)
         self.GetDevice = ffi('GetDevice', errcheck)
-        # self.SetAddress = ffi('SetAddress', errcheck)
-        # self.GetStatus = ffi('GetStatus', errcheck)
-        # self.GetTime = ffi('GetTime', errcheck)
-        # self.SetTime = ffi('SetTime', errcheck)
-        # self.GetListener = ffi('GetListener', errcheck)
-        # self.SetListener = ffi('SetListener', errcheck)
-        # self.GetDoorControl = ffi('GetDoorControl', errcheck)
-        # self.SetDoorControl = ffi('SetDoorControl', errcheck)
-        # self.OpenDoor = ffi('OpenDoor', errcheck)
+        self.SetAddress = ffi('SetAddress', errcheck)
+        self.GetStatus = ffi('GetStatus', errcheck)
+        self.GetTime = ffi('GetTime', errcheck)
+        self.SetTime = ffi('SetTime', errcheck)
+        self.GetListener = ffi('GetListener', errcheck)
+        self.SetListener = ffi('SetListener', errcheck)
+        self.GetDoorControl = ffi('GetDoorControl', errcheck)
+        self.SetDoorControl = ffi('SetDoorControl', errcheck)
+        self.OpenDoor = ffi('OpenDoor', errcheck)
         # self.GetCards = ffi('GetCards', errcheck)
         # self.GetCard = ffi('GetCard', errcheck)
         # self.GetCardByIndex = ffi('GetCardByIndex', errcheck)
@@ -827,15 +818,6 @@ class FFI:
 class FFIX:
 
     def __init__(self, errcheck):
-        self.SetAddress = ffix('SetAddress', errcheck)
-        self.GetStatus = ffix('GetStatus', errcheck)
-        self.GetTime = ffix('GetTime', errcheck)
-        self.SetTime = ffix('SetTime', errcheck)
-        self.GetListener = ffix('GetListener', errcheck)
-        self.SetListener = ffix('SetListener', errcheck)
-        self.GetDoorControl = ffix('GetDoorControl', errcheck)
-        self.SetDoorControl = ffix('SetDoorControl', errcheck)
-        self.OpenDoor = ffix('OpenDoor', errcheck)
         self.GetCards = ffix('GetCards', errcheck)
         self.GetCard = ffix('GetCard', errcheck)
         self.GetCardByIndex = ffix('GetCardByIndex', errcheck)
@@ -886,15 +868,15 @@ def libfunctions():
     return {
         'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_uint32), POINTER(ctypes.c_int), POINTER(GoError)]),
         'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, POINTER(GoError)]),
-        'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
-        'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'SetTime':                  (lib.SetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
-        'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), c_char_p, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'SetListener':              (lib.SetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, POINTER(ctypes.c_int)]),
-        'GetDoorControl':           (lib.GetDoorControl,           [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
-        'SetDoorControl':           (lib.SetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
-        'OpenDoor':                 (lib.OpenDoor,                 [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
+        'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p, POINTER(GoError)]),
+        'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong,POINTER(GoError)]),
+        'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_char_p, c_ulong, POINTER(GoError)]),
+        'SetTime':                  (lib.SetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(GoError)]),
+        'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), c_char_p, c_ulong, POINTER(GoError)]),
+        'SetListener':              (lib.SetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(GoError)]),
+        'GetDoorControl':           (lib.GetDoorControl,           [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte, POINTER(GoError)]),
+        'SetDoorControl':           (lib.SetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte, POINTER(GoError)]),
+        'OpenDoor':                 (lib.OpenDoor,                 [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoError)]),
         'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
@@ -923,13 +905,13 @@ def libfunctions():
 
 class GoError(Structure):
     _fields_ = [
-        ('size', c_int),
+        ('len', c_int),
         ('message', c_char_p),
     ]
 
     def __init__(self):
         super(GoError, self).__init__()
-        self.size = 256
+        self.len = 256
         self.message = c_char_p(bytes(' ' * 256, 'utf-8'))
 
 

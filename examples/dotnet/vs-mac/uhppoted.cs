@@ -84,7 +84,7 @@ namespace uhppoted
             uint[] slice;
             GoError err = new GoError();
 
-            err.size = 256;
+            err.len = 256;
             err.message = Marshal.AllocHGlobal(256);
 
             try
@@ -125,7 +125,7 @@ namespace uhppoted
             device.version = Marshal.AllocHGlobal(7);
             device.date = Marshal.AllocHGlobal(11);
 
-            err.size = 256;
+            err.len = 256;
             err.message = Marshal.AllocHGlobal(256);
 
             try
@@ -161,19 +161,21 @@ namespace uhppoted
         public void SetAddress(uint deviceID, string address, string subnet,
                                string gateway)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             {
-                if (SetAddress(ref this.u, deviceID, address, subnet, gateway, err, ref errN) != 0) 
+                if (SetAddress(ref this.u, deviceID, address, subnet, gateway, ref err) != 0) 
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
@@ -181,8 +183,10 @@ namespace uhppoted
         {
             GoStatus status = new GoStatus();
             GoEvent _evt = new GoEvent();
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             _evt.timestamp = Marshal.AllocHGlobal(20);
 
@@ -195,9 +199,9 @@ namespace uhppoted
 
             try
             {
-                if (GetStatus(ref this.u, ref status, deviceID,err, ref errN) != 0)  
+                if (GetStatus(ref this.u, ref status, deviceID, ref err) != 0)  
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 string sysdatetime = Marshal.PtrToStringAnsi(status.sysdatetime)!;
@@ -250,21 +254,23 @@ namespace uhppoted
                 Marshal.FreeHGlobal(status.doors);
                 Marshal.FreeHGlobal(status.buttons);
                 Marshal.FreeHGlobal(status.evt);
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public string GetTime(uint deviceID)
         {
             IntPtr datetime = Marshal.AllocHGlobal(20);
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (GetTime(ref this.u, datetime, deviceID, err, ref errN) != 0)
+                if (GetTime(ref this.u, datetime, deviceID, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 return Marshal.PtrToStringAnsi(datetime)!;
@@ -272,39 +278,43 @@ namespace uhppoted
             finally
             {
                 Marshal.FreeHGlobal(datetime);
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void SetTime(uint deviceID, string datetime)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (SetTime(ref this.u, deviceID, datetime, err, ref errN) != 0)
+                if (SetTime(ref this.u, deviceID, datetime, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public string GetListener(uint deviceID)
         {
             IntPtr listener = Marshal.AllocHGlobal(22);
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (GetListener(ref this.u, listener, deviceID, err, ref errN) != 0)
+                if (GetListener(ref this.u, listener, deviceID, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 return Marshal.PtrToStringAnsi(listener)!;
@@ -312,83 +322,91 @@ namespace uhppoted
             finally
             {
                 Marshal.FreeHGlobal(listener);
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void SetListener(uint deviceID, string listener)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (SetListener(ref this.u, deviceID, listener, err, ref errN) != 0)
+                if (SetListener(ref this.u, deviceID, listener, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public DoorControl GetDoorControl(uint deviceID, byte door)
         {
             GoDoorControl control = new GoDoorControl();
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (GetDoorControl(ref this.u, ref control, deviceID, door, err, ref errN) != 0)
+                if (GetDoorControl(ref this.u, ref control, deviceID, door, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 return new DoorControl(control.control, control.delay);
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
 
         }
 
         public void SetDoorControl(uint deviceID, byte door, byte mode, byte delay)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (SetDoorControl(ref this.u, deviceID, door, mode, delay, err, ref errN) != 0)
+                if (SetDoorControl(ref this.u, deviceID, door, mode, delay, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void OpenDoor(uint deviceID, byte door)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (OpenDoor(ref this.u, deviceID, door, err, ref errN) != 0)
+                if (OpenDoor(ref this.u, deviceID, door, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
@@ -1013,7 +1031,7 @@ namespace uhppoted
                 throw new UhppotedException("unknown error");
             }
 
-            string? msg = Marshal.PtrToStringAnsi(err.message, err.size);
+            string? msg = Marshal.PtrToStringAnsi(err.message, err.len);
             if (msg == null)
             {
                 throw new UhppotedException("unknown error");
@@ -1031,31 +1049,31 @@ namespace uhppoted
         private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, IntPtr err, ref int errN);
+        private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, IntPtr err, ref int errN);
+        private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetTime(ref UHPPOTE u, IntPtr datetime, uint deviceID, IntPtr err, ref int errN);
+        private static extern int GetTime(ref UHPPOTE u, IntPtr datetime, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, IntPtr err, ref int errN);
+        private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, IntPtr err, ref int errN);
+        private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, IntPtr err, ref int errN);
+        private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door, IntPtr err, ref int errN);
+        private static extern int GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, IntPtr err, ref int errN);
+        private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, IntPtr err, ref int errN);
+        private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, IntPtr err, ref int errN);
@@ -1152,7 +1170,7 @@ namespace uhppoted
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoError {
-            public int size;
+            public int len;
             public IntPtr message; // array of char
         }
 

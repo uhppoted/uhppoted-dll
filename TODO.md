@@ -6,21 +6,22 @@
       - [x] CCL: fix all make-heap-ivector
       - [x] CCL: tests on github
       - [ ] CCL: return code is a pointer ??
+      - (?) Reorder parameters
 
       - [x] Use C.cchar_t
       - [x] error handling tests
       - [ ] Make errmsg a struct
-            - [ ] get-devices
-            - [ ] get-device
-            - [ ] set-address
-            - [ ] get-status
-            - [ ] get-time
-            - [ ] set-time
-            - [ ] get-listener
-            - [ ] set-listener
-            - [ ] get-door-control
-            - [ ] set-door-control
-            - [ ] open-door
+            - [x] get-devices
+            - [x] get-device
+            - [x] set-address
+            - [x] get-status
+            - [x] get-time
+            - [x] set-time
+            - [x] get-listener
+            - [x] set-listener
+            - [x] get-door-control
+            - [x] set-door-control
+            - [x] open-door
             - [ ] get-cards
             - [ ] get-card
             - [ ] get-card-by-index
@@ -43,8 +44,6 @@
             - [ ] set-door-passcodes
             - [ ] restore-default-parameters
             - [ ] listen
-
-      - [ ] Reorder parameters
 
       - [x] get-devices
       - [x] get-device

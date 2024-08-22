@@ -70,7 +70,7 @@ uhppoted_exception::uhppoted_exception(char *err) {
 
 uhppoted_exception::uhppoted_exception(const char *err, int N) { message = std::string(err, N); }
 
-uhppoted_exception::uhppoted_exception(const error &err) { message = std::string(err.message, err.size); }
+uhppoted_exception::uhppoted_exception(const error &err) { message = std::string(err.message, err.len); }
 
 uhppoted_exception::~uhppoted_exception() {}
 
@@ -158,7 +158,7 @@ vector<uint32_t> uhppoted::get_devices() {
     char errmsg[256] = "";
 
     error err = {
-        .size = sizeof(errmsg),
+        .len = sizeof(errmsg),
         .message = errmsg,
     };
 
@@ -202,7 +202,7 @@ struct device uhppoted::get_device(uint32_t id) {
     };
 
     error err = {
-        .size = sizeof(errmsg),
+        .len = sizeof(errmsg),
         .message = errmsg,
     };
 
@@ -224,19 +224,25 @@ struct device uhppoted::get_device(uint32_t id) {
 }
 
 void uhppoted::set_address(uint32_t id, std::string &address, std::string &subnet, std::string &gateway) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetAddress(u, id, (char *)address.c_str(), (char *)subnet.c_str(), (char *)gateway.c_str(), err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetAddress(u, id, (char *)address.c_str(), (char *)subnet.c_str(), (char *)gateway.c_str(), &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
 status uhppoted::get_status(unsigned id) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
 
     char sysdatetime[20];
     vector<uint8_t> doors(4);
@@ -254,8 +260,8 @@ status uhppoted::get_status(unsigned id) {
         .event = &event,
     };
 
-    if ((rc = GetStatus(u, &status, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    if (GetStatus(u, &status, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     struct status s;
@@ -294,59 +300,74 @@ status uhppoted::get_status(unsigned id) {
 }
 
 string uhppoted::get_time(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
     char datetime[20] = "";
+    char errmsg[256] = "";
 
-    if ((rc = GetTime(u, datetime, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetTime(u, datetime, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     return string(datetime);
 }
 
 void uhppoted::set_time(uint32_t id, std::string &datetime) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetTime(u, id, (char *)datetime.c_str(), err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetTime(u, id, (char *)datetime.c_str(), &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
 string uhppoted::get_listener(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
     char listener[22] = "";
+    char errmsg[256] = "";
 
-    if ((rc = GetListener(u, listener, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetListener(u, listener, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     return listener;
 }
 
 void uhppoted::set_listener(uint32_t id, std::string &listener) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetListener(u, id, listener.c_str(), err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetListener(u, id, listener.c_str(), &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
 struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
     struct DoorControl control;
+    char errmsg[256] = "";
 
-    if ((rc = GetDoorControl(u, &control, id, door, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetDoorControl(u, &control, id, door, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     struct door_control d = {
@@ -358,22 +379,28 @@ struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
 }
 
 void uhppoted::set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetDoorControl(u, id, door, mode, delay, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetDoorControl(u, id, door, mode, delay, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::open_door(uint32_t id, uint8_t door) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = OpenDoor(u, id, door, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (OpenDoor(u, id, door, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
