@@ -568,55 +568,61 @@ namespace uhppoted
         public uint GetEventIndex(uint deviceID)
         {
             uint index = 0;
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (GetEventIndex(ref this.u, ref index, deviceID, err, ref errN) != 0)
+                if (GetEventIndex(ref this.u, ref index, deviceID, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 return index;
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void SetEventIndex(uint deviceID, uint index)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (SetEventIndex(ref this.u, deviceID, index, err, ref errN) != 0)
+                if (SetEventIndex(ref this.u, deviceID, index, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public Event GetEvent(uint deviceID, uint index)
         {
             GoEvent evt = new GoEvent();
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
 
             evt.timestamp = Marshal.AllocHGlobal(20);
 
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
+
             try
             { 
-                if (GetEvent(ref this.u, ref evt, deviceID, index, err, ref errN) != 0)
+                if (GetEvent(ref this.u, ref evt, deviceID, index, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 string timestamp = Marshal.PtrToStringAnsi(evt.timestamp)!;
@@ -633,25 +639,27 @@ namespace uhppoted
             finally
             {
                 Marshal.FreeHGlobal(evt.timestamp);
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void RecordSpecialEvents(uint deviceID, bool enabled)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (RecordSpecialEvents(ref this.u, deviceID, enabled, err, ref errN) != 0)
+                if (RecordSpecialEvents(ref this.u, deviceID, enabled, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
@@ -1106,16 +1114,16 @@ namespace uhppoted
         private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID, IntPtr err, ref int errN);
+        private static extern int GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int SetEventIndex(ref UHPPOTE u, uint deviceID, uint index, IntPtr err, ref int errN);
+        private static extern int SetEventIndex(ref UHPPOTE u, uint deviceID, uint index, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index, IntPtr err, ref int errN);
+        private static extern int GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, IntPtr err, ref int errN);
+        private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID, IntPtr err, ref int errN);

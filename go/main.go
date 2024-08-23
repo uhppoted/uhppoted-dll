@@ -347,39 +347,39 @@ func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 }
 
 //export GetEventIndex
-func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getEventIndex(uu, index, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetEventIndex
-func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setEventIndex(uu, deviceID, index)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetEvent
-func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getEvent(uu, event, deviceID, index)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export RecordSpecialEvents
-func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, errmsg *C.cchar_t, errN *C.int) C.int {
+func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return recordSpecialEvents(uu, deviceID, enabled)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetTimeProfile

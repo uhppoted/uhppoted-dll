@@ -30,6 +30,8 @@ void setEventIndex(uhppoted &u, int argc, char **argv) {
     uint32_t deviceID = options.device_id;
     uint32_t index = options.event_index;
 
+    u.set_event_index(deviceID, index);
+
     vector<field> fields = {
         field("ID", deviceID),
         field("index", index),

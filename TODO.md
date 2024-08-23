@@ -28,10 +28,10 @@
             - [x] put-card
             - [x] delete-card
             - [x] delete-cards
-            - [ ] get-event-index
-            - [ ] set-event-index
-            - [ ] get-event
-            - [ ] record-special-events
+            - [x] get-event-index
+            - [x] set-event-index
+            - [x] get-event
+            - [x] record-special-events
             - [ ] get-time-profile
             - [ ] set-time-profile
             - [ ] clear-time-profiles

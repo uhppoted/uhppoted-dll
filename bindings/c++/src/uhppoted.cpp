@@ -531,24 +531,30 @@ void uhppoted::delete_cards(uint32_t id) {
 
 uint32_t uhppoted::get_event_index(uint32_t id) {
     uint32_t index;
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetEventIndex(u, &index, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetEventIndex(u, &index, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     return index;
 }
 
 void uhppoted::set_event_index(uint32_t id, uint32_t index) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetEventIndex(u, id, index, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetEventIndex(u, id, index, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
@@ -558,12 +564,15 @@ event uhppoted::get_event(uint32_t id, uint32_t index) {
         .timestamp = timestamp,
     };
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetEvent(u, &event, id, index, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetEvent(u, &event, id, index, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     struct event e;
@@ -581,12 +590,15 @@ event uhppoted::get_event(uint32_t id, uint32_t index) {
 }
 
 void uhppoted::record_special_events(uint32_t id, bool enabled) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = RecordSpecialEvents(u, id, enabled, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (RecordSpecialEvents(u, id, enabled, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 

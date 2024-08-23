@@ -587,12 +587,15 @@ int delete_cards(uint32_t id) {
 
 int get_event_index(uint32_t id, uint32_t *index) {
     uint32_t ix;
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetEventIndex(u, &ix, id, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetEventIndex(u, &ix, id, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -602,12 +605,15 @@ int get_event_index(uint32_t id, uint32_t *index) {
 }
 
 int set_event_index(uint32_t id, uint32_t index) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetEventIndex(u, id, index, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetEventIndex(u, id, index, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -620,12 +626,15 @@ int get_event(uint32_t id, uint32_t index, event *e) {
         .timestamp = timestamp,
     };
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetEvent(u, &event, id, index, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetEvent(u, &event, id, index, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -642,12 +651,15 @@ int get_event(uint32_t id, uint32_t index, event *e) {
 }
 
 int record_special_events(uint32_t id, bool enabled) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = RecordSpecialEvents(u, id, enabled, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (RecordSpecialEvents(u, id, enabled, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 

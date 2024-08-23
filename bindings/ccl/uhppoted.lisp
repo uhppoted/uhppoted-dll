@@ -699,7 +699,7 @@
 (defun uhppoted-delete-cards (uhppote device-id) "Deletes all cards from a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((err (:struct :GoError) :len     errlen
+    (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
     (with-macptrs ((ok (external-call "DeleteCards" :address uhppote 
                                                     :unsigned-long device-id 
@@ -714,16 +714,16 @@
 (defun uhppoted-get-event-index (uhppote device-id) "Retrieves the current event index from a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((index :signed-long 0)
-           (errN :signed-long errlen))
-    (with-macptrs ((err (external-call "GetEventIndex" :address uhppote 
-                                                       :address index
-                                                       :unsigned-long device-id 
-                                                       :address errmsgp
-                                                       :address errN
-                                                       :signed-long)))
+    (rletz ((index :signed-long 0)
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "GetEventIndex" :address uhppote 
+                                                      :address index
+                                                      :unsigned-long device-id 
+                                                      :address err
+                                                      :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (%get-unsigned-long index)))
     (dispose-heap-ivector errmsg))))
 
@@ -731,15 +731,15 @@
 (defun uhppoted-set-event-index (uhppote device-id index) "Retrieves the current event index from a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long errlen))
-    (with-macptrs ((err (external-call "SetEventIndex" :address uhppote 
-                                                       :unsigned-long device-id 
-                                                       :unsigned-long index
-                                                       :address errmsgp
-                                                       :address errN
-                                                       :signed-long)))
+    (rletz ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "SetEventIndex" :address uhppote 
+                                                      :unsigned-long device-id 
+                                                      :unsigned-long index
+                                                      :address err
+                                                      :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 
@@ -749,16 +749,16 @@
   (multiple-value-bind (timestamp timestampp)     (make-heap-ivector 20  '(unsigned-byte 8))
   (unwind-protect
     (rletz ((event (:struct :GoEvent) :timestamp timestampp)
-            (errN :signed-long errlen))
-    (with-macptrs ((err (external-call "GetEvent" :address uhppote 
-                                                  :address event
-                                                  :unsigned-long device-id 
-                                                  :unsigned-long index
-                                                  :address errmsgp
-                                                  :address errN
-                                                  :signed-long)))
+            (err   (:struct :GoError) :len     errlen
+                                      :message errmsgp))
+    (with-macptrs ((ok (external-call "GetEvent" :address uhppote 
+                                                 :address event
+                                                 :unsigned-long device-id 
+                                                 :unsigned-long index
+                                                 :address err
+                                                 :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-event :timestamp  (%get-cstring (pref event :GoEvent.timestamp))
                   :index      (pref event :GoEvent.index)
                   :event-type (pref event :GoEvent.event-type)
@@ -774,15 +774,15 @@
 (defun uhppoted-record-special-events (uhppote device-id enabled) "Enables/disables recording additional events for a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rletz ((errN :signed-long errlen))
-    (with-macptrs ((err (external-call "RecordSpecialEvents" :address uhppote 
-                                                             :unsigned-long device-id 
-                                                             :unsigned-byte (if enabled 1 0)
-                                                             :address errmsgp
-                                                             :address errN
-                                                             :signed-long)))
+    (rletz ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "RecordSpecialEvents" :address uhppote 
+                                                            :unsigned-long device-id 
+                                                            :unsigned-byte (if enabled 1 0)
+                                                            :address err
+                                                            :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 

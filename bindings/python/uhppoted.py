@@ -410,38 +410,34 @@ class Uhppote:
 
     def get_event_index(self, deviceID):
         index = ctypes.c_ulong(0)
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.GetEventIndex(self._uhppote, byref(index), deviceID, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetEventIndex(self._uhppote, byref(index), deviceID, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         return index.value
 
     def set_event_index(self, deviceID, index):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetEventIndex(self._uhppote, deviceID, index, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetEventIndex(self._uhppote, deviceID, index, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def get_event(self, deviceID, index):
         event = GoEvent()
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.GetEvent(self._uhppote, byref(event), deviceID, index, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetEvent(self._uhppote, byref(event), deviceID, index, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         return Event(event.timestamp.decode('utf-8'), event.index, event.eventType, event.granted, event.door, event.direction, event.card,
                      event.reason)
 
     def record_special_events(self, deviceID, enabled):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.RecordSpecialEvents(self._uhppote, deviceID, enabled, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.RecordSpecialEvents(self._uhppote, deviceID, enabled, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def get_time_profile(self, deviceID, profileID):
         profile = GoTimeProfile()
@@ -791,10 +787,10 @@ class FFI:
         self.PutCard = ffi('PutCard', errcheck)
         self.DeleteCard = ffi('DeleteCard', errcheck)
         self.DeleteCards = ffi('DeleteCards', errcheck)
-        # self.GetEventIndex = ffi('GetEventIndex', errcheck)
-        # self.SetEventIndex = ffi('SetEventIndex', errcheck)
-        # self.GetEvent = ffi('GetEvent', errcheck)
-        # self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
+        self.GetEventIndex = ffi('GetEventIndex', errcheck)
+        self.SetEventIndex = ffi('SetEventIndex', errcheck)
+        self.GetEvent = ffi('GetEvent', errcheck)
+        self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
         # self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
         # self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
         # self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
@@ -812,10 +808,6 @@ class FFI:
 class FFIX:
 
     def __init__(self, errcheck):
-        self.GetEventIndex = ffix('GetEventIndex', errcheck)
-        self.SetEventIndex = ffix('SetEventIndex', errcheck)
-        self.GetEvent = ffix('GetEvent', errcheck)
-        self.RecordSpecialEvents = ffix('RecordSpecialEvents', errcheck)
         self.GetTimeProfile = ffix('GetTimeProfile', errcheck)
         self.SetTimeProfile = ffix('SetTimeProfile', errcheck)
         self.ClearTimeProfiles = ffix('ClearTimeProfiles', errcheck)
@@ -871,10 +863,10 @@ def libfunctions():
         'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong, POINTER(GoError)]),
         'DeleteCard':               (lib.DeleteCard,               [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoError)]),
         'DeleteCards':              (lib.DeleteCards,              [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
-        'GetEventIndex':            (lib.GetEventIndex,            [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'SetEventIndex':            (lib.SetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'GetEvent':                 (lib.GetEvent,                 [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'RecordSpecialEvents':      (lib.RecordSpecialEvents,      [POINTER(GoUHPPOTE), c_ulong, c_bool, c_char_p, POINTER(ctypes.c_int)]),
+        'GetEventIndex':            (lib.GetEventIndex,            [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong, POINTER(GoError)]),
+        'SetEventIndex':            (lib.SetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoError)]),
+        'GetEvent':                 (lib.GetEvent,                 [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong, POINTER(GoError)]),
+        'RecordSpecialEvents':      (lib.RecordSpecialEvents,      [POINTER(GoUHPPOTE), c_ulong, c_bool, POINTER(GoError)]),
         'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
         'SetTimeProfile':           (lib.SetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile), c_char_p, POINTER(ctypes.c_int)]),
         'ClearTimeProfiles':        (lib.ClearTimeProfiles,        [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
