@@ -105,7 +105,7 @@ const command commands[] = {
     {
         .cmd = "delete-card",
         .help = "Deletes a card from a controller.",
-        .fn = getCard,
+        .fn = deleteCard,
     },
     {
         .cmd = "delete-cards",

@@ -293,57 +293,57 @@ func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8, err *C.error) C.
 }
 
 //export GetCards
-func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getCards(uu, N, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetCard
-func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getCard(uu, card, deviceID, cardNumber)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetCardByIndex
-func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getCardByIndex(uu, card, deviceID, index)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export PutCard
-func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.cchar_t, doors *uint8, PIN uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.cchar_t, doors *uint8, PIN uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return putCard(uu, deviceID, cardNumber, from, to, doors, PIN)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export DeleteCard
-func DeleteCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func DeleteCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return deleteCard(uu, deviceID, cardNumber)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export DeleteCards
-func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return deleteCards(uu, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export GetEventIndex

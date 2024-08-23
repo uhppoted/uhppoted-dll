@@ -22,12 +22,12 @@
             - [x] get-door-control
             - [x] set-door-control
             - [x] open-door
-            - [ ] get-cards
-            - [ ] get-card
-            - [ ] get-card-by-index
-            - [ ] put-card
-            - [ ] delete-card
-            - [ ] delete-cards
+            - [x] get-cards
+            - [x] get-card
+            - [x] get-card-by-index
+            - [x] put-card
+            - [x] delete-card
+            - [x] delete-cards
             - [ ] get-event-index
             - [ ] set-event-index
             - [ ] get-event

@@ -573,16 +573,16 @@
 (defun uhppoted-get-cards (uhppote device-id) "Retrieves the number of cards stored on a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((N :signed-long 0)
-           (errN :signed-long errlen))
-    (with-macptrs ((err (external-call "GetCards" :address uhppote 
+    (rletz ((N :signed-long 0)
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "GetCards" :address uhppote 
                                                  :address N 
-                                                  :unsigned-long device-id 
-                                                  :address errmsgp
-                                                  :address errN
-                                                  :signed-long)))
+                                                 :unsigned-long device-id 
+                                                 :address err
+                                                 :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (%get-signed-long N)))
   (dispose-heap-ivector errmsg))))
 
@@ -596,16 +596,16 @@
     (rletz ((card (:struct :GoCard) :from  fromp
                                     :to    top
                                     :doors doors)
-            (errN :signed-long errlen))
-      (with-macptrs ((err (external-call "GetCard" :address uhppote 
-                                                   :address card
-                                                   :unsigned-long device-id 
-                                                   :unsigned-long card-number
-                                                   :address errmsgp
-                                                   :address errN
-                                                   :signed-long)))
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+      (with-macptrs ((ok (external-call "GetCard" :address uhppote 
+                                                  :address card
+                                                  :unsigned-long device-id 
+                                                  :unsigned-long card-number
+                                                  :address err
+                                                  :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
         (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
                    :from        (%get-cstring       (pref card :GoCard.from))
                    :to          (%get-cstring       (pref card :GoCard.to))
@@ -628,16 +628,16 @@
     (rletz ((card (:struct :GoCard) :from  fromp
                                     :to    top
                                     :doors doors)
-            (errN :signed-long errlen))
-      (with-macptrs ((err (external-call "GetCardByIndex" :address uhppote 
-                                                          :address card
-                                                          :unsigned-long device-id 
-                                                          :unsigned-long index
-                                                          :address errmsgp
-                                                          :address errN
-                                                          :signed-long)))
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+      (with-macptrs ((ok (external-call "GetCardByIndex" :address uhppote 
+                                                         :address card
+                                                         :unsigned-long device-id 
+                                                         :unsigned-long index
+                                                         :address err
+                                                         :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
         (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
                    :from        (%get-cstring       (pref card :GoCard.from))
                    :to          (%get-cstring       (pref card :GoCard.to))
@@ -657,24 +657,24 @@
                  (to_   to))
     (multiple-value-bind (doors_ pdoors) (make-heap-ivector 4 '(unsigned-byte 8))
       (unwind-protect
-        (rlet ((errN :signed-long errlen))
+        (rletz ((err (:struct :GoError) :len     errlen
+                                        :message errmsgp))
         (progn
           (setf (paref pdoors (:* :unsigned-byte) 0) (aref doors 0))
           (setf (paref pdoors (:* :unsigned-byte) 1) (aref doors 1))
           (setf (paref pdoors (:* :unsigned-byte) 2) (aref doors 2))
           (setf (paref pdoors (:* :unsigned-byte) 3) (aref doors 3))
-          (with-macptrs ((err (external-call "PutCard" :address uhppote 
-                                                       :unsigned-long device-id 
-                                                       :unsigned-long card-number
-                                                       :address       from_  
-                                                       :address       to_
-                                                       :address       pdoors
-                                                       :unsigned-long PIN
-                                                       :address errmsgp
-                                                       :address errN
-                                                       :signed-long)))
+          (with-macptrs ((ok (external-call "PutCard" :address uhppote 
+                                                      :unsigned-long device-id 
+                                                      :unsigned-long card-number
+                                                      :address       from_  
+                                                      :address       to_
+                                                      :address       pdoors
+                                                      :unsigned-long PIN
+                                                      :address err
+                                                      :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t)))
     (dispose-heap-ivector doors_)
     (dispose-heap-ivector errmsg))))))
@@ -683,15 +683,15 @@
 (defun uhppoted-delete-card (uhppote device-id card-number) "Deletes a card from a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long errlen))
-    (with-macptrs ((err (external-call "DeleteCard" :address uhppote 
-                                                    :unsigned-long device-id 
-                                                    :unsigned-long card-number
-                                                    :address errmsgp
-                                                    :address errN
-                                                    :signed-long)))
+    (rletz ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "DeleteCard" :address uhppote 
+                                                   :unsigned-long device-id 
+                                                   :unsigned-long card-number
+                                                   :address err
+                                                   :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 
@@ -699,14 +699,14 @@
 (defun uhppoted-delete-cards (uhppote device-id) "Deletes all cards from a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long errlen))
-    (with-macptrs ((err (external-call "DeleteCards" :address uhppote 
-                                                     :unsigned-long device-id 
-                                                     :address errmsgp
-                                                     :address errN
-                                                     :signed-long)))
+    (rlet ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "DeleteCards" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :address err
+                                                    :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 

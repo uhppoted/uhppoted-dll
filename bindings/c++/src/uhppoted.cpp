@@ -406,12 +406,15 @@ void uhppoted::open_door(uint32_t id, uint8_t door) {
 
 int uhppoted::get_cards(uint32_t id) {
     int N;
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetCards(u, &N, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetCards(u, &N, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     return N;
@@ -427,12 +430,15 @@ card uhppoted::get_card(uint32_t id, uint32_t card_number) {
         .doors = doors.data(),
     };
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetCard(u, &card, id, card_number, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetCard(u, &card, id, card_number, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     struct card c;
@@ -459,12 +465,15 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
         .doors = doors.data(),
     };
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetCardByIndex(u, &card, id, index, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetCardByIndex(u, &card, id, index, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     struct card c;
@@ -482,32 +491,41 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
 }
 
 void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string to, uint8_t doors[4], uint32_t PIN) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = PutCard(u, id, card_number, (char *)from.c_str(), (char *)to.c_str(), (uint8_t *)doors, PIN, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (PutCard(u, id, card_number, (char *)from.c_str(), (char *)to.c_str(), (uint8_t *)doors, PIN, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::delete_card(uint32_t id, uint32_t card_number) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = DeleteCard(u, id, card_number, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (DeleteCard(u, id, card_number, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::delete_cards(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = DeleteCards(u, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (DeleteCards(u, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 

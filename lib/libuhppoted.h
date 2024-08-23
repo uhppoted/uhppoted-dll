@@ -206,12 +206,12 @@ extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* listener, 
 extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door, error* err);
 extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, error* err);
 extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, error* err);
-extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern int GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* errmsg, int* errN);
-extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
-extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* from, cchar_t* to, GoUint8* doors, GoUint32 PIN, cchar_t* errmsg, int* errN);
-extern int DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* errmsg, int* errN);
-extern int DeleteCards(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, error* err);
+extern int GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber, error* err);
+extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index, error* err);
+extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* from, cchar_t* to, GoUint8* doors, GoUint32 PIN, error* err);
+extern int DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, error* err);
+extern int DeleteCards(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern int SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);
 extern int GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index, cchar_t* errmsg, int* errN);

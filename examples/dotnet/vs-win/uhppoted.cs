@@ -412,40 +412,44 @@ namespace uhppoted
 
         public uint GetCards(uint deviceID)
         {
-            uint N = 0;
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            uint cards = 0;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (GetCards(ref this.u, ref N, deviceID, err, ref errN) != 0)
+                if (GetCards(ref this.u, ref cards, deviceID, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
-                return N;
+                return cards;
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public Card GetCard(uint deviceID, uint cardNumber)
         {
             GoCard card = new GoCard();
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
 
             card.from = Marshal.AllocHGlobal(11);
             card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
 
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
+
             try
             { 
-                if (GetCard(ref this.u, ref card, deviceID, cardNumber, err, ref errN) != 0)
+                if (GetCard(ref this.u, ref card, deviceID, cardNumber, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 string from = Marshal.PtrToStringAnsi(card.from)!;
@@ -461,25 +465,27 @@ namespace uhppoted
                 Marshal.FreeHGlobal(card.from);
                 Marshal.FreeHGlobal(card.to);
                 Marshal.FreeHGlobal(card.doors);
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public Card GetCardByIndex(uint deviceID, uint index)
         {
             GoCard card = new GoCard();
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
 
             card.from = Marshal.AllocHGlobal(11);
             card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
 
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
+
             try
             { 
-                if (GetCardByIndex(ref this.u, ref card, deviceID, index, err, ref errN) != 0)
+                if (GetCardByIndex(ref this.u, ref card, deviceID, index, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
 
                 string from = Marshal.PtrToStringAnsi(card.from)!;
@@ -495,61 +501,67 @@ namespace uhppoted
                 Marshal.FreeHGlobal(card.from);
                 Marshal.FreeHGlobal(card.to);
                 Marshal.FreeHGlobal(card.doors);
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, err, ref errN) != 0)
+                if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void DeleteCard(uint deviceID, uint cardNumber)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (DeleteCard(ref this.u, deviceID, cardNumber, err, ref errN) != 0)
+                if (DeleteCard(ref this.u, deviceID, cardNumber, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
         public void DeleteCards(uint deviceID)
         {
-            IntPtr err = Marshal.AllocHGlobal(256);
-            int errN = 256;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
 
             try
             { 
-                if (DeleteCards(ref this.u, deviceID, err, ref errN) != 0)
+                if (DeleteCards(ref this.u, deviceID, ref err) != 0)
                 {
-                    raise(err, errN);
+                    raise(err);
                 }
             }
             finally
             {
-                Marshal.FreeHGlobal(err);
+                Marshal.FreeHGlobal(err.message);
             }
         }
 
@@ -1076,22 +1088,22 @@ namespace uhppoted
         private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, IntPtr err, ref int errN);
+        private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber, IntPtr err, ref int errN);
+        private static extern int GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index, IntPtr err, ref int errN);
+        private static extern int GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, IntPtr err, ref int errN);
+        private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber, IntPtr err, ref int errN);
+        private static extern int DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
+        private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID, IntPtr err, ref int errN);
