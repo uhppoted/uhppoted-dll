@@ -9,6 +9,7 @@
 
 ### Updated
 1. C++ Replaced NULL with nullptr (cf. https://stackoverflow.com/questions/1282295/what-is-the-nullptr-keyword-and-why-is-it-better-than-null)
+2. Updated to Go 1.23.
 
 
 ## [0.8.8](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.8) - 2024-03-27

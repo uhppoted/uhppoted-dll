@@ -773,7 +773,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException("unknown error");
         }
 
-        string? msg = Marshal.PtrToStringAnsi(errmsg);
+        string msg = Marshal.PtrToStringAnsi(errmsg);
         if (msg == null) {
             throw new UhppotedException("unknown error");
         }
@@ -786,7 +786,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException("unknown error");
         }
 
-        string? msg = Marshal.PtrToStringAnsi(errmsg, N);
+        string msg = Marshal.PtrToStringAnsi(errmsg, N);
         if (msg == null) {
             throw new UhppotedException("unknown error");
         }
@@ -799,7 +799,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException("unknown error");
         }
 
-        string? msg = Marshal.PtrToStringAnsi(err.message, err.len);
+        string msg = Marshal.PtrToStringAnsi(err.message, err.len);
         if (msg == null) {
             throw new UhppotedException("unknown error");
         }

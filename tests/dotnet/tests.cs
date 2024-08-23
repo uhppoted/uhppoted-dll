@@ -729,7 +729,7 @@ public class Tests {
 
         try {
             u.GetDevice(INVALID_DEVICE_ID);
-        } catch (Exception e) {
+        } catch (Exception) {
             failed["get-controller"] = true;
         }
 
