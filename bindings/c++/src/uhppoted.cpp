@@ -623,12 +623,15 @@ time_profile uhppoted::get_time_profile(uint32_t id, uint8_t profile_id) {
         .segment3end = segment3end,
     };
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetTimeProfile(u, &profile, id, profile_id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetTimeProfile(u, &profile, id, profile_id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 
     struct time_profile p;
@@ -677,22 +680,28 @@ void uhppoted::set_time_profile(uint32_t id, const time_profile &p) {
     profile.segment3start = (char *)p.segment3start.c_str();
     profile.segment3end = (char *)p.segment3end.c_str();
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = SetTimeProfile(u, id, &profile, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetTimeProfile(u, id, &profile, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 
 void uhppoted::clear_time_profiles(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = ClearTimeProfiles(u, id, err, &errN)) != 0) {
-        throw uhppoted_exception(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (ClearTimeProfiles(u, id, &err) != 0) {
+        throw uhppoted_exception(err);
     }
 }
 

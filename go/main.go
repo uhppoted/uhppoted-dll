@@ -383,30 +383,30 @@ func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, err
 }
 
 //export GetTimeProfile
-func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getTimeProfile(uu, profile, deviceID, profileID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetTimeProfile
-func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_TimeProfile, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setTimeProfile(uu, deviceID, profile)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export ClearTimeProfiles
-func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return clearTimeProfiles(uu, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export AddTask

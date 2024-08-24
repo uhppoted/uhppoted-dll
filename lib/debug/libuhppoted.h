@@ -216,9 +216,9 @@ extern int GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID, 
 extern int SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, error* err);
 extern int GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index, error* err);
 extern int RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled, error* err);
-extern int GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID, cchar_t* errmsg, int* errN);
-extern int SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile, cchar_t* errmsg, int* errN);
-extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID, error* err);
+extern int SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile, error* err);
+extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, cchar_t* errmsg, int* errN);
 extern int RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
 extern int ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);

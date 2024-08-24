@@ -441,11 +441,10 @@ class Uhppote:
 
     def get_time_profile(self, deviceID, profileID):
         profile = GoTimeProfile()
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.GetTimeProfile(self._uhppote, byref(profile), deviceID, profileID, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.GetTimeProfile(self._uhppote, byref(profile), deviceID, profileID, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
         return TimeProfile(profile.ID, profile.linked, profile.start.decode('utf-8'), profile.end.decode('utf-8'), profile.monday != 0,
                            profile.tuesday != 0, profile.wednesday != 0, profile.thursday != 0, profile.friday != 0,
@@ -472,18 +471,16 @@ class Uhppote:
                                 segment3start=p.segment3start,
                                 segment3end=p.segment3end)
 
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetTimeProfile(self._uhppote, deviceID, byref(profile), err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetTimeProfile(self._uhppote, deviceID, byref(profile), byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def clear_time_profiles(self, deviceID):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.ClearTimeProfiles(self._uhppote, deviceID, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.ClearTimeProfiles(self._uhppote, deviceID, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def add_task(self, deviceID, t):
         task = GoTask(t.task, t.door, c_char_p(bytes(t.start, 'utf-8')), c_char_p(bytes(t.end, 'utf-8')), 1 if t.monday else 0,
@@ -791,9 +788,9 @@ class FFI:
         self.SetEventIndex = ffi('SetEventIndex', errcheck)
         self.GetEvent = ffi('GetEvent', errcheck)
         self.RecordSpecialEvents = ffi('RecordSpecialEvents', errcheck)
-        # self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
-        # self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
-        # self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
+        self.GetTimeProfile = ffi('GetTimeProfile', errcheck)
+        self.SetTimeProfile = ffi('SetTimeProfile', errcheck)
+        self.ClearTimeProfiles = ffi('ClearTimeProfiles', errcheck)
         # self.AddTask = ffi('AddTask', errcheck)
         # self.RefreshTaskList = ffi('RefreshTaskList', errcheck)
         # self.ClearTaskList = ffi('ClearTaskList', errcheck)
@@ -808,9 +805,6 @@ class FFI:
 class FFIX:
 
     def __init__(self, errcheck):
-        self.GetTimeProfile = ffix('GetTimeProfile', errcheck)
-        self.SetTimeProfile = ffix('SetTimeProfile', errcheck)
-        self.ClearTimeProfiles = ffix('ClearTimeProfiles', errcheck)
         self.AddTask = ffix('AddTask', errcheck)
         self.RefreshTaskList = ffix('RefreshTaskList', errcheck)
         self.ClearTaskList = ffix('ClearTaskList', errcheck)
@@ -867,9 +861,9 @@ def libfunctions():
         'SetEventIndex':            (lib.SetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoError)]),
         'GetEvent':                 (lib.GetEvent,                 [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong, POINTER(GoError)]),
         'RecordSpecialEvents':      (lib.RecordSpecialEvents,      [POINTER(GoUHPPOTE), c_ulong, c_bool, POINTER(GoError)]),
-        'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
-        'SetTimeProfile':           (lib.SetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile), c_char_p, POINTER(ctypes.c_int)]),
-        'ClearTimeProfiles':        (lib.ClearTimeProfiles,        [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
+        'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte, POINTER(GoError)]),
+        'SetTimeProfile':           (lib.SetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile), POINTER(GoError)]),
+        'ClearTimeProfiles':        (lib.ClearTimeProfiles,        [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
         'AddTask':                  (lib.AddTask,                  [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask), c_char_p, POINTER(ctypes.c_int)]),
         'RefreshTaskList':          (lib.RefreshTaskList,          [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
         'ClearTaskList':            (lib.ClearTaskList,            [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),

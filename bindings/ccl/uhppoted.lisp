@@ -806,16 +806,16 @@
                                               :segment2end   segment2endp
                                               :segment3start segment3startp
                                               :segment3end   segment3endp)
-            (errN :signed-long errlen))
-    (with-macptrs ((err (external-call "GetTimeProfile" :address uhppote 
-                                                        :address profile
-                                                        :unsigned-long device-id 
-                                                        :unsigned-byte profile-id
-                                                        :address errmsgp
-                                                        :address errN
-                                                        :signed-long)))
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "GetTimeProfile" :address uhppote
+                                                       :address profile
+                                                       :unsigned-long device-id 
+                                                       :unsigned-byte profile-id
+                                                       :address err
+                                                       :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-time-profile :ID            (pref profile :GoTimeProfile.ID)
                          :linked        (pref profile :GoTimeProfile.linked)
                          :from          (%get-cstring (pref profile :GoTimeProfile.from))
@@ -872,15 +872,15 @@
                                         :segment2end   segment2end
                                         :segment3start segment3start
                                         :segment3end   segment3end)
-            (errN :signed-long errlen))
-    (with-macptrs ((err (external-call "SetTimeProfile" :address       uhppote 
-                                                        :unsigned-long device-id 
-                                                        :address       p
-                                                        :address       errmsgp
-                                                        :address       errN
-                                                        :signed-long)))
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "SetTimeProfile" :address       uhppote 
+                                                       :unsigned-long device-id 
+                                                       :address       p
+                                                       :address       err
+                                                       :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t)))
     (dispose-heap-ivector errmsg))))
 
@@ -888,14 +888,14 @@
 (defun uhppoted-clear-time-profiles (uhppote device-id) "Deletes all time profiles from a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long errlen))
-    (with-macptrs ((err (external-call "ClearTimeProfiles" :address uhppote 
-                                                           :unsigned-long device-id 
-                                                           :address       errmsgp
-                                                           :address       errN
-                                                           :signed-long)))
+    (rletz ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "ClearTimeProfiles" :address uhppote 
+                                                          :unsigned-long device-id 
+                                                          :address       err
+                                                          :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 

@@ -531,8 +531,7 @@ public class Uhppoted : IDisposable {
 
     public TimeProfile GetTimeProfile(uint deviceID, byte profileID) {
         GoTimeProfile profile = new GoTimeProfile();
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
 
         profile.from = Marshal.AllocHGlobal(11);
         profile.to = Marshal.AllocHGlobal(11);
@@ -543,9 +542,12 @@ public class Uhppoted : IDisposable {
         profile.segment3start = Marshal.AllocHGlobal(6);
         profile.segment3end = Marshal.AllocHGlobal(6);
 
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
+
         try {
-            if (GetTimeProfile(ref this.u, ref profile, deviceID, profileID, err, ref errN) != 0) {
-                raise(err, errN);
+            if (GetTimeProfile(ref this.u, ref profile, deviceID, profileID, ref err) != 0) {
+                raise(err);
             }
 
             string from = Marshal.PtrToStringAnsi(profile.from);
@@ -570,14 +572,12 @@ public class Uhppoted : IDisposable {
             Marshal.FreeHGlobal(profile.segment3start);
             Marshal.FreeHGlobal(profile.segment3end);
 
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void SetTimeProfile(uint deviceID, TimeProfile p) {
         GoTimeProfile profile = new GoTimeProfile();
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
 
         profile.ID = p.ID;
         profile.linked = p.linked;
@@ -597,9 +597,14 @@ public class Uhppoted : IDisposable {
         profile.segment3start = Marshal.StringToHGlobalAnsi(p.segment3start);
         profile.segment3end = Marshal.StringToHGlobalAnsi(p.segment3end);
 
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
+
         try {
-            if (SetTimeProfile(ref this.u, deviceID, ref profile, err, ref errN) != 0) {
-                raise(err, errN);
+            if (SetTimeProfile(ref this.u, deviceID, ref profile, ref err) != 0) {
+                raise(err);
             }
         } finally {
             Marshal.FreeHGlobal(profile.from);
@@ -611,20 +616,22 @@ public class Uhppoted : IDisposable {
             Marshal.FreeHGlobal(profile.segment3start);
             Marshal.FreeHGlobal(profile.segment3end);
 
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void ClearTimeProfiles(uint deviceID) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (ClearTimeProfiles(ref this.u, deviceID, err, ref errN) != 0) {
-                raise(err, errN);
+            if (ClearTimeProfiles(ref this.u, deviceID, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
@@ -874,14 +881,13 @@ public class Uhppoted : IDisposable {
     private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID, IntPtr err,
-                                             ref int errN);
+    private static extern int GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile, IntPtr err, ref int errN);
+    private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
+    private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, ref GoError err);
 
     [DllImport(DLL)]
     private static extern int AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task, IntPtr err, ref int errN);

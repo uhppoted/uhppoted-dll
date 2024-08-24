@@ -687,12 +687,15 @@ int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
         .segment3end = segment3end,
     };
 
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = GetTimeProfile(u, &profile, id, profile_id, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetTimeProfile(u, &profile, id, profile_id, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -722,9 +725,6 @@ int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
 
 int set_time_profile(uint32_t id, time_profile *p) {
     struct TimeProfile profile;
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
 
     profile.ID = p->ID;
     profile.linked = p->linked;
@@ -744,8 +744,15 @@ int set_time_profile(uint32_t id, time_profile *p) {
     profile.segment3start = p->segment3start;
     profile.segment3end = p->segment3end;
 
-    if ((rc = SetTimeProfile(u, id, &profile, err, &errN)) != 0) {
-        set_error(err, errN);
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetTimeProfile(u, id, &profile, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -753,12 +760,15 @@ int set_time_profile(uint32_t id, time_profile *p) {
 }
 
 int clear_time_profiles(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
-    int rc;
+    char errmsg[256] = "";
 
-    if ((rc = ClearTimeProfiles(u, id, err, &errN)) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (ClearTimeProfiles(u, id, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 

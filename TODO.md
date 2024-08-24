@@ -33,9 +33,9 @@
             - [x] set-event-index
             - [x] get-event
             - [x] record-special-events
-            - [ ] get-time-profile
-            - [ ] set-time-profile
-            - [ ] clear-time-profiles
+            - [x] get-time-profile
+            - [x] set-time-profile
+            - [x] clear-time-profiles
             - [ ] add-task
             - [ ] refresh-tasklist
             - [ ] clear-tasklist
