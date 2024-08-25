@@ -777,8 +777,6 @@ int clear_time_profiles(uint32_t id) {
 
 int add_task(uint32_t id, task *t) {
     struct Task task;
-    char err[256] = "";
-    int errN = sizeof(err);
 
     task.task = t->task;
     task.door = t->door;
@@ -794,8 +792,15 @@ int add_task(uint32_t id, task *t) {
     task.at = t->at;
     task.cards = t->cards;
 
-    if (AddTask(u, id, &task, err, &errN) != 0) {
-        set_error(err, errN);
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (AddTask(u, id, &task, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -803,11 +808,15 @@ int add_task(uint32_t id, task *t) {
 }
 
 int refresh_tasklist(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
+    char errmsg[256] = "";
 
-    if (RefreshTaskList(u, id, err, &errN) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (RefreshTaskList(u, id, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 
@@ -815,11 +824,15 @@ int refresh_tasklist(uint32_t id) {
 }
 
 int clear_tasklist(uint32_t id) {
-    char err[256] = "";
-    int errN = sizeof(err);
+    char errmsg[256] = "";
 
-    if (ClearTaskList(u, id, err, &errN) != 0) {
-        set_error(err, errN);
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (ClearTaskList(u, id, &err) != 0) {
+        set_error(err.message, err.len);
         return -1;
     }
 

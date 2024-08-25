@@ -4,14 +4,18 @@
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 - [x] Update to Go 1.23 (cf. https://github.com/uhppoted/uhppoted/issues/53)
 - [ ] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
+      - [x] Preallocate memory for strings
+      - [x] Use C.cchar_t
       - [x] CCL: fix all make-heap-ivector
       - [x] CCL: tests on github
       - [ ] CCL: return code is a pointer ??
-      - (?) Reorder parameters
+      - [ ] CHANGELOG
+      - [ ] README
+      - [ ] Documentation
+      - [ ] Reorder parameters
 
-      - [x] Use C.cchar_t
-      - [x] error handling tests
       - [ ] Make errmsg a struct
+            - [x] error handling tests
             - [x] get-devices
             - [x] get-device
             - [x] set-address
@@ -36,49 +40,15 @@
             - [x] get-time-profile
             - [x] set-time-profile
             - [x] clear-time-profiles
-            - [ ] add-task
-            - [ ] refresh-tasklist
-            - [ ] clear-tasklist
+            - [x] add-task
+            - [x] refresh-tasklist
+            - [x] clear-tasklist
             - [ ] set-pc-control
             - [ ] set-interlock
             - [ ] activate-keypads
             - [ ] set-door-passcodes
             - [ ] restore-default-parameters
             - [ ] listen
-
-      - [x] get-devices
-      - [x] get-device
-      - [x] set-address
-      - [x] get-status
-      - [x] get-time
-      - [x] set-time
-      - [x] get-listener
-      - [x] set-listener
-      - [x] get-door-control
-      - [x] set-door-control
-      - [x] open-door
-      - [x] get-cards
-      - [x] get-card
-      - [x] get-card-by-index
-      - [x] put-card
-      - [x] delete-card
-      - [x] delete-cards
-      - [x] get-event-index
-      - [x] set-event-index
-      - [x] get-event
-      - [x] record-special-events
-      - [x] get-time-profile
-      - [x] set-time-profile
-      - [x] clear-time-profiles
-      - [x] add-task
-      - [x] refresh-tasklist
-      - [x] clear-tasklist
-      - [x] set-pc-control
-      - [x] set-interlock
-      - [x] activate-keypads
-      - [x] set-door-passcodes
-      - [x] restore-default-parameters
-      - [x] listen
 
 ## TODO
 

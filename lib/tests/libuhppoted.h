@@ -219,9 +219,9 @@ extern int RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 ena
 extern int GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID, error* err);
 extern int SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile, error* err);
 extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, error* err);
-extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, cchar_t* errmsg, int* errN);
-extern int RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
-extern int ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* errmsg, int* errN);
+extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, error* err);
+extern int RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID, error* err);
+extern int ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled, cchar_t* errmsg, int* errN);
 extern int SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock, cchar_t* errmsg, int* errN);
 extern int ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4, cchar_t* errmsg, int* errN);

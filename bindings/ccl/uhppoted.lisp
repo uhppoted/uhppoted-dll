@@ -919,15 +919,15 @@
                                   :sunday    (if (task-sunday    task) 1 0)
                                   :at at
                                   :cards     (task-cards task))
-            (errN :signed-long errlen))
-     (with-macptrs ((err (external-call "AddTask" :address       uhppote 
-                                                  :unsigned-long device-id 
-                                                  :address       tt
-                                                  :address       errmsgp
-                                                  :address       errN
-                                                  :signed-long)))
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+     (with-macptrs ((ok (external-call "AddTask" :address       uhppote 
+                                                 :unsigned-long device-id 
+                                                 :address       tt
+                                                 :address       err
+                                                 :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
        t)))
     (dispose-heap-ivector errmsg))))
 
@@ -935,14 +935,14 @@
 (defun uhppoted-refresh-tasklist (uhppote device-id) "Refreshes a controller task list to activate added tasks"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long errlen))
-      (with-macptrs ((err (external-call "RefreshTaskList" :address uhppote 
-                                                           :unsigned-long device-id 
-                                                           :address       errmsgp
-                                                           :address       errN
-                                                           :signed-long)))
+    (rletz ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+      (with-macptrs ((ok (external-call "RefreshTaskList" :address uhppote 
+                                                          :unsigned-long device-id 
+                                                          :address       err
+                                                          :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 
@@ -950,14 +950,14 @@
 (defun uhppoted-clear-tasklist (uhppote device-id) "Clears a controller task list"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
-    (rlet ((errN :signed-long errlen))
-    (with-macptrs ((err (external-call "ClearTaskList" :address uhppote 
-                                                       :unsigned-long device-id 
-                                                       :address       errmsgp
-                                                       :address       errN
-                                                       :signed-long)))
+    (rletz ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+    (with-macptrs ((ok (external-call "ClearTaskList" :address uhppote 
+                                                      :unsigned-long device-id 
+                                                      :address       err
+                                                      :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p err) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 

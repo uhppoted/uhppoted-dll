@@ -410,30 +410,30 @@ func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int
 }
 
 //export AddTask
-func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task, errmsg *C.cchar_t, errN *C.int) C.int {
+func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return addTask(uu, deviceID, task)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export RefreshTaskList
-func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return refreshTaskList(uu, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export ClearTaskList
-func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return clearTaskList(uu, deviceID)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetPCControl

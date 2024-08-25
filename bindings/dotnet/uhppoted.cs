@@ -637,8 +637,6 @@ public class Uhppoted : IDisposable {
 
     public void AddTask(uint deviceID, Task t) {
         GoTask task = new GoTask();
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
 
         task.task = t.task;
         task.door = t.door;
@@ -654,38 +652,47 @@ public class Uhppoted : IDisposable {
         task.at = t.at;
         task.cards = t.cards;
 
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
+
         try {
-            if (AddTask(ref this.u, deviceID, ref task, err, ref errN) != 0) {
-                raise(err, errN);
+            if (AddTask(ref this.u, deviceID, ref task, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void RefreshTaskList(uint deviceID) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (RefreshTaskList(ref this.u, deviceID, err, ref errN) != 0) {
-                raise(err, errN);
+            if (RefreshTaskList(ref this.u, deviceID, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void ClearTaskList(uint deviceID) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (ClearTaskList(ref this.u, deviceID, err, ref errN) != 0) {
-                raise(err, errN);
+            if (ClearTaskList(ref this.u, deviceID, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
@@ -890,13 +897,13 @@ public class Uhppoted : IDisposable {
     private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task, IntPtr err, ref int errN);
+    private static extern int AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int RefreshTaskList(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
+    private static extern int RefreshTaskList(ref UHPPOTE u, uint deviceID, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int ClearTaskList(ref UHPPOTE u, uint deviceID, IntPtr err, ref int errN);
+    private static extern int ClearTaskList(ref UHPPOTE u, uint deviceID, ref GoError err);
 
     [DllImport(DLL)]
     private static extern int SetPCControl(ref UHPPOTE u, uint controller, bool enabled, IntPtr err, ref int errN);
