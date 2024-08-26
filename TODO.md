@@ -9,11 +9,11 @@
       - [x] CCL: fix all make-heap-ivector
       - [x] CCL: tests on github
       - [x] Make errmsg a struct
+      - [x] C#/listen: fix in-function flags
       - [ ] CCL: return code is a pointer ??
       - [ ] CHANGELOG
       - [ ] README
       - [ ] Documentation
-      - [ ] C#/listen: fix in-function flags
 
       - [ ] Reorder parameters
             - [ ] get-devices

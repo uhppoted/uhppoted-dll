@@ -978,7 +978,7 @@ namespace uhppoted
         delegate void OnListenEvent([In] GoListenEvent e, IntPtr userdata);
         delegate void OnListenError([In][MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
-        public void ListenEvents(OnEvent on_event, OnError on_error, CancellationToken token, ManualResetEvent stopped, IntPtr userdata)
+        public void ListenEvents(OnEvent on_event, OnError on_error, ref byte listening, ref byte stop, IntPtr userdata)
         {
             OnListenEvent onevent = ([In] GoListenEvent e, IntPtr userdata) =>
             {
@@ -992,7 +992,7 @@ namespace uhppoted
                     e.direction,
                     e.card,
                     e.reason),
-                userdata);
+                    userdata);
             };
 
             OnListenError onerror = ([In][MarshalAs(UnmanagedType.LPUTF8Str)] string err) =>
@@ -1000,41 +1000,11 @@ namespace uhppoted
                 on_error(err);
             };
 
-            TimeSpan delay = TimeSpan.FromMilliseconds(100);
-            byte listening = 0; // NTS C# bool is not uint8_t
-            byte stop = 0;      // NTS C# bool is not uint8_t
-
-            token.Register(() =>
-            {
-                Volatile.Write(ref stop, 1);
-
-                for (int count = 0; count < 5; count++)
-                {
-                    Thread.Sleep(delay);
-                    if (Volatile.Read(ref listening) == 0)
-                    {
-                        stopped.Set();
-                        return;
-                    }
-                }
-            });
-
             int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror, IntPtr.Zero);
             if (err != 0)
             {
-                throw new UhppotedException("error listening for events");
+                throw new UhppotedException("error starting event listener");
             }
-
-            for (int count = 0; count < 5; count++)
-            {
-                Thread.Sleep(delay);
-                if (Volatile.Read(ref listening) == 1)
-                {
-                    return;
-                }
-            }
-
-            throw new UhppotedException("error starting event listener");
         }
 
         private void raise(IntPtr errmsg)

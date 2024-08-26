@@ -869,12 +869,12 @@ public class examples {
         u.ListenEvents(onevent, onerror, ref listening, ref stop, IntPtr.Zero);
 
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !cbool(listening); count++) {
-            WriteLine("DEBUG ... waiting {0} {1}", count, cbool(listening) ? "listening" : "pending");
+        for (int count = 0; (count < 5) && (listening != 1); count++) {
+            WriteLine("DEBUG ... waiting {0} {1}", count, listening == 1 ? "listening" : "pending");
             Thread.Sleep(delay);
         }
 
-        if (!cbool(listening)) {
+        if (listening != 1) {
             WriteLine("ERROR {0}", "failed to start event listener");
             return;
         }
@@ -885,22 +885,18 @@ public class examples {
 
         stop = 1;
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && cbool(listening); count++) {
-            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, cbool(listening) ? "listening" : "stopped");
+        for (int count = 0; (count < 5) && (listening != 0); count++) {
+            WriteLine("DEBUG ... stoppping event listener {0} {1}", count, listening == 1 ? "listening" : "stopped");
             Thread.Sleep(delay);
         }
 
         WriteLine("DEBUG ... waited");
 
-        if (cbool(listening)) {
+        if (listening != 0) {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 
         WriteLine("DEBUG ... thread exit");
-    }
-
-    static bool cbool(byte v) {
-        return v == 1;
     }
 
     static options parse(string[] args) {

@@ -926,6 +926,7 @@ class UhppotedDLLCLI
         thread.Join(timeout);
     }
 
+
     static void listen(Uhppoted u, CancellationToken done)
     {
         Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) =>
@@ -948,19 +949,33 @@ class UhppotedDLLCLI
             WriteLine("ERROR {0}", err);
         };
 
-        CancellationTokenSource stop = new CancellationTokenSource();
-        ManualResetEvent stopped = new ManualResetEvent(false);
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
+        byte listening = 0; // NTS because C# bool is not uint8_t
+        byte stop = 0;      // NTS because C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, stop.Token, stopped, IntPtr.Zero);
+        u.ListenEvents(onevent, onerror, ref listening, ref stop, IntPtr.Zero);
+
+        Thread.Sleep(delay);
+        for (int count = 0; (count < 5) && (listening != 1); count++) {
+            Thread.Sleep(delay);
+        }
+
+        if (listening != 1) {
+            WriteLine("ERROR {0}", "failed to start event listener");
+            return;
+        }
 
         WriteLine("INFO  ... listening");
         done.WaitHandle.WaitOne();
         WriteLine("DEBUG .. stopping");
-        stop.Cancel();
 
-        if (!stopped.WaitOne(delay))
-        {
+        stop = 1;
+        Thread.Sleep(delay);
+        for (int count = 0; (count < 5) && (listening != 0); count++) {
+            Thread.Sleep(delay);
+        }
+
+        if (listening != 0) {
             WriteLine("ERROR timeout waiting for event listener to terminate");
         }
     }
