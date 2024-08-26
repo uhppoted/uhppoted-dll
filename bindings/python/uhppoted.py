@@ -504,39 +504,34 @@ class Uhppote:
             raise Exception(f"{err.message.decode('utf-8')}")
 
     def set_pc_control(self, deviceID, enabled):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetPCControl(self._uhppote, deviceID, enabled, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetPCControl(self._uhppote, deviceID, enabled, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def set_interlock(self, deviceID, interlock):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetInterlock(self._uhppote, deviceID, interlock, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetInterlock(self._uhppote, deviceID, interlock, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def activate_keypads(self, deviceID, reader1, reader2, reader3, reader4):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.ActivateKeypads(self._uhppote, deviceID, reader1, reader2, reader3, reader4, err, byref(errN)) != 0:
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.ActivateKeypads(self._uhppote, deviceID, reader1, reader2, reader3, reader4, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def set_door_passcodes(self, deviceID, door, passcode1, passcode2, passcode3, passcode4):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.SetDoorPasscodes(self._uhppote, deviceID, door, passcode1, passcode2, passcode3, passcode4, err, byref(errN)) != 0:  # yapf: disable
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.SetDoorPasscodes(self._uhppote, deviceID, door, passcode1, passcode2, passcode3, passcode4, byref(err)) != 0:  # yapf: disable
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     def restore_default_parameters(self, deviceID):
-        errN = ctypes.c_int(256)
-        err = c_char_p(bytes('*' * errN.value, 'utf-8'))
+        err = GoError()
 
-        if self.ffix.RestoreDefaultParameters(self._uhppote, deviceID, err, byref(errN)) != 0:  # yapf: disable
-            raise Exception(f"{err.value.decode('utf-8')}")
+        if self.ffi.RestoreDefaultParameters(self._uhppote, deviceID, byref(err)) != 0:  # yapf: disable
+            raise Exception(f"{err.message.decode('utf-8')}")
 
     # Ref. https://docs.python.org/3/library/ctypes.html#callback-functions
     # Ref. https://stackoverflow.com/questions/24912065/how-to-access-data-from-pointer-in-struct-from-python-with-ctypes
@@ -791,22 +786,17 @@ class FFI:
         self.AddTask = ffi('AddTask', errcheck)
         self.RefreshTaskList = ffi('RefreshTaskList', errcheck)
         self.ClearTaskList = ffi('ClearTaskList', errcheck)
-        # self.SetPCControl = ffi('SetPCControl', errcheck)
-        # self.SetInterlock = ffi('SetInterlock', errcheck)
-        # self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
-        # self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
-        # self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
+        self.SetPCControl = ffi('SetPCControl', errcheck)
+        self.SetInterlock = ffi('SetInterlock', errcheck)
+        self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
+        self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
+        self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
         # self.Listen = ffil('Listen', errcheck)
 
 
 class FFIX:
 
     def __init__(self, errcheck):
-        self.SetPCControl = ffix('SetPCControl', errcheck)
-        self.SetInterlock = ffix('SetInterlock', errcheck)
-        self.ActivateKeypads = ffix('ActivateKeypads', errcheck)
-        self.SetDoorPasscodes = ffix('SetDoorPasscodes', errcheck)
-        self.RestoreDefaultParameters = ffix('RestoreDefaultParameters', errcheck)
         self.Listen = ffix('Listen', errcheck)
 
 
@@ -861,11 +851,11 @@ def libfunctions():
         'AddTask':                  (lib.AddTask,                  [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask), POINTER(GoError)]),
         'RefreshTaskList':          (lib.RefreshTaskList,          [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
         'ClearTaskList':            (lib.ClearTaskList,            [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
-        'SetPCControl':             (lib.SetPCControl,             [POINTER(GoUHPPOTE), c_ulong, c_bool, c_char_p, POINTER(ctypes.c_int)]),
-        'SetInterlock':             (lib.SetInterlock,             [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_char_p, POINTER(ctypes.c_int)]),
-        'ActivateKeypads':          (lib.ActivateKeypads,          [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool, c_char_p, POINTER(ctypes.c_int)]),
-        'SetDoorPasscodes':         (lib.SetDoorPasscodes,         [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong, c_char_p, POINTER(ctypes.c_int)]),
-        'RestoreDefaultParameters': (lib.RestoreDefaultParameters, [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(ctypes.c_int)]),
+        'SetPCControl':             (lib.SetPCControl,             [POINTER(GoUHPPOTE), c_ulong, c_bool, POINTER(GoError)]),
+        'SetInterlock':             (lib.SetInterlock,             [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoError)]),
+        'ActivateKeypads':          (lib.ActivateKeypads,          [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool, POINTER(GoError)]),
+        'SetDoorPasscodes':         (lib.SetDoorPasscodes,         [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong, POINTER(GoError)]),
+        'RestoreDefaultParameters': (lib.RestoreDefaultParameters, [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
         'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), on_event, POINTER(c_bool), POINTER(c_bool), on_error, c_void_p]),
     }
 # yapf: enable

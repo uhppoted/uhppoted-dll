@@ -697,67 +697,77 @@ public class Uhppoted : IDisposable {
     }
 
     public void SetPCControl(uint controller, bool enabled) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (SetPCControl(ref this.u, controller, enabled, err, ref errN) != 0) {
-                raise(err, errN);
+            if (SetPCControl(ref this.u, controller, enabled, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void SetInterlock(uint controller, byte interlock) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (SetInterlock(ref this.u, controller, interlock, err, ref errN) != 0) {
-                raise(err, errN);
+            if (SetInterlock(ref this.u, controller, interlock, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void ActivateKeypads(uint controller, bool reader1, bool reader2, bool reader3, bool reader4) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (ActivateKeypads(ref this.u, controller, reader1, reader2, reader3, reader4, err, ref errN) != 0) {
-                raise(err, errN);
+            if (ActivateKeypads(ref this.u, controller, reader1, reader2, reader3, reader4, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void SetDoorPasscodes(uint controller, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (SetDoorPasscodes(ref this.u, controller, door, passcode1, passcode2, passcode3, passcode4, err, ref errN) != 0) {
-                raise(err, errN);
+            if (SetDoorPasscodes(ref this.u, controller, door, passcode1, passcode2, passcode3, passcode4, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
     public void RestoreDefaultParameters(uint controller) {
-        IntPtr err = Marshal.AllocHGlobal(256);
-        int errN = 256;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (RestoreDefaultParameters(ref this.u, controller, err, ref errN) != 0) {
-                raise(err, errN);
+            if (RestoreDefaultParameters(ref this.u, controller, ref err) != 0) {
+                raise(err);
             }
         } finally {
-            Marshal.FreeHGlobal(err);
+            Marshal.FreeHGlobal(err.message);
         }
     }
 
@@ -906,21 +916,21 @@ public class Uhppoted : IDisposable {
     private static extern int ClearTaskList(ref UHPPOTE u, uint deviceID, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int SetPCControl(ref UHPPOTE u, uint controller, bool enabled, IntPtr err, ref int errN);
+    private static extern int SetPCControl(ref UHPPOTE u, uint controller, bool enabled, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int SetInterlock(ref UHPPOTE u, uint controller, byte interlock, IntPtr err, ref int errN);
+    private static extern int SetInterlock(ref UHPPOTE u, uint controller, byte interlock, ref GoError err);
 
     [DllImport(DLL)]
     private static extern int ActivateKeypads(ref UHPPOTE u, uint controller, bool reader1, bool reader2, bool reader3, bool reader4,
-                                              IntPtr err, ref int errN);
+                                              ref GoError err);
 
     [DllImport(DLL)]
     private static extern int SetDoorPasscodes(ref UHPPOTE u, uint controller, byte door, uint passcode1, uint passcode2, uint passcode3,
-                                               uint passcode4, IntPtr err, ref int errN);
+                                               uint passcode4, ref GoError err);
 
     [DllImport(DLL)]
-    private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, IntPtr err, ref int errN);
+    private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, ref GoError err);
 
     [DllImport(DLL)]
     private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte listening, ref byte stop, OnListenError errx,

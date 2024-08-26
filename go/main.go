@@ -437,30 +437,30 @@ func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 }
 
 //export SetPCControl
-func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setPCControl(uu, controller, enabled)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export SetInterlock
-func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setInterlock(uu, controller, interlock)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 //export ActivateKeypads
-func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool, errmsg *C.cchar_t, errN *C.int) C.int {
+func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, reader3, reader4 bool, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return activateKeypads(uu, controller, reader1, reader2, reader3, reader4)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 // Sets the supervisor passcodes for a door managed by the controller.
@@ -469,23 +469,23 @@ func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, r
 // a 0 (no code).
 //
 //export SetDoorPasscodes
-func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 // Resets a controller to the manufacturer default configuration.
 //
 //export RestoreDefaultParameters
-func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32, errmsg *C.cchar_t, errN *C.int) C.int {
+func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return restoreDefaultParameters(uu, controller)
 	}
 
-	return exec(u, f, errmsg, errN)
+	return exex(u, f, err)
 }
 
 // Listens for events and invokes a callback function.

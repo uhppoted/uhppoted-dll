@@ -13,8 +13,9 @@
       - [ ] README
       - [ ] Documentation
       - [ ] Reorder parameters
+      - [ ] C#: fix in-function flags
 
-      - [ ] Make errmsg a struct
+      - [x] Make errmsg a struct
             - [x] error handling tests
             - [x] get-devices
             - [x] get-device
@@ -43,12 +44,11 @@
             - [x] add-task
             - [x] refresh-tasklist
             - [x] clear-tasklist
-            - [ ] set-pc-control
-            - [ ] set-interlock
-            - [ ] activate-keypads
-            - [ ] set-door-passcodes
-            - [ ] restore-default-parameters
-            - [ ] listen
+            - [x] set-pc-control
+            - [x] set-interlock
+            - [x] activate-keypads
+            - [x] set-door-passcodes
+            - [x] restore-default-parameters
 
 ## TODO
 

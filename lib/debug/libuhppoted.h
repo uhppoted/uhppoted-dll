@@ -222,20 +222,20 @@ extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, error* err);
 extern int RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID, error* err);
-extern int SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled, cchar_t* errmsg, int* errN);
-extern int SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock, cchar_t* errmsg, int* errN);
-extern int ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4, cchar_t* errmsg, int* errN);
+extern int SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled, error* err);
+extern int SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock, error* err);
+extern int ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4, error* err);
 
 // Sets the supervisor passcodes for a door managed by the controller.
 //
 // Valid passcodes are in the range [1..999999] or 0 (no code) - invalid passcodes will be replaced by
 // a 0 (no code).
 //
-extern int SetDoorPasscodes(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 passcode1, GoUint32 passcode2, GoUint32 passcode3, GoUint32 passcode4, cchar_t* errmsg, int* errN);
+extern int SetDoorPasscodes(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 passcode1, GoUint32 passcode2, GoUint32 passcode3, GoUint32 passcode4, error* err);
 
 // Resets a controller to the manufacturer default configuration.
 //
-extern int RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller, cchar_t* errmsg, int* errN);
+extern int RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller, error* err);
 
 // Listens for events and invokes a callback function.
 //
