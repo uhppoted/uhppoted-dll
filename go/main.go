@@ -138,40 +138,7 @@ var BROADCAST = netip.AddrFrom4([4]byte{255, 255, 255, 255})
 
 func main() {}
 
-func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, errmsg *C.char, errlen *C.int) C.int {
-	g := func() error {
-		if uu, err := makeUHPPOTE(u); err != nil {
-			return err
-		} else if err := f(uu); err != nil {
-			return err
-		} else {
-			return nil
-		}
-	}
-
-	if err := g(); err != nil {
-		N := 256
-		if errlen != nil {
-			N = int(*errlen)
-		}
-
-		length := 0
-
-		if errmsg != nil {
-			length = cstring(err, errmsg, N)
-		}
-
-		if errlen != nil {
-			*errlen = C.int(length)
-		}
-
-		return -1
-	}
-
-	return 0
-}
-
-func exex(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, err *C.error) C.int {
+func exec(u *C.struct_UHPPOTE, f func(uu uhppote.IUHPPOTE) error, err *C.error) C.int {
 	g := func() error {
 		if uu, _err := makeUHPPOTE(u); _err != nil {
 			return _err
@@ -199,7 +166,7 @@ func GetDevices(u *C.struct_UHPPOTE, list *C.uint, N *C.int, err *C.error) C.int
 		return getDevices(uu, N, list)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetDevice
@@ -208,7 +175,7 @@ func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, er
 		return getDevice(uu, device, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetAddress
@@ -217,7 +184,7 @@ func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.c
 		return setAddress(uu, deviceID, addr, subnet, gateway)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetStatus
@@ -226,7 +193,7 @@ func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, er
 		return getStatus(uu, status, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetTime
@@ -235,7 +202,7 @@ func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, err *C.e
 		return getTime(uu, deviceID, datetime)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetTime
@@ -244,7 +211,7 @@ func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.cchar_t, err *C.e
 		return setTime(uu, deviceID, datetime)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetListener
@@ -253,7 +220,7 @@ func GetListener(u *C.struct_UHPPOTE, address *C.cchar_t, deviceID uint32, err *
 		return getListener(uu, address, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetListener
@@ -262,7 +229,7 @@ func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.cchar_t, err 
 		return setListener(uu, deviceID, listener)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetDoorControl
@@ -271,7 +238,7 @@ func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID
 		return getDoorControl(uu, control, deviceID, door)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetDoorControl
@@ -280,7 +247,7 @@ func SetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, mode uint8
 		return setDoorControl(uu, deviceID, door, types.ControlState(mode), delay)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export OpenDoor
@@ -289,7 +256,7 @@ func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8, err *C.error) C.
 		return openDoor(uu, deviceID, door)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetCards
@@ -298,7 +265,7 @@ func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, err *C.error) C.in
 		return getCards(uu, N, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetCard
@@ -307,7 +274,7 @@ func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 		return getCard(uu, card, deviceID, cardNumber)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetCardByIndex
@@ -316,7 +283,7 @@ func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, i
 		return getCardByIndex(uu, card, deviceID, index)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export PutCard
@@ -325,7 +292,7 @@ func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 		return putCard(uu, deviceID, cardNumber, from, to, doors, PIN)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export DeleteCard
@@ -334,7 +301,7 @@ func DeleteCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, err *C.
 		return deleteCard(uu, deviceID, cardNumber)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export DeleteCards
@@ -343,7 +310,7 @@ func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 		return deleteCards(uu, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetEventIndex
@@ -352,7 +319,7 @@ func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32, err *C.e
 		return getEventIndex(uu, index, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetEventIndex
@@ -361,7 +328,7 @@ func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, err *C.er
 		return setEventIndex(uu, deviceID, index)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetEvent
@@ -370,7 +337,7 @@ func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index
 		return getEvent(uu, event, deviceID, index)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export RecordSpecialEvents
@@ -379,7 +346,7 @@ func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, err
 		return recordSpecialEvents(uu, deviceID, enabled)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export GetTimeProfile
@@ -388,7 +355,7 @@ func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID
 		return getTimeProfile(uu, profile, deviceID, profileID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetTimeProfile
@@ -397,7 +364,7 @@ func SetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profile *C.struct_Time
 		return setTimeProfile(uu, deviceID, profile)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export ClearTimeProfiles
@@ -406,7 +373,7 @@ func ClearTimeProfiles(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int
 		return clearTimeProfiles(uu, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export AddTask
@@ -415,7 +382,7 @@ func AddTask(u *C.struct_UHPPOTE, deviceID uint32, task *C.struct_Task, err *C.e
 		return addTask(uu, deviceID, task)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export RefreshTaskList
@@ -424,7 +391,7 @@ func RefreshTaskList(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 		return refreshTaskList(uu, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export ClearTaskList
@@ -433,7 +400,7 @@ func ClearTaskList(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 		return clearTaskList(uu, deviceID)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetPCControl
@@ -442,7 +409,7 @@ func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool, err *C.e
 		return setPCControl(uu, controller, enabled)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export SetInterlock
@@ -451,7 +418,7 @@ func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8, err *
 		return setInterlock(uu, controller, interlock)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 //export ActivateKeypads
@@ -460,7 +427,7 @@ func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, r
 		return activateKeypads(uu, controller, reader1, reader2, reader3, reader4)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 // Sets the supervisor passcodes for a door managed by the controller.
@@ -474,7 +441,7 @@ func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passco
 		return setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 // Resets a controller to the manufacturer default configuration.
@@ -485,7 +452,7 @@ func RestoreDefaultParameters(u *C.struct_UHPPOTE, controller uint32, err *C.err
 		return restoreDefaultParameters(uu, controller)
 	}
 
-	return exex(u, f, err)
+	return exec(u, f, err)
 }
 
 // Listens for events and invokes a callback function.

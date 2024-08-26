@@ -204,7 +204,6 @@ class Uhppote:
 
     def __init__(self, uhppote=None):
         self.ffi = FFI(self.errcheck)
-        self.ffix = FFIX(self.errcheckx)
         self._uhppote = None
         if uhppote:
             self._uhppote = GoUHPPOTE(uhppote.bind, uhppote.broadcast, uhppote.listen, uhppote.timeout, uhppote.controllers, uhppote.debug)
@@ -547,7 +546,7 @@ class Uhppote:
             p = pointer(ctypes.py_object(v))
 
         try:
-            self.ffix.Listen(self._uhppote, callback, byref(listening), byref(stop), err_handler, p)
+            self.ffi.Listen(self._uhppote, callback, byref(listening), byref(stop), err_handler, p)
             count = 0
             while (not listening) and (count < 10):
                 print(f' ... waiting {count}')
@@ -791,26 +790,10 @@ class FFI:
         self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
         self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
         self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
-        # self.Listen = ffil('Listen', errcheck)
-
-
-class FFIX:
-
-    def __init__(self, errcheck):
-        self.Listen = ffix('Listen', errcheck)
+        self.Listen = ffi('Listen', errcheck)
 
 
 def ffi(tag, errcheck):
-    (ff, argtypes) = libfunctions()[tag]
-
-    ff.argtypes = argtypes
-    ff.restype = ctypes.c_int
-    ff.errcheck = errcheck
-
-    return ff
-
-
-def ffix(tag, errcheck):
     (ff, argtypes) = libfunctions()[tag]
 
     ff.argtypes = argtypes
