@@ -250,7 +250,7 @@ class Uhppote:
         err = GoError()
         device = GoDevice()
 
-        if self.ffi.GetDevice(self._uhppote, byref(device), deviceID, byref(err)) != 0:
+        if self.ffi.GetDevice(self._uhppote, deviceID, byref(device), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return Device(device.ID, device.address.decode('utf-8'), device.subnet.decode('utf-8'), device.gateway.decode('utf-8'),
@@ -270,7 +270,7 @@ class Uhppote:
         err = GoError()
         status = GoStatus()
 
-        if self.ffi.GetStatus(self._uhppote, ctypes.byref(status), deviceID, byref(err)) != 0:
+        if self.ffi.GetStatus(self._uhppote, deviceID, ctypes.byref(status), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         doors = [False, False, False, False]
@@ -300,7 +300,7 @@ class Uhppote:
         datetime = c_char_p(bytes(' ' * 20, 'utf-8'))
         err = GoError()
 
-        if self.ffi.GetTime(self._uhppote, datetime, deviceID, byref(err)) != 0:
+        if self.ffi.GetTime(self._uhppote, deviceID, datetime, byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return datetime.value.decode('utf-8')
@@ -315,7 +315,7 @@ class Uhppote:
         listener = c_char_p(bytes(' ' * 22, 'utf-8'))
         err = GoError()
 
-        if self.ffi.GetListener(self._uhppote, listener, deviceID, byref(err)) != 0:
+        if self.ffi.GetListener(self._uhppote, deviceID, listener, byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return listener.value.decode('utf-8')
@@ -330,7 +330,7 @@ class Uhppote:
         control = GoDoorControl()
         err = GoError()
 
-        if self.ffi.GetDoorControl(self._uhppote, byref(control), deviceID, door, byref(err)) != 0:
+        if self.ffi.GetDoorControl(self._uhppote, deviceID, door, byref(control), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return DoorControl(control.control, control.delay)
@@ -351,7 +351,7 @@ class Uhppote:
         cards = ctypes.c_int(0)
         err = GoError()
 
-        if self.ffi.GetCards(self._uhppote, byref(cards), deviceID, byref(err)) != 0:
+        if self.ffi.GetCards(self._uhppote, deviceID, byref(cards), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return cards.value
@@ -360,7 +360,7 @@ class Uhppote:
         card = GoCard()
         err = GoError()
 
-        if self.ffi.GetCard(self._uhppote, byref(card), deviceID, cardNumber, byref(err)) != 0:
+        if self.ffi.GetCard(self._uhppote, deviceID, cardNumber, byref(card), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         doors = [0, 0, 0, 0]
@@ -373,7 +373,7 @@ class Uhppote:
         card = GoCard()
         err = GoError()
 
-        if self.ffi.GetCardByIndex(self._uhppote, byref(card), deviceID, index, byref(err)) != 0:
+        if self.ffi.GetCardByIndex(self._uhppote, deviceID, index, byref(card), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         doors = [0, 0, 0, 0]
@@ -411,7 +411,7 @@ class Uhppote:
         index = ctypes.c_ulong(0)
         err = GoError()
 
-        if self.ffi.GetEventIndex(self._uhppote, byref(index), deviceID, byref(err)) != 0:
+        if self.ffi.GetEventIndex(self._uhppote, deviceID, byref(index), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return index.value
@@ -426,7 +426,7 @@ class Uhppote:
         event = GoEvent()
         err = GoError()
 
-        if self.ffi.GetEvent(self._uhppote, byref(event), deviceID, index, byref(err)) != 0:
+        if self.ffi.GetEvent(self._uhppote, deviceID, index, byref(event), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return Event(event.timestamp.decode('utf-8'), event.index, event.eventType, event.granted, event.door, event.direction, event.card,
@@ -442,7 +442,7 @@ class Uhppote:
         profile = GoTimeProfile()
         err = GoError()
 
-        if self.ffi.GetTimeProfile(self._uhppote, byref(profile), deviceID, profileID, byref(err)) != 0:
+        if self.ffi.GetTimeProfile(self._uhppote, deviceID, profileID, byref(profile), byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
         return TimeProfile(profile.ID, profile.linked, profile.start.decode('utf-8'), profile.end.decode('utf-8'), profile.monday != 0,
@@ -808,27 +808,27 @@ def ffi(tag, errcheck):
 def libfunctions():
     return {
         'GetDevices':               (lib.GetDevices,               [POINTER(GoUHPPOTE), POINTER(ctypes.c_uint32), POINTER(ctypes.c_int), POINTER(GoError)]),
-        'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), POINTER(GoDevice),  c_ulong, POINTER(GoError)]),
+        'GetDevice':                (lib.GetDevice,                [POINTER(GoUHPPOTE), c_ulong, POINTER(GoDevice), POINTER(GoError)]),
         'SetAddress':               (lib.SetAddress,               [POINTER(GoUHPPOTE), c_ulong, c_char_p, c_char_p, c_char_p, POINTER(GoError)]),
-        'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), POINTER(GoStatus), c_ulong,POINTER(GoError)]),
-        'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_char_p, c_ulong, POINTER(GoError)]),
+        'GetStatus':                (lib.GetStatus,                [POINTER(GoUHPPOTE), c_ulong, POINTER(GoStatus), POINTER(GoError)]),
+        'GetTime':                  (lib.GetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(GoError)]),
         'SetTime':                  (lib.SetTime,                  [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(GoError)]),
-        'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), c_char_p, c_ulong, POINTER(GoError)]),
+        'GetListener':              (lib.GetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(GoError)]),
         'SetListener':              (lib.SetListener,              [POINTER(GoUHPPOTE), c_ulong, c_char_p, POINTER(GoError)]),
-        'GetDoorControl':           (lib.GetDoorControl,           [POINTER(GoUHPPOTE), POINTER(GoDoorControl), c_ulong, c_ubyte, POINTER(GoError)]),
+        'GetDoorControl':           (lib.GetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoDoorControl), POINTER(GoError)]),
         'SetDoorControl':           (lib.SetDoorControl,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ubyte, c_ubyte, POINTER(GoError)]),
         'OpenDoor':                 (lib.OpenDoor,                 [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoError)]),
-        'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), POINTER(c_int), c_ulong, POINTER(GoError)]),
-        'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, POINTER(GoError)]),
-        'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), POINTER(GoCard), c_ulong, c_ulong, POINTER(GoError)]),
+        'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), c_ulong, POINTER(c_int), POINTER(GoError)]),
+        'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoCard), POINTER(GoError)]),
+        'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoCard), POINTER(GoError)]),
         'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong, POINTER(GoError)]),
         'DeleteCard':               (lib.DeleteCard,               [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoError)]),
         'DeleteCards':              (lib.DeleteCards,              [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
-        'GetEventIndex':            (lib.GetEventIndex,            [POINTER(GoUHPPOTE), POINTER(c_ulong), c_ulong, POINTER(GoError)]),
+        'GetEventIndex':            (lib.GetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, POINTER(c_ulong), POINTER(GoError)]),
         'SetEventIndex':            (lib.SetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoError)]),
-        'GetEvent':                 (lib.GetEvent,                 [POINTER(GoUHPPOTE), POINTER(GoEvent), c_ulong, c_ulong, POINTER(GoError)]),
+        'GetEvent':                 (lib.GetEvent,                 [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoEvent), POINTER(GoError)]),
         'RecordSpecialEvents':      (lib.RecordSpecialEvents,      [POINTER(GoUHPPOTE), c_ulong, c_bool, POINTER(GoError)]),
-        'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), POINTER(GoTimeProfile), c_ulong, c_ubyte, POINTER(GoError)]),
+        'GetTimeProfile':           (lib.GetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoTimeProfile), POINTER(GoError)]),
         'SetTimeProfile':           (lib.SetTimeProfile,           [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTimeProfile), POINTER(GoError)]),
         'ClearTimeProfiles':        (lib.ClearTimeProfiles,        [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
         'AddTask':                  (lib.AddTask,                  [POINTER(GoUHPPOTE), c_ulong, POINTER(GoTask), POINTER(GoError)]),

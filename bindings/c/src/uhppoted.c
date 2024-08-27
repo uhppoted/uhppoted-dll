@@ -229,7 +229,7 @@ int get_device(uint32_t id, struct device *d) {
         .date = date,
     };
 
-    if (GetDevice(u, &device, id, &err) != 0) {
+    if (GetDevice(u, id, &device, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -283,7 +283,7 @@ int get_status(uint32_t id, struct status *s) {
         .event = &event,
     };
 
-    if (GetStatus(u, &status, id, &err) != 0) {
+    if (GetStatus(u, id, &status, &err) != 0) {
         set_error(err.message, err.len);
         free(status.doors);
         free(status.buttons);
@@ -335,7 +335,7 @@ int get_time(uint32_t id, char **t) {
         .message = errmsg,
     };
 
-    if (GetTime(u, datetime, id, &err) != 0) {
+    if (GetTime(u, id, datetime, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -370,7 +370,7 @@ int get_listener(uint32_t id, char **t) {
         .message = errmsg,
     };
 
-    if (GetListener(u, listener, id, &err) != 0) {
+    if (GetListener(u, id, listener, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -405,7 +405,7 @@ int get_door_control(uint32_t id, uint8_t door, struct door_control *c) {
         .message = errmsg,
     };
 
-    if (GetDoorControl(u, &control, id, door, &err) != 0) {
+    if (GetDoorControl(u, id, door, &control, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -457,7 +457,7 @@ int get_cards(uint32_t id, int *N) {
         .message = errmsg,
     };
 
-    if (GetCards(u, &cards, id, &err) != 0) {
+    if (GetCards(u, id, &cards, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -485,7 +485,7 @@ int get_card(uint32_t id, uint32_t card_number, card *c) {
         .message = errmsg,
     };
 
-    if (GetCard(u, &card, id, card_number, &err) != 0) {
+    if (GetCard(u, id, card_number, &card, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -520,7 +520,7 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
         .message = errmsg,
     };
 
-    if (GetCardByIndex(u, &card, id, index, &err) != 0) {
+    if (GetCardByIndex(u, id, index, &card, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -594,7 +594,7 @@ int get_event_index(uint32_t id, uint32_t *index) {
         .message = errmsg,
     };
 
-    if (GetEventIndex(u, &ix, id, &err) != 0) {
+    if (GetEventIndex(u, id, &ix, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -633,7 +633,7 @@ int get_event(uint32_t id, uint32_t index, event *e) {
         .message = errmsg,
     };
 
-    if (GetEvent(u, &event, id, index, &err) != 0) {
+    if (GetEvent(u, id, index, &event, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
@@ -694,7 +694,7 @@ int get_time_profile(uint32_t id, uint8_t profile_id, time_profile *p) {
         .message = errmsg,
     };
 
-    if (GetTimeProfile(u, &profile, id, profile_id, &err) != 0) {
+    if (GetTimeProfile(u, id, profile_id, &profile, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }

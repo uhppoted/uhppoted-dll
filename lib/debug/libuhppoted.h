@@ -196,27 +196,27 @@ extern "C" {
 #endif
 
 extern int GetDevices(struct UHPPOTE* u, unsigned int* list, int* N, error* err);
-extern int GetDevice(struct UHPPOTE* u, struct Device* device, GoUint32 deviceID, error* err);
+extern int GetDevice(struct UHPPOTE* u, GoUint32 deviceID, struct Device* device, error* err);
 extern int SetAddress(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* addr, cchar_t* subnet, cchar_t* gateway, error* err);
-extern int GetStatus(struct UHPPOTE* u, struct Status* status, GoUint32 deviceID, error* err);
-extern int GetTime(struct UHPPOTE* u, cchar_t* datetime, GoUint32 deviceID, error* err);
+extern int GetStatus(struct UHPPOTE* u, GoUint32 deviceID, struct Status* status, error* err);
+extern int GetTime(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* datetime, error* err);
 extern int SetTime(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* datetime, error* err);
-extern int GetListener(struct UHPPOTE* u, cchar_t* address, GoUint32 deviceID, error* err);
+extern int GetListener(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* address, error* err);
 extern int SetListener(struct UHPPOTE* u, GoUint32 deviceID, cchar_t* listener, error* err);
-extern int GetDoorControl(struct UHPPOTE* u, struct DoorControl* control, GoUint32 deviceID, GoUint8 door, error* err);
+extern int GetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, struct DoorControl* control, error* err);
 extern int SetDoorControl(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, GoUint8 mode, GoUint8 delay, error* err);
 extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, error* err);
-extern int GetCards(struct UHPPOTE* u, int* N, GoUint32 deviceID, error* err);
-extern int GetCard(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 cardNumber, error* err);
-extern int GetCardByIndex(struct UHPPOTE* u, struct Card* card, GoUint32 deviceID, GoUint32 index, error* err);
+extern int GetCards(struct UHPPOTE* u, GoUint32 deviceID, int* N, error* err);
+extern int GetCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, struct Card* card, error* err);
+extern int GetCardByIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, struct Card* card, error* err);
 extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* from, cchar_t* to, GoUint8* doors, GoUint32 PIN, error* err);
 extern int DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, error* err);
 extern int DeleteCards(struct UHPPOTE* u, GoUint32 deviceID, error* err);
-extern int GetEventIndex(struct UHPPOTE* u, GoUint32* index, GoUint32 deviceID, error* err);
+extern int GetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32* index, error* err);
 extern int SetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, error* err);
-extern int GetEvent(struct UHPPOTE* u, Event* event, GoUint32 deviceID, GoUint32 index, error* err);
+extern int GetEvent(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, Event* event, error* err);
 extern int RecordSpecialEvents(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 enabled, error* err);
-extern int GetTimeProfile(struct UHPPOTE* u, struct TimeProfile* profile, GoUint32 deviceID, GoUint8 profileID, error* err);
+extern int GetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 profileID, struct TimeProfile* profile, error* err);
 extern int SetTimeProfile(struct UHPPOTE* u, GoUint32 deviceID, struct TimeProfile* profile, error* err);
 extern int ClearTimeProfiles(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, error* err);

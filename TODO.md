@@ -14,40 +14,39 @@
       - [ ] CHANGELOG
       - [ ] README
       - [ ] Documentation
-
-      - [ ] Reorder parameters
-            - [ ] get-devices
-            - [ ] get-device
-            - [ ] set-address
-            - [ ] get-status
-            - [ ] get-time
-            - [ ] set-time
-            - [ ] get-listener
-            - [ ] set-listener
-            - [ ] get-door-control
-            - [ ] set-door-control
-            - [ ] open-door
-            - [ ] get-cards
-            - [ ] get-card
-            - [ ] get-card-by-index
-            - [ ] put-card
-            - [ ] delete-card
-            - [ ] delete-cards
-            - [ ] get-event-index
-            - [ ] set-event-index
-            - [ ] get-event
-            - [ ] record-special-events
-            - [ ] get-time-profile
-            - [ ] set-time-profile
-            - [ ] clear-time-profiles
-            - [ ] add-task
-            - [ ] refresh-tasklist
-            - [ ] clear-tasklist
-            - [ ] set-pc-control
-            - [ ] set-interlock
-            - [ ] activate-keypads
-            - [ ] set-door-passcodes
-            - [ ] restore-default-parameters
+      - [x] Reorder parameters
+            - [x] get-devices
+            - [x] get-device
+            - [x] set-address
+            - [x] get-status
+            - [x] get-time
+            - [x] set-time
+            - [x] get-listener
+            - [x] set-listener
+            - [x] get-door-control
+            - [x] set-door-control
+            - [x] open-door
+            - [x] get-cards
+            - [x] get-card
+            - [x] get-card-by-index
+            - [x] put-card
+            - [x] delete-card
+            - [x] delete-cards
+            - [x] get-event-index
+            - [x] set-event-index
+            - [x] get-event
+            - [x] record-special-events
+            - [x] get-time-profile
+            - [x] set-time-profile
+            - [x] clear-time-profiles
+            - [x] add-task
+            - [x] refresh-tasklist
+            - [x] clear-tasklist
+            - [x] set-pc-control
+            - [x] set-interlock
+            - [x] activate-keypads
+            - [x] set-door-passcodes
+            - [x] restore-default-parameters
 
 ## TODO
 

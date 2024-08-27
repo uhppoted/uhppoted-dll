@@ -352,8 +352,8 @@
         (setf (pref device :GoDevice.date)    datep)
 
         (with-macptrs ((ok (external-call "GetDevice" :address       uhppote
-                                                      :address       device
                                                       :unsigned-long device-id
+                                                      :address       device
                                                       :address       err
                                                       :signed-long)))
           ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -413,8 +413,8 @@
                                        :message errmsgp))
 
         (with-macptrs ((ok (external-call "GetStatus" :address uhppote 
-                                                      :address status
                                                       :unsigned-long device-id 
+                                                      :address status
                                                       :address err
                                                       :signed-long)))
           ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -454,8 +454,8 @@
                                     :message errmsgp))
 
       (with-macptrs ((ok (external-call "GetTime" :address uhppote 
-                                                  :address datetimep
                                                   :unsigned-long device-id 
+                                                  :address datetimep
                                                   :address err
                                                   :signed-long)))
         ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -489,8 +489,8 @@
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
       (with-macptrs ((ok (external-call "GetListener" :address uhppote 
-                                                      :address listenerp
                                                       :unsigned-long device-id 
+                                                      :address listenerp
                                                       :address err
                                                       :signed-long)))
         ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -524,9 +524,9 @@
             (err     (:struct :GoError) :len     errlen
                                         :message errmsgp))
       (with-macptrs ((ok (external-call "GetDoorControl" :address uhppote 
-                                                         :address control 
                                                          :unsigned-long device-id 
                                                          :unsigned-byte door
+                                                         :address control 
                                                          :address err
                                                          :signed-long)))
         ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -577,8 +577,8 @@
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
     (with-macptrs ((ok (external-call "GetCards" :address uhppote 
-                                                 :address N 
                                                  :unsigned-long device-id 
+                                                 :address N 
                                                  :address err
                                                  :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -599,9 +599,9 @@
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
       (with-macptrs ((ok (external-call "GetCard" :address uhppote 
-                                                  :address card
                                                   :unsigned-long device-id 
                                                   :unsigned-long card-number
+                                                  :address card
                                                   :address err
                                                   :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -631,9 +631,9 @@
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
       (with-macptrs ((ok (external-call "GetCardByIndex" :address uhppote 
-                                                         :address card
                                                          :unsigned-long device-id 
                                                          :unsigned-long index
+                                                         :address card
                                                          :address err
                                                          :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -718,8 +718,8 @@
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
     (with-macptrs ((ok (external-call "GetEventIndex" :address uhppote 
-                                                      :address index
                                                       :unsigned-long device-id 
+                                                      :address index
                                                       :address err
                                                       :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -752,9 +752,9 @@
             (err   (:struct :GoError) :len     errlen
                                       :message errmsgp))
     (with-macptrs ((ok (external-call "GetEvent" :address uhppote 
-                                                 :address event
                                                  :unsigned-long device-id 
                                                  :unsigned-long index
+                                                 :address event
                                                  :address err
                                                  :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
@@ -809,9 +809,9 @@
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
     (with-macptrs ((ok (external-call "GetTimeProfile" :address uhppote
-                                                       :address profile
                                                        :unsigned-long device-id 
                                                        :unsigned-byte profile-id
+                                                       :address profile
                                                        :address err
                                                        :signed-long)))
       ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)

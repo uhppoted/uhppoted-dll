@@ -170,7 +170,7 @@ func GetDevices(u *C.struct_UHPPOTE, list *C.uint, N *C.int, err *C.error) C.int
 }
 
 //export GetDevice
-func GetDevice(u *C.struct_UHPPOTE, device *C.struct_Device, deviceID uint32, err *C.error) C.int {
+func GetDevice(u *C.struct_UHPPOTE, deviceID uint32, device *C.struct_Device, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getDevice(uu, device, deviceID)
 	}
@@ -188,7 +188,7 @@ func SetAddress(u *C.struct_UHPPOTE, deviceID uint32, addr, subnet, gateway *C.c
 }
 
 //export GetStatus
-func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, err *C.error) C.int {
+func GetStatus(u *C.struct_UHPPOTE, deviceID uint32, status *C.struct_Status, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getStatus(uu, status, deviceID)
 	}
@@ -197,7 +197,7 @@ func GetStatus(u *C.struct_UHPPOTE, status *C.struct_Status, deviceID uint32, er
 }
 
 //export GetTime
-func GetTime(u *C.struct_UHPPOTE, datetime *C.cchar_t, deviceID uint32, err *C.error) C.int {
+func GetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.cchar_t, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getTime(uu, deviceID, datetime)
 	}
@@ -215,7 +215,7 @@ func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.cchar_t, err *C.e
 }
 
 //export GetListener
-func GetListener(u *C.struct_UHPPOTE, address *C.cchar_t, deviceID uint32, err *C.error) C.int {
+func GetListener(u *C.struct_UHPPOTE, deviceID uint32, address *C.cchar_t, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getListener(uu, address, deviceID)
 	}
@@ -233,7 +233,7 @@ func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.cchar_t, err 
 }
 
 //export GetDoorControl
-func GetDoorControl(u *C.struct_UHPPOTE, control *C.struct_DoorControl, deviceID uint32, door uint8, err *C.error) C.int {
+func GetDoorControl(u *C.struct_UHPPOTE, deviceID uint32, door uint8, control *C.struct_DoorControl, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getDoorControl(uu, control, deviceID, door)
 	}
@@ -260,7 +260,7 @@ func OpenDoor(u *C.struct_UHPPOTE, deviceID uint32, door uint8, err *C.error) C.
 }
 
 //export GetCards
-func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, err *C.error) C.int {
+func GetCards(u *C.struct_UHPPOTE, deviceID uint32, N *C.int, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getCards(uu, N, deviceID)
 	}
@@ -269,7 +269,7 @@ func GetCards(u *C.struct_UHPPOTE, N *C.int, deviceID uint32, err *C.error) C.in
 }
 
 //export GetCard
-func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumber uint32, err *C.error) C.int {
+func GetCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, card *C.struct_Card, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getCard(uu, card, deviceID, cardNumber)
 	}
@@ -278,7 +278,7 @@ func GetCard(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 }
 
 //export GetCardByIndex
-func GetCardByIndex(u *C.struct_UHPPOTE, card *C.struct_Card, deviceID uint32, index uint32, err *C.error) C.int {
+func GetCardByIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, card *C.struct_Card, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getCardByIndex(uu, card, deviceID, index)
 	}
@@ -314,7 +314,7 @@ func DeleteCards(u *C.struct_UHPPOTE, deviceID uint32, err *C.error) C.int {
 }
 
 //export GetEventIndex
-func GetEventIndex(u *C.struct_UHPPOTE, index *uint32, deviceID uint32, err *C.error) C.int {
+func GetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index *uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getEventIndex(uu, index, deviceID)
 	}
@@ -332,7 +332,7 @@ func SetEventIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, err *C.er
 }
 
 //export GetEvent
-func GetEvent(u *C.struct_UHPPOTE, event *C.struct_Event, deviceID uint32, index uint32, err *C.error) C.int {
+func GetEvent(u *C.struct_UHPPOTE, deviceID uint32, index uint32, event *C.struct_Event, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getEvent(uu, event, deviceID, index)
 	}
@@ -350,7 +350,7 @@ func RecordSpecialEvents(u *C.struct_UHPPOTE, deviceID uint32, enabled bool, err
 }
 
 //export GetTimeProfile
-func GetTimeProfile(u *C.struct_UHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8, err *C.error) C.int {
+func GetTimeProfile(u *C.struct_UHPPOTE, deviceID uint32, profileID uint8, profile *C.struct_TimeProfile, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return getTimeProfile(uu, profile, deviceID, profileID)
 	}

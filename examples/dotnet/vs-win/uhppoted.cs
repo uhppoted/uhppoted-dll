@@ -130,7 +130,7 @@ namespace uhppoted
 
             try
             {
-                if (GetDevice(ref this.u, ref device, deviceID, ref err) != 0)
+                if (GetDevice(ref this.u, deviceID, ref device, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -199,7 +199,7 @@ namespace uhppoted
 
             try
             {
-                if (GetStatus(ref this.u, ref status, deviceID, ref err) != 0)  
+                if (GetStatus(ref this.u, deviceID, ref status, ref err) != 0)  
                 {
                     raise(err);
                 }
@@ -268,7 +268,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetTime(ref this.u, datetime, deviceID, ref err) != 0)
+                if (GetTime(ref this.u, deviceID, datetime, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -312,7 +312,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetListener(ref this.u, listener, deviceID, ref err) != 0)
+                if (GetListener(ref this.u, deviceID, listener, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -356,7 +356,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetDoorControl(ref this.u, ref control, deviceID, door, ref err) != 0)
+                if (GetDoorControl(ref this.u, deviceID, door, ref control, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -420,7 +420,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetCards(ref this.u, ref cards, deviceID, ref err) != 0)
+                if (GetCards(ref this.u, deviceID, ref cards, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -447,7 +447,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetCard(ref this.u, ref card, deviceID, cardNumber, ref err) != 0)
+                if (GetCard(ref this.u, deviceID, cardNumber, ref card, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -483,7 +483,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetCardByIndex(ref this.u, ref card, deviceID, index, ref err) != 0)
+                if (GetCardByIndex(ref this.u, deviceID, index, ref card, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -575,7 +575,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetEventIndex(ref this.u, ref index, deviceID, ref err) != 0)
+                if (GetEventIndex(ref this.u, deviceID, ref index, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -620,7 +620,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetEvent(ref this.u, ref evt, deviceID, index, ref err) != 0)
+                if (GetEvent(ref this.u, deviceID, index, ref evt, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -683,7 +683,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetTimeProfile(ref this.u, ref profile, deviceID, profileID, ref err) != 0)
+                if (GetTimeProfile(ref this.u, deviceID, profileID, ref profile, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -1061,28 +1061,28 @@ namespace uhppoted
         private static extern int GetDevices(ref UHPPOTE u, uint[] list, ref int N, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetDevice(ref UHPPOTE u, ref GoDevice device, uint deviceID, ref GoError err);
+        private static extern int GetDevice(ref UHPPOTE u, uint deviceID, ref GoDevice device, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetStatus(ref UHPPOTE u, ref GoStatus status, uint deviceID, ref GoError err);
+        private static extern int GetStatus(ref UHPPOTE u, uint deviceID, ref GoStatus status, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetTime(ref UHPPOTE u, IntPtr datetime, uint deviceID, ref GoError err);
+        private static extern int GetTime(ref UHPPOTE u, uint deviceID, IntPtr datetime, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetListener(ref UHPPOTE u, IntPtr listener, uint deviceID, ref GoError err);
+        private static extern int GetListener(ref UHPPOTE u, uint deviceID, IntPtr listener, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetDoorControl(ref UHPPOTE u, ref GoDoorControl c, uint deviceID, byte door, ref GoError err);
+        private static extern int GetDoorControl(ref UHPPOTE u, uint deviceID, byte door, ref GoDoorControl control, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, ref GoError err);
@@ -1091,13 +1091,13 @@ namespace uhppoted
         private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetCards(ref UHPPOTE u, ref uint N, uint deviceID, ref GoError err);
+        private static extern int GetCards(ref UHPPOTE u, uint deviceID, ref uint N, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetCard(ref UHPPOTE u, ref GoCard card, uint deviceID, uint cardNumber, ref GoError err);
+        private static extern int GetCard(ref UHPPOTE u, uint deviceID, uint cardNumber, ref GoCard card, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetCardByIndex(ref UHPPOTE u, ref GoCard card, uint deviceID, uint index, ref GoError err);
+        private static extern int GetCardByIndex(ref UHPPOTE u, uint deviceID, uint index, ref GoCard card, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, ref GoError err);
@@ -1109,19 +1109,19 @@ namespace uhppoted
         private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetEventIndex(ref UHPPOTE u, ref uint index, uint deviceID, ref GoError err);
+        private static extern int GetEventIndex(ref UHPPOTE u, uint deviceID, ref uint index, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetEventIndex(ref UHPPOTE u, uint deviceID, uint index, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetEvent(ref UHPPOTE u, ref GoEvent evt, uint deviceID, uint index, ref GoError err);
+        private static extern int GetEvent(ref UHPPOTE u, uint deviceID, uint index, ref GoEvent evt, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetTimeProfile(ref UHPPOTE u, ref GoTimeProfile profile, uint deviceID, byte profileID, ref GoError err);
+        private static extern int GetTimeProfile(ref UHPPOTE u, uint deviceID, byte profileID, ref GoTimeProfile profile, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile, ref GoError err);

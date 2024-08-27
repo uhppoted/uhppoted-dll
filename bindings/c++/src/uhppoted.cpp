@@ -206,7 +206,7 @@ struct device uhppoted::get_device(uint32_t id) {
         .message = errmsg,
     };
 
-    if (GetDevice(u, &device, id, &err) != 0) {
+    if (GetDevice(u, id, &device, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -260,7 +260,7 @@ status uhppoted::get_status(unsigned id) {
         .event = &event,
     };
 
-    if (GetStatus(u, &status, id, &err) != 0) {
+    if (GetStatus(u, id, &status, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -308,7 +308,7 @@ string uhppoted::get_time(uint32_t id) {
         .message = errmsg,
     };
 
-    if (GetTime(u, datetime, id, &err) != 0) {
+    if (GetTime(u, id, datetime, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -337,7 +337,7 @@ string uhppoted::get_listener(uint32_t id) {
         .message = errmsg,
     };
 
-    if (GetListener(u, listener, id, &err) != 0) {
+    if (GetListener(u, id, listener, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -366,7 +366,7 @@ struct door_control uhppoted::get_door_control(uint32_t id, uint8_t door) {
         .message = errmsg,
     };
 
-    if (GetDoorControl(u, &control, id, door, &err) != 0) {
+    if (GetDoorControl(u, id, door, &control, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -413,7 +413,7 @@ int uhppoted::get_cards(uint32_t id) {
         .message = errmsg,
     };
 
-    if (GetCards(u, &N, id, &err) != 0) {
+    if (GetCards(u, id, &N, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -437,7 +437,7 @@ card uhppoted::get_card(uint32_t id, uint32_t card_number) {
         .message = errmsg,
     };
 
-    if (GetCard(u, &card, id, card_number, &err) != 0) {
+    if (GetCard(u, id, card_number, &card, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -472,7 +472,7 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
         .message = errmsg,
     };
 
-    if (GetCardByIndex(u, &card, id, index, &err) != 0) {
+    if (GetCardByIndex(u, id, index, &card, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -538,7 +538,7 @@ uint32_t uhppoted::get_event_index(uint32_t id) {
         .message = errmsg,
     };
 
-    if (GetEventIndex(u, &index, id, &err) != 0) {
+    if (GetEventIndex(u, id, &index, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -571,7 +571,7 @@ event uhppoted::get_event(uint32_t id, uint32_t index) {
         .message = errmsg,
     };
 
-    if (GetEvent(u, &event, id, index, &err) != 0) {
+    if (GetEvent(u, id, index, &event, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
@@ -630,7 +630,7 @@ time_profile uhppoted::get_time_profile(uint32_t id, uint8_t profile_id) {
         .message = errmsg,
     };
 
-    if (GetTimeProfile(u, &profile, id, profile_id, &err) != 0) {
+    if (GetTimeProfile(u, id, profile_id, &profile, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
