@@ -33,6 +33,11 @@ controllers Optional list of specific controllers and their associated IPv4 addr
 debug       Displays the DLL and controller requests/responses if true.
 ```
 
+The _controllers_ list is a list of [_controller_](#controller) structs, e.g.:
+```
+const controller ALPHA = {.id = 405419896, .address = "192.168.1.100", .transport = "tcp"};
+```
+
 The `uhppoted` _destructor_ frees any dynamically allocated memory associated with:
 - the internal _UHPPOTE_ _struct_
 - the global error message
@@ -457,9 +462,9 @@ Throws a uhppoted_exception if the call failed. The error message can be retriev
 uhppoted_exception::what() method.
 ```
 
-### `listen-events`
+### `listen`
 ```
-void listen(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata);
+void listen_events(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata);
 
 callback   callback function invoked to process received events
 listening  set to 'true' when the listen function is initialised and listening

@@ -43,6 +43,11 @@ debug      Displays the DLL and controller requests/responses if true.
            located on a different interface, a VLAN or a VPN)
 ```
 
+The _controllers_ vararg list is a list of [_controller_](#controller) structs, e.g.:
+```
+controller alpha = {.id = 405419896, .address = "192.168.1.100", .transport = "tcp"};
+```
+
 ### `teardown`
 Frees any dynamically allocated memory associated with:
 - the internal _UHPPOTE_ _struct_ created by `setup`

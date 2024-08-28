@@ -38,6 +38,14 @@ controllers Optional list of specific controllers and their associated IPv4 addr
 debug       Displays the DLL and controller requests/responses if true.
 ```
 
+The _controllers_ list is a list of [_controller_](#controller) structs, e.g.:
+```
+controllers = [
+    uhppoted.Controller(405419896, '192.168.1.100', 'tcp'),
+    ...
+]
+```
+
 All API functions raise an `Exception` if the call fails for any reason whatsoever.
 
 ### `lookup`
@@ -412,7 +420,7 @@ ID        controller serial number
 Raises an Exception if the call failed.
 ```
 
-### `listen-events`
+### `listen`
 ```
 uhppoted.listen_events(onevent, onerror, listening, stop, userdata):
 

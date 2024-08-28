@@ -22,7 +22,7 @@ Supported operating systems:
 
 ## Release Notes
 
-The releases do not include binaries - cross-compiling a DLL/shared-lib is not straightforward because
+The releases do not include binaries - cross-compiling a DLL/shared-lib is not simple because
 the _cgo_ compiler links in a platfrom specific version of _glibc_. Building the DLL/shared-lib 
 is straightforward (see below) and only requires that _go_ and _cgo_ are installed on the system.
 
@@ -37,7 +37,7 @@ is straightforward (see below) and only requires that _go_ and _cgo_ are install
 ## Installation
 
 Requirements:
-- Go v1.21+
+- Go v1.23+
 - (Windows only) _mingw_
 - (optional) make
 
@@ -89,7 +89,7 @@ returns a fixed response.
 | *Dependency*                                             | *Description*                                          |
 | -------------------------------------------------------- | ------------------------------------------------------ |
 | [uhppote-core](https://github.com/uhppoted/uhppote-core) | Device level API implementation                        |
-| [uhppoted-lib](https://github.com/uhppoted/uhppoted-lib) | Library of commonalised functionality            s      |
+| [uhppoted-lib](https://github.com/uhppoted/uhppoted-lib) | Library of commonalised functionality                  |
 |                                                          |                                                        |
 
 ## Documentation
@@ -134,7 +134,7 @@ returns a fixed response.
 - [`ActivateKeypads`](#activatekeypads)
 - [`SetDoorPasscodes`](#setdoorpasscodes)
 - [`RestoreDefaultParameters`](#restoredefaultparameters)
-- [`ListenEvents`](#listenevents)
+- [`Listen`](#listen)
 
 #### `GetDevices`
 
@@ -312,7 +312,7 @@ Sets up to four supervisor passcodes to allow keypad only access to a door.
 Resets a controller to the manufacturer default configuration.
 
 
-#### `ListenEvents`
+#### `Listen`
 
 Listens for controller events and forwards received events to a callback function for processing by the
 application.

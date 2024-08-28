@@ -28,6 +28,14 @@ controllers Optional list of specific controllers and their associated IPv4 addr
 debug       Displays the DLL and controller requests/responses if true.
 ```
 
+The _controllers_ list is a list of [_controller_](#controller) structs, e.g.:
+```
+static Controller[] controllers = { 
+    new Controller(405419896, "192.168.1.100", "tcp"),
+    ...
+};
+```
+
 The `Uhppoted` _destructor_ frees any dynamically allocated memory associated with:
 - the internal _UHPPOTE_ _struct_
 - the global error message
