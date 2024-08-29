@@ -3,7 +3,7 @@
 - [x] event listener (cf. https://github.com/uhppoted/uhppoted-dll/issues/11)
 - [x] TCP/IP protocol (cf. https://github.com/uhppoted/uhppote-core/issues/17)
 - [x] Update to Go 1.23 (cf. https://github.com/uhppoted/uhppoted/issues/53)
-- [ ] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
+- [x] Merge LTSC changes back into main branch (cf. https://github.com/uhppoted/uhppoted-dll/issues/12)
       - [x] Preallocate memory for strings
       - [x] Use C.cchar_t
       - [x] CCL: fix all make-heap-ivector
@@ -14,7 +14,7 @@
       - [x] CHANGELOG
       - [x] README
       - [x] Documentation
-      - [ ] CCL: return code is a pointer ??
+      - [x] CCL: return code is a pointer ??
 
 ## TODO
 

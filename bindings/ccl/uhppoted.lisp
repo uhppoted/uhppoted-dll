@@ -350,12 +350,13 @@
         (setf (pref device :GoDevice.version) versionp)
         (setf (pref device :GoDevice.date)    datep)
 
-        (let ((ok (external-call "GetDevice" :address       uhppote
-                                             :unsigned-long device-id
-                                             :address       device
-                                             :address       err
-                                             :signed-fullword)))
-          (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+        (unless (eq 0 (external-call "GetDevice" :address       uhppote
+                                                 :unsigned-long device-id
+                                                 :address       device
+                                                 :address       err
+                                                 :signed-fullword))
+          (error 'uhppoted-error :message (%get-cstring errmsgp)))
+
         (make-device :id      (%get-unsigned-long device)
                      :address (%get-cstring (pref device :GoDevice.address))
                      :subnet  (%get-cstring (pref device :GoDevice.subnet))
@@ -382,14 +383,14 @@
     (rletz ((err  (:struct :GoError) :len     errlen
                                      :message errmsgp))
 
-      (let ((ok (external-call "SetAddress" :address uhppote 
-                                            :unsigned-long device-id 
-                                            :address address  
-                                            :address subnet
-                                            :address gateway
-                                            :address err
-                                            :signed-fullword)))
-        (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "SetAddress" :address uhppote 
+                                                :unsigned-long device-id 
+                                                :address address  
+                                                :address subnet
+                                                :address gateway
+                                                :address err
+                                                :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
     (dispose-heap-ivector errmsg))))
 
@@ -409,12 +410,13 @@
               (err  (:struct :GoError) :len     errlen
                                        :message errmsgp))
 
-        (let ((ok (external-call "GetStatus" :address uhppote 
-                                             :unsigned-long device-id 
-                                             :address status
-                                             :address err
-                                             :signed-fullword)))
-          (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+        (unless (eq 0 (external-call "GetStatus" :address uhppote 
+                                                 :unsigned-long device-id 
+                                                 :address status
+                                                 :address err
+                                                 :signed-fullword))
+          (error 'uhppoted-error :message (%get-cstring errmsgp)))
+
         (make-status :id        (%get-unsigned-long status)
                      :timestamp (%get-cstring (pref status :GoStatus.timestamp))
                      :doors     (list (if (equal 0 (%get-unsigned-byte doors 0)) nil T)
@@ -450,12 +452,12 @@
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
 
-      (let ((ok (external-call "GetTime" :address uhppote 
-                                         :unsigned-long device-id 
-                                         :address datetimep
-                                         :address err
-                                         :signed-fullword)))
-        (unless (eq 0 ok) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "GetTime" :address uhppote 
+                                             :unsigned-long device-id 
+                                             :address datetimep
+                                             :address err
+                                            :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (%get-cstring datetimep))
   (dispose-heap-ivector datetime)
   (dispose-heap-ivector errmsg)))))
@@ -467,12 +469,12 @@
     (with-cstrs ((dt datetime))
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (let ((ok (external-call "SetTime" :address uhppote 
-                                         :unsigned-long device-id 
-                                         :address dt
-                                         :address err
-                                         :signed-fullword)))
-        (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "SetTime" :address uhppote 
+                                             :unsigned-long device-id 
+                                             :address dt
+                                             :address err
+                                             :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
   (dispose-heap-ivector errmsg))))
 
@@ -483,12 +485,12 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (let ((ok (external-call "GetListener" :address uhppote 
-                                             :unsigned-long device-id 
-                                             :address listenerp
-                                             :address err
-                                             :signed-fullword)))
-        (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "GetListener" :address uhppote 
+                                                 :unsigned-long device-id 
+                                                 :address listenerp
+                                                 :address err
+                                                 :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
     (%get-cstring listenerp))
   (dispose-heap-ivector listener)
   (dispose-heap-ivector errmsg)))))
@@ -500,12 +502,12 @@
     (with-cstrs ((addr listener))
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (let ((ok (external-call "SetListener" :address uhppote 
-                                             :unsigned-long device-id 
-                                             :address addr
-                                             :address err
-                                             :signed-fullword)))
-        (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "SetListener" :address uhppote 
+                                                 :unsigned-long device-id 
+                                                 :address addr
+                                                 :address err
+                                                 :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
   (dispose-heap-ivector errmsg))))
 
@@ -516,13 +518,13 @@
     (rletz ((control (:struct :GoDoorControl))
             (err     (:struct :GoError) :len     errlen
                                         :message errmsgp))
-      (let ((ok (external-call "GetDoorControl" :address uhppote 
-                                                :unsigned-long device-id 
-                                                :unsigned-byte door
-                                                :address control 
-                                                :address err
-                                                :signed-fullword)))
-        (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "GetDoorControl" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :unsigned-byte door
+                                                    :address control 
+                                                    :address err
+                                                    :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-door-control :mode  (pref control :GoDoorControl.mode)
                          :delay (pref control :GoDoorControl.delay)))
   (dispose-heap-ivector errmsg))))
@@ -533,14 +535,14 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (let ((ok (external-call "SetDoorControl" :address uhppote 
-                                                :unsigned-long device-id 
-                                                :unsigned-byte door
-                                                :unsigned-byte mode
-                                                :unsigned-byte delay
-                                                :address err
-                                                :signed-fullword)))
-        (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "SetDoorControl" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :unsigned-byte door
+                                                    :unsigned-byte mode
+                                                    :unsigned-byte delay
+                                                    :address err
+                                                    :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
   (dispose-heap-ivector errmsg)))
 
@@ -550,12 +552,12 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (let ((ok (external-call "OpenDoor" :address uhppote 
-                                          :unsigned-long device-id 
-                                          :unsigned-byte door
-                                          :address err
-                                          :signed-fullword)))
-        (unless (eq ok 0) (error 'uhppoted-error :message (%get-cstring errmsgp))))
+      (unless (eq 0 (external-call "OpenDoor" :address uhppote 
+                                              :unsigned-long device-id 
+                                              :unsigned-byte door
+                                              :address err
+                                              :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t))
   (dispose-heap-ivector errmsg)))
 
@@ -566,14 +568,13 @@
     (rletz ((N :signed-long 0)
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "GetCards" :address uhppote 
-                                                 :unsigned-long device-id 
-                                                 :address N 
-                                                 :address err
-                                                 :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      (%get-signed-long N)))
+      (unless (eq 0 (external-call "GetCards" :address uhppote 
+                                              :unsigned-long device-id 
+                                              :address N 
+                                              :address err
+                                              :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (%get-signed-long N))
   (dispose-heap-ivector errmsg))))
 
 
@@ -588,22 +589,21 @@
                                     :doors doors)
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (with-macptrs ((ok (external-call "GetCard" :address uhppote 
-                                                  :unsigned-long device-id 
-                                                  :unsigned-long card-number
-                                                  :address card
-                                                  :address err
-                                                  :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-        (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
-                   :from        (%get-cstring       (pref card :GoCard.from))
-                   :to          (%get-cstring       (pref card :GoCard.to))
-                   :doors       (list (%get-unsigned-byte doors 0)
-                                      (%get-unsigned-byte doors 1)
-                                      (%get-unsigned-byte doors 2)
-                                      (%get-unsigned-byte doors 3))
-                   :PIN         (pref card :GoCard.PIN)))))
+      (unless (eq 0 (external-call "GetCard" :address uhppote 
+                                             :unsigned-long device-id 
+                                             :unsigned-long card-number
+                                             :address card
+                                             :address err
+                                             :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
+                 :from        (%get-cstring       (pref card :GoCard.from))
+                 :to          (%get-cstring       (pref card :GoCard.to))
+                 :doors       (list (%get-unsigned-byte doors 0)
+                                    (%get-unsigned-byte doors 1)
+                                    (%get-unsigned-byte doors 2)
+                                    (%get-unsigned-byte doors 3))
+                 :PIN         (pref card :GoCard.PIN))))
   (dispose-heap-ivector from)
   (dispose-heap-ivector to)
   (dispose-heap-ivector errmsg))))))
@@ -620,22 +620,21 @@
                                     :doors doors)
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (with-macptrs ((ok (external-call "GetCardByIndex" :address uhppote 
-                                                         :unsigned-long device-id 
-                                                         :unsigned-long index
-                                                         :address card
-                                                         :address err
-                                                         :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-        (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
-                   :from        (%get-cstring       (pref card :GoCard.from))
-                   :to          (%get-cstring       (pref card :GoCard.to))
-                   :doors       (list (%get-unsigned-byte doors 0)
-                                      (%get-unsigned-byte doors 1)
-                                      (%get-unsigned-byte doors 2)
-                                      (%get-unsigned-byte doors 3))
-                   :PIN         (pref card :GoCard.PIN)))))
+      (unless (eq 0 (external-call "GetCardByIndex" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :unsigned-long index
+                                                    :address card
+                                                    :address err
+                                                    :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
+                 :from        (%get-cstring       (pref card :GoCard.from))
+                 :to          (%get-cstring       (pref card :GoCard.to))
+                 :doors       (list (%get-unsigned-byte doors 0)
+                                    (%get-unsigned-byte doors 1)
+                                    (%get-unsigned-byte doors 2)
+                                    (%get-unsigned-byte doors 3))
+                 :PIN         (pref card :GoCard.PIN))))
   (dispose-heap-ivector from)
   (dispose-heap-ivector to)
   (dispose-heap-ivector errmsg))))))
@@ -649,25 +648,23 @@
       (unwind-protect
         (rletz ((err (:struct :GoError) :len     errlen
                                         :message errmsgp))
-        (progn
           (setf (paref pdoors (:* :unsigned-byte) 0) (aref doors 0))
           (setf (paref pdoors (:* :unsigned-byte) 1) (aref doors 1))
           (setf (paref pdoors (:* :unsigned-byte) 2) (aref doors 2))
           (setf (paref pdoors (:* :unsigned-byte) 3) (aref doors 3))
-          (with-macptrs ((ok (external-call "PutCard" :address uhppote 
-                                                      :unsigned-long device-id 
-                                                      :unsigned-long card-number
-                                                      :address       from_  
-                                                      :address       to_
-                                                      :address       pdoors
-                                                      :unsigned-long PIN
-                                                      :address err
-                                                      :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t)))
+          (unless (eq 0 (external-call "PutCard" :address uhppote 
+                                                 :unsigned-long device-id 
+                                                 :unsigned-long card-number
+                                                 :address       from_  
+                                                 :address       to_
+                                                 :address       pdoors
+                                                 :unsigned-long PIN
+                                                 :address err
+                                                 :signed-long))
+            (error 'uhppoted-error :message (%get-cstring errmsgp)))
+          t))
     (dispose-heap-ivector doors_)
-    (dispose-heap-ivector errmsg))))))
+    (dispose-heap-ivector errmsg)))))
 
 
 (defun uhppoted-delete-card (uhppote device-id card-number) "Deletes a card from a controller"
@@ -675,14 +672,13 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "DeleteCard" :address uhppote 
-                                                   :unsigned-long device-id 
-                                                   :unsigned-long card-number
-                                                   :address err
-                                                   :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "DeleteCard" :address uhppote 
+                                                :unsigned-long device-id 
+                                                :unsigned-long card-number
+                                                :address err
+                                                :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
 
 
@@ -691,13 +687,12 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "DeleteCards" :address uhppote 
-                                                    :unsigned-long device-id 
-                                                    :address err
-                                                    :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "DeleteCards" :address uhppote 
+                                                 :unsigned-long device-id 
+                                                 :address err
+                                                 :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
 
 
@@ -707,14 +702,13 @@
     (rletz ((index :signed-long 0)
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "GetEventIndex" :address uhppote 
-                                                      :unsigned-long device-id 
-                                                      :address index
-                                                      :address err
-                                                      :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      (%get-unsigned-long index)))
+      (unless (eq 0 (external-call "GetEventIndex" :address uhppote 
+                                                   :unsigned-long device-id 
+                                                   :address index
+                                                   :address err
+                                                   :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (%get-unsigned-long index))
     (dispose-heap-ivector errmsg))))
 
 
@@ -723,14 +717,13 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "SetEventIndex" :address uhppote 
-                                                      :unsigned-long device-id 
-                                                      :unsigned-long index
-                                                      :address err
-                                                      :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "SetEventIndex" :address uhppote 
+                                                   :unsigned-long device-id 
+                                                   :unsigned-long index
+                                                   :address err
+                                                   :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
 
 
@@ -741,14 +734,13 @@
     (rletz ((event (:struct :GoEvent) :timestamp timestampp)
             (err   (:struct :GoError) :len     errlen
                                       :message errmsgp))
-    (with-macptrs ((ok (external-call "GetEvent" :address uhppote 
-                                                 :unsigned-long device-id 
-                                                 :unsigned-long index
-                                                 :address event
-                                                 :address err
-                                                 :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (eq 0(external-call "GetEvent" :address uhppote 
+                                             :unsigned-long device-id 
+                                             :unsigned-long index
+                                             :address event
+                                             :address err
+                                             :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-event :timestamp  (%get-cstring (pref event :GoEvent.timestamp))
                   :index      (pref event :GoEvent.index)
                   :event-type (pref event :GoEvent.event-type)
@@ -756,7 +748,7 @@
                   :door       (pref event :GoEvent.door)
                   :direction  (pref event :GoEvent.direction)
                   :card       (pref event :GoEvent.card)
-                  :reason     (pref event :GoEvent.reason))))
+                  :reason     (pref event :GoEvent.reason)))
     (dispose-heap-ivector timestamp)
     (dispose-heap-ivector errmsg)))))
 
@@ -766,14 +758,13 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "RecordSpecialEvents" :address uhppote 
-                                                            :unsigned-long device-id 
-                                                            :unsigned-byte (if enabled 1 0)
-                                                            :address err
-                                                            :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "RecordSpecialEvents" :address uhppote 
+                                                         :unsigned-long device-id 
+                                                         :unsigned-byte (if enabled 1 0)
+                                                         :address err
+                                                         :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
 
 
@@ -798,14 +789,13 @@
                                               :segment3end   segment3endp)
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "GetTimeProfile" :address uhppote
-                                                       :unsigned-long device-id 
-                                                       :unsigned-byte profile-id
-                                                       :address profile
-                                                       :address err
-                                                       :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (unless (eq 0 (external-call "GetTimeProfile" :address uhppote
+                                                    :unsigned-long device-id 
+                                                    :unsigned-byte profile-id
+                                                    :address profile
+                                                    :address err
+                                                    :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-time-profile :ID            (pref profile :GoTimeProfile.ID)
                          :linked        (pref profile :GoTimeProfile.linked)
                          :from          (%get-cstring (pref profile :GoTimeProfile.from))
@@ -822,7 +812,7 @@
                          :segment2start (%get-cstring (pref profile :GoTimeProfile.segment2start))
                          :segment2end   (%get-cstring (pref profile :GoTimeProfile.segment2end))
                          :segment3start (%get-cstring (pref profile :GoTimeProfile.segment3start))
-                         :segment3end   (%get-cstring (pref profile :GoTimeProfile.segment3end)))))
+                         :segment3end   (%get-cstring (pref profile :GoTimeProfile.segment3end))))
     (dispose-heap-ivector from)
     (dispose-heap-ivector to)
     (dispose-heap-ivector segment1start)
@@ -864,14 +854,13 @@
                                         :segment3end   segment3end)
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "SetTimeProfile" :address       uhppote 
-                                                       :unsigned-long device-id 
-                                                       :address       p
-                                                       :address       err
-                                                       :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t)))
+      (unless (eq 0 (external-call "SetTimeProfile" :address       uhppote 
+                                                    :unsigned-long device-id 
+                                                    :address       p
+                                                    :address       err
+                                                    :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t))
     (dispose-heap-ivector errmsg))))
 
 
@@ -880,13 +869,12 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "ClearTimeProfiles" :address uhppote 
-                                                          :unsigned-long device-id 
-                                                          :address       err
-                                                          :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "ClearTimeProfiles" :address uhppote 
+                                                       :unsigned-long device-id 
+                                                       :address       err
+                                                       :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
 
 
@@ -911,14 +899,13 @@
                                   :cards     (task-cards task))
             (err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-     (with-macptrs ((ok (external-call "AddTask" :address       uhppote 
-                                                 :unsigned-long device-id 
-                                                 :address       tt
-                                                 :address       err
-                                                 :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-       t)))
+      (unless (eq 0 (external-call "AddTask" :address       uhppote 
+                                             :unsigned-long device-id 
+                                             :address       tt
+                                             :address       err
+                                             :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+       t))
     (dispose-heap-ivector errmsg))))
 
 
@@ -927,13 +914,12 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-      (with-macptrs ((ok (external-call "RefreshTaskList" :address uhppote 
-                                                          :unsigned-long device-id 
-                                                          :address       err
-                                                          :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0(external-call "RefreshTaskList" :address uhppote 
+                                                    :unsigned-long device-id 
+                                                    :address       err
+                                                    :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
 
 
@@ -942,95 +928,95 @@
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "ClearTaskList" :address uhppote 
-                                                      :unsigned-long device-id 
-                                                      :address       err
-                                                      :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "ClearTaskList" :address uhppote 
+                                                   :unsigned-long device-id 
+                                                   :address       err
+                                                   :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
+
 
 (defun uhppoted-set-pc-control (uhppote device-id enabled) "Enables/disables controller remote access control"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "SetPCControl" :address uhppote 
-                                                     :unsigned-long device-id 
-                                                     :unsigned-byte (if enabled 1 0)
-                                                     :address       err
-                                                     :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "SetPCControl" :address uhppote 
+                                                  :unsigned-long device-id 
+                                                  :unsigned-byte (if enabled 1 0)
+                                                  :address       err
+                                                  :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
+
 
 (defun uhppoted-set-interlock (uhppote device-id interlock) "Sets a controller interlock mode"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "SetInterlock" :address uhppote 
-                                                     :unsigned-long device-id 
-                                                     :unsigned-byte interlock
-                                                     :address       err
-                                                     :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "SetInterlock" :address uhppote 
+                                                  :unsigned-long device-id 
+                                                  :unsigned-byte interlock
+                                                  :address       err
+                                                  :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
+
 
 (defun uhppoted-activate-keypads (uhppote device-id reader1 reader2 reader3 reader4) "Activates and deactivates a controller reader access keypads"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rlet ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "ActivateKeypads" :address uhppote 
-                                                        :unsigned-long device-id 
-                                                        :unsigned-byte (if reader1 1 0)
-                                                        :unsigned-byte (if reader2 1 0)
-                                                        :unsigned-byte (if reader3 1 0)
-                                                        :unsigned-byte (if reader4 1 0)
-                                                        :address       err
-                                                        :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "ActivateKeypads" :address uhppote 
+                                                     :unsigned-long device-id 
+                                                     :unsigned-byte (if reader1 1 0)
+                                                     :unsigned-byte (if reader2 1 0)
+                                                     :unsigned-byte (if reader3 1 0)
+                                                     :unsigned-byte (if reader4 1 0)
+                                                     :address       err
+                                                     :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
+
 
 (defun uhppoted-set-door-passcodes (uhppote device-id door passcode1 passcode2 passcode3 passcode4) "Sets the supervisor keypad passcodes for a door"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rlet ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "SetDoorPasscodes" :address uhppote 
-                                                         :unsigned-long device-id 
-                                                         :unsigned-byte door
-                                                         :unsigned-long passcode1
-                                                         :unsigned-long passcode2
-                                                         :unsigned-long passcode3
-                                                         :unsigned-long passcode4
-                                                         :address       err
-                                                         :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-    t))
+      (unless (eq 0 (external-call "SetDoorPasscodes" :address uhppote 
+                                                      :unsigned-long device-id 
+                                                      :unsigned-byte door
+                                                      :unsigned-long passcode1
+                                                      :unsigned-long passcode2
+                                                      :unsigned-long passcode3
+                                                      :unsigned-long passcode4
+                                                      :address       err
+                                                      :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
+
 
 (defun uhppoted-restore-default-parameters (uhppote device-id) "Resets a controller to the manufacturer default configuration"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (rletz ((err (:struct :GoError) :len     errlen
                                     :message errmsgp))
-    (with-macptrs ((ok (external-call "RestoreDefaultParameters" :address uhppote 
-                                                                 :unsigned-long device-id 
-                                                                 :address       err
-                                                                 :signed-long)))
-      ; CCL absolutely insists 'err' is a foreign pointer (because with-macptrs maybe ?)
-      (unless (%null-ptr-p ok) (error 'uhppoted-error :message (%get-cstring errmsgp)))
-      t))
+      (unless (eq 0 (external-call "RestoreDefaultParameters" :address uhppote 
+                                                              :unsigned-long device-id 
+                                                              :address       err
+                                                              :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
     (dispose-heap-ivector errmsg))))
+
 
 (defparameter *uhppoted-event-handler* nil)
 (defparameter *uhppoted-error-handler* nil)
