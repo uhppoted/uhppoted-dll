@@ -28,10 +28,15 @@ is straightforward (see below) and only requires that _go_ and _cgo_ are install
 
 ### Current Release
 
-**[v0.8.8](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.8) - 2024-03-27**
+**[v0.8.9](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.9) - 2024-09-06**
 
-1. Implemented `restore-default-parameters` function to reset a controller to the manufacturer default configuration.
-2. Bumped Go version to 1.22.
+1. Added `listen` API function to capture controller events.
+2. Added VB.NET example GUI application authored by @threeeye.
+3. Added `transport` field to `udevice` struct for TCP support.
+4. Reworked throughout to use preallocated memory for strings (for Windows LTSC).
+5. Restructured error handling to use an _error_ struct.
+6. Updated to Go 1.23.
+7. Reordered internal function parameters to follow (in,out,err) convention
 
 
 ## Installation

@@ -10,6 +10,10 @@ github.com/uhppoted/uhppote-core v0.8.9-0.20240716175228-f9eb59015579 h1:SIw99yY
 github.com/uhppoted/uhppote-core v0.8.9-0.20240716175228-f9eb59015579/go.mod h1:Q+DHtT8s74efLs2b0eF20DRBUL9yBkySwaTQ+0lsEVM=
 github.com/uhppoted/uhppote-core v0.8.9-0.20240823182843-e0981da9c4a4 h1:7zcs93hYt0sBp+kCIbgju4Tgc1zvaRVgReksSs4K1uM=
 github.com/uhppoted/uhppote-core v0.8.9-0.20240823182843-e0981da9c4a4/go.mod h1:oUQdz4NBMXkcwzEHUd6lYQgF6He32+jnb+FMwehZRwg=
+github.com/uhppoted/uhppote-core v0.8.9-0.20240905182113-96b4c7f5bb0e h1:4K/9n6bxViy4GC2fZVO3N5onun4/glU3gOYY6aczO/M=
+github.com/uhppoted/uhppote-core v0.8.9-0.20240905182113-96b4c7f5bb0e/go.mod h1:oUQdz4NBMXkcwzEHUd6lYQgF6He32+jnb+FMwehZRwg=
+github.com/uhppoted/uhppote-core v0.8.9 h1:1+PE/rSS5fWJfPZ97UXkRBWHmp/h80QLgQ+P3942WZU=
+github.com/uhppoted/uhppote-core v0.8.9/go.mod h1:oUQdz4NBMXkcwzEHUd6lYQgF6He32+jnb+FMwehZRwg=
 github.com/uhppoted/uhppoted-lib v0.8.9-0.20240605161930-54dea6fc78b1 h1:T1tGRfDa/jN9apkZtiid5FmHMMxjNXuazp7Mi9J4K/U=
 github.com/uhppoted/uhppoted-lib v0.8.9-0.20240605161930-54dea6fc78b1/go.mod h1:di+eHPBWGIN6UwtmjXNPzmKZyoE8VL7f1KDbbw1cFzQ=
 github.com/uhppoted/uhppoted-lib v0.8.9-0.20240606160456-0430d2c98f6d h1:tc5XXgrJMMZT8kogXpBJkt4QMO/UYbOIyLVRtxzbp24=
@@ -24,3 +28,7 @@ github.com/uhppoted/uhppoted-lib v0.8.9-0.20240814183232-228a330a26e2 h1:zLOOyFu
 github.com/uhppoted/uhppoted-lib v0.8.9-0.20240814183232-228a330a26e2/go.mod h1:0/apbyGsubo2DxF3ZE5B9oFrDOuwPhawpFTGN8x2XZc=
 github.com/uhppoted/uhppoted-lib v0.8.9-0.20240823183521-d127a710cea0 h1:ZD9n1Q6w2ykR2KoORUKo2s4lFLiWsCwMj5ByYec12bU=
 github.com/uhppoted/uhppoted-lib v0.8.9-0.20240823183521-d127a710cea0/go.mod h1:vz01fBAy8QYbwUGBCfFEZh5naPt9Ma6SHlzp/SIRLcE=
+github.com/uhppoted/uhppoted-lib v0.8.9-0.20240827173223-f5262c207d8b h1:ItQCO+PnhGKlyOwn4SEpxq+pw7VXRy/+72mz4TM+yaE=
+github.com/uhppoted/uhppoted-lib v0.8.9-0.20240827173223-f5262c207d8b/go.mod h1:vz01fBAy8QYbwUGBCfFEZh5naPt9Ma6SHlzp/SIRLcE=
+github.com/uhppoted/uhppoted-lib v0.8.9 h1:PQmlZeESlYhLfkGpBxTeRyQaD2b3melImtcsgb8VVhw=
+github.com/uhppoted/uhppoted-lib v0.8.9/go.mod h1:tQgA5Jno0R2g8hlv7Wi52vVZYmdB9DFFLehLWLHuuKU=
