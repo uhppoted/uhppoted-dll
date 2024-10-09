@@ -132,9 +132,11 @@ bool setTime(uhppoted &u) {
 
 bool getListener(uhppoted &u) {
     string listener = u.get_listener(DEVICE_ID);
+    uint8_t interval = u.get_listener_interval(DEVICE_ID);
 
     vector<result> rs = {
         result("listener address", string("192.168.1.100:60001"), listener),
+        result("listener interval", uint8_t(15), interval),
     };
 
     return evaluate("get-listener", rs);
@@ -142,8 +144,9 @@ bool getListener(uhppoted &u) {
 
 bool setListener(uhppoted &u) {
     string listener = "192.168.1.100:60001";
+    uint8_t interval = 15;
 
-    u.set_listener(DEVICE_ID, listener);
+    u.set_listener(DEVICE_ID, listener, interval);
 
     vector<result> rs = {};
 

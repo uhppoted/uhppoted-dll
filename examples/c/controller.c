@@ -180,8 +180,9 @@ int setTime(int argc, char **argv) {
 int getListener(int argc, char **argv) {
     uint32_t deviceID = parse(argc, argv).device_id;
     char *listener;
+    uint8_t interval;
 
-    if (get_listener(deviceID, &listener) != 0) {
+    if (get_listener(deviceID, &listener, &interval) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -189,6 +190,7 @@ int getListener(int argc, char **argv) {
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
         {.field = "event listener", .type = "string", .value.string = listener},
+        {.field = "interval", .type = "uint8", .value.uint8 = interval},
     };
 
     display("get-listener", sizeof(fields) / sizeof(field), fields);
@@ -202,8 +204,9 @@ int setListener(int argc, char **argv) {
     options opts = parse(argc, argv);
     uint32_t deviceID = opts.device_id;
     const char *listener = opts.listener;
+    uint8_t interval = opts.auto_send_interval;
 
-    if (set_listener(deviceID, (char *)listener) != 0) {
+    if (set_listener(deviceID, (char *)listener, interval) != 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
@@ -211,6 +214,7 @@ int setListener(int argc, char **argv) {
     field fields[] = {
         {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
         {.field = "event listener", .type = "string", .value.string = (char *)listener},
+        {.field = "interval", .type = "uint8", .value.uint8 = interval},
     };
 
     display("set-listener", sizeof(fields) / sizeof(field), fields);

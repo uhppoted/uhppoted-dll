@@ -255,16 +255,18 @@ public class Tests {
 
     static bool GetListener(Uhppoted u) {
         string listener = u.GetListener(DEVICE_ID);
+        byte interval = u.GetListenerInterval(DEVICE_ID);
 
         result[] resultset = {
             new stringResult("event listener address", "192.168.1.100:60001", listener),
+            new uint8Result("event listener interval", 15, interval),
         };
 
         return evaluate("get-listener", resultset);
     }
 
     static bool SetListener(Uhppoted u) {
-        u.SetListener(DEVICE_ID, "192.168.1.100:60001");
+        u.SetListener(DEVICE_ID, "192.168.1.100:60001", 15);
 
         result[] resultset = {};
 

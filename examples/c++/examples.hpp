@@ -16,6 +16,7 @@ typedef struct options {
     std::string subnet_mask;
     std::string gateway;
     std::string listener;
+    uint8_t auto_send_interval;
     uint32_t card;
     uint32_t card_index;
     uint8_t door;

@@ -337,14 +337,16 @@ string uhppoted::get_listener(uint32_t id) {
         .message = errmsg,
     };
 
-    if (GetListener(u, id, listener, &err) != 0) {
+    if (GetListener(u, id, listener, NULL, &err) != 0) {
         throw uhppoted_exception(err);
     }
 
     return listener;
 }
 
-void uhppoted::set_listener(uint32_t id, std::string &listener) {
+uint8_t uhppoted::get_listener_interval(uint32_t id) {
+    char listener[22] = "";
+    uint8_t interval;
     char errmsg[256] = "";
 
     error err = {
@@ -352,7 +354,22 @@ void uhppoted::set_listener(uint32_t id, std::string &listener) {
         .message = errmsg,
     };
 
-    if (SetListener(u, id, listener.c_str(), &err) != 0) {
+    if (GetListener(u, id, listener, &interval, &err) != 0) {
+        throw uhppoted_exception(err);
+    }
+
+    return interval;
+}
+
+void uhppoted::set_listener(uint32_t id, std::string &listener, uint8_t interval) {
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetListener(u, id, listener.c_str(), interval, &err) != 0) {
         throw uhppoted_exception(err);
     }
 }

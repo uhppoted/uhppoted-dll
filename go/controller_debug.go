@@ -180,23 +180,27 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	}
 }
 
-func getListener(uu uhppote.IUHPPOTE, address *C.char, deviceID uint32) error {
+func getListener(uu uhppote.IUHPPOTE, controller uint32, address *C.char, interval *uint8) error {
 	if address == nil {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to char[22]")
 	}
 
 	if DEBUG {
 		fmt.Printf(">>> get-listener\n")
-		fmt.Printf("    ID: %v\n", deviceID)
+		fmt.Printf("    ID: %v\n", controller)
 		fmt.Println()
 	}
 
 	cstring("192.168.1.100:60001", address, 22)
 
+	if interval == nil {
+		*interval = 15
+	}
+
 	return nil
 }
 
-func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
+func setListener(uu uhppote.IUHPPOTE, controller uint32, listener *C.char, interval uint8) error {
 	if listener == nil {
 		return fmt.Errorf("invalid argument (listener) - expected valid pointer to string")
 	}
@@ -207,8 +211,9 @@ func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
 		return fmt.Errorf("Invalid UDP address: %v", listener)
 	} else if DEBUG {
 		fmt.Printf(">>> set-listener\n")
-		fmt.Printf("    ID:       %v\n", deviceID)
+		fmt.Printf("    ID:       %v\n", controller)
 		fmt.Printf("    listener: %v\n", address.IP.To4())
+		fmt.Printf("    interval: %d\n", interval)
 		fmt.Println()
 	}
 

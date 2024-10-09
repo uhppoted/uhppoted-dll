@@ -163,12 +163,24 @@ Returns the controller event listener IPv4 address:port as a string if the call 
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
+### `get-listener-interval`
+```
+(defun uhppoted-get-listener-interval (uhppote device-id) ...)
+
+device-id  controller serial number 
+
+Returns the controller auto-send interval (seconds)
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
 ### `set-listener`
 ```
-(defun uhppoted-set-listener (uhppote device-id listener) ...)
+(defun uhppoted-set-listener (uhppote device-id listener interval) ...)
 
 device-id  controller serial number 
 listener   listener IPv4 address:port string
+interval   auto-send interval (seconds). A zero value disables auto-send.
 
 Raises a `uhppoted-error` condition if the call failed.
 ```

@@ -154,12 +154,25 @@ Throws a uhppoted_exception if the call failed. The error message can be retriev
 uhppoted_exception::what() method.
 ```
 
+### `get_listener_interval`
+```
+uint8_t uhppoted::get_listener_interval(uint32_t id);
+
+id  controller serial number 
+
+Returns the controller auto-send interval (seconds).
+
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
+```
+
 ### `set_listener`
 ```
-void uhppoted::set_listener(uint32_t id, std::string &);
+void uhppoted::set_listener(uint32_t id, std::string &, uint8_t interval);
 
 id        controller serial number 
 listener  listener IPv4 address:port string
+interval  auto-send interval (seconds). A zero value disables auto-send.
 
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
 uhppoted_exception::what() method.

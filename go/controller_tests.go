@@ -197,36 +197,44 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	return nil
 }
 
-func getListener(uu uhppote.IUHPPOTE, address *C.char, deviceID uint32) error {
+func getListener(uu uhppote.IUHPPOTE, controller uint32, address *C.char, interval *uint8) error {
 	if address == nil {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to char[22]")
 	}
 
-	if deviceID != 405419896 {
-		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect controller ID (%v)", controller)
 	}
 
 	cstring("192.168.1.100:60001", address, 22)
 
+	if interval != nil {
+		*interval = 15
+	}
+
 	return nil
 }
 
-func setListener(uu uhppote.IUHPPOTE, deviceID uint32, listener *C.char) error {
+func setListener(uu uhppote.IUHPPOTE, controller uint32, listener *C.char, interval uint8) error {
 	if listener == nil {
 		return fmt.Errorf("invalid argument (listener) - expected valid pointer to string")
 	}
 
-	if deviceID != 405419896 {
-		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
+	if controller != 405419896 {
+		return fmt.Errorf("incorrect controller ID (%v)", controller)
 	}
 
 	_listener := C.GoString(listener)
 	if address, err := net.ResolveUDPAddr("udp", _listener); err != nil {
 		return err
 	} else if address == nil || address.IP.To4() == nil {
-		return fmt.Errorf("Invalid UDP address: %v", listener)
+		return fmt.Errorf("invalid UDP address: %v", listener)
 	} else if _listener != "192.168.1.100:60001" {
-		return fmt.Errorf("Incorrect listener address (%v)", _listener)
+		return fmt.Errorf("incorrect listener address (%v)", _listener)
+	}
+
+	if interval != 15 {
+		return fmt.Errorf("incorrect auto-send interval (%v)", interval)
 	}
 
 	return nil

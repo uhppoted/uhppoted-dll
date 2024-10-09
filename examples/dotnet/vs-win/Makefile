@@ -24,7 +24,7 @@ get-listener:
 	$(CLI) get-listener --controller $(CONTROLLER)
 
 set-listener:
-	$(CLI) set-listener --controller $(CONTROLLER) --listener 192.168.1.100:60001
+	$(CLI) set-listener --controller $(CONTROLLER) --listener 192.168.1.100:60001 --listener-interval 15
 
 get-door-control:
 	$(CLI) get-door-control --controller $(CONTROLLER) --door 4

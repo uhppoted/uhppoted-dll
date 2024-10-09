@@ -72,17 +72,22 @@
 
 (defun get-listener (args) "" 
   (let* ((device-id (args-device-id args))
-         (listener (exec #'(lambda (u) (uhppoted-get-listener u device-id)))))
+         (listener (exec #'(lambda (u) (uhppoted-get-listener          u device-id))))
+         (interval (exec #'(lambda (u) (uhppoted-get-listener-interval u device-id))))
+         )
     (when listener
-      (display "get-listener" device-id (list "listener" listener)))))
+      (display "get-listener" device-id (list "listener" listener
+                                              "interval" interval)))))
 
 
 (defun set-listener (args) "" 
-  (let* ((device-id (args-device-id     args))
-         (listener  (args-listener-addr args))
-         (ok        (exec #'(lambda (u) (uhppoted-set-listener u device-id listener)))))
+  (let* ((device-id (args-device-id         args))
+         (listener  (args-listener-addr     args))
+         (interval  (args-listener-interval args))
+         (ok        (exec #'(lambda (u) (uhppoted-set-listener u device-id listener interval)))))
     (when ok
-      (display "set-listener" device-id (list "listener" listener)))))
+      (display "set-listener" device-id (list "listener" listener
+                                              "interval" interval)))))
 
 
 (defun get-door-control (args) "" 
@@ -371,6 +376,9 @@
 
 (defun args-listener-addr (args)
   (parse-args args "--listener-address" "192.168.1.100:60001"))
+
+(defun args-listener-interval (args)
+  (parse-integer (parse-args args "--listener-interval" "0")))
 
 (defun args-door (args)
   (parse-integer (parse-args args "--door" "4")))

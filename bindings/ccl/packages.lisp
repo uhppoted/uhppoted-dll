@@ -11,6 +11,7 @@
            uhppoted-get-time
            uhppoted-set-time
            uhppoted-get-listener
+           uhppoted-get-listener-interval
            uhppoted-set-listener
            uhppoted-get-door-control
            uhppoted-set-door-control

@@ -44,6 +44,7 @@ typedef struct options {
     const char *subnet_mask;
     const char *gateway;
     const char *listener;
+    uint8_t auto_send_interval;
     uint32_t card;
     uint32_t card_index;
     uint8_t door;

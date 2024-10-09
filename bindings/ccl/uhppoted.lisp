@@ -488,6 +488,7 @@
       (unless (eq 0 (external-call "GetListener" :address uhppote 
                                                  :unsigned-long device-id 
                                                  :address listenerp
+                                                 :address (%null-ptr)
                                                  :address err
                                                  :signed-fullword))
         (error 'uhppoted-error :message (%get-cstring errmsgp)))
@@ -495,8 +496,26 @@
   (dispose-heap-ivector listener)
   (dispose-heap-ivector errmsg)))))
 
+(defun uhppoted-get-listener-interval (uhppote device-id) "Retrieves the controller event listener address"
+  (multiple-value-bind (errmsg   errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (multiple-value-bind (listener listenerp)      (make-heap-ivector 22  '(unsigned-byte 8))
+  (unwind-protect
+    (rletz ((interval :unsigned-byte 0)
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+      (unless (eq 0 (external-call "GetListener" :address uhppote 
+                                                 :unsigned-long device-id 
+                                                 :address listenerp
+                                                 :address interval
+                                                 :address err
+                                                 :signed-fullword))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+    (%get-unsigned-byte interval))
+  (dispose-heap-ivector listener)
+  (dispose-heap-ivector errmsg)))))
 
-(defun uhppoted-set-listener (uhppote device-id listener) "Sets a controller's event listener address and port"
+
+(defun uhppoted-set-listener (uhppote device-id listener interval) "Sets a controller's event listener address:port and auto-send interval"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect
     (with-cstrs ((addr listener))
@@ -505,6 +524,7 @@
       (unless (eq 0 (external-call "SetListener" :address uhppote 
                                                  :unsigned-long device-id 
                                                  :address addr
+                                                 :unsigned-byte interval
                                                  :address err
                                                  :signed-fullword))
         (error 'uhppoted-error :message (%get-cstring errmsgp)))

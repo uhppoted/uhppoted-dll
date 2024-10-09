@@ -138,10 +138,12 @@ void getListener(uhppoted &u, int argc, char **argv) {
     uint32_t deviceID = options.device_id;
 
     auto listener = u.get_listener(deviceID);
+    uint8_t interval = u.get_listener_interval(deviceID);
 
     vector<field> fields = {
         field("ID", deviceID),
         field("event listener", listener),
+        field("interval", interval),
     };
 
     display("get-listener", fields);
@@ -151,12 +153,14 @@ void setListener(uhppoted &u, int argc, char **argv) {
     auto options = parse(argc, argv);
     uint32_t deviceID = options.device_id;
     string listener = options.listener;
+    uint8_t interval = options.auto_send_interval;
 
-    u.set_listener(deviceID, listener);
+    u.set_listener(deviceID, listener, interval);
 
     vector<field> fields = {
         field("ID", deviceID),
         field("event listener", listener),
+        field("interval", interval),
     };
 
     display("set-listener", fields);

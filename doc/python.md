@@ -142,12 +142,24 @@ Returns the controller event listener IPv4 address:port as a string if the call 
 Raises an Exception if the call failed.
 ```
 
+### `get_listener_interval`
+```
+uhppoted.get_listener_interval(ID);
+
+ID  controller serial number 
+
+Returns the controller auto-send interval (seconds).
+
+Raises an Exception if the call failed.
+```
+
 ### `set_listener`
 ```
 uhppoted.set_listener(ID, listener)
 
 ID        controller serial number 
 listener  listener IPv4 address:port string
+interval  auto-send interval (seconds). A zero value disables auto-send.
 
 Raises an Exception if the call failed.
 ```

@@ -114,8 +114,8 @@ int set_address(uint32_t id, const char *address, const char *subnet, const char
 int get_status(uint32_t id, struct status *);
 int get_time(uint32_t id, char **);
 int set_time(uint32_t id, char *);
-int get_listener(uint32_t id, char **);
-int set_listener(uint32_t id, char *);
+int get_listener(uint32_t id, char **, uint8_t *);
+int set_listener(uint32_t id, char *, uint8_t);
 int get_door_control(uint32_t id, uint8_t door, struct door_control *);
 int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
 int open_door(uint32_t id, uint8_t door);

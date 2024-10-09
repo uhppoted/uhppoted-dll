@@ -25,7 +25,7 @@ class UhppotedDLLCLI
     const byte DOOR = 1;
     const string DOOR_MODE = "controlled";
     const byte DOOR_DELAY = 5;
-    const uint CARD_NUMBER = 10058399;
+    const uint CARD_NUMBER = 10058400;
     const uint CARD_INDEX = 1;
     const string CARD_FROM = "2023-01-01";
     const string CARD_TO = "2024-12-31";
@@ -293,8 +293,9 @@ class UhppotedDLLCLI
         Status status = u.GetStatus(controller);
         string timestamp = status.evt.timestamp;
 
-        if (timestamp == "") {
-           timestamp = "-";
+        if (timestamp == "")
+        {
+            timestamp = "-";
         }
 
         WriteLine(Format("get-status ({0})", controller));
@@ -347,20 +348,24 @@ class UhppotedDLLCLI
     {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         string listener = u.GetListener(controller);
+        byte interval = u.GetListenerInterval(controller);
 
         WriteLine(Format("get-listener ({0})", controller));
         WriteLine(Format("   event listener {0}", listener));
+        WriteLine(Format("   interval       {0}", interval));
     }
 
     static void SetListener(Uhppoted u, string[] args)
     {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         string listener = ParseArgs(args, "--listener", "");
+        byte interval = ParseArgs(args, "--listener-interval", 0);
 
-        u.SetListener(controller, listener);
+        u.SetListener(controller, listener, interval);
 
         WriteLine(Format("set-listener ({0})", controller));
         WriteLine(Format("   event listener {0}", listener));
+        WriteLine(Format("   interval       {0}", interval));
     }
 
     static void GetDoorControl(Uhppoted u, string[] args)
@@ -856,7 +861,8 @@ class UhppotedDLLCLI
         WriteLine(Format("   reader 4 {0}", reader4));
     }
 
-    static void SetDoorPasscodes(Uhppoted u, string[] args) {
+    static void SetDoorPasscodes(Uhppoted u, string[] args)
+    {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         byte door = ParseArgs(args, "--door", DOOR);
         string[] passcodes = ParseArgs(args, "--passcodes", "").Split(",");
@@ -892,7 +898,8 @@ class UhppotedDLLCLI
         WriteLine(Format("   passcode 4 {0}", passcode4));
     }
 
-    static void RestoreDefaultParameters(Uhppoted u, string[] args) {
+    static void RestoreDefaultParameters(Uhppoted u, string[] args)
+    {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
 
         u.RestoreDefaultParameters(controller);
@@ -900,12 +907,14 @@ class UhppotedDLLCLI
         WriteLine(Format("restore-default-parameters ({0})", controller));
     }
 
-    static void Listen(Uhppoted u, string[] args) {
+    static void Listen(Uhppoted u, string[] args)
+    {
         ManualResetEvent exitEvent = new ManualResetEvent(false);
         CancellationTokenSource cancel = new CancellationTokenSource();
         CancellationToken token = cancel.Token;
 
-        Console.CancelKeyPress += (sender, eventArgs) => {
+        Console.CancelKeyPress += (sender, eventArgs) =>
+        {
             eventArgs.Cancel = true;
             exitEvent.Set();
         };
@@ -921,9 +930,11 @@ class UhppotedDLLCLI
         thread.Join(timeout);
     }
 
+
     static void listen(Uhppoted u, CancellationToken done)
     {
-        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
+        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) =>
+        {
             WriteLine("-- EVENT");
             WriteLine("   controller: {0}", e.controller);
             WriteLine("   timestamp:  {0}", e.timestamp);
@@ -937,23 +948,39 @@ class UhppotedDLLCLI
             WriteLine();
         };
 
-        Uhppoted.OnError onerror = (string err) => {
+        Uhppoted.OnError onerror = (string err) =>
+        {
             WriteLine("ERROR {0}", err);
         };
 
-        CancellationTokenSource stop = new CancellationTokenSource();
-        ManualResetEvent stopped = new ManualResetEvent(false);
         TimeSpan delay = TimeSpan.FromMilliseconds(1000);
+        byte listening = 0; // NTS because C# bool is not uint8_t
+        byte stop = 0;      // NTS because C# bool is not uint8_t
 
-        u.ListenEvents(onevent, onerror, stop.Token, stopped, IntPtr.Zero);
+        u.ListenEvents(onevent, onerror, ref listening, ref stop, IntPtr.Zero);
+
+        Thread.Sleep(delay);
+        for (int count = 0; (count < 5) && (listening != 1); count++) {
+            Thread.Sleep(delay);
+        }
+
+        if (listening != 1) {
+            WriteLine("ERROR {0}", "failed to start event listener");
+            return;
+        }
 
         WriteLine("INFO  ... listening");
         done.WaitHandle.WaitOne();
         WriteLine("DEBUG .. stopping");
-        stop.Cancel();
 
-        if (!stopped.WaitOne(delay)) {
-            WriteLine("ERROR timeout waiting for event listener to terminate");            
+        stop = 1;
+        Thread.Sleep(delay);
+        for (int count = 0; (count < 5) && (listening != 0); count++) {
+            Thread.Sleep(delay);
+        }
+
+        if (listening != 0) {
+            WriteLine("ERROR timeout waiting for event listener to terminate");
         }
     }
 

@@ -147,12 +147,24 @@ Returns the controller event listener IPv4 address:port as a string if the call 
 Throws a UhppotedException if the call failed.
 ```
 
+### `Uhppoted::GetListenerInterval`
+```
+public byte GetListenerInterval(uint ID)
+
+ID  controller serial number 
+
+Returns the controller auto-send interval (seconds).
+
+Throws a UhppotedException if the call failed.
+```
+
 ### `Uhppoted::SetListener`
 ```
-public void SetListener(uint ID, string listener)
+public void SetListener(uint ID, string listener, byte interval)
 
 ID        controller serial number 
 listener  listener IPv4 address:port string
+interval  auto-send interval (seconds). A zero value disables auto-send.
 
 Throws a UhppotedException if the call failed.
 ```

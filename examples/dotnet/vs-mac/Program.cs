@@ -348,20 +348,24 @@ class UhppotedDLLCLI
     {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         string listener = u.GetListener(controller);
+        byte interval = u.GetListenerInterval(controller);
 
         WriteLine(Format("get-listener ({0})", controller));
         WriteLine(Format("   event listener {0}", listener));
+        WriteLine(Format("   interval       {0}", interval));
     }
 
     static void SetListener(Uhppoted u, string[] args)
     {
         uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
         string listener = ParseArgs(args, "--listener", "");
+        byte interval = ParseArgs(args, "--listener-interval", 0);
 
-        u.SetListener(controller, listener);
+        u.SetListener(controller, listener, interval);
 
         WriteLine(Format("set-listener ({0})", controller));
         WriteLine(Format("   event listener {0}", listener));
+        WriteLine(Format("   interval       {0}", interval));
     }
 
     static void GetDoorControl(Uhppoted u, string[] args)

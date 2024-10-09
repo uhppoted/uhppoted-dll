@@ -215,18 +215,18 @@ func SetTime(u *C.struct_UHPPOTE, deviceID uint32, datetime *C.cchar_t, err *C.e
 }
 
 //export GetListener
-func GetListener(u *C.struct_UHPPOTE, deviceID uint32, address *C.cchar_t, err *C.error) C.int {
+func GetListener(u *C.struct_UHPPOTE, controller uint32, address *C.cchar_t, interval *uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
-		return getListener(uu, address, deviceID)
+		return getListener(uu, controller, address, interval)
 	}
 
 	return exec(u, f, err)
 }
 
 //export SetListener
-func SetListener(u *C.struct_UHPPOTE, deviceID uint32, listener *C.cchar_t, err *C.error) C.int {
+func SetListener(u *C.struct_UHPPOTE, controller uint32, listener *C.cchar_t, interval uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
-		return setListener(uu, deviceID, listener)
+		return setListener(uu, controller, listener, interval)
 	}
 
 	return exec(u, f, err)

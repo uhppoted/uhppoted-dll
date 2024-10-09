@@ -111,13 +111,16 @@
 
 
 (defun get-listener () "" 
-  (let ((listener (exec #'(lambda (u) (uhppoted-get-listener u TEST-DEVICE-ID)))))
+  (let (
+    (listener (exec #'(lambda (u) (uhppoted-get-listener          u TEST-DEVICE-ID))))
+    (interval (exec #'(lambda (u) (uhppoted-get-listener-interval u TEST-DEVICE-ID)))))
     (evaluate "get-listener" 
-              (list (make-result :field "event listener address" :expected "192.168.1.100:60001" :value listener)))))
+              (list (make-result :field "event listener address"  :expected "192.168.1.100:60001" :value listener)
+                    (make-result :field "event listener interval" :expected 15                    :value interval)))))
 
 
 (defun set-listener () "" 
-  (exec #'(lambda (u) (uhppoted-set-listener u TEST-DEVICE-ID "192.168.1.100:60001")))
+  (exec #'(lambda (u) (uhppoted-set-listener u TEST-DEVICE-ID "192.168.1.100:60001" 15)))
   (evaluate "set-listener" '()))
 
 

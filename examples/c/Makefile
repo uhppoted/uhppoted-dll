@@ -59,7 +59,7 @@ get-listener: build
 	$(CMD) get-listener --controller $(DEVICEID)
 
 set-listener: build
-	$(CMD) set-listener --controller $(DEVICEID) --listener-address 192.168.1.100:60001
+	$(CMD) set-listener --controller $(DEVICEID) --listener-address 192.168.1.100:60001 --interval 13
 
 get-door-control: build
 	$(CMD) get-door-control --controller $(DEVICEID) $(DOOR)

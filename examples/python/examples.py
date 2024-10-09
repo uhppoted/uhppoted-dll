@@ -196,6 +196,7 @@ def main():
                         type=str,
                         default='192.168.1.100:60001',
                         help='controller event listener address')
+    parser.add_argument('--listener-interval', type=int, default=0, help='controller event listener auto-send interval')
 
     parser.add_argument('--card', type=int, default=CARD_NUMBER, help='card number')
     parser.add_argument('--card-index', type=int, default=CARD_INDEX, help='card index')
@@ -365,22 +366,26 @@ def get_listener(u, args):
     device_id = args.controller
 
     listener = u.get_listener(device_id)
+    interval = u.get_listener_interval(device_id)
 
     display('get-listener', [
         ('ID', device_id),
         ('event listener', listener),
+        ('interval', interval),
     ])
 
 
 def set_listener(u, args):
     device_id = args.controller
     listener = args.listener_address
+    interval = args.listener_interval
 
-    u.set_listener(device_id, listener)
+    u.set_listener(device_id, listener, interval)
 
     display('set-listener', [
         ('ID', device_id),
         ('event listener', listener),
+        ('interval', interval),
     ])
 
 

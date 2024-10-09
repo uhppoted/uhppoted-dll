@@ -24,32 +24,6 @@ public class command {
     }
 };
 
-public class options {
-    public uint deviceID;
-    public string ipAddress;
-    public string subnetMask;
-    public string gateway;
-    public string listener;
-    public uint card;
-    public uint cardIndex;
-    public byte door;
-    public uint eventIndex;
-    public byte timeProfileID;
-
-    public options(uint deviceID, string ipAddress, string subnetMask, string gateway, string listener, uint card, uint cardIndex, byte door, uint eventIndex, byte timeProfileID) {
-        this.deviceID = deviceID;
-        this.ipAddress = ipAddress;
-        this.subnetMask = subnetMask;
-        this.gateway = gateway;
-        this.listener = listener;
-        this.card = card;
-        this.cardIndex = cardIndex;
-        this.door = door;
-        this.eventIndex = eventIndex;
-        this.timeProfileID = timeProfileID;
-    }
-};
-
 public class examples {
     const uint DEVICE_ID = 405419896;
     const uint CARD_NUMBER = 10058400;
@@ -59,6 +33,34 @@ public class examples {
     const byte PROFILE_ID = 29;
     const uint PIN = 7531;
     const string locale = "";
+
+    public class options {
+        public uint deviceID;
+        public string ipAddress;
+        public string subnetMask;
+        public string gateway;
+        public string listener;
+        public byte listener_interval;
+        public uint card;
+        public uint cardIndex;
+        public byte door;
+        public uint eventIndex;
+        public byte timeProfileID;
+
+        public options() {
+            this.deviceID = DEVICE_ID;
+            this.ipAddress = "192.168.1.125";
+            this.subnetMask = "255.255.255.0";
+            this.gateway = "192.168.1.0";
+            this.listener = "192.168.1.100:60001";
+            this.listener_interval = 0;
+            this.card = CARD_NUMBER;
+            this.cardIndex = CARD_INDEX;
+            this.door = DOOR;
+            this.eventIndex = EVENT_INDEX;
+            this.timeProfileID = PROFILE_ID;
+        }
+    };
 
     static command[] commands = {
         new command("get-controllers",
@@ -348,10 +350,12 @@ public class examples {
         uint deviceID = opts.deviceID;
 
         string listener = u.GetListener(deviceID);
+        byte interval = u.GetListenerInterval(deviceID);
 
         field[] fields = {
             new uint32Field("ID", deviceID),
             new stringField("event listener", listener),
+            new uint8Field("interval", interval),
         };
 
         display("get-listener", fields);
@@ -361,12 +365,14 @@ public class examples {
         options opts = parse(args);
         uint deviceID = opts.deviceID;
         string listener = opts.listener;
+        byte interval = opts.listener_interval;
 
-        u.SetListener(deviceID, listener);
+        u.SetListener(deviceID, listener, interval);
 
         field[] fields = {
             new uint32Field("ID", deviceID),
             new stringField("event listener", listener),
+            new uint8Field("interval", interval),
         };
 
         display("set-listener", fields);
@@ -900,8 +906,7 @@ public class examples {
     }
 
     static options parse(string[] args) {
-        options opts = new options(DEVICE_ID, "192.168.1.125", "255.255.255.0", "192.168.1.0", "192.168.1.100:60001", CARD_NUMBER,
-                                   CARD_INDEX, DOOR, EVENT_INDEX, PROFILE_ID);
+        options opts = new options();
 
         int ix = 1;
         while (ix < args.Length) {
@@ -935,6 +940,12 @@ public class examples {
             case "--listener-address":
                 if (ix < args.Length) {
                     opts.listener = args[ix++];
+                }
+                break;
+
+            case "--listener-interval":
+                if (ix < args.Length) {
+                    opts.listener_interval = Convert.ToByte(args[ix++]);
                 }
                 break;
 

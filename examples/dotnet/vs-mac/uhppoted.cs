@@ -305,6 +305,7 @@ namespace uhppoted
         public string GetListener(uint deviceID)
         {
             IntPtr listener = Marshal.AllocHGlobal(22);
+            byte interval = 0;
             GoError err = new GoError();
 
             err.len = 256;
@@ -312,7 +313,7 @@ namespace uhppoted
 
             try
             { 
-                if (GetListener(ref this.u, deviceID, listener, ref err) != 0)
+                if (GetListener(ref this.u, deviceID, listener, ref interval, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -326,7 +327,32 @@ namespace uhppoted
             }
         }
 
-        public void SetListener(uint deviceID, string listener)
+        public byte GetListenerInterval(uint deviceID)
+        {
+            IntPtr listener = Marshal.AllocHGlobal(22);
+            byte interval = 0;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
+
+            try
+            { 
+                if (GetListener(ref this.u, deviceID, listener, ref interval, ref err) != 0)
+                {
+                    raise(err);
+                }
+
+                return interval;
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(listener);
+                Marshal.FreeHGlobal(err.message);
+            }
+        }
+
+        public void SetListener(uint deviceID, string listener, byte interval)
         {
             GoError err = new GoError();
 
@@ -335,7 +361,7 @@ namespace uhppoted
 
             try
             { 
-                if (SetListener(ref this.u, deviceID, listener, ref err) != 0)
+                if (SetListener(ref this.u, deviceID, listener, interval, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -1076,10 +1102,10 @@ namespace uhppoted
         private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int GetListener(ref UHPPOTE u, uint deviceID, IntPtr listener, ref GoError err);
+        private static extern int GetListener(ref UHPPOTE u, uint deviceID, IntPtr listener, ref byte interval, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, ref GoError err);
+        private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, byte interval, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int GetDoorControl(ref UHPPOTE u, uint deviceID, byte door, ref GoDoorControl control, ref GoError err);

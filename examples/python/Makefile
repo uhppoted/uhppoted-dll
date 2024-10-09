@@ -54,7 +54,7 @@ get-listener: build
 	$(GO) && $(DLL) && $(CMD) get-listener
 
 set-listener: build
-	$(GO) && $(DLL) && $(CMD) set-listener
+	$(GO) && $(DLL) && $(CMD) set-listener --listener-interval 15
 
 get-door-control: build
 	$(GO) && $(DLL) && $(CMD) get-door-control

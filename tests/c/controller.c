@@ -188,8 +188,9 @@ bool setTime() {
 bool getListener() {
     const char *tag = "get-listener";
     char *listener;
+    uint8_t interval;
 
-    if (get_listener(DEVICE_ID, &listener) != 0) {
+    if (get_listener(DEVICE_ID, &listener, &interval) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
@@ -200,6 +201,12 @@ bool getListener() {
             .type = "string",
             .value.string.expected = "192.168.1.100:60001",
             .value.string.value = listener,
+        },
+        {
+            .field = "interval",
+            .type = "uint8",
+            .value.uint8.expected = 15,
+            .value.uint8.value = interval,
         },
     };
 
@@ -213,7 +220,7 @@ bool getListener() {
 bool setListener() {
     const char *tag = "set-listener";
 
-    if (set_listener(DEVICE_ID, "192.168.1.100:60001") != 0) {
+    if (set_listener(DEVICE_ID, "192.168.1.100:60001", 15) != 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }

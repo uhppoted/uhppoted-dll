@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Updated
+1. Added auto-send interval to the get-listener and set-listener API.
+
 
 ## [0.8.9](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.9) - 2024-09-06
 

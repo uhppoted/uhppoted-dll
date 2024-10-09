@@ -119,7 +119,8 @@ class uhppoted {
     std::string get_time(uint32_t id);
     void set_time(uint32_t id, std::string &);
     std::string get_listener(uint32_t id);
-    void set_listener(uint32_t id, std::string &);
+    uint8_t get_listener_interval(uint32_t id);
+    void set_listener(uint32_t id, std::string &, uint8_t);
     door_control get_door_control(uint32_t id, uint8_t door);
     void set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay);
     void open_door(uint32_t id, uint8_t door);

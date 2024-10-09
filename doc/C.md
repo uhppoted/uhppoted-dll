@@ -164,10 +164,11 @@ Returns:
 
 ### `get_listener`
 ```
-int get_listener(uint32_t id, char **time);
+int get_listener(uint32_t id, char **time, uint8_t *interval);
 
 id        controller serial number 
-listener  pointer for a listener address string
+listener  pointer to a listener address string
+interval  pointer to a uint8_t for the auto-send interval. Can be NULL.
 
 Returns:
 - 0  if the call succeeded. The listener variable will be initialised to a string containing the controller
@@ -178,10 +179,11 @@ Returns:
 
 ### `set_listener`
 ```
-int set_listener(uint32_t id, char *time);
+int set_listener(uint32_t id, char *time, uint8_t interval);
 
 id        controller serial number 
 listener  listener IPv4 address:port
+interval  auto-send interval (seconds). A zero value disables auto-send.
 
 Returns:
 - 0  if the call succeeded. 

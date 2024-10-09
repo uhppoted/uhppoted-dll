@@ -361,8 +361,9 @@ int set_time(uint32_t id, char *datetime) {
     return 0;
 }
 
-int get_listener(uint32_t id, char **t) {
+int get_listener(uint32_t id, char **t, uint8_t *interval) {
     char listener[22] = "";
+    uint8_t _interval;
     char errmsg[256] = "";
 
     error err = {
@@ -370,17 +371,21 @@ int get_listener(uint32_t id, char **t) {
         .message = errmsg,
     };
 
-    if (GetListener(u, id, listener, &err) != 0) {
+    if (GetListener(u, id, listener, &_interval, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }
 
     *t = strdup(listener);
 
+    if (interval != NULL) {
+        *interval = _interval;
+    }
+
     return 0;
 }
 
-int set_listener(uint32_t id, char *listener) {
+int set_listener(uint32_t id, char *listener, uint8_t interval) {
     char errmsg[256] = "";
 
     error err = {
@@ -388,7 +393,7 @@ int set_listener(uint32_t id, char *listener) {
         .message = errmsg,
     };
 
-    if (SetListener(u, id, listener, &err) != 0) {
+    if (SetListener(u, id, listener, interval, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }

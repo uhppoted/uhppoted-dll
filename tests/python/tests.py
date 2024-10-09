@@ -217,14 +217,16 @@ def set_time(u):
 
 def get_listener(u):
     listener = u.get_listener(DEVICE_ID)
+    interval = u.get_listener_interval(DEVICE_ID)
 
     return evaluate('get-listener', [
         ('event listener', '192.168.1.100:60001', listener),
+        ('interval', 15, interval),
     ])
 
 
 def set_listener(u):
-    u.set_listener(DEVICE_ID, '192.168.1.100:60001')
+    u.set_listener(DEVICE_ID, '192.168.1.100:60001', 15)
 
     return evaluate('set-listener', [])
 

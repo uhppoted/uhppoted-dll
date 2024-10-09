@@ -196,30 +196,34 @@ func setTime(uu uhppote.IUHPPOTE, deviceID uint32, datetime *C.char) error {
 	}
 }
 
-func getListener(uu uhppote.IUHPPOTE, address *C.char, deviceID uint32) error {
+func getListener(uu uhppote.IUHPPOTE, controller uint32, address *C.char, interval *uint8) error {
 	if address == nil {
 		return fmt.Errorf("invalid argument (address) - expected valid pointer to char[22]")
 	}
 
-	if v, err := uu.GetListener(deviceID); err != nil {
+	if _address, _interval, err := uu.GetListener(controller); err != nil {
 		return err
-	} else if !v.IsValid() {
-		return fmt.Errorf("%v: invalid response to get-listener", deviceID)
+	} else if !_address.IsValid() {
+		return fmt.Errorf("%v: invalid response to get-listener", controller)
 	} else {
-		cstring(v, address, 22)
+		cstring(_address, address, 22)
+
+		if interval != nil {
+			*interval = _interval
+		}
 	}
 
 	return nil
 }
 
-func setListener(uu uhppote.IUHPPOTE, controller uint32, listener *C.char) error {
+func setListener(uu uhppote.IUHPPOTE, controller uint32, listener *C.char, interval uint8) error {
 	if listener == nil {
 		return fmt.Errorf("invalid argument (listener) - expected valid pointer to string")
 	}
 
 	if address, err := netip.ParseAddrPort(C.GoString(listener)); err != nil {
 		return err
-	} else if ok, err := uu.SetListener(controller, address); err != nil {
+	} else if ok, err := uu.SetListener(controller, address, interval); err != nil {
 		return err
 	} else if !ok {
 		return fmt.Errorf("failed to set event listener")

@@ -265,6 +265,7 @@ options parse(int argc, char **argv) {
         .subnet_mask = "255.255.255.0",
         .gateway = "192.168.1.0",
         .listener = "192.168.1.100:60001",
+        .auto_send_interval = 0,
         .card = CARD_NUMBER,
         .card_index = CARD_INDEX,
         .door = DOOR,
@@ -298,6 +299,12 @@ options parse(int argc, char **argv) {
 
         if (arg == "--listener-address" && ix < argc) {
             opts.listener = argv[ix++];
+        }
+
+        if (arg == "--interval" && ix < argc) {
+            if ((lval = strtol(argv[ix++], nullptr, 10)) > 0) {
+                opts.auto_send_interval = lval < 0 ? 0 : (lval < 256 ? lval : 255);
+            }
         }
 
         if (arg == "--card" && ix < argc) {
