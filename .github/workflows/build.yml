@@ -40,11 +40,6 @@ jobs:
         ln -s /opt/ccl/lx86cl64 /usr/local/bin/ccl64
         sudo apt-get install rlwrap
 
-    # - name: Setup C#
-    #   run: |
-    #     sudo apt-get update
-    #     sudo apt-get install -y dotnet-sdk-9.0
-
     - name: Setup mono
       run: |
         sudo apt install ca-certificates gnupg
