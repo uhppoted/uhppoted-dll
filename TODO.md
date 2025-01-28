@@ -7,6 +7,13 @@
       - [x] CHANGELOG
       - [x] README
 
+- [ ] github build warning:
+```
+errors.cpp:32:33: warning: catching polymorphic type ‘class uhppoted_exception’ by value [-Wcatch-value=]
+   32 |     } catch (uhppoted_exception e) {
+      |                                 ^
+```
+
 ## TODO
 
 - (?) [llgo](https://github.com/goplus/llgo)
