@@ -22,6 +22,7 @@ typedef struct options {
     uint8_t door;
     uint32_t event_index;
     uint8_t time_profile_id;
+    uint8_t antipassback;
 } options;
 
 
@@ -61,6 +62,8 @@ void setPCControl(uhppoted &u, int argc, char **argv);
 void setInterlock(uhppoted &u, int argc, char **argv);
 void activateKeypads(uhppoted &u, int argc, char **argv);
 void setDoorPasscodes(uhppoted &u, int argc, char **argv);
+void getAntiPassback(uhppoted &u, int argc, char **argv);
+void setAntiPassback(uhppoted &u, int argc, char **argv);
 void restoreDefaultParameters(uhppoted &u, int argc, char **argv);
 
 void listenEvents(uhppoted &u, int argc, char **argv);

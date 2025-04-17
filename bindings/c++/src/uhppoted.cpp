@@ -830,6 +830,35 @@ void uhppoted::set_door_passcodes(uint32_t controller, uint8_t door, uint32_t pa
     }
 }
 
+uint8_t uhppoted::get_antipassback(uint32_t controller) {
+    uint8_t antipassback;
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetAntiPassback(u, controller, &antipassback, &err) != 0) {
+        throw uhppoted_exception(err);
+    }
+
+    return antipassback;
+}
+
+void uhppoted::set_antipassback(uint32_t controller, uint8_t antipassback) {
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetAntiPassback(u, controller, antipassback, &err) != 0) {
+        throw uhppoted_exception(err);
+    }
+}
+
 void uhppoted::restore_default_parameters(uint32_t controller) {
     char errmsg[256] = "";
 

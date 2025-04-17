@@ -4,7 +4,7 @@
       - [x] `get-antipassback`
       - [x] `set-antipassback`
       - [x] C
-      - [ ] C++
+      - [x] C++
       - [ ] CCL
       - [ ] dotnet
       - [ ] python

@@ -48,6 +48,8 @@ vector<test> tests = {
     {"set-interlock", setInterlock},
     {"activate-keypads", activateKeypads},
     {"set-door-passcodes", setDoorPasscodes},
+    {"get-antipassback", getAntiPassback},
+    {"set-antipassback", setAntiPassback},
     {"restore-default-parameters", restoreDefaultParameters},
     {"errors", errors},
     {"lookup", internationalisation},
@@ -55,16 +57,17 @@ vector<test> tests = {
     {"listen", listen},
 };
 
-extern const uint32_t DEVICE_ID = 405419896;
-extern const uint32_t DEVICE_ID2 = 303986753;
-extern const uint32_t CARD_ID = 8165538;
-extern const uint32_t CARD_INDEX = 19;
-extern const uint32_t EVENT_INDEX = 51;
-extern const uint8_t DOOR = 4;
-extern const uint8_t PROFILE_ID = 49;
+const uint32_t DEVICE_ID = 405419896;
+const uint32_t DEVICE_ID2 = 303986753;
+const uint32_t CARD_ID = 8165538;
+const uint32_t CARD_INDEX = 19;
+const uint32_t EVENT_INDEX = 51;
+const uint8_t DOOR = 4;
+const uint8_t PROFILE_ID = 49;
+const uint8_t ANTIPASSBACK = 2;
 
-extern const controller ALPHA = {.id = 405419896, .address = "192.168.1.101", "tcp"};
-extern const controller BETA = {.id = 303986753, .address = "192.168.1.102"};
+const controller ALPHA = {.id = 405419896, .address = "192.168.1.101", "tcp"};
+const controller BETA = {.id = 303986753, .address = "192.168.1.102"};
 
 void usage();
 bool passed(const string &);

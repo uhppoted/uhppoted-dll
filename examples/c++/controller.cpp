@@ -291,6 +291,34 @@ void setDoorPasscodes(uhppoted &u, int argc, char **argv) {
     display("set-door-passcodes", fields);
 }
 
+void getAntiPassback(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t controller = options.device_id;
+    uint8_t antipassback = u.get_antipassback(controller);
+
+    vector<field> fields = {
+        field("ID", controller),
+        field("antipassback", antipassback),
+    };
+
+    display("set-antipassback", fields);
+}
+
+void setAntiPassback(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t controller = options.device_id;
+    uint8_t antipassback = options.antipassback;
+
+    u.set_antipassback(controller, antipassback);
+
+    vector<field> fields = {
+        field("ID", controller),
+        field("antipassback", antipassback),
+    };
+
+    display("set-antipassback", fields);
+}
+
 void restoreDefaultParameters(uhppoted &u, int argc, char **argv) {
     auto options = parse(argc, argv);
     uint32_t controller = options.device_id;

@@ -212,6 +212,24 @@ bool setDoorPasscodes(uhppoted &u) {
     return evaluate("set-door-passcodes", rs);
 }
 
+bool getAntiPassback(uhppoted &u) {
+    auto antipassback = u.get_antipassback(DEVICE_ID);
+
+    vector<result> rs = {
+        result("antipassback", uint8_t(2), antipassback),
+    };
+
+    return evaluate("get-antipassback", rs);
+}
+
+bool setAntiPassback(uhppoted &u) {
+    u.set_antipassback(DEVICE_ID, 2);
+
+    vector<result> rs = {};
+
+    return evaluate("set-passback", rs);
+}
+
 bool restoreDefaultParameters(uhppoted &u) {
     u.restore_default_parameters(DEVICE_ID);
 

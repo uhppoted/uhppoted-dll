@@ -150,6 +150,8 @@ class uhppoted {
     void activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reader3, bool reader4);
     void set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3,
                             uint32_t passcode4);
+    uint8_t get_antipassback(uint32_t controller);
+    void set_antipassback(uint32_t controller, uint8_t antipassback);
     void restore_default_parameters(uint32_t controller);
 
     void listen(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata);

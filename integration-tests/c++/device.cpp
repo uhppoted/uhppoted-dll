@@ -142,8 +142,9 @@ bool getListener(uhppoted &u) {
 
 bool setListener(uhppoted &u) {
     string listener = "192.168.1.100:60001";
+    uint8_t autosend = 0;
 
-    u.set_listener(DEVICE_ID, listener);
+    u.set_listener(DEVICE_ID, listener, autosend);
 
     vector<result> rs = {};
 
@@ -207,6 +208,24 @@ bool setDoorPasscodes(uhppoted &u) {
     vector<result> rs = {};
 
     return evaluate("set-door-passcodes", rs);
+}
+
+bool getAntiPassback(uhppoted &u) {
+    auto antipassback = u.get_antipassback(DEVICE_ID);
+
+    vector<result> rs = {
+        result("antipassbacke", ANTIPASSBACK, antipassback),
+    };
+
+    return evaluate("get-antipassback", rs);
+}
+
+bool setAntiPassback(uhppoted &u) {
+    u.set_antipassback(DEVICE_ID, ANTIPASSBACK);
+
+    vector<result> rs = {};
+
+    return evaluate("set-antipassback", rs);
 }
 
 bool restoreDefaultParameters(uhppoted &u) {

@@ -130,6 +130,12 @@ activate-keypads: build
 set-door-passcodes: build
 	$(CMD) set-door-passcodes $(DEVICEID) $(DOOR)
 
+get-antipassback: build
+	$(CMD) get-antipassback $(DEVICEID)
+
+set-antipassback: build
+	$(CMD) set-antipassback $(DEVICEID) --antipassback "(1,3):(2,4)"
+
 restore-default-parameters: build
 	$(CMD) restore-default-parameters $(DEVICEID)
 

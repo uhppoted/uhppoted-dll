@@ -351,8 +351,16 @@ options parse(int argc, char **argv) {
         }
 
         if ((strcmp(argv[ix], "--antipassback") == 0) && ++ix < argc) {
-            if ((lval = strtol(argv[ix], NULL, 10)) > 0) {
-                opts.antipassback = (uint8_t)lval;
+            if (strcmp(argv[ix], "disabled") == 0) {
+                opts.antipassback = 0;
+            } else if (strcmp(argv[ix], "(1:2);(3:4)") == 0) {
+                opts.antipassback = 1;
+            } else if (strcmp(argv[ix], "(1,3):(2,4)") == 0) {
+                opts.antipassback = 2;
+            } else if (strcmp(argv[ix], "1:(2,3)") == 0) {
+                opts.antipassback = 3;
+            } else if (strcmp(argv[ix], "1:(2,3,4)") == 0) {
+                opts.antipassback = 4;
             }
         }
 

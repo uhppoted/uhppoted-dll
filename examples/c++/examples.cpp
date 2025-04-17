@@ -188,6 +188,16 @@ const vector<command> commands = {
         .fn = setDoorPasscodes,
     },
     {
+        .cmd = "get-antipassback",
+        .help = "gets the anti-passback mode from a controller.",
+        .fn = getAntiPassback,
+    },
+    {
+        .cmd = "set-antipassback",
+        .help = "Sets the anti-passback mode for a controller.",
+        .fn = setAntiPassback,
+    },
+    {
         .cmd = "restore-default-parameters",
         .help = "Resets a controller to the manufacturer default configuration.",
         .fn = restoreDefaultParameters,
@@ -336,6 +346,21 @@ options parse(int argc, char **argv) {
             lval = strtol(argv[ix++], nullptr, 10);
             if (lval >= 2 && lval <= 255) {
                 opts.time_profile_id = (uint8_t)lval;
+            }
+        }
+
+        if (arg == "--antipassback" && ix < argc) {
+            const string s = argv[ix++];
+            if (s == "disabled") {
+                opts.antipassback = 0;
+            } else if (s == "(1:2);(3:4)") {
+                opts.antipassback = 1;
+            } else if (s == "(1,3):(2,4)") {
+                opts.antipassback = 2;
+            } else if (s == "1:(2,3)") {
+                opts.antipassback = 3;
+            } else if (s == "1:(2,3,4)") {
+                opts.antipassback = 4;
             }
         }
     }

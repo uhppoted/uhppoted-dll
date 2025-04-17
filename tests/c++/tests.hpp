@@ -16,6 +16,8 @@ extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;
 extern const uint8_t DOOR;
 extern const uint8_t PROFILE_ID;
+extern const uint8_t ANTIPASSBACK;
+
 extern const controller ALPHA;
 extern const controller BETA;
 
@@ -56,6 +58,8 @@ extern bool setPCControl(uhppoted &);
 extern bool setInterlock(uhppoted &);
 extern bool activateKeypads(uhppoted &);
 extern bool setDoorPasscodes(uhppoted &);
+extern bool getAntiPassback(uhppoted &);
+extern bool setAntiPassback(uhppoted &);
 extern bool restoreDefaultParameters(uhppoted &);
 
 extern bool listen(uhppoted &);
