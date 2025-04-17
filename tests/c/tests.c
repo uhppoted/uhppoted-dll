@@ -59,6 +59,8 @@ const test tests[] = {
     {.name = "set-interlock", .fn = setInterlock},
     {.name = "activate-keypads", .fn = activateKeypads},
     {.name = "set-door-passcodes", .fn = setDoorPasscodes},
+    {.name = "get-antipassback", .fn = getAntiPassback},
+    {.name = "set-antipassback", .fn = setAntiPassback},
     {.name = "restore-default-parameters", .fn = restoreDefaultParameters},
     {.name = "errors", .fn = errors},
     {.name = "lookup", .fn = internationalisation},

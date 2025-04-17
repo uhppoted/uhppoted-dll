@@ -72,6 +72,8 @@ extern bool setPCControl();
 extern bool setInterlock();
 extern bool activateKeypads();
 extern bool setDoorPasscodes();
+extern bool getAntiPassback();
+extern bool setAntiPassback();
 extern bool restoreDefaultParameters();
 
 extern bool listen();

@@ -15,6 +15,7 @@ const uint32_t CARD_NUMBER = 10058400;
 const uint32_t CARD_INDEX = 7;
 const uint32_t EVENT_INDEX = 91;
 const uint8_t PROFILE_ID = 29;
+const uint8_t ANTIPASSBACK = 2;
 
 const char *locale = "";
 
@@ -183,6 +184,16 @@ const command commands[] = {
         .fn = setDoorPasscodes,
     },
     {
+        .cmd = "get-antipassback",
+        .help = "Retrieves the anti-passback mode from a controller.",
+        .fn = getAntiPassback,
+    },
+    {
+        .cmd = "set-antipassback",
+        .help = "Sets the anti-passback mode for a controller.",
+        .fn = setAntiPassback,
+    },
+    {
         .cmd = "restore-default-parameters",
         .help = "Resets a controller to the manufacturer default configuration.",
         .fn = restoreDefaultParameters,
@@ -272,6 +283,7 @@ options parse(int argc, char **argv) {
         .door = DOOR,
         .event_index = EVENT_INDEX,
         .time_profile_id = PROFILE_ID,
+        .antipassback = ANTIPASSBACK,
     };
 
     long lval;
@@ -335,6 +347,12 @@ options parse(int argc, char **argv) {
             lval = strtol(argv[ix], NULL, 10);
             if (lval >= 2 && lval <= 255) {
                 opts.time_profile_id = (uint8_t)lval;
+            }
+        }
+
+        if ((strcmp(argv[ix], "--antipassback") == 0) && ++ix < argc) {
+            if ((lval = strtol(argv[ix], NULL, 10)) > 0) {
+                opts.antipassback = (uint8_t)lval;
             }
         }
 

@@ -335,6 +335,40 @@ bool setDoorPasscodes() {
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
+bool getAntiPassback() {
+    const char *tag = "get-antipassback";
+    uint8_t antipassback;
+
+    if (get_antipassback(DEVICE_ID, &antipassback) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    const result resultset[] = {
+        {
+            .field = "antipassback",
+            .type = "uint8",
+            .value.uint8.expected = 2,
+            .value.uint8.value = antipassback,
+        },
+    };
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}
+
+bool setAntiPassback() {
+    const char *tag = "set-antipassback";
+
+    if (set_antipassback(DEVICE_ID, 2) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return false;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}
+
 bool restoreDefaultParameters() {
     const char *tag = "restore-default-parameters";
 

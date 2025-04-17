@@ -371,6 +371,40 @@ func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passco
 	return nil
 }
 
+// Test implementation of getAntiPassback:
+// - returns an error if the controller is not 405419896
+// - return 2 in the antipassback argument
+func getAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback *uint8) error {
+	if antipassback == nil {
+		return fmt.Errorf("invalid argument (antipassback) - expected valid pointer to uint8")
+	}
+
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect controller ID (%v)", controller)
+	}
+
+	*antipassback = 2
+
+	return nil
+}
+
+// Test implementation of setAntiPassback
+//
+// Returns an error if the arguments do not match:
+// - controller: 405419896
+// - antipassback: 2
+func setAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback uint8) error {
+	if controller != 405419896 {
+		return fmt.Errorf("Incorrect controller ID (%v)", controller)
+	}
+
+	if antipassback != 2 {
+		return fmt.Errorf("Incorrect antipassback mode (%v)", antipassback)
+	}
+
+	return nil
+}
+
 // Test implementation of restoreDefaultParameters
 //
 // Returns an error if the arguments do not match:

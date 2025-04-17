@@ -72,6 +72,8 @@ extern bool setPCControl();
 extern bool setInterlock();
 extern bool activateKeypads();
 extern bool setDoorPasscodes();
+extern bool getAntiPassback();
+extern bool setAntiPassback();
 extern bool restoreDefaultParameters();
 
 extern const uint32_t DEVICE_ID;
@@ -81,6 +83,7 @@ extern const uint32_t CARD_INDEX;
 extern const uint32_t EVENT_INDEX;
 extern const uint8_t DOOR;
 extern const uint8_t PROFILE_ID;
+extern const uint8_t ANTIPASSBACK;
 
 extern bool evaluate(const char *, int, const result *);
 

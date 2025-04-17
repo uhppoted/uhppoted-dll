@@ -50,6 +50,7 @@ typedef struct options {
     uint8_t door;
     uint32_t event_index;
     uint8_t time_profile_id;
+    uint8_t antipassback;
 } options;
 
 
@@ -89,6 +90,8 @@ extern int setPCControl(int argc, char **argv);
 extern int setInterlock(int argc, char **argv);
 extern int activateKeypads(int argc, char **argv);
 extern int setDoorPasscodes(int argc, char **argv);
+extern int getAntiPassback(int argc, char **argv);
+extern int setAntiPassback(int argc, char **argv);
 extern int restoreDefaultParameters(int argc, char **argv);
 
 extern int listen(int argc, char **argv);

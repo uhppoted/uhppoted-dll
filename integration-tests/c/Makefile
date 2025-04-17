@@ -118,6 +118,12 @@ activate-keypads:
 set-door-passcodes: 
 	$(CMD) set-door-passcodes
 
+get-antipassback: 
+	$(CMD) get-antipassback
+
+set-antipassback: 
+	$(CMD) set-antipassback
+
 restore-default-parameters: 
 	$(CMD) restore-default-parameters
 

@@ -412,6 +412,16 @@ func SetPCControl(u *C.struct_UHPPOTE, controller uint32, enabled bool, err *C.e
 	return exec(u, f, err)
 }
 
+// Sets the door interlocks for a controller.
+//
+// Valid interlock modes are:
+// - 0: no interlocks
+// - 1: doors 1 and 2 are interlocked
+// - 2: doors 3 and 4 are interlocked
+// - 3: doors 1 and 2 are interlocked and doors 3 and 4 are interlocked
+// - 4: doors 1,2 and 3 are interlocked
+// - 8: doors 1,2,3 and 4 are interlocked
+//
 //export SetInterlock
 func SetInterlock(u *C.struct_UHPPOTE, controller uint32, interlock uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
@@ -439,6 +449,35 @@ func ActivateKeypads(u *C.struct_UHPPOTE, controller uint32, reader1, reader2, r
 func SetDoorPasscodes(u *C.struct_UHPPOTE, controller uint32, door uint8, passcode1, passcode2, passcode3, passcode4 uint32, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
 		return setDoorPasscodes(uu, controller, door, passcode1, passcode2, passcode3, passcode4)
+	}
+
+	return exec(u, f, err)
+}
+
+// Retrieves the anti-passback mode for a controller.
+//
+//export GetAntiPassback
+func GetAntiPassback(u *C.struct_UHPPOTE, deviceID uint32, antipassback *uint8, err *C.error) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return getAntiPassback(uu, deviceID, antipassback)
+	}
+
+	return exec(u, f, err)
+}
+
+// Sets the anti-passback mode for a controller.
+//
+// Valid anti-passback modes are:
+// - 0: anti-passback disabled
+// - 1: doors 1 and 2 are anti-passbacked and doors 3 and 4 are anti-passbacked
+// - 2: doors 1 and 3 are anti-passbacked with doors 2 and 4
+// - 3: door 1 is anti-passbacked with doors 2 and 3
+// - 4: door 1 is anti-passbacked with doors 2,3 and 4
+//
+//export SetAntiPassback
+func SetAntiPassback(u *C.struct_UHPPOTE, deviceID uint32, antipassback uint8, err *C.error) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setAntiPassback(uu, deviceID, antipassback)
 	}
 
 	return exec(u, f, err)

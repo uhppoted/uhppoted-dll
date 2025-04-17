@@ -189,8 +189,9 @@ bool setTime() {
 bool getListener() {
   const char *tag = "get-listener";
   char *listener;
+  uint8_t autosend;
 
-  if (get_listener(DEVICE_ID, &listener) != 0) {
+  if (get_listener(DEVICE_ID, &listener, &autosend) != 0) {
     printf("ERROR %s\n", errmsg());
     return false;
   }
@@ -201,6 +202,12 @@ bool getListener() {
           .type = "string",
           .value.string.expected = "192.168.1.100:60001",
           .value.string.value = listener,
+      },
+      {
+          .field = "autosend",
+          .type = "uint8",
+          .value.uint8.expected = 0,
+          .value.uint8.value = autosend,
       },
   };
 
@@ -214,7 +221,7 @@ bool getListener() {
 bool setListener() {
   const char *tag = "set-listener";
 
-  if (set_listener(DEVICE_ID, "192.168.1.100:60001") != 0) {
+  if (set_listener(DEVICE_ID, "192.168.1.100:60001", 0) != 0) {
     printf("ERROR %s\n", errmsg());
     return false;
   }
@@ -320,6 +327,40 @@ bool setDoorPasscodes() {
   const char *tag = "set-door-passcodes";
 
   if (set_door_passcodes(DEVICE_ID, DOOR, 12345, 999999, 0, 54321) < 0) {
+    printf("ERROR %s\n", errmsg());
+    return false;
+  }
+
+  const result resultset[] = {};
+
+  return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}
+
+bool getAntiPassback() {
+  const char *tag = "get-antipassback";
+  uint8_t antipassback;
+
+  if (get_antipassback(DEVICE_ID, &antipassback) != 0) {
+    printf("ERROR %s\n", errmsg());
+    return false;
+  }
+
+  const result resultset[] = {
+      {
+          .field = "antipassback",
+          .type = "uint8",
+          .value.uint8.expected = ANTIPASSBACK,
+          .value.uint8.value = antipassback,
+      },
+  };
+
+  return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
+}
+
+bool setAntiPassback() {
+  const char *tag = "set-antipassback";
+
+  if (set_antipassback(DEVICE_ID, 2) < 0) {
     printf("ERROR %s\n", errmsg());
     return false;
   }

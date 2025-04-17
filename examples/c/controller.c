@@ -383,6 +383,44 @@ int setDoorPasscodes(int argc, char **argv) {
     return 0;
 }
 
+int getAntiPassback(int argc, char **argv) {
+    uint32_t controller = parse(argc, argv).device_id;
+    uint8_t antipassback;
+
+    if (get_antipassback(controller, &antipassback) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = controller},
+        {.field = "antipassback", .type = "uint8", .value.uint8 = antipassback},
+    };
+
+    display("get-antipassback", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}
+
+int setAntiPassback(int argc, char **argv) {
+    uint32_t controller = parse(argc, argv).device_id;
+    uint8_t antipassback = parse(argc, argv).antipassback;
+
+    if (set_antipassback(controller, antipassback) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = controller},
+        {.field = "antipassback", .type = "uint8", .value.uint8 = antipassback},
+    };
+
+    display("set-antipassback", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}
+
 int restoreDefaultParameters(int argc, char **argv) {
     uint32_t controller = parse(argc, argv).device_id;
 

@@ -283,6 +283,15 @@ func setPCControl(uu uhppote.IUHPPOTE, controller uint32, enabled bool) error {
 	return nil
 }
 
+// Sets the door interlock mode for a controller.
+//
+// Valid interlock modes are:
+// - 0: no interlocks
+// - 1: doors 1 and 2 are interlocked
+// - 2: doors 3 and 4 are interlocked
+// - 3: doors 1 and 2 are interlocked and doors 3 and 4 are interlocked
+// - 4: doors 1,2 and 3 are interlocked
+// - 8: doors 1,2,3 and 4 are interlocked
 func setInterlock(uu uhppote.IUHPPOTE, controller uint32, interlock uint8) error {
 	if interlock != 0 && interlock != 1 && interlock != 2 && interlock != 3 && interlock != 4 && interlock != 8 {
 		return fmt.Errorf("invalid interlock value (%v)", interlock)
@@ -321,6 +330,42 @@ func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passco
 		return err
 	} else if !ok {
 		return fmt.Errorf("%v: failed to set supervisor passcodes for door %v", controller, door)
+	}
+
+	return nil
+}
+
+// Retrieves the anti-passback mode for a controller.
+func getAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback *uint8) error {
+	if antipassback == nil {
+		return fmt.Errorf("invalid argument (antipassback) - expected valid pointer to uint8")
+	}
+
+	v, err := uu.GetAntiPassback(controller)
+	if err != nil {
+		return err
+	} else {
+		*antipassback = uint8(v)
+	}
+
+	return nil
+}
+
+// Sets the anti-passback mode for a controller.
+//
+// Valid anti-passback modes are:
+// - 0: anti-passback disabled
+// - 1: doors 1 and 2 are anti-passbacked and doors 3 and 4 are anti-passbacked
+// - 2: doors 1 and 3 are anti-passbacked with doors 2 and 4
+// - 3: door 1 is anti-passbacked with doors 2 and 3
+// - 4: door 1 is anti-passbacked with doors 2,3 and 4
+func setAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback uint8) error {
+	if antipassback != 0 && antipassback != 1 && antipassback != 2 && antipassback != 3 && antipassback != 4 {
+		return fmt.Errorf("invalid antipassback value (%v)", antipassback)
+	} else if ok, err := uu.SetAntiPassback(controller, types.AntiPassback(antipassback)); err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: failed to set controller anti-passback", controller)
 	}
 
 	return nil

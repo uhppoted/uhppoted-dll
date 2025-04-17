@@ -892,6 +892,41 @@ int activate_keypads(uint32_t id, bool reader1, bool reader2, bool reader3, bool
     return 0;
 }
 
+int get_antipassback(uint32_t id, uint8_t *antipassback) {
+    uint8_t v;
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (GetAntiPassback(u, id, &v, &err) != 0) {
+        set_error(err.message, err.len);
+        return -1;
+    }
+
+    *antipassback = v;
+
+    return 0;
+}
+
+int set_antipassback(uint32_t id, uint8_t antipassback) {
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetAntiPassback(u, id, antipassback, &err) != 0) {
+        set_error(err.message, err.len);
+        return -1;
+    }
+
+    return 0;
+}
+
 int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
     char errmsg[256] = "";
 

@@ -25,6 +25,7 @@ const uint32_t CARD_INDEX = 19;
 const uint32_t EVENT_INDEX = 51;
 const uint8_t DOOR = 4;
 const uint8_t PROFILE_ID = 49;
+const uint8_t ANTIPASSBACK = 2;
 
 const test tests[] = {
     // {.name = "get-devices", .fn = getDevices},
@@ -59,6 +60,8 @@ const test tests[] = {
     // {.name = "set-interlock", .fn = setInterlock},
     // {.name = "activate-keypads", .fn = activateKeypads},
     // {.name = "set-door-passcodes", .fn = setDoorPasscodes},
+    {.name = "get-antipassback", .fn = getAntiPassback},
+    {.name = "set-antipassback", .fn = setAntiPassback},
     {.name = "restore-default-parameters", .fn = restoreDefaultParameters},
 };
 

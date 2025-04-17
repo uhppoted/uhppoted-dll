@@ -316,6 +316,36 @@ func setDoorPasscodes(uu uhppote.IUHPPOTE, controller uint32, door uint8, passco
 	return nil
 }
 
+// Debug implementation of getAntiPassback
+func getAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback *uint8) error {
+	if antipassback == nil {
+		return fmt.Errorf("invalid argument (antipassback) - expected valid pointer to uint8")
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> get-antipassback\n")
+		fmt.Printf("    ID:           %v\n", controller)
+		fmt.Printf("    antipassback: %v\n", antipassback)
+		fmt.Println()
+	}
+
+	*antipassback = 2
+
+	return nil
+}
+
+// Debug implementation of setAntiPassback
+func setAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback uint8) error {
+	if DEBUG {
+		fmt.Printf(">>> set-antipassback\n")
+		fmt.Printf("    ID:           %v\n", controller)
+		fmt.Printf("    antipassback: %v\n", antipassback)
+		fmt.Println()
+	}
+
+	return nil
+}
+
 // Debug implementation of restoreDefaultParameters
 //
 // Prints the controller ID to the console (if DEBUG is enabled) and returns nil.
