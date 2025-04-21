@@ -1024,6 +1024,37 @@
     (dispose-heap-ivector errmsg))))
 
 
+(defun uhppoted-get-antipassback (uhppote device-id) "Retrieves the anti-passback mode from a controller"
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (unwind-protect
+    (rletz ((antipassback :unsigned-byte 0)
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+      (unless (eq 0 (external-call "GetAntiPassback" :address uhppote 
+                                                     :unsigned-long device-id 
+                                                     :address antipassback
+                                                     :address err
+                                                     :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      (%get-unsigned-byte antipassback))
+    (dispose-heap-ivector errmsg))))
+
+
+(defun uhppoted-set-antipassback (uhppote device-id antipassback) "Sets the anti-passback mode for a controller"
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (unwind-protect
+    (rletz ((err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+      (unless (eq 0 (external-call "SetAntiPassback" :address uhppote 
+                                                     :unsigned-long device-id 
+                                                     :unsigned-byte antipassback
+                                                     :address       err
+                                                     :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+      t)
+    (dispose-heap-ivector errmsg))))
+
+
 (defun uhppoted-restore-default-parameters (uhppote device-id) "Resets a controller to the manufacturer default configuration"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
   (unwind-protect

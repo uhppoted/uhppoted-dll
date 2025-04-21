@@ -442,6 +442,37 @@ passcode4  PIN code in the range [1..999999] or 0 (for none)
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
+### `get-antipassback`
+```
+(defun uhppoted-get-antipassback (uhppote device-id) ...)
+
+device-id  controller serial number 
+
+Returns the controller anti-passback mode if the call succeeded. The mode will be one of:
+  0: disabled
+  1: (1:2);(3:4)
+  2: (1,3):(2,4)
+  3: 1:(2,3)
+  4: 1:(2,3,4)
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
+### `set-antipassback`
+```
+(defun uhppoted-set-antipassback (uhppote device-id antipassback) ...)
+
+device-id     controller serial number 
+antipassback  controller antipassback mode
+              0: disabled
+              1: (1:2);(3:4)
+              2: (1,3):(2,4)
+              3: 1:(2,3)
+              4: 1:(2,3,4)
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
 ### `restore-default-parameters`
 ```
 (defun uhppoted-restore-default-parameters (uhppote device-id) ...)

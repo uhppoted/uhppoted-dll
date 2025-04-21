@@ -36,6 +36,8 @@
            uhppoted-set-interlock
            uhppoted-activate-keypads
            uhppoted-set-door-passcodes
+           uhppoted-get-antipassback
+           uhppoted-set-antipassback
            uhppoted-restore-default-parameters
            uhppoted-listen-events
            uhppoted-error

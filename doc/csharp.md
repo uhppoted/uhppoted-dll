@@ -425,6 +425,36 @@ passcode4   PIN code in the range [1..999999] or 0 (for none)
 
 Throws a UhppotedException if the call failed.
 
+### `Uhppoted::GetAntiPassback`
+```
+public byte GetAntiPassback(uint ID)
+
+ID  controller serial number 
+
+Returns the controller anti-passback mode if the call succeeded. The mode will be one of:
+  0: disabled
+  1: (1:2);(3:4)
+  2: (1,3):(2,4)
+  3: 1:(2,3)
+  4: 1:(2,3,4)
+
+Throws a UhppotedException if the call failed.
+```
+
+### `Uhppoted::SetAntiPassback`
+```
+public void SetAntiPassback(uint controller, byte antipassback)
+
+controller    controller serial number 
+antipassback  controller door anti-passback mode
+              0: disabled
+              1: (1:2);(3:4)
+              2: (1,3):(2,4)
+              3: 1:(2,3)
+              4: 1:(2,3,4)
+
+Throws a UhppotedException if the call failed.
+```
 
 ### `Uhppoted::RestoreDefaultParameters`
 ```

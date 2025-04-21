@@ -156,6 +156,12 @@ public class examples {
         new command("set-door-passcodes",
                     "Sets the supervisor passcodes for keypad only access to a door.",
                     SetDoorPasscodes),
+        new command("get-antipassback",
+                    "Retrieves the anti-passback mode for a controller.",
+                    GetAntiPassback),
+        new command("set-antipassback",
+                    "Set a controller anti-passback mode.",
+                    SetAntiPassback),
         new command("restore-default-parameters",
                     "Resets a controller to the manufacturer default configuration.",
                     RestoreDefaultParameters),
@@ -813,6 +819,34 @@ public class examples {
         };
 
         display("set-door-passcodes", fields);
+    }
+
+    static void GetAntiPassback(Uhppoted u, string[] args) {
+        options opts = parse(args);
+        uint deviceID = opts.deviceID;
+        byte antipassback = u.GetAntiPassback(deviceID);
+
+        field[] fields = {
+            new uint32Field("ID", deviceID),
+            new uint32Field("anti-passback", antipassback),
+        };
+
+        display("get-antipassback", fields);
+    }
+
+    static void SetAntiPassback(Uhppoted u, string[] args) {
+        options opts = parse(args);
+        uint controller = opts.deviceID;
+        byte antipassback = 2;
+
+        u.SetAntiPassback(controller, antipassback);
+
+        field[] fields = {
+            new uint32Field("ID", controller),
+            new uint8Field("antipassback", antipassback),
+        };
+
+        display("set-antipassback", fields);
     }
 
     static void RestoreDefaultParameters(Uhppoted u, string[] args) {

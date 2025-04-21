@@ -35,6 +35,8 @@
            set-interlock
            activate-keypads
            set-door-passcodes
+           get-antipassback
+           set-antipassback
            restore-default-parameters
            listen-events))
 

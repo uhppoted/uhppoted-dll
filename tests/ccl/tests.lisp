@@ -308,6 +308,17 @@
   (evaluate "set-door-passcodes" '()))
 
 
+(defun get-antipassback () "" 
+  (let ((antipassback    (exec #'(lambda (u) (uhppoted-get-antipassback u TEST-DEVICE-ID)))))
+    (evaluate "get-antipassback" 
+              (list (make-result :field "anti-passback" :expected 2 :value antipassback)))))
+
+
+(defun set-antipassback () "" 
+  (exec #'(lambda (u) (uhppoted-set-antipassback u TEST-DEVICE-ID 2)))
+  (evaluate "set-antipassback" '()))
+
+
 (defun restore-default-parameters() "" 
   (exec #'(lambda (u) (uhppoted-restore-default-parameters u TEST-DEVICE-ID)))
   (evaluate "restore-default-parameters" '()))

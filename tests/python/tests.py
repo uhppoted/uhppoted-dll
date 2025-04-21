@@ -73,6 +73,8 @@ def tests():
         'set-interlock': set_interlock,
         'activate-keypads': activate_keypads,
         'set-door-passcodes': set_door_passcodes,
+        'get-antipassback': get_antipassback,
+        'set-antipassback': set_antipassback,
         'restore-default-parameters': restore_default_parameters,
         'lookup': internationalisation,
         'errors': errors,
@@ -427,6 +429,21 @@ def activate_keypads(u):
 def set_door_passcodes(u):
     tag = 'set-door-passcodes'
     u.set_door_passcodes(DEVICE_ID, DOOR, 12345, 999999, 0, 54321)
+
+    return evaluate(tag, [])
+
+
+def get_antipassback(u):
+    antipassback = u.get_antipassback(DEVICE_ID)
+
+    return evaluate('get-antipassback', [
+        ('anti-passback', 2, antipassback),
+    ])
+
+
+def set_antipassback(u):
+    tag = 'set-antipassback'
+    u.set_antipassback(DEVICE_ID, 2)
 
     return evaluate(tag, [])
 

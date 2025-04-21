@@ -5,6 +5,7 @@ CONTROLLER ?= 405419896
 CARD ?= 10058400
 DOOR ?= 3
 INTERLOCK  ?=3
+ANTIPASSBACK ?= "(1,3):(2,4)"
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -80,8 +81,8 @@ put-card: build
 delete-card: build
 	$(GO) && $(DLL) && $(CMD) delete-card
 
-delete-cards: build
-	$(GO) && $(DLL) && $(CMD) delete-cards
+delete-all-cards: build
+	$(GO) && $(DLL) && $(CMD) delete-all-cards
 
 get-event-index: build
 	$(GO) && $(DLL) && $(CMD) get-event-index
@@ -124,6 +125,12 @@ activate-keypads: build
 
 set-door-passcodes: build
 	$(GO) && $(DLL) && $(CMD) set-door-passcodes  --controller $(CONTROLLER) --door $(DOOR)
+
+get-antipassback: build
+	$(GO) && $(DLL) && $(CMD) get-antipassback --controller $(CONTROLLER)
+
+set-antipassback: build
+	$(GO) && $(DLL) && $(CMD) set-antipassback --controller $(CONTROLLER) --antipassback $(ANTIPASSBACK)
 
 restore-default-parameters: build
 	$(GO) && $(DLL) && $(CMD) restore-default-parameters  --controller $(CONTROLLER)

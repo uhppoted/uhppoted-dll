@@ -1,15 +1,15 @@
 # TODO
 
-- [ ] anti-passback (cf. https://github.com/uhppoted/uhppoted/issues/60)
+- [x] anti-passback (cf. https://github.com/uhppoted/uhppoted/issues/60)
       - [x] `get-antipassback`
       - [x] `set-antipassback`
       - [x] C
       - [x] C++
-      - [ ] CCL
-      - [ ] dotnet
-      - [ ] python
-      - [ ] CHANGELOG
-      - [ ] README
+      - [x] CCL
+      - [x] dotnet
+      - [x] python
+      - [x] CHANGELOG
+      - [x] README
 
 - [ ] github build warning:
 ```

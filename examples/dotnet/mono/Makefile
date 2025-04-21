@@ -4,6 +4,7 @@ GO=GODEBUG=cgocheck=2
 DEVICEID=--controller 405419896
 CARD=--card 10058400
 DOOR=--door 3
+ANTIPASSBACK ?= "(1,3):(2,4)"
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -130,6 +131,12 @@ activate-keypads: build
 
 set-door-passcodes: build
 	$(CMD) set-door-passcodes $(DEVICEID) $(DOOR)
+
+get-antipassback: build
+	$(CMD) get-antipassback $(DEVICEID)
+
+set-antipassback: build
+	$(CMD) set-antipassback $(DEVICEID) --antipassback=$(ANTIPASSBACK)
 
 restore-default-parameters: build
 	$(CMD) restore-default-parameters $(DEVICEID)

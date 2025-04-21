@@ -978,6 +978,49 @@ namespace uhppoted
             }
         }
 
+        public byte GetAntiPassback(uint deviceID)
+        {
+            byte antipassback = 0;
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
+
+            try
+            { 
+                if (GetAntiPassback(ref this.u, deviceID, ref antipassback, ref err) != 0)
+                {
+                    raise(err);
+                }
+
+                return antipassback;
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(err.message);
+            }
+        }
+
+        public void SetAntiPassback(uint deviceID, byte antipassback)
+        {
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
+
+            try
+            { 
+                if (SetAntiPassback(ref this.u, deviceID, antipassback, ref err) != 0)
+                {
+                    raise(err);
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(err.message);
+            }
+        }
+
         public void RestoreDefaultParameters(uint controller)
         {
             GoError err = new GoError();
@@ -1175,6 +1218,12 @@ namespace uhppoted
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4, ref GoError err);
+
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern int GetAntiPassback(ref UHPPOTE u, uint deviceID, ref byte AntiPassback, ref GoError err);
+
+        [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        private static extern int SetAntiPassback(ref UHPPOTE u, uint deviceID, byte antipassback, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, ref GoError err);

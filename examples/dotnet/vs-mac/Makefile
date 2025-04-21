@@ -96,6 +96,12 @@ activate-keypads:
 set-door-passcodes:
 	$(CLI) set-door-passcodes --controller $(CONTROLLER) --door 4 --passcodes 12345,7531
 
+get-antipassback:
+	$(CLI) get-antipassback --controller $(CONTROLLER)
+
+set-antipassback:
+	$(CLI) set-antipassback --controller $(CONTROLLER) --antipassback "(1,3):(2,4)"
+
 restore-default-parameters:
 	$(CLI) restore-default-parameters --controller $(CONTROLLER)
 

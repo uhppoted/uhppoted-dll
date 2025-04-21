@@ -68,6 +68,8 @@ public class Tests {
         new test("set-interlock", SetInterlock),
         new test("activate-keypads", ActivateKeypads),
         new test("set-door-passcodes", SetDoorPasscodes),
+        new test("get-antipassback", GetAntiPassback),
+        new test("set-antipassback", SetAntiPassback),
         new test("restore-default-parameters", RestoreDefaultParameters),
         new test("lookup", Internationalisation),
         new test("errors", Errors),
@@ -497,6 +499,16 @@ public class Tests {
         return evaluate("set-pc-control", resultset);
     }
 
+    static bool GetAntiPassback(Uhppoted u) {
+        byte antipassback = u.GetAntiPassback(DEVICE_ID);
+
+        result[] resultset = {
+            new uint8Result("antipassback", 2, antipassback),
+        };
+
+        return evaluate("get-antipassback", resultset);
+    }
+
     static bool SetInterlock(Uhppoted u) {
         u.SetInterlock(DEVICE_ID, 4);
 
@@ -519,6 +531,14 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("set-door-passcodes", resultset);
+    }
+
+    static bool SetAntiPassback(Uhppoted u) {
+        u.SetAntiPassback(DEVICE_ID, 2);
+
+        result[] resultset = {};
+
+        return evaluate("set-antipassback", resultset);
     }
 
     static bool RestoreDefaultParameters(Uhppoted u) {

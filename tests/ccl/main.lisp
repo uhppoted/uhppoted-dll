@@ -38,6 +38,8 @@
         '("set-interlock"              tests:set-interlock)
         '("activate-keypads"           tests:activate-keypads)
         '("set-door-passcodes"         tests:set-door-passcodes)
+        '("get-antipassback"           tests:get-antipassback)
+        '("set-antipassback"           tests:set-antipassback)
         '("restore-default-parameters" tests:restore-default-parameters)
         '("lookup"                     tests:internationalisation)
         '("errors"                     tests:errors)

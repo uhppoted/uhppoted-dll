@@ -133,6 +133,7 @@
     (when card 
       (display "get-card" device-id (as-fields card)))))
 
+
 (defun get-card-by-index (args) "" 
   (let* ((device-id (args-device-id  args))
          (index     (args-card-index args))
@@ -313,6 +314,21 @@
          (ok (exec #'(lambda (u) (uhppoted-set-door-passcodes u device-id door passcode1 passcode2 passcode3 passcode4)))))
     (when ok
       (display "set-door-passcodes" device-id nil))))
+
+
+(defun get-antipassback (args) "" 
+  (let* ((device-id    (args-device-id args))
+         (antipassback (exec #'(lambda (u) (uhppoted-get-antipassback u device-id)))))
+    (when antipassback
+      (display "get-antipassback" device-id (list "anti-passback" antipassback)))))
+
+
+(defun set-antipassback (args) "" 
+  (let* ((device-id (args-device-id args))
+         (antipassback 2)
+         (ok (exec #'(lambda (u) (uhppoted-set-antipassback u device-id antipassback)))))
+    (when ok
+      (display "set-antipassback" device-id nil))))
 
 
 (defun restore-default-parameters (args) "" 

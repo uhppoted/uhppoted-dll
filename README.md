@@ -132,6 +132,8 @@ returns a fixed response.
 - [`SetInterlock`](#setinterlock)
 - [`ActivateKeypads`](#activatekeypads)
 - [`SetDoorPasscodes`](#setdoorpasscodes)
+- [`GetAntiPassback`](#getantipassback)
+- [`SetAntiPassback`](#setantipassback)
 - [`RestoreDefaultParameters`](#restoredefaultparameters)
 - [`Listen`](#listen)
 
@@ -304,6 +306,56 @@ Note that the controllers do not provide the capability for activating or deacti
 #### `SetDoorPasscodes`
 
 Sets up to four supervisor passcodes to allow keypad only access to a door.
+
+
+#### `GetAntipassback`
+
+Gets the controller anti-passback mode. The anti-passback will be one of the following:
+- _disabled_
+- _(1:2);(3:4)_
+- _(1,3):(2,4)_
+- _1:(2,3)_
+- _1:(2,3,4)_
+
+| Value | Mode          | Description                                                  |
+|-------|---------------|--------------------------------------------------------------|
+| 0     | _disabled_    | No anti-passback                                             |
+| 1     | _(1:2);(3:4)_ | Doors 1 and 2 are interlocked, doors 3 and 4 are interlocked |
+| 2     | _(1,3):(2,4)_ | Doors 1 and 3 are interlocked with doors 2 and 4             |
+| 3     | _1:(2,3)_     | Door 1 is interlocked with doors 2 and 3                     |
+| 4     | _1:(2,3,4)_   | Door 1 is interlocked with doors 2,3 and 4                   |
+
+where _interlocked_ means a card will be swiped through a second time on a door until it has 
+been swiped through at the _interlocked_ door. e.g: if the anti-passback mode is _(1,3):(2,4),
+a card swiped through at either of doors 1 or 3 will be denied access at doors 1 and 3 until 
+it has been swiped through at either of doors 2 or 4. Likewise a card swiped through at either
+of doors 2 or 4 will be denied access at doors 2 and 4 until is has been swiped through at 
+either of doors 1 or 3.
+
+
+#### `SetAntipassback`
+
+Sets the controller anti-passback mode. The anti-passback must be one of the following:
+- _disabled_
+- _(1:2);(3:4)_
+- _(1,3):(2,4)_
+- _1:(2,3)_
+- _1:(2,3,4)_
+
+| Value | Mode          | Description                                                  |
+|-------|---------------|--------------------------------------------------------------|
+| 0     | _disabled_    | No anti-passback                                             |
+| 1     | _(1:2);(3:4)_ | Doors 1 and 2 are interlocked, doors 3 and 4 are interlocked |
+| 2     | _(1,3):(2,4)_ | Doors 1 and 3 are interlocked with doors 2 and 4             |
+| 3     | _1:(2,3)_     | Door 1 is interlocked with doors 2 and 3                     |
+| 4     | _1:(2,3,4)_   | Door 1 is interlocked with doors 2,3 and 4                   |
+
+where _interlocked_ means a card will be swiped through a second time on a door until it has 
+been swiped through at the _interlocked_ door. e.g: if the anti-passback mode is _(1,3):(2,4),
+a card swiped through at either of doors 1 or 3 will be denied access at doors 1 and 3 until 
+it has been swiped through at either of doors 2 or 4. Likewise a card swiped through at either
+of doors 2 or 4 will be denied access at doors 2 and 4 until is has been swiped through at 
+either of doors 1 or 3.
 
 
 #### `RestoreDefaultParameters`

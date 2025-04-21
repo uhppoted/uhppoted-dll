@@ -206,6 +206,14 @@ class UhppotedDLLCLI
                     "Sets the supervisor passcodes for keypad only access to a door.",
                     SetDoorPasscodes),
 
+        new command("get-antipassback",
+                    "Retrieves the anti-passback mode from a controller.",
+                    GetAntiPassback),
+
+        new command("set-antipassback",
+                    "Set a controller anti-passback mode.",
+                    SetAntiPassback),
+
         new command("restore-default-parameters",
                     "Resets a controller to the manufacturer default configuration.",
                     RestoreDefaultParameters),
@@ -896,6 +904,34 @@ class UhppotedDLLCLI
         WriteLine(Format("   passcode 2 {0}", passcode2));
         WriteLine(Format("   passcode 3 {0}", passcode3));
         WriteLine(Format("   passcode 4 {0}", passcode4));
+    }
+
+    static void GetAntiPassback(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        byte antipassback = u.GetAntiPassback(controller);
+
+        WriteLine(Format("get-antipassback ({0})", controller));
+        WriteLine(Format("   anti-passback {0}", antipassback));
+    }
+
+    static void SetAntiPassback(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        string antipassback = ParseArgs(args, "--antipassback", "");
+
+        switch (antipassback)
+        {
+            case "disabled": u.SetAntiPassback(controller, 0); break;
+            case "(1:2);(3:4)": u.SetAntiPassback(controller, 1); break;
+            case "(1,3):(2,4)": u.SetAntiPassback(controller, 2); break;
+            case "1:(2,3_": u.SetAntiPassback(controller, 3); break;
+            case "1:(2,3,4)": u.SetAntiPassback(controller, 4); break;
+            default: throw new ArgumentException(Format("Invalid anti-passback {0}", antipassback));
+        }
+
+        WriteLine(Format("set-antipassback ({0})", controller));
+        WriteLine(Format("   anti-passback {0}", antipassback));
     }
 
     static void RestoreDefaultParameters(Uhppoted u, string[] args)

@@ -117,6 +117,12 @@ set-pc-control: build
 set-interlock: build
 	$(CMD) set-interlock
 
+get-antipassback: build
+	$(CMD) get-antipassback
+
+set-antipassback: build
+	$(CMD) set-antipassback
+
 activate-keypads: build
 	$(CMD) activate-keypads
 

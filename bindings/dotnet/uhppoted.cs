@@ -777,6 +777,39 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public byte GetAntiPassback(uint controller) {
+        byte antipassback = 0;
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
+
+        try {
+            if (GetAntiPassback(ref this.u, controller, ref antipassback, ref err) != 0) {
+                raise(err);
+            }
+
+            return antipassback;
+        } finally {
+            Marshal.FreeHGlobal(err.message);
+        }
+    }
+
+    public void SetAntiPassback(uint controller, byte antipassback) {
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
+
+        try {
+            if (SetAntiPassback(ref this.u, controller, antipassback, ref err) != 0) {
+                raise(err);
+            }
+        } finally {
+            Marshal.FreeHGlobal(err.message);
+        }
+    }
+
     public void RestoreDefaultParameters(uint controller) {
         GoError err = new GoError();
 
@@ -949,6 +982,12 @@ public class Uhppoted : IDisposable {
     [DllImport(DLL)]
     private static extern int SetDoorPasscodes(ref UHPPOTE u, uint controller, byte door, uint passcode1, uint passcode2, uint passcode3,
                                                uint passcode4, ref GoError err);
+
+    [DllImport(DLL)]
+    private static extern int GetAntiPassback(ref UHPPOTE u, uint deviceID, ref byte antipassback, ref GoError err);
+
+    [DllImport(DLL)]
+    private static extern int SetAntiPassback(ref UHPPOTE u, uint controller, byte antipassback, ref GoError err);
 
     [DllImport(DLL)]
     private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, ref GoError err);

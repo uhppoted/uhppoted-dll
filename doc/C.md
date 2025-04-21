@@ -488,6 +488,42 @@ Returns:
 - -1 if the call failed. The error message can be retrieved using errmsg().
 ```
 
+
+### `get_antipassback`
+```
+int get_antipassback(uint32_t controller, uint8_t *antipassback);
+
+controller    controller serial number 
+antipassback  variable for the controller anti-passback mode
+              0: disabled
+              1: (1:2);(3:4)
+              2: (1,3):(2,4)
+              3: 1:(2,3)
+              4: 1:(2,3,4)
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
+
+### `set_antipassback`
+```
+int set_antipassback(uint32_t controller, uint8_t antipassback);
+
+controller    controller serial number 
+antipassback  controller anti-passback mode
+              0: disabled
+              1: (1:2);(3:4)
+              2: (1,3):(2,4)
+              3: 1:(2,3)
+              4: 1:(2,3,4)
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
 ### `restore-default-parameters`
 ```
 int restore-default-parameters(uint32_t controller);

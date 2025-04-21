@@ -536,6 +536,21 @@ class Uhppote:
         if self.ffi.SetDoorPasscodes(self._uhppote, deviceID, door, passcode1, passcode2, passcode3, passcode4, byref(err)) != 0:  # yapf: disable
             raise Exception(f"{err.message.decode('utf-8')}")
 
+    def get_antipassback(self, deviceID):
+        antipassback = ctypes.c_ubyte(0)
+        err = GoError()
+
+        if self.ffi.GetAntiPassback(self._uhppote, deviceID, byref(antipassback), byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
+
+        return antipassback.value
+
+    def set_antipassback(self, deviceID, antipassback):
+        err = GoError()
+
+        if self.ffi.SetAntiPassback(self._uhppote, deviceID, antipassback, byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
+
     def restore_default_parameters(self, deviceID):
         err = GoError()
 
@@ -767,7 +782,6 @@ def lookup(category, code, locale):
 class FFI:
 
     def __init__(self, errcheck):
-        pass
         self.GetDevices = ffi('GetDevices', errcheck)
         self.GetDevice = ffi('GetDevice', errcheck)
         self.SetAddress = ffi('SetAddress', errcheck)
@@ -799,6 +813,8 @@ class FFI:
         self.SetInterlock = ffi('SetInterlock', errcheck)
         self.ActivateKeypads = ffi('ActivateKeypads', errcheck)
         self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
+        self.GetAntiPassback = ffi('GetAntiPassback', errcheck)
+        self.SetAntiPassback = ffi('SetAntiPassback', errcheck)
         self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
         self.Listen = ffi('Listen', errcheck)
 
@@ -848,6 +864,8 @@ def libfunctions():
         'SetInterlock':             (lib.SetInterlock,             [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoError)]),
         'ActivateKeypads':          (lib.ActivateKeypads,          [POINTER(GoUHPPOTE), c_ulong, c_bool, c_bool, c_bool, c_bool, POINTER(GoError)]),
         'SetDoorPasscodes':         (lib.SetDoorPasscodes,         [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong, POINTER(GoError)]),
+        'GetAntiPassback':          (lib.GetAntiPassback,          [POINTER(GoUHPPOTE), c_ulong, POINTER(c_ubyte), POINTER(GoError)]),
+        'SetAntiPassback':          (lib.SetAntiPassback,          [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoError)]),
         'RestoreDefaultParameters': (lib.RestoreDefaultParameters, [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
         'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), on_event, POINTER(c_bool), POINTER(c_bool), on_error, c_void_p]),
     }

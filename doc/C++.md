@@ -419,7 +419,7 @@ uhppoted_exception::what() method.
 
 ### `set_interlock`
 ```
-int set_interlock(uint32_t controller, uint8_t interlock);
+void set_interlock(uint32_t controller, uint8_t interlock);
 
 controller  controller serial number 
 interlock   controller door interlock mode
@@ -459,6 +459,42 @@ passcode1   PIN code in the range [1..999999] or 0 (for none)
 passcode2   PIN code in the range [1..999999] or 0 (for none)
 passcode3   PIN code in the range [1..999999] or 0 (for none)
 passcode4   PIN code in the range [1..999999] or 0 (for none)
+
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
+```
+
+
+### `get_antipassback`
+```
+uint8_t get_antipassback(uint32_t controller);
+
+controller    controller serial number 
+
+Returns the anti-passback mode if the call succeeds. The anti-passback mode will be
+one of:
+  0: disabled
+  1: (1:2);(3:4)
+  2: (1,3):(2,4)
+  3: 1:(2,3)
+  4: 1:(2,3,4)
+
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
+```
+
+
+### `set_antipassback`
+```
+void set_antipassback(uint32_t controller, uint8_t antipassback);
+
+controller    controller serial number 
+antipassback  controller anti-passback mode
+              0: disabled
+              1: (1:2);(3:4)
+              2: (1,3):(2,4)
+              3: 1:(2,3)
+              4: 1:(2,3,4)
 
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
 uhppoted_exception::what() method.

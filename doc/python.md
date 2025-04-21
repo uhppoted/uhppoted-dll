@@ -423,6 +423,38 @@ passcode4 PIN code in the range [1..999999] or 0 (for none)
 Raises an Exception if the call failed.
 ```
 
+### `get_antipassback`
+```
+uhppoted.get_antipassback(ID)
+
+ID  controller serial number 
+
+Returns the controller anti-passback mode if the call succeeded. The anti-passback mode will be 
+one of:
+  0: disabled
+  1: (1:2);(3:4)
+  2: (1,3):(2,4)
+  3: 1:(2,3)
+  4: 1:(2,3,4)
+
+Raises an Exception if the call failed.
+```
+
+### `set_antipassback`
+```
+uhppoted.set_antipassback(ID, antipassback)
+
+ID            controller serial number 
+antipassback  controller antipassback mode
+              0: disabled
+              1: (1:2);(3:4)
+              2: (1,3):(2,4)
+              3: 1:(2,3)
+              4: 1:(2,3,4)
+
+Raises an Exception if the call failed.
+```
+
 ### `restore-default-parameters`
 ```
 uhppoted.restore_default_parameters(ID)

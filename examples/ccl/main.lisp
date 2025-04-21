@@ -36,6 +36,8 @@
         '("set-interlock"              examples:set-interlock              "Sets a controller interlock mode.")
         '("activate-keypads"           examples:activate-keypads           "Activates and deactivates a controller reader access keypads.")
         '("set-door-passcodes"         examples:set-door-passcodes         "Sets the supervisor passcodes for keypad only access to a door.")
+        '("get-antipassback"           examples:get-antipassback           "Retrieves the anti-passback mode from a controller.")
+        '("set-antipassback"           examples:set-antipassback           "Sets the anti-passback mode for a controller.")
         '("restore-default-parameters" examples:restore-default-parameters "Resets a controller to the manufacturer default configuration.")
         '("listen"                     examples:listen-events              "Listens for controller events.")
 ))
