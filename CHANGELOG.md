@@ -1,9 +1,12 @@
 # CHANGELOG
 
-## Unreleased
+## [0.8.11](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.11) - 2025-07-01
 
 ### Added
 1. Implemented `get/set-antipassback` API function to manage the anti-passback mode for a controller.
+
+### Updated
+1. Updated to Go 1.24.
 
 
 ## [0.8.10](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.10) - 2025-01-30
