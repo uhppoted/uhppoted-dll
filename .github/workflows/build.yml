@@ -33,6 +33,12 @@ jobs:
         python-version: ^3.9
       id: python
 
+    - name: Create (dummy) .venv virtual environment
+      run: |
+         pwd
+         python -m venv .venv
+         ls -la
+
     - name: Set up Clozure Common Lisp
       run: |
         mkdir -p /opt/ccl
