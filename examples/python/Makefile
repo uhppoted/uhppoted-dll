@@ -19,8 +19,8 @@ else
 endif
 
 format:
-	yapf -ri .
-	yapf -ri ../../bindings/python
+	. ../../.venv/bin/activate; yapf -ri .
+	. ../../.venv/bin/activate; yapf -ri ../../bindings/python
 
 build: format
 

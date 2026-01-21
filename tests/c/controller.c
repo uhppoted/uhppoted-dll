@@ -55,8 +55,7 @@ bool getController() {
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
-bool setAddress(uint32_t deviceID, const char *address, const char *subnet,
-                const char *gateway) {
+bool setAddress() {
     const char *tag = "set-address";
 
     if (set_address(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0") != 0) {

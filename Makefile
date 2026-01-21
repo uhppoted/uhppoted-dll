@@ -75,12 +75,15 @@ build-all: build test lint
 	make -C ./tests/c++            -f Makefile tests
 	make -C ./tests/dotnet         -f Makefile tests || true
 	make -C ./tests/python         -f Makefile tests
-	make -C ./tests/ccl            -f Makefile tests
 	make -C ./examples/c           -f Makefile build
 	make -C ./examples/c++         -f Makefile build
-	make -C ./examples/dotnet/mono -f Makefile build
 	make -C ./examples/python      -f Makefile build
+ifeq ($(shell uname),Darwin)
+	@echo "Skipping CCL on macOS"
+else
+	make -C ./tests/ccl            -f Makefile tests
 	make -C ./examples/ccl         -f Makefile build
+endif	
 
 build-debug: build
 	make -C ./tests/c++       -f Makefile tests
