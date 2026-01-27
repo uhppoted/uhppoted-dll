@@ -28,10 +28,9 @@ is straightforward (see below) and only requires that _go_ and _cgo_ are install
 
 ### Current Release
 
-**[v0.8.11](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.8.11) - 2025-07-01**
-
-1. Implemented `get/set-antipassback` API function to manage the anti-passback mode for a controller.
-2. Updated to Go 1.24.
+**[v0.9.0](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.9.0) - 2026-01-27**
+1. Updated to Go 1.25.
+2. Removed support for _mono_.
 
 
 ## Installation
