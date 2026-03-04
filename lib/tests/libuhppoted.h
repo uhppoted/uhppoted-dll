@@ -231,48 +231,12 @@ extern int AddTask(struct UHPPOTE* u, GoUint32 deviceID, struct Task* task, erro
 extern int RefreshTaskList(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int ClearTaskList(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int SetPCControl(struct UHPPOTE* u, GoUint32 controller, GoUint8 enabled, error* err);
-
-// Sets the door interlocks for a controller.
-//
-// Valid interlock modes are:
-// - 0: no interlocks
-// - 1: doors 1 and 2 are interlocked
-// - 2: doors 3 and 4 are interlocked
-// - 3: doors 1 and 2 are interlocked and doors 3 and 4 are interlocked
-// - 4: doors 1,2 and 3 are interlocked
-// - 8: doors 1,2,3 and 4 are interlocked
-//
 extern int SetInterlock(struct UHPPOTE* u, GoUint32 controller, GoUint8 interlock, error* err);
 extern int ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reader1, GoUint8 reader2, GoUint8 reader3, GoUint8 reader4, error* err);
-
-// Sets the supervisor passcodes for a door managed by the controller.
-//
-// Valid passcodes are in the range [1..999999] or 0 (no code) - invalid passcodes will be replaced by
-// a 0 (no code).
-//
 extern int SetDoorPasscodes(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 passcode1, GoUint32 passcode2, GoUint32 passcode3, GoUint32 passcode4, error* err);
-
-// Retrieves the anti-passback mode for a controller.
-//
 extern int GetAntiPassback(struct UHPPOTE* u, GoUint32 deviceID, GoUint8* antipassback, error* err);
-
-// Sets the anti-passback mode for a controller.
-//
-// Valid anti-passback modes are:
-// - 0: anti-passback disabled
-// - 1: doors 1 and 2 are anti-passbacked and doors 3 and 4 are anti-passbacked
-// - 2: doors 1 and 3 are anti-passbacked with doors 2 and 4
-// - 3: door 1 is anti-passbacked with doors 2 and 3
-// - 4: door 1 is anti-passbacked with doors 2,3 and 4
-//
 extern int SetAntiPassback(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 antipassback, error* err);
-
-// Resets a controller to the manufacturer default configuration.
-//
 extern int RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller, error* err);
-
-// Listens for events and invokes a callback function.
-//
 extern GoInt32 Listen(struct UHPPOTE* u, onevent f, GoUint8* listening, GoUint8* stop, onerror g, void* userdata);
 
 #ifdef __cplusplus
