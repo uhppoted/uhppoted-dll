@@ -118,6 +118,20 @@ typedef struct Task {
 	uint8_t cards;
 } Task;
 
+typedef struct FirstCard {
+	const char *start_time;
+	const char *end_time;
+	uint8_t active_mode;
+	uint8_t inactive_mode;
+    uint8_t monday;
+    uint8_t tuesday;
+    uint8_t wednesday;
+    uint8_t thursday;
+    uint8_t friday;
+    uint8_t saturday;
+    uint8_t sunday;
+} FirstCard;
+
 */
 import "C"
 
@@ -483,6 +497,17 @@ func SetAntiPassback(u *C.struct_UHPPOTE, deviceID uint32, antipassback uint8, e
 	return exec(u, f, err)
 }
 
+// Sets the first-card configuration for a controller managed door.
+//
+//export SetFirstCard
+func SetFirstCard(u *C.struct_UHPPOTE, deviceID uint32, door uint8, firstcard *C.struct_FirstCard, err *C.error) C.int {
+	f := func(uu uhppote.IUHPPOTE) error {
+		return setFirstCard(uu, deviceID, door, firstcard)
+	}
+
+	return exec(u, f, err)
+}
+
 // Resets a controller to the manufacturer default configuration.
 //
 //export RestoreDefaultParameters
@@ -762,6 +787,36 @@ func makeTask(task *C.struct_Task) (*types.Task, error) {
 	}
 
 	return &t, nil
+}
+
+func makeFirstCard(firstcard *C.struct_FirstCard) (*types.FirstCard, error) {
+	startTime, err := types.HHmmFromString(C.GoString(firstcard.start_time))
+	if err != nil {
+		return nil, fmt.Errorf("invalid 'start' time (%v)", err)
+	}
+
+	endTime, err := types.HHmmFromString(C.GoString(firstcard.end_time))
+	if err != nil {
+		return nil, fmt.Errorf("invalid 'end' time (%v)", err)
+	}
+
+	f := types.FirstCard{
+		StartTime: *startTime,
+		EndTime:   *endTime,
+		Active:    types.ControlState(firstcard.active_mode),
+		Inactive:  types.ControlState(firstcard.inactive_mode),
+		Weekdays: map[time.Weekday]bool{
+			time.Monday:    firstcard.monday != 0,
+			time.Tuesday:   firstcard.tuesday != 0,
+			time.Wednesday: firstcard.wednesday != 0,
+			time.Thursday:  firstcard.thursday != 0,
+			time.Friday:    firstcard.friday != 0,
+			time.Saturday:  firstcard.saturday != 0,
+			time.Sunday:    firstcard.sunday != 0,
+		},
+	}
+
+	return &f, nil
 }
 
 func cbool(b bool) C.uchar {

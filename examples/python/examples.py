@@ -193,12 +193,12 @@ def commands():
 #     parser.add_argument('command', type=str, help='command')
 #     parser.add_argument('--controller', type=int, default=DEVICE_ID, help='controller serial number')
 #     parser.add_argument('--interlock', type=int, default=1, help='controller door interlock')
-#     parser.add_argument('--ip-address', type=str, default='192.168.1.100', help='controller IP address')
+#     parser.add_argument('--ip-address', type=str, default='192.168.1.125', help='controller IP address')
 #     parser.add_argument('--subnet-mask', type=str, default='255.255.255.0', help='controller subnet mask')
 #     parser.add_argument('--gateway-address', type=str, default='192.168.1.5', help='controller gateway address')
 #     parser.add_argument('--listener-address',
 #                         type=str,
-#                         default='192.168.1.100:60001',
+#                         default='192.168.1.125:60001',
 #                         help='controller event listener address')
 #     parser.add_argument('--listener-interval', type=int, default=0, help='controller event listener auto-send interval')
 #
@@ -411,8 +411,8 @@ def main():
         timeout = 2500
         debug = True
         controllers = [
-            uhppoted.Controller(405419896, '192.168.1.100', 'tcp'),
-            uhppoted.Controller(303986753, '192.168.1.100'),
+            uhppoted.Controller(405419896, '192.168.1.125', 'tcp'),
+            uhppoted.Controller(303986753, '192.168.1.125'),
         ]
 
         u = uhppoted.Uhppote(

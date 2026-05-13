@@ -524,6 +524,19 @@ Returns:
 - -1 if the call failed. The error message can be retrieved using errmsg().
 ```
 
+### `set_firstcard`
+```
+int set_firstcard(uint32_t controller, uint8_t door, firstcard *firstcard);
+
+controller    controller serial number 
+door          door ID [1..4]
+firstcard     firstcard struct initialised with the first-card configuration for the controller door.
+
+Returns:
+- 0  if the call succeeded. 
+- -1 if the call failed. The error message can be retrieved using errmsg().
+```
+
 ### `restore-default-parameters`
 ```
 int restore-default-parameters(uint32_t controller);
@@ -682,6 +695,24 @@ typedef struct task {
     char at[6];
     uint8_t cards;
 } task;
+```
+
+### firstcard
+Container struct for the configuration information required for `set_firstcard`.
+```
+typedef struct firstcard {
+    char start_time[6];
+    char end_time[6];
+    uint8_t active_mode;
+    uint8_t inactive_mode;
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+} firstcard;
 ```
 
 ### ListenEvent

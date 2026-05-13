@@ -1,15 +1,15 @@
 # TODO
 
-- [x] anti-passback (cf. https://github.com/uhppoted/uhppoted/issues/60)
-      - [x] `get-antipassback`
-      - [x] `set-antipassback`
+- [ ] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
+      - [x] API
       - [x] C
-      - [x] C++
-      - [x] CCL
-      - [x] dotnet
-      - [x] python
-      - [x] CHANGELOG
-      - [x] README
+      - [ ] C++
+      - [ ] CCL
+      - [ ] .NET
+      - [ ] Python
+      - [ ] documentation
+      - [ ] CHANGELOG
+      - [ ] README
 
 - [ ] github build warning:
 ```

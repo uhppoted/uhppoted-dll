@@ -140,6 +140,20 @@ typedef struct Task {
 	uint8_t cards;
 } Task;
 
+typedef struct FirstCard {
+	const char *start_time;
+	const char *end_time;
+	uint8_t active_mode;
+	uint8_t inactive_mode;
+    uint8_t monday;
+    uint8_t tuesday;
+    uint8_t wednesday;
+    uint8_t thursday;
+    uint8_t friday;
+    uint8_t saturday;
+    uint8_t sunday;
+} FirstCard;
+
 
 #line 1 "cgo-generated-wrapper"
 
@@ -236,6 +250,7 @@ extern int ActivateKeypads(struct UHPPOTE* u, GoUint32 controller, GoUint8 reade
 extern int SetDoorPasscodes(struct UHPPOTE* u, GoUint32 controller, GoUint8 door, GoUint32 passcode1, GoUint32 passcode2, GoUint32 passcode3, GoUint32 passcode4, error* err);
 extern int GetAntiPassback(struct UHPPOTE* u, GoUint32 deviceID, GoUint8* antipassback, error* err);
 extern int SetAntiPassback(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 antipassback, error* err);
+extern int SetFirstCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, struct FirstCard* firstcard, error* err);
 extern int RestoreDefaultParameters(struct UHPPOTE* u, GoUint32 controller, error* err);
 extern GoInt32 Listen(struct UHPPOTE* u, onevent f, GoUint8* listening, GoUint8* stop, onerror g, void* userdata);
 

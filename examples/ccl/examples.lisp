@@ -15,7 +15,7 @@
              :broadcast-addr "255.255.255.255"
              :listen-addr    "0.0.0.0:60001"
              :timeout        2500
-             :controllers    (list '(405419896 "192.168.1.100" "tcp") '(303986753 "192.168.1.100"))
+             :controllers    (list '(405419896 "192.168.1.125" "tcp") '(303986753 "192.168.1.125"))
              :debug          T)))
 
 
@@ -391,7 +391,7 @@
   (parse-args args "--gateway-address" "192.168.1.5"))
 
 (defun args-listener-addr (args)
-  (parse-args args "--listener-address" "192.168.1.100:60001"))
+  (parse-args args "--listener-address" "192.168.1.125:60001"))
 
 (defun args-listener-interval (args)
   (parse-integer (parse-args args "--listener-interval" "0")))

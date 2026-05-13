@@ -421,6 +421,50 @@ int setAntiPassback(int argc, char **argv) {
     return 0;
 }
 
+int setFirstCard(int argc, char **argv) {
+    uint32_t controller = parse(argc, argv).device_id;
+    uint32_t door = parse(argc, argv).door;
+
+    firstcard firstcard = {
+        .start_time = "08:30",
+        .active_mode = 1,
+        .inactive_mode = 4,
+        .end_time = "16:45",
+        .monday = true,
+        .tuesday = false,
+        .wednesday = true,
+        .thursday = true,
+        .friday = false,
+        .saturday = false,
+        .sunday = true,
+    };
+
+    if (set_firstcard(controller, door, &firstcard) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    field fields[] = {
+        {.field = "ID", .type = "uint32", .value.uint32 = controller},
+        {.field = "door", .type = "uint8", .value.uint8 = door},
+        {.field = "start time", .type = "string", .value.string = firstcard.start_time},
+        {.field = "end time", .type = "string", .value.string = firstcard.end_time},
+        {.field = "active mode", .type = "uint8", .value.uint8 = firstcard.active_mode},
+        {.field = "inactive mode", .type = "uint8", .value.uint8 = firstcard.inactive_mode},
+        {.field = "enabled on Monday", .type = "bool", .value.boolean = firstcard.monday},
+        {.field = "           Tuesday", .type = "bool", .value.boolean = firstcard.tuesday},
+        {.field = "           Wednesday", .type = "bool", .value.boolean = firstcard.wednesday},
+        {.field = "           Thursday", .type = "bool", .value.boolean = firstcard.thursday},
+        {.field = "           Friday", .type = "bool", .value.boolean = firstcard.friday},
+        {.field = "           Saturday", .type = "bool", .value.boolean = firstcard.saturday},
+        {.field = "           Sunday", .type = "bool", .value.boolean = firstcard.sunday},
+    };
+
+    display("set-firstcard", sizeof(fields) / sizeof(field), fields);
+
+    return 0;
+}
+
 int restoreDefaultParameters(int argc, char **argv) {
     uint32_t controller = parse(argc, argv).device_id;
 

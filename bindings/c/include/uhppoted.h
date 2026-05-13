@@ -100,6 +100,20 @@ typedef struct task {
     uint8_t cards;
 } task;
 
+typedef struct firstcard {
+    char start_time[6];
+    char end_time[6];
+    uint8_t active_mode;
+    uint8_t inactive_mode;
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+} firstcard;
+
 typedef void (*on_event)(const struct ListenEvent evt, void *userdata);
 typedef void (*on_error)(const char *err);
 
@@ -148,4 +162,5 @@ int activate_keypads(uint32_t controller, bool reader1, bool reader2, bool reade
 int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4);
 int get_antipassback(uint32_t controller, uint8_t *antipassback);
 int set_antipassback(uint32_t controller, uint8_t antipassback);
+int set_firstcard(uint32_t controller, uint8_t door, firstcard *firstcard);
 int restore_default_parameters(uint32_t controller);

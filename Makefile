@@ -89,8 +89,9 @@ else
 	make -C ./examples/ccl         -f Makefile build
 endif	
 
-build-debug: build
-	make -C ./tests/c++       -f Makefile tests
+debug: build
+	make -C ./examples/c -f Makefile set-firstcard
+	make -C ./tests/c    -f Makefile set-firstcard
 
 godoc:
 	godoc -http=:80	-index_interval=60s

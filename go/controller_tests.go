@@ -405,6 +405,74 @@ func setAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback uint8)
 	return nil
 }
 
+// Test implementation of setFirstCard
+func setFirstCard(uu uhppote.IUHPPOTE, controller uint32, door uint8, firstcard *C.struct_FirstCard) error {
+	if firstcard == nil {
+		return fmt.Errorf("invalid argument (firstcard) - expected valid pointer")
+	}
+
+	f, err := makeFirstCard(firstcard)
+	if err != nil {
+		return err
+	} else if f == nil {
+		return fmt.Errorf("invalid first-card (%v)", f)
+	}
+
+	if controller != 405419896 {
+		return fmt.Errorf("incorrect controller (%v)", controller)
+	}
+
+	if door != 4 {
+		return fmt.Errorf("incorrect door (%v)", door)
+	}
+
+	if startTime := fmt.Sprintf("%v", f.StartTime); startTime != "08:30" {
+		return fmt.Errorf("incorrect first-card 'start-time' (%v)", startTime)
+	}
+
+	if endTime := fmt.Sprintf("%v", f.EndTime); endTime != "16:45" {
+		return fmt.Errorf("incorrect first-card 'end-time' (%v)", endTime)
+	}
+
+	if f.Active != types.ModeNormallyOpen {
+		return fmt.Errorf("incorrect first-card active mode (%v)", f.Active)
+	}
+
+	if f.Inactive != types.ModeFirstCardOnly {
+		return fmt.Errorf("incorrect first-card inactive mode (%v)", f.Inactive)
+	}
+
+	if !f.Weekdays[time.Monday] {
+		return fmt.Errorf("Incorrect Monday value (%v)", f.Weekdays[time.Monday])
+	}
+
+	if f.Weekdays[time.Tuesday] {
+		return fmt.Errorf("Incorrect Tuesday value (%v)", f.Weekdays[time.Tuesday])
+	}
+
+	if !f.Weekdays[time.Wednesday] {
+		return fmt.Errorf("Incorrect Wednesday value (%v)", f.Weekdays[time.Wednesday])
+	}
+
+	if !f.Weekdays[time.Thursday] {
+		return fmt.Errorf("Incorrect Thursday value (%v)", f.Weekdays[time.Thursday])
+	}
+
+	if f.Weekdays[time.Friday] {
+		return fmt.Errorf("Incorrect Friday value (%v)", f.Weekdays[time.Friday])
+	}
+
+	if f.Weekdays[time.Saturday] {
+		return fmt.Errorf("Incorrect Saturday value (%v)", f.Weekdays[time.Saturday])
+	}
+
+	if !f.Weekdays[time.Sunday] {
+		return fmt.Errorf("Incorrect Sunday value (%v)", f.Weekdays[time.Sunday])
+	}
+
+	return nil
+}
+
 // Test implementation of restoreDefaultParameters
 //
 // Returns an error if the arguments do not match:

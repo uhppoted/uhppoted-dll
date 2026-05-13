@@ -368,6 +368,31 @@ bool setAntiPassback() {
     return evaluate(tag, sizeof(resultset) / sizeof(result), resultset);
 }
 
+bool setFirstCard() {
+    firstcard firstcard = {
+        .start_time = "08:30",
+        .end_time = "16:45",
+        .active_mode = 1,
+        .inactive_mode = 4,
+        .monday = true,
+        .tuesday = false,
+        .wednesday = true,
+        .thursday = true,
+        .friday = false,
+        .saturday = false,
+        .sunday = true,
+    };
+
+    if (set_firstcard(DEVICE_ID, DOOR, &firstcard) < 0) {
+        printf("ERROR %s\n", errmsg());
+        return -1;
+    }
+
+    const result resultset[] = {};
+
+    return evaluate("set-firstcard", sizeof(resultset) / sizeof(result), resultset);
+}
+
 bool restoreDefaultParameters() {
     const char *tag = "restore-default-parameters";
 

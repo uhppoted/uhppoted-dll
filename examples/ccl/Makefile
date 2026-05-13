@@ -39,7 +39,7 @@ get-controller: build
 	$(CMD) get-controller $(DEVICEID)
 
 set-address: build
-	$(CMD) set-address $(DEVICEID) --ip-address "192.168.1.100" --subnet-mask "255.255.255.0" --gateway-address "192.168.1.1"
+	$(CMD) set-address $(DEVICEID) --ip-address "192.168.1.125" --subnet-mask "255.255.255.0" --gateway-address "192.168.1.1"
 
 get-status: build
 	$(CMD) get-status $(DEVICEID)
@@ -54,7 +54,7 @@ get-listener: build
 	$(CMD) get-listener $(DEVICEID)
 
 set-listener: build
-	$(CMD) set-listener $(DEVICEID) --listener-address "192.168.1.100:60002" --listener-interval 15
+	$(CMD) set-listener $(DEVICEID) --listener-address "192.168.1.125:60002" --listener-interval 15
 
 get-door-control: build
 	$(CMD) get-door-control $(DEVICEID) $(DOOR)

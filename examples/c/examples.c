@@ -194,6 +194,11 @@ const command commands[] = {
         .fn = setAntiPassback,
     },
     {
+        .cmd = "set-firstcard",
+        .help = "Sets the first-card configuration for a controller managed door.",
+        .fn = setFirstCard,
+    },
+    {
         .cmd = "restore-default-parameters",
         .help = "Resets a controller to the manufacturer default configuration.",
         .fn = restoreDefaultParameters,
@@ -205,8 +210,8 @@ const command commands[] = {
     },
 };
 
-controller alpha = {.id = 405419896, .address = "192.168.1.100", .transport = "tcp"};
-controller beta = {.id = 303986753, .address = "192.168.1.100"};
+controller alpha = {.id = 405419896, .address = "192.168.1.125", .transport = "tcp"};
+controller beta = {.id = 303986753, .address = "192.168.1.125"};
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -276,7 +281,7 @@ options parse(int argc, char **argv) {
         .ip_address = "192.168.1.125",
         .subnet_mask = "255.255.255.0",
         .gateway = "192.168.1.0",
-        .listener = "192.168.1.100:60001",
+        .listener = "192.168.1.125:60001",
         .auto_send_interval = 0,
         .card = CARD_NUMBER,
         .card_index = CARD_INDEX,

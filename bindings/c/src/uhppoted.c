@@ -437,6 +437,22 @@ int set_door_control(uint32_t id, uint8_t door, uint8_t mode, uint8_t delay) {
     return 0;
 }
 
+int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4, &err) != 0) {
+        set_error(err.message, err.len);
+        return -1;
+    }
+
+    return 0;
+}
+
 int open_door(uint32_t id, uint8_t door) {
     char errmsg[256] = "";
 
@@ -927,7 +943,21 @@ int set_antipassback(uint32_t id, uint8_t antipassback) {
     return 0;
 }
 
-int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, uint32_t passcode2, uint32_t passcode3, uint32_t passcode4) {
+int set_firstcard(uint32_t id, uint8_t door, firstcard *f) {
+    struct FirstCard firstcard;
+
+    firstcard.start_time = f->start_time;
+    firstcard.end_time = f->end_time;
+    firstcard.active_mode = f->active_mode;
+    firstcard.inactive_mode = f->inactive_mode;
+    firstcard.monday = f->monday;
+    firstcard.tuesday = f->tuesday;
+    firstcard.wednesday = f->wednesday;
+    firstcard.thursday = f->thursday;
+    firstcard.friday = f->friday;
+    firstcard.saturday = f->saturday;
+    firstcard.sunday = f->sunday;
+
     char errmsg[256] = "";
 
     error err = {
@@ -935,7 +965,7 @@ int set_door_passcodes(uint32_t controller, uint8_t door, uint32_t passcode1, ui
         .message = errmsg,
     };
 
-    if (SetDoorPasscodes(u, controller, door, passcode1, passcode2, passcode3, passcode4, &err) != 0) {
+    if (SetFirstCard(u, id, door, &firstcard, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }

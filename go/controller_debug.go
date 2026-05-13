@@ -346,6 +346,36 @@ func setAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback uint8)
 	return nil
 }
 
+// Debug implementation of setFirstCard
+func setFirstCard(uu uhppote.IUHPPOTE, controller uint32, door uint8, firstcard *C.struct_FirstCard) error {
+	f, err := makeFirstCard(firstcard)
+	if err != nil {
+		return err
+	} else if f == nil {
+		return fmt.Errorf("invalid first-card (%v)", f)
+	}
+
+	if DEBUG {
+		fmt.Printf(">>> set-firstcard\n")
+		fmt.Printf("    ID:                   %v\n", controller)
+		fmt.Printf("    door:                 %v\n", door)
+		fmt.Printf("    start time:           %v\n", f.StartTime)
+		fmt.Printf("      end time:           %v\n", f.EndTime)
+		fmt.Printf("      active mode:        %v\n", f.Active)
+		fmt.Printf("    inactive mode:        %v\n", f.Inactive)
+		fmt.Printf("    enabled on Monday:    %v\n", f.Weekdays[time.Monday])
+		fmt.Printf("               Tuesday:   %v\n", f.Weekdays[time.Tuesday])
+		fmt.Printf("               Wednesday: %v\n", f.Weekdays[time.Wednesday])
+		fmt.Printf("               Thursday:  %v\n", f.Weekdays[time.Thursday])
+		fmt.Printf("               Friday:    %v\n", f.Weekdays[time.Friday])
+		fmt.Printf("               Saturday:  %v\n", f.Weekdays[time.Saturday])
+		fmt.Printf("               Sunday:    %v\n", f.Weekdays[time.Sunday])
+		fmt.Println()
+	}
+
+	return nil
+}
+
 // Debug implementation of restoreDefaultParameters
 //
 // Prints the controller ID to the console (if DEBUG is enabled) and returns nil.

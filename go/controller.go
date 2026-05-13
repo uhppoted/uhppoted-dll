@@ -371,6 +371,28 @@ func setAntiPassback(uu uhppote.IUHPPOTE, controller uint32, antipassback uint8)
 	return nil
 }
 
+// Sets the first-card configuration for a controller managed door.
+func setFirstCard(uu uhppote.IUHPPOTE, controller uint32, door uint8, firstcard *C.struct_FirstCard) error {
+	if firstcard == nil {
+		return fmt.Errorf("invalid argument (firstcard) - expected valid pointer")
+	}
+
+	f, err := makeFirstCard(firstcard)
+	if err != nil {
+		return err
+	} else if f == nil {
+		return fmt.Errorf("invalid first-card (%v)", f)
+	}
+
+	if ok, err := uu.SetFirstCard(controller, door, *f); err != nil {
+		return err
+	} else if !ok {
+		return fmt.Errorf("%v: set-firstcard failed for door %v", controller, door)
+	}
+
+	return nil
+}
+
 // Resets a controller to the manufacturer default configuration.
 func restoreDefaultParameters(uu uhppote.IUHPPOTE, controller uint32) error {
 	ok, err := uu.RestoreDefaultParameters(controller)

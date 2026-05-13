@@ -74,6 +74,7 @@ extern bool activateKeypads();
 extern bool setDoorPasscodes();
 extern bool getAntiPassback();
 extern bool setAntiPassback();
+extern bool setFirstCard();
 extern bool restoreDefaultParameters();
 
 extern bool listen();

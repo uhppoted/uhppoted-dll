@@ -20,8 +20,8 @@ extern const uint8_t PROFILE_ID = 29;
 
 extern const string LOCALE = "";
 
-const controller ALPHA = {.id = 405419896, .address = "192.168.1.100", .transport = "tcp"};
-const controller BETA = {.id = 303986753, .address = "192.168.1.100"};
+const controller ALPHA = {.id = 405419896, .address = "192.168.1.125", .transport = "tcp"};
+const controller BETA = {.id = 303986753, .address = "192.168.1.125"};
 
 typedef void(f)(uhppoted &, int, char **);
 
@@ -274,7 +274,7 @@ options parse(int argc, char **argv) {
         .ip_address = "192.168.1.125",
         .subnet_mask = "255.255.255.0",
         .gateway = "192.168.1.0",
-        .listener = "192.168.1.100:60001",
+        .listener = "192.168.1.125:60001",
         .auto_send_interval = 0,
         .card = CARD_NUMBER,
         .card_index = CARD_INDEX,

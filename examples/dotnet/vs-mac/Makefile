@@ -10,7 +10,7 @@ get-controller:
 	$(CLI) get-controller --controller $(CONTROLLER)
 
 set-address:
-	$(CLI) set-address --controller $(CONTROLLER) --address 192.168.1.100 --netmask 255.255.255.0 --gateway 192.168.1.255
+	$(CLI) set-address --controller $(CONTROLLER) --address 192.168.1.125 --netmask 255.255.255.0 --gateway 192.168.1.255
 
 get-status:
 	$(CLI) get-status --controller $(CONTROLLER)
@@ -25,7 +25,7 @@ get-listener:
 	$(CLI) get-listener --controller $(CONTROLLER)
 
 set-listener:
-	$(CLI) set-listener --controller $(CONTROLLER) --listener 192.168.1.100:60001 --listener-interval 15
+	$(CLI) set-listener --controller $(CONTROLLER) --listener 192.168.1.125:60001 --listener-interval 15
 
 get-door-control:
 	$(CLI) get-door-control --controller $(CONTROLLER) --door 4

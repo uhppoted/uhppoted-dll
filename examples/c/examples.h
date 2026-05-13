@@ -92,6 +92,7 @@ extern int activateKeypads(int argc, char **argv);
 extern int setDoorPasscodes(int argc, char **argv);
 extern int getAntiPassback(int argc, char **argv);
 extern int setAntiPassback(int argc, char **argv);
+extern int setFirstCard(int argc, char **argv);
 extern int restoreDefaultParameters(int argc, char **argv);
 
 extern int listen(int argc, char **argv);
