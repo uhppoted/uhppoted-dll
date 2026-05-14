@@ -134,6 +134,7 @@ returns a fixed response.
 - [`SetDoorPasscodes`](#setdoorpasscodes)
 - [`GetAntiPassback`](#getantipassback)
 - [`SetAntiPassback`](#setantipassback)
+- [`SetFirstCard`](#setfirstcard)
 - [`RestoreDefaultParameters`](#restoredefaultparameters)
 - [`Listen`](#listen)
 
@@ -326,7 +327,7 @@ Gets the controller anti-passback mode. The anti-passback will be one of the fol
 | 4     | _1:(2,3,4)_   | Door 1 is interlocked with doors 2,3 and 4                   |
 
 where _interlocked_ means a card will be swiped through a second time on a door until it has 
-been swiped through at the _interlocked_ door. e.g: if the anti-passback mode is _(1,3):(2,4),
+been swiped through at the _interlocked_ door. e.g: if the anti-passback mode is _(1,3):(2,4)_,
 a card swiped through at either of doors 1 or 3 will be denied access at doors 1 and 3 until 
 it has been swiped through at either of doors 2 or 4. Likewise a card swiped through at either
 of doors 2 or 4 will be denied access at doors 2 and 4 until is has been swiped through at 
@@ -351,11 +352,16 @@ Sets the controller anti-passback mode. The anti-passback must be one of the fol
 | 4     | _1:(2,3,4)_   | Door 1 is interlocked with doors 2,3 and 4                   |
 
 where _interlocked_ means a card will be swiped through a second time on a door until it has 
-been swiped through at the _interlocked_ door. e.g: if the anti-passback mode is _(1,3):(2,4),
+been swiped through at the _interlocked_ door. e.g: if the anti-passback mode is _(1,3):(2,4)_,
 a card swiped through at either of doors 1 or 3 will be denied access at doors 1 and 3 until 
 it has been swiped through at either of doors 2 or 4. Likewise a card swiped through at either
 of doors 2 or 4 will be denied access at doors 2 and 4 until is has been swiped through at 
 either of doors 1 or 3.
+
+
+#### `SetFirstCard`
+
+Sets the _first card_ configuration for a controller managed door.
 
 
 #### `RestoreDefaultParameters`

@@ -60,6 +60,7 @@ extern bool activateKeypads(uhppoted &);
 extern bool setDoorPasscodes(uhppoted &);
 extern bool getAntiPassback(uhppoted &);
 extern bool setAntiPassback(uhppoted &);
+extern bool setFirstCard(uhppoted &);
 extern bool restoreDefaultParameters(uhppoted &);
 
 extern bool listen(uhppoted &);

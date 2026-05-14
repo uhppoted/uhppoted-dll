@@ -3,13 +3,13 @@
 - [ ] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
       - [x] API
       - [x] C
-      - [ ] C++
+      - [x] C++
       - [ ] CCL
       - [ ] .NET
       - [ ] Python
       - [ ] documentation
-      - [ ] CHANGELOG
-      - [ ] README
+      - [x] CHANGELOG
+      - [x] README
 
 - [ ] github build warning:
 ```

@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+1. `set-firstcard` API bindings, examples and tests.
+
 ### Updated
 1. Updated to Go v1.26.
 2. Updated to _modern_ Go with `go fix`.

@@ -319,6 +319,46 @@ void setAntiPassback(uhppoted &u, int argc, char **argv) {
     display("set-antipassback", fields);
 }
 
+void setFirstCard(uhppoted &u, int argc, char **argv) {
+    auto options = parse(argc, argv);
+    uint32_t controller = options.device_id;
+    uint8_t door = options.door;
+
+    firstcard firstcard = {
+        .start_time = "08:30",
+        .end_time = "16:45",
+        .active_mode = 1,
+        .inactive_mode = 4,
+        .monday = true,
+        .tuesday = false,
+        .wednesday = true,
+        .thursday = true,
+        .friday = false,
+        .saturday = false,
+        .sunday = true,
+    };
+
+    u.set_firstcard(controller, door, firstcard);
+
+    vector<field> fields = {
+        field("ID", controller),
+        field("door", door),
+        field("enabled from", firstcard.start_time),
+        field("        to", firstcard.end_time),
+        field("active mode", firstcard.active_mode),
+        field("inactive mode", firstcard.inactive_mode),
+        field("enabled on Monday", firstcard.monday),
+        field("           Tuesday", firstcard.tuesday),
+        field("           Wednesday", firstcard.wednesday),
+        field("           Thursday", firstcard.thursday),
+        field("           Friday", firstcard.friday),
+        field("           Saturday", firstcard.saturday),
+        field("           Sunday", firstcard.sunday),
+    };
+
+    display("set-firstcard", fields);
+}
+
 void restoreDefaultParameters(uhppoted &u, int argc, char **argv) {
     auto options = parse(argc, argv);
     uint32_t controller = options.device_id;

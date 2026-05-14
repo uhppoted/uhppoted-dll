@@ -64,6 +64,7 @@ void activateKeypads(uhppoted &u, int argc, char **argv);
 void setDoorPasscodes(uhppoted &u, int argc, char **argv);
 void getAntiPassback(uhppoted &u, int argc, char **argv);
 void setAntiPassback(uhppoted &u, int argc, char **argv);
+void setFirstCard(uhppoted &u, int argc, char **argv);
 void restoreDefaultParameters(uhppoted &u, int argc, char **argv);
 
 void listenEvents(uhppoted &u, int argc, char **argv);

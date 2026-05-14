@@ -859,6 +859,33 @@ void uhppoted::set_antipassback(uint32_t controller, uint8_t antipassback) {
     }
 }
 
+void uhppoted::set_firstcard(uint32_t id, uint8_t door, const firstcard &f) {
+    FirstCard firstcard;
+
+    firstcard.start_time = (char *)f.start_time.c_str();
+    firstcard.end_time = (char *)f.end_time.c_str();
+    firstcard.active_mode = f.active_mode;
+    firstcard.inactive_mode = f.inactive_mode;
+    firstcard.monday = f.monday;
+    firstcard.tuesday = f.tuesday;
+    firstcard.wednesday = f.wednesday;
+    firstcard.thursday = f.thursday;
+    firstcard.friday = f.friday;
+    firstcard.saturday = f.saturday;
+    firstcard.sunday = f.sunday;
+
+    char errmsg[256] = "";
+
+    error err = {
+        .len = sizeof(errmsg),
+        .message = errmsg,
+    };
+
+    if (SetFirstCard(u, id, door, &firstcard, &err) != 0) {
+        throw uhppoted_exception(err);
+    }
+}
+
 void uhppoted::restore_default_parameters(uint32_t controller) {
     char errmsg[256] = "";
 

@@ -90,8 +90,8 @@ else
 endif	
 
 debug: build
-	make -C ./examples/c -f Makefile set-firstcard
-	make -C ./tests/c    -f Makefile set-firstcard
+	make -C ./examples/c++ -f Makefile set-firstcard
+	make -C ./tests/c++    -f Makefile set-firstcard
 
 godoc:
 	godoc -http=:80	-index_interval=60s

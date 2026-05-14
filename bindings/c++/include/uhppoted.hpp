@@ -101,6 +101,20 @@ typedef struct task {
     uint8_t cards;
 } task;
 
+typedef struct firstcard {
+    std::string start_time;
+    std::string end_time;
+    uint8_t active_mode;
+    uint8_t inactive_mode;
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+} firstcard;
+
 typedef void (*on_event)(const struct ListenEvent evt, void *userdata);
 typedef void (*on_error)(const char *err);
 
@@ -152,6 +166,7 @@ class uhppoted {
                             uint32_t passcode4);
     uint8_t get_antipassback(uint32_t controller);
     void set_antipassback(uint32_t controller, uint8_t antipassback);
+    void set_firstcard(uint32_t controller, uint8_t door, const firstcard &firstcard);
     void restore_default_parameters(uint32_t controller);
 
     void listen(on_event handler, bool *listening, bool *stop, on_error err_handler, void *userdata);

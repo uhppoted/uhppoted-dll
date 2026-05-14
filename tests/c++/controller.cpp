@@ -227,7 +227,32 @@ bool setAntiPassback(uhppoted &u) {
 
     vector<result> rs = {};
 
-    return evaluate("set-passback", rs);
+    return evaluate("set-antipassback", rs);
+}
+
+bool setFirstCard(uhppoted &u) {
+    uint32_t controller = DEVICE_ID;
+    uint8_t door = DOOR;
+
+    firstcard firstcard = {
+        .start_time = "08:30",
+        .end_time = "16:45",
+        .active_mode = 1,
+        .inactive_mode = 4,
+        .monday = true,
+        .tuesday = false,
+        .wednesday = true,
+        .thursday = true,
+        .friday = false,
+        .saturday = false,
+        .sunday = true,
+    };
+
+    u.set_firstcard(controller, door, firstcard);
+
+    vector<result> rs = {};
+
+    return evaluate("set-firstcard", rs);
 }
 
 bool restoreDefaultParameters(uhppoted &u) {

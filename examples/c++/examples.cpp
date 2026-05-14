@@ -198,6 +198,11 @@ const vector<command> commands = {
         .fn = setAntiPassback,
     },
     {
+        .cmd = "set-firstcard",
+        .help = "Sets the first card configuration for a controller managed door.",
+        .fn = setAntiPassback,
+    },
+    {
         .cmd = "restore-default-parameters",
         .help = "Resets a controller to the manufacturer default configuration.",
         .fn = restoreDefaultParameters,

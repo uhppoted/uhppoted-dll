@@ -138,6 +138,9 @@ get-antipassback: build
 set-antipassback: build
 	$(CMD) set-antipassback
 
+set-firstcard: build
+	$(CMD) set-firstcard
+
 restore-default-parameters: build
 	$(CMD) restore-default-parameters
 

@@ -501,6 +501,19 @@ uhppoted_exception::what() method.
 ```
 
 
+### `set_firstcard`
+```
+void set_firstcard(uint32_t controller, uint8_t door, const firstcard &firstcard);
+
+controller    controller serial number 
+door          door ID [1..4]
+firstcard     firstcard struct initialised with the first-card configuration for the controller door.
+
+Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
+uhppoted_exception::what() method.
+```
+
+
 ### `restore-default-parameters`
 ```
 void restore_default_parameters(uint32_t controller);
@@ -659,6 +672,24 @@ typedef struct task {
     std::string at;
     uint8_t cards;
 } task;
+```
+
+### firstcard
+Container struct for the configuration information required for `set_firstcard`.
+```
+typedef struct firstcard {
+    std::string start_time;
+    std::string end_time;
+    uint8_t active_mode;
+    uint8_t inactive_mode;
+    bool monday;
+    bool tuesday;
+    bool wednesday;
+    bool thursday;
+    bool friday;
+    bool saturday;
+    bool sunday;
+} firstcard;
 ```
 
 ### ListenEvent

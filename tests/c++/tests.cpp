@@ -50,6 +50,7 @@ vector<test> tests = {
     {"set-door-passcodes", setDoorPasscodes},
     {"get-antipassback", getAntiPassback},
     {"set-antipassback", setAntiPassback},
+    {"set-firstcard", setFirstCard},
     {"restore-default-parameters", restoreDefaultParameters},
     {"errors", errors},
     {"lookup", internationalisation},
@@ -66,7 +67,7 @@ const uint8_t DOOR = 4;
 const uint8_t PROFILE_ID = 49;
 const uint8_t ANTIPASSBACK = 2;
 
-const controller ALPHA = {.id = 405419896, .address = "192.168.1.101", "tcp"};
+const controller ALPHA = {.id = 405419896, .address = "192.168.1.101", .transport = "tcp"};
 const controller BETA = {.id = 303986753, .address = "192.168.1.102"};
 
 void usage();
