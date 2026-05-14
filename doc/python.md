@@ -455,6 +455,17 @@ antipassback  controller antipassback mode
 Raises an Exception if the call failed.
 ```
 
+### `set_firstcard`
+```
+uhppoted.set_firstcard(ID, door, firstcard)
+
+ID         controller serial number 
+door       door ID [1..4]
+firstcard  FirstCard dataclass instance initialised with the first card configuration for the controller + door.
+
+Raises an Exception if the call failed.
+```
+
 ### `restore-default-parameters`
 ```
 uhppoted.restore_default_parameters(ID)
@@ -614,6 +625,24 @@ class Task:
     sunday: bool
     at: str
     cards: int
+```
+
+### firstcard
+Container class for the first card configuration required for `set_firstcard`.
+```
+@dataclass
+class FirstCard:
+    start_time: str
+    end_time: str
+    active_mode: int
+    inactive_mode: int
+    monday: bool
+    tuesday: bool
+    wednesday: bool
+    thursday: bool
+    friday: bool
+    saturday: bool
+    sunday: bool
 ```
 
 ### ListenEvent

@@ -188,6 +188,21 @@ class Task:
 
 
 @dataclass
+class FirstCard:
+    start_time: str
+    end_time: str
+    active_mode: int
+    inactive_mode: int
+    monday: bool
+    tuesday: bool
+    wednesday: bool
+    thursday: bool
+    friday: bool
+    saturday: bool
+    sunday: bool
+
+
+@dataclass
 class ListenEvent:
     controller: int
     timestamp: str
@@ -551,6 +566,15 @@ class Uhppote:
         if self.ffi.SetAntiPassback(self._uhppote, deviceID, antipassback, byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
+    def set_firstcard(self, controller, door, f):
+        firstcard = GoFirstCard(c_char_p(bytes(f.start_time, 'utf-8')), c_char_p(bytes(f.end_time, 'utf-8')), f.active_mode,
+                                f.inactive_mode, 1 if f.monday else 0, 1 if f.tuesday else 0, 1 if f.wednesday else 0,
+                                1 if f.thursday else 0, 1 if f.friday else 0, 1 if f.saturday else 0, 1 if f.sunday else 0)
+        err = GoError()
+
+        if self.ffi.SetFirstCard(self._uhppote, controller, door, byref(firstcard), byref(err)) != 0:
+            raise Exception(f"{err.message.decode('utf-8')}")
+
     def restore_default_parameters(self, deviceID):
         err = GoError()
 
@@ -815,6 +839,7 @@ class FFI:
         self.SetDoorPasscodes = ffi('SetDoorPasscodes', errcheck)
         self.GetAntiPassback = ffi('GetAntiPassback', errcheck)
         self.SetAntiPassback = ffi('SetAntiPassback', errcheck)
+        self.SetFirstCard = ffi('SetFirstCard', errcheck)
         self.RestoreDefaultParameters = ffi('RestoreDefaultParameters', errcheck)
         self.Listen = ffi('Listen', errcheck)
 
@@ -866,6 +891,7 @@ def libfunctions():
         'SetDoorPasscodes':         (lib.SetDoorPasscodes,         [POINTER(GoUHPPOTE), c_ulong, c_ubyte, c_ulong, c_ulong, c_ulong, c_ulong, POINTER(GoError)]),
         'GetAntiPassback':          (lib.GetAntiPassback,          [POINTER(GoUHPPOTE), c_ulong, POINTER(c_ubyte), POINTER(GoError)]),
         'SetAntiPassback':          (lib.SetAntiPassback,          [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoError)]),
+        'SetFirstCard':             (lib.SetFirstCard,             [POINTER(GoUHPPOTE), c_ulong, c_ubyte, POINTER(GoFirstCard), POINTER(GoError)]),
         'RestoreDefaultParameters': (lib.RestoreDefaultParameters, [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
         'Listen':                   (lib.Listen,                   [POINTER(GoUHPPOTE), on_event, POINTER(c_bool), POINTER(c_bool), on_error, c_void_p]),
     }
@@ -1077,6 +1103,22 @@ class GoTask(Structure):
         ('sunday', c_ubyte),
         ('at', c_char_p),
         ('cards', c_ubyte),
+    ]
+
+
+class GoFirstCard(Structure):
+    _fields_ = [
+        ('start_time', c_char_p),
+        ('end_time', c_char_p),
+        ('active_mode', c_ubyte),
+        ('inactive_mode', c_ubyte),
+        ('monday', c_ubyte),
+        ('tuesday', c_ubyte),
+        ('wednesday', c_ubyte),
+        ('thursday', c_ubyte),
+        ('friday', c_ubyte),
+        ('saturday', c_ubyte),
+        ('sunday', c_ubyte),
     ]
 
 

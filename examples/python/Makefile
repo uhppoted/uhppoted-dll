@@ -1,11 +1,13 @@
 LIB=../../lib
 GO=GODEBUG=cgocheck=2
 CMD=python3 examples.py 
+
 CONTROLLER ?= 405419896
 CARD ?= 10058400
 DOOR ?= 3
 INTERLOCK  ?=3
 ANTIPASSBACK ?= "(1,3):(2,4)"
+FIRSTCARD ?= 08:30,16:45,normally open, firstcard only, [Mon,Tues,Fri]
 
 ifeq ($(OS),Windows_NT)
 	DLL=set PATH=$(LIB)
@@ -131,6 +133,9 @@ get-antipassback: build
 
 set-antipassback: build
 	$(GO) && $(DLL) && $(CMD) set-antipassback --controller $(CONTROLLER) --antipassback $(ANTIPASSBACK)
+
+set-firstcard: build
+	$(GO) && $(DLL) && $(CMD) set-firstcard --controller $(CONTROLLER) --door $(DOOR) --firstcard "$(FIRSTCARD)"
 
 restore-default-parameters: build
 	$(GO) && $(DLL) && $(CMD) restore-default-parameters  --controller $(CONTROLLER)

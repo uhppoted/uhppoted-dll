@@ -129,6 +129,9 @@ activate-keypads: build
 set-door-passcodes: build
 	$(CMD) set-door-passcodes
 
+set-firstcard: build
+	$(CMD) set-firstcard
+
 restore-default-parameters: build
 	$(CMD) restore-default-parameters
 

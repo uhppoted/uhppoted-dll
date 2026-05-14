@@ -176,6 +176,10 @@ def commands():
             'help': "Sets the controller anti-passback mode",
             'fn': set_antipassback,
         },
+        'set-firstcard': {
+            'help': "Sets the first card configuration for a controller managed door",
+            'fn': set_firstcard,
+        },
         'restore-default-parameters': {
             'help': "Resets a controller to the manufacturer default configuration",
             'fn': restore_default_parameters,
@@ -185,30 +189,6 @@ def commands():
             'fn': listen,
         },
     }
-
-
-# def parse_args():
-#     parser = argparse.ArgumentParser(description='uhppoted-dll examples')
-#
-#     parser.add_argument('command', type=str, help='command')
-#     parser.add_argument('--controller', type=int, default=DEVICE_ID, help='controller serial number')
-#     parser.add_argument('--interlock', type=int, default=1, help='controller door interlock')
-#     parser.add_argument('--ip-address', type=str, default='192.168.1.125', help='controller IP address')
-#     parser.add_argument('--subnet-mask', type=str, default='255.255.255.0', help='controller subnet mask')
-#     parser.add_argument('--gateway-address', type=str, default='192.168.1.5', help='controller gateway address')
-#     parser.add_argument('--listener-address',
-#                         type=str,
-#                         default='192.168.1.125:60001',
-#                         help='controller event listener address')
-#     parser.add_argument('--listener-interval', type=int, default=0, help='controller event listener auto-send interval')
-#
-#     parser.add_argument('--card', type=int, default=CARD_NUMBER, help='card number')
-#     parser.add_argument('--card-index', type=int, default=CARD_INDEX, help='card index')
-#     parser.add_argument('--door', type=int, default=DOOR, help='controller door ID [1..4]')
-#     parser.add_argument('--event-index', type=int, default=EVENT_INDEX, help='event index')
-#     parser.add_argument('--time-profile', type=int, default=TIME_PROFILE_ID, help='time profile ID')
-#
-#     return parser.parse_args()
 
 
 def parse_args():
@@ -384,6 +364,11 @@ def parse_args():
                                   type=str,
                                   default='disabled',
                                   help='disabled, (1:2);(3:4), (1,3):(2,4), 1:(2,3) or 1:(2,3,4)')
+    # ... set-firstcard
+    set_firstcard = parsers['set-firstcard']
+    set_firstcard.add_argument('--controller', type=int, help='controller serial number, e.g. 405419896')
+    set_firstcard.add_argument('--door', type=int, help='door ID [1..4]')
+    set_firstcard.add_argument('--firstcard', type=str, help='firstcard configuration string]')
 
     # ... restore-default-parameters
     restore_default_parameters = parsers['restore-default-parameters']
@@ -983,6 +968,30 @@ def set_antipassback(u, args):
     display('set-antipassback', [
         ('ID', controller),
         ('anti-passback', antipassback),
+    ])
+
+
+def set_firstcard(u, args):
+    controller = args.controller
+    door = args.door
+    firstcard = uhppoted.FirstCard("08:30", "16:45", 1, 4, True, False, True, True, False, False, True)
+
+    u.set_firstcard(controller, door, firstcard)
+
+    display('set-firstcard', [
+        ('ID', controller),
+        ('door', door),
+        ('enabled from', firstcard.start_time),
+        ('        to', firstcard.end_time),
+        ('active mode', firstcard.active_mode),
+        ('inactive mode', firstcard.inactive_mode),
+        ('enabled on Monday', firstcard.monday),
+        ('           Tuesday', firstcard.tuesday),
+        ('           Wednesday', firstcard.wednesday),
+        ('           Thursday', firstcard.thursday),
+        ('           Friday', firstcard.friday),
+        ('           Saturday', firstcard.saturday),
+        ('           Sunday', firstcard.sunday),
     ])
 
 

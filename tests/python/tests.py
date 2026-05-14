@@ -29,9 +29,9 @@ from uhppoted import LOOKUP_DIRECTION
 from uhppoted import LOOKUP_EVENT_TYPE
 from uhppoted import LOOKUP_EVENT_REASON
 
-DEVICE_ID = 405419896
-DEVICE_ID2 = 303986753
-INVALID_DEVICE_ID = 987654321
+CONTROLLER = 405419896
+CONTROLLER2 = 303986753
+INVALID_CONTROLLER = 987654321
 CARD_NUMBER = 8165538
 CARD_INDEX = 19
 EVENT_INDEX = 51
@@ -75,6 +75,7 @@ def tests():
         'set-door-passcodes': set_door_passcodes,
         'get-antipassback': get_antipassback,
         'set-antipassback': set_antipassback,
+        'set-firstcard': set_firstcard,
         'restore-default-parameters': restore_default_parameters,
         'lookup': internationalisation,
         'errors': errors,
@@ -136,7 +137,7 @@ def get_controllers(u):
 
 
 def get_controller(u):
-    info = u.get_device(DEVICE_ID)
+    info = u.get_device(CONTROLLER)
 
     return evaluate('get-device', [
         ('device ID', 405419896, info.ID),
@@ -150,13 +151,13 @@ def get_controller(u):
 
 
 def set_address(u):
-    u.set_address(DEVICE_ID, '192.168.1.125', '255.255.254.0', '192.168.1.0')
+    u.set_address(CONTROLLER, '192.168.1.125', '255.255.254.0', '192.168.1.0')
 
     return evaluate('set-address', [])
 
 
 def get_status(u):
-    status = u.get_status(DEVICE_ID)
+    status = u.get_status(CONTROLLER)
 
     return evaluate('get-status', [
         ('device ID', 405419896, status.ID),
@@ -180,7 +181,7 @@ def get_status(u):
 
 
 def get_status_no_event(u):
-    status = u.get_status(DEVICE_ID2)
+    status = u.get_status(CONTROLLER2)
 
     return evaluate('get-status-no-event', [
         ('device ID', 303986753, status.ID),
@@ -204,7 +205,7 @@ def get_status_no_event(u):
 
 
 def get_time(u):
-    datetime = u.get_time(DEVICE_ID)
+    datetime = u.get_time(CONTROLLER)
 
     return evaluate('get-time', [
         ('date/time', '2022-01-02 12:34:56', datetime),
@@ -212,14 +213,14 @@ def get_time(u):
 
 
 def set_time(u):
-    u.set_time(DEVICE_ID, '2022-03-23 12:24:17')
+    u.set_time(CONTROLLER, '2022-03-23 12:24:17')
 
     return evaluate('set-time', [])
 
 
 def get_listener(u):
-    listener = u.get_listener(DEVICE_ID)
-    interval = u.get_listener_interval(DEVICE_ID)
+    listener = u.get_listener(CONTROLLER)
+    interval = u.get_listener_interval(CONTROLLER)
 
     return evaluate('get-listener', [
         ('event listener', '192.168.1.100:60001', listener),
@@ -228,13 +229,13 @@ def get_listener(u):
 
 
 def set_listener(u):
-    u.set_listener(DEVICE_ID, '192.168.1.100:60001', 15)
+    u.set_listener(CONTROLLER, '192.168.1.100:60001', 15)
 
     return evaluate('set-listener', [])
 
 
 def get_door_control(u):
-    control = u.get_door_control(DEVICE_ID, DOOR)
+    control = u.get_door_control(CONTROLLER, DOOR)
 
     return evaluate('get-door-control', [
         ('door control mode', CONTROLLED, control.mode),
@@ -243,19 +244,19 @@ def get_door_control(u):
 
 
 def set_door_control(u):
-    u.set_door_control(DEVICE_ID, DOOR, NORMALLY_CLOSED, 6)
+    u.set_door_control(CONTROLLER, DOOR, NORMALLY_CLOSED, 6)
 
     return evaluate('set-door-control', [])
 
 
 def open_door(u):
-    u.open_door(DEVICE_ID, DOOR)
+    u.open_door(CONTROLLER, DOOR)
 
     return evaluate('open-door', [])
 
 
 def get_cards(u):
-    cards = u.get_cards(DEVICE_ID)
+    cards = u.get_cards(CONTROLLER)
 
     return evaluate('get-cards', [
         ('card count', 39, cards),
@@ -263,7 +264,7 @@ def get_cards(u):
 
 
 def get_card(u):
-    card = u.get_card(DEVICE_ID, CARD_NUMBER)
+    card = u.get_card(CONTROLLER, CARD_NUMBER)
 
     return evaluate('get-card', [
         ('card number', 8165538, card.cardNumber),
@@ -278,7 +279,7 @@ def get_card(u):
 
 
 def get_card_by_index(u):
-    card = u.get_card_by_index(DEVICE_ID, CARD_INDEX)
+    card = u.get_card_by_index(CONTROLLER, CARD_INDEX)
 
     return evaluate('get-card-by-index', [
         ('card number', 8165538, card.cardNumber),
@@ -293,25 +294,25 @@ def get_card_by_index(u):
 
 
 def put_card(u):
-    u.put_card(DEVICE_ID, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75], 7531)
+    u.put_card(CONTROLLER, CARD_NUMBER, '2022-01-01', '2022-12-31', [0, 1, 31, 75], 7531)
 
     return evaluate('put-card', [])
 
 
 def delete_card(u):
-    u.delete_card(DEVICE_ID, CARD_NUMBER)
+    u.delete_card(CONTROLLER, CARD_NUMBER)
 
     return evaluate('delete-card', [])
 
 
 def delete_cards(u):
-    u.delete_cards(DEVICE_ID)
+    u.delete_cards(CONTROLLER)
 
     return evaluate('delete-cards', [])
 
 
 def get_event_index(u):
-    index = u.get_event_index(DEVICE_ID)
+    index = u.get_event_index(CONTROLLER)
 
     return evaluate('get-event-index', [
         ('event index', 47, index),
@@ -319,13 +320,13 @@ def get_event_index(u):
 
 
 def set_event_index(u):
-    u.set_event_index(DEVICE_ID, EVENT_INDEX)
+    u.set_event_index(CONTROLLER, EVENT_INDEX)
 
     return evaluate('set-event-index', [])
 
 
 def get_event(u):
-    event = u.get_event(DEVICE_ID, EVENT_INDEX)
+    event = u.get_event(CONTROLLER, EVENT_INDEX)
 
     return evaluate('get-event', [
         ('event index', 51, event.index),
@@ -341,13 +342,13 @@ def get_event(u):
 
 def record_special_events(u):
     tag = 'record-special-events'
-    u.record_special_events(DEVICE_ID, True)
+    u.record_special_events(CONTROLLER, True)
 
     return evaluate(tag, [])
 
 
 def get_time_profile(u):
-    profile = u.get_time_profile(DEVICE_ID, PROFILE_ID)
+    profile = u.get_time_profile(CONTROLLER, PROFILE_ID)
 
     return evaluate('get-time-profile', [
         ('profile ID', 49, profile.ID),
@@ -374,13 +375,13 @@ def set_time_profile(u):
     profile = uhppoted.TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30", True, False, True, True, False, False,
                                    True, "08:30", "11:30", "", "", "", "18:00")
 
-    u.set_time_profile(DEVICE_ID, profile)
+    u.set_time_profile(CONTROLLER, profile)
 
     return evaluate('set-time-profile', [])
 
 
 def clear_time_profiles(u):
-    u.clear_time_profiles(DEVICE_ID)
+    u.clear_time_profiles(CONTROLLER)
 
     return evaluate('clear-time-profiles', [])
 
@@ -388,53 +389,53 @@ def clear_time_profiles(u):
 def add_task(u):
     task = uhppoted.Task(4, 3, "2022-02-01", "2022-06-30", True, False, True, True, False, False, True, "09:45", 11)
 
-    u.add_task(DEVICE_ID, task)
+    u.add_task(CONTROLLER, task)
 
     return evaluate('set-time-profile', [])
 
 
 def refresh_tasklist(u):
-    u.refresh_tasklist(DEVICE_ID)
+    u.refresh_tasklist(CONTROLLER)
 
     return evaluate('refresh-tasklist', [])
 
 
 def clear_tasklist(u):
-    u.clear_tasklist(DEVICE_ID)
+    u.clear_tasklist(CONTROLLER)
 
     return evaluate('clear-tasklist', [])
 
 
 def set_pc_control(u):
     tag = 'set-pc-control'
-    u.set_pc_control(DEVICE_ID, True)
+    u.set_pc_control(CONTROLLER, True)
 
     return evaluate(tag, [])
 
 
 def set_interlock(u):
     tag = 'set-interlock'
-    u.set_interlock(DEVICE_ID, 4)
+    u.set_interlock(CONTROLLER, 4)
 
     return evaluate(tag, [])
 
 
 def activate_keypads(u):
     tag = 'activate-keypads'
-    u.activate_keypads(DEVICE_ID, True, True, False, True)
+    u.activate_keypads(CONTROLLER, True, True, False, True)
 
     return evaluate(tag, [])
 
 
 def set_door_passcodes(u):
     tag = 'set-door-passcodes'
-    u.set_door_passcodes(DEVICE_ID, DOOR, 12345, 999999, 0, 54321)
+    u.set_door_passcodes(CONTROLLER, DOOR, 12345, 999999, 0, 54321)
 
     return evaluate(tag, [])
 
 
 def get_antipassback(u):
-    antipassback = u.get_antipassback(DEVICE_ID)
+    antipassback = u.get_antipassback(CONTROLLER)
 
     return evaluate('get-antipassback', [
         ('anti-passback', 2, antipassback),
@@ -443,14 +444,24 @@ def get_antipassback(u):
 
 def set_antipassback(u):
     tag = 'set-antipassback'
-    u.set_antipassback(DEVICE_ID, 2)
+    u.set_antipassback(CONTROLLER, 2)
 
     return evaluate(tag, [])
 
 
+def set_firstcard(u):
+    controller = CONTROLLER
+    door = DOOR
+    firstcard = uhppoted.FirstCard("08:30", "16:45", 1, 4, True, False, True, True, False, False, True)
+
+    u.set_firstcard(controller, door, firstcard)
+
+    return evaluate('set-firstcard', [])
+
+
 def restore_default_parameters(u):
     tag = 'restore-default-parameters'
-    u.restore_default_parameters(DEVICE_ID)
+    u.restore_default_parameters(CONTROLLER)
 
     return evaluate(tag, [])
 
@@ -630,7 +641,7 @@ def errors(u):
     }
 
     try:
-        u.get_device(INVALID_DEVICE_ID)
+        u.get_device(INVALID_CONTROLLER)
     except Exception as e:
         failed['get-controller'] = True
 

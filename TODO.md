@@ -4,9 +4,9 @@
       - [x] API
       - [x] C
       - [x] C++
-      - [ ] CCL
+      - [x] Python
       - [ ] .NET
-      - [ ] Python
+      - [ ] CCL
       - [ ] documentation
       - [x] CHANGELOG
       - [x] README
