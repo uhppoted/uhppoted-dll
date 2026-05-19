@@ -1393,6 +1393,21 @@ namespace uhppoted
             public byte cards;
         }
 
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        struct GoFirstCard {
+            public string start_time;
+            public string end_time;
+            public byte active_mode;
+            public byte inactive_mode;
+            public byte monday;
+            public byte tuesday;
+            public byte wednesday;
+            public byte thursday;
+            public byte friday;
+            public byte saturday;
+            public byte sunday;
+        }
+
 #pragma warning disable 649 // assigned in DLL
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
         struct GoListenEvent
