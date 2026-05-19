@@ -1698,10 +1698,10 @@ namespace uhppoted
         public FirstCard(string startTime, string endTime, 
                          byte activeMode, byte inactiveMode, 
                          bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday) {
-            this.start_time = startTime;
-            this.end_time = endTime;
-            this.active_mode = activeMode;
-            this.inactive_mode = inactiveMode;
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.activeMode = activeMode;
+            this.inactiveMode = inactiveMode;
     
             this.monday = monday;
             this.tuesday = tuesday;
