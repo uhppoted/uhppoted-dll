@@ -810,20 +810,20 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public void SetFirstCard(uint deviceID, byte door, FirstCard fc) {
+    public void SetFirstCard(uint deviceID, byte door, FirstCard firstcard) {
         GoFirstCard firstcard = new GoFirstCard();
 
-        firstcard.start_time = fc.start_time;
-        firstcard.end_time = fc.end_time;
-        firstcard.active_mode = fc.active_mode;
-        firstcard.inactive_mode = fc.inactive_mode;
-        firstcard.monday = fc.monday ? (byte)1 : (byte)0;
-        firstcard.tuesday = fc.tuesday ? (byte)1 : (byte)0;
-        firstcard.wednesday = fc.wednesday ? (byte)1 : (byte)0;
-        firstcard.thursday = fc.thursday ? (byte)1 : (byte)0;
-        firstcard.friday = fc.friday ? (byte)1 : (byte)0;
-        firstcard.saturday = fc.saturday ? (byte)1 : (byte)0;
-        firstcard.sunday = fc.sunday ? (byte)1 : (byte)0;
+        fc.start_time = firstcard.start_time;
+        fc.end_time = firstcard.end_time;
+        fc.active_mode = firstcard.active_mode;
+        fc.inactive_mode = firstcard.inactive_mode;
+        fc.monday = firstcard.monday ? (byte)1 : (byte)0;
+        fc.tuesday = firstcard.tuesday ? (byte)1 : (byte)0;
+        fc.wednesday = firstcard.wednesday ? (byte)1 : (byte)0;
+        fc.thursday = firstcard.thursday ? (byte)1 : (byte)0;
+        fc.friday = firstcard.friday ? (byte)1 : (byte)0;
+        fc.saturday = firstcard.saturday ? (byte)1 : (byte)0;
+        fc.sunday = firstcard.sunday ? (byte)1 : (byte)0;
 
         GoError err = new GoError();
 
@@ -1138,7 +1138,6 @@ public class Uhppoted : IDisposable {
         public byte cards;
     }
 
-
     struct GoFirstCard {
         public string start_time;
         public string end_time;
@@ -1405,10 +1404,10 @@ public class Task {
 }
 
 public class FirstCard {
-    public string start_time;
-    public string end_time;
-    public byte active_mode;
-    public byte inactive_mode;
+    public string startTime;
+    public string endTime;
+    public byte activeMode;
+    public byte inactiveMode;
     public bool monday;
     public bool tuesday;
     public bool wednesday;
@@ -1417,13 +1416,13 @@ public class FirstCard {
     public bool saturday;
     public bool sunday;
 
-    public FirstCard(string start_time, string end_time, 
-                     byte active_mode, byte inactive_mode, 
+    public FirstCard(string startTime, string endTime, 
+                     byte activeMode, byte inactiveMode, 
                      bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday) {
-        this.start_time = start_time;
-        this.end_time = end_time;
-        this.active_mode = active_mode;
-        this.inactive_mode = inactive_mode;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.activeMode = activeMode;
+        this.inactiveMode = inactiveM\ode;
 
         this.monday = monday;
         this.tuesday = tuesday;

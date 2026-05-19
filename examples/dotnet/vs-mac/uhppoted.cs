@@ -1681,7 +1681,6 @@ namespace uhppoted
         }
     }
 
-
     public class FirstCard {
         public string startTime;
         public string endTime;

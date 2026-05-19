@@ -1021,6 +1021,35 @@ namespace uhppoted
             }
         }
 
+        public void SetFirstCard(uint deviceID, byte door, FirstCard firstcard) {
+            GoFirstCard fc = new GoFirstCard();
+
+            fc.start_time = firstcard.startTime;
+            fc.end_time = firstcard.endTime;
+            fc.active_mode = firstcard.activeMode;
+            fc.inactive_mode = firstcard.inactiveMode;
+            fc.monday = firstcard.monday ? (byte)1 : (byte)0;
+            fc.tuesday = firstcard.tuesday ? (byte)1 : (byte)0;
+            fc.wednesday = firstcard.wednesday ? (byte)1 : (byte)0;
+            fc.thursday = firstcard.thursday ? (byte)1 : (byte)0;
+            fc.friday = firstcard.friday ? (byte)1 : (byte)0;
+            fc.saturday = firstcard.saturday ? (byte)1 : (byte)0;
+            fc.sunday = firstcard.sunday ? (byte)1 : (byte)0;
+
+            GoError err = new GoError();
+
+            err.len = 256;
+            err.message = Marshal.AllocHGlobal(256);
+
+            try {
+                if (SetFirstCard(ref this.u, deviceID, door, ref fc, ref err) != 0) {
+                    raise(err);
+                }
+            } finally {
+                Marshal.FreeHGlobal(err.message);
+            }
+        }
+
         public void RestoreDefaultParameters(uint controller)
         {
             GoError err = new GoError();
@@ -1225,6 +1254,9 @@ namespace uhppoted
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int SetAntiPassback(ref UHPPOTE u, uint deviceID, byte antipassback, ref GoError err);
 
+        [DllImport(DLL)]
+        private static extern int SetFirstCard(ref UHPPOTE u, uint deviceID, byte door, ref GoFirstCard task, ref GoError err);
+
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, ref GoError err);
 
@@ -1359,6 +1391,21 @@ namespace uhppoted
             public byte sunday;
             public string at;
             public byte cards;
+        }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
+        struct GoFirstCard {
+            public string start_time;
+            public string end_time;
+            public byte active_mode;
+            public byte inactive_mode;
+            public byte monday;
+            public byte tuesday;
+            public byte wednesday;
+            public byte thursday;
+            public byte friday;
+            public byte saturday;
+            public byte sunday;
         }
 
 #pragma warning disable 649 // assigned in DLL
@@ -1631,6 +1678,37 @@ namespace uhppoted
 
             this.at = at;
             this.cards = cards;
+        }
+    }
+
+    public class FirstCard {
+        public string startTime;
+        public string endTime;
+        public byte activeMode;
+        public byte inactiveMode;
+        public bool monday;
+        public bool tuesday;
+        public bool wednesday;
+        public bool thursday;
+        public bool friday;
+        public bool saturday;
+        public bool sunday;
+
+        public FirstCard(string startTime, string endTime, 
+                         byte activeMode, byte inactiveMode, 
+                         bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday) {
+            this.startTime = startTime;
+            this.endTime = endTime;
+            this.activeMode = activeMode;
+            this.inactiveMode = inactiveMode;
+    
+            this.monday = monday;
+            this.tuesday = tuesday;
+            this.wednesday = wednesday;
+            this.thursday = thursday;
+            this.friday = friday;
+            this.saturday = saturday;
+            this.sunday = sunday;
         }
     }
 

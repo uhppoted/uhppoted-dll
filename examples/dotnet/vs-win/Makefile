@@ -1,6 +1,6 @@
 DLL = ..\..\..\lib
 CLI = PATH=$(DLL) && .\bin\Debug\net8.0\uhppoted-dll-cli
-CONTROLLER = 405419896
+CONTROLLER ?= 405419896
 CARD ?= 10058400
 FIRSTCARD ?= 08:30,16:45,normally open, firstcard only, [Mon,Tue,Fri]
 

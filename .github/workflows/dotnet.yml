@@ -2,10 +2,10 @@ name: dotnet
 
 on:
   workflow_dispatch:
-  # push:
-  #   branches: [ main ]
-  # pull_request:
-  #   branches: [ main ]
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
 
@@ -13,8 +13,7 @@ jobs:
     name: Build
     strategy:
       matrix:
-        version: ['10.x']
-        # version: ['8.x', '9.x', '10.x']
+        version: ['8.x', '9.x', '10.x']
     runs-on: ubuntu-latest
     steps:
 
