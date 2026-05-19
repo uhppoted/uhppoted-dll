@@ -1006,7 +1006,7 @@ class UhppotedDLLCLI
                                                               activeMode, inactiveMode,
                                                               monday, tuesday, wednesday, thursday, friday, saturday, sunday);
 
-        u.SetFirstCard(controller, firstcard);
+        u.SetFirstCard(controller, door, firstcard);
 
         WriteLine(Format("set-firstcard ({0})", controller));
         WriteLine(Format("   door                 {0}", door));

@@ -1021,20 +1021,20 @@ namespace uhppoted
             }
         }
 
-        public void SetFirstCard(uint deviceID, byte door, FirstCard fc) {
-            GoFirstCard firstcard = new GoFirstCard();
+        public void SetFirstCard(uint deviceID, byte door, FirstCard firstcard) {
+            GoFirstCard fc = new GoFirstCard();
 
-            firstcard.start_time = fc.startTime;
-            firstcard.end_time = fc.endTime;
-            firstcard.active_mode = fc.activeMode;
-            firstcard.inactive_mode = fc.inactiveMode;
-            firstcard.monday = fc.monday ? (byte)1 : (byte)0;
-            firstcard.tuesday = fc.tuesday ? (byte)1 : (byte)0;
-            firstcard.wednesday = fc.wednesday ? (byte)1 : (byte)0;
-            firstcard.thursday = fc.thursday ? (byte)1 : (byte)0;
-            firstcard.friday = fc.friday ? (byte)1 : (byte)0;
-            firstcard.saturday = fc.saturday ? (byte)1 : (byte)0;
-            firstcard.sunday = fc.sunday ? (byte)1 : (byte)0;
+            fc.start_time = fc.startTime;
+            fc.end_time = fc.endTime;
+            fc.active_mode = fc.activeMode;
+            fc.inactive_mode = fc.inactiveMode;
+            fc.monday = fc.monday ? (byte)1 : (byte)0;
+            fc.tuesday = fc.tuesday ? (byte)1 : (byte)0;
+            fc.wednesday = fc.wednesday ? (byte)1 : (byte)0;
+            fc.thursday = fc.thursday ? (byte)1 : (byte)0;
+            fc.friday = fc.friday ? (byte)1 : (byte)0;
+            fc.saturday = fc.saturday ? (byte)1 : (byte)0;
+            fc.sunday = fc.sunday ? (byte)1 : (byte)0;
 
             GoError err = new GoError();
 
@@ -1042,7 +1042,7 @@ namespace uhppoted
             err.message = Marshal.AllocHGlobal(256);
 
             try {
-                if (SetFirstCard(ref this.u, deviceID, door, ref firstcard, ref err) != 0) {
+                if (SetFirstCard(ref this.u, deviceID, door, ref fc, ref err) != 0) {
                     raise(err);
                 }
             } finally {
