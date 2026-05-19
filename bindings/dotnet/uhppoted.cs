@@ -1434,6 +1434,7 @@ public class FirstCard {
         this.sunday = sunday;
     }
 }
+
 public class lookup {
     public const string LOOKUP_MODE = "door.mode";
     public const string LOOKUP_DIRECTION = "event.direction";
