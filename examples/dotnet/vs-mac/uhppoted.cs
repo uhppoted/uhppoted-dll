@@ -1024,17 +1024,17 @@ namespace uhppoted
         public void SetFirstCard(uint deviceID, byte door, FirstCard firstcard) {
             GoFirstCard fc = new GoFirstCard();
 
-            fc.start_time = fc.startTime;
-            fc.end_time = fc.endTime;
-            fc.active_mode = fc.activeMode;
-            fc.inactive_mode = fc.inactiveMode;
-            fc.monday = fc.monday ? (byte)1 : (byte)0;
-            fc.tuesday = fc.tuesday ? (byte)1 : (byte)0;
-            fc.wednesday = fc.wednesday ? (byte)1 : (byte)0;
-            fc.thursday = fc.thursday ? (byte)1 : (byte)0;
-            fc.friday = fc.friday ? (byte)1 : (byte)0;
-            fc.saturday = fc.saturday ? (byte)1 : (byte)0;
-            fc.sunday = fc.sunday ? (byte)1 : (byte)0;
+            fc.start_time = firstcard.startTime;
+            fc.end_time = firstcard.endTime;
+            fc.active_mode = firstcard.activeMode;
+            fc.inactive_mode = firstcard.inactiveMode;
+            fc.monday = firstcard.monday ? (byte)1 : (byte)0;
+            fc.tuesday = firstcard.tuesday ? (byte)1 : (byte)0;
+            fc.wednesday = firstcard.wednesday ? (byte)1 : (byte)0;
+            fc.thursday = firstcard.thursday ? (byte)1 : (byte)0;
+            fc.friday = firstcard.friday ? (byte)1 : (byte)0;
+            fc.saturday = firstcard.saturday ? (byte)1 : (byte)0;
+            fc.sunday = firstcard.sunday ? (byte)1 : (byte)0;
 
             GoError err = new GoError();
 
