@@ -1024,10 +1024,10 @@ namespace uhppoted
         public void SetFirstCard(uint deviceID, byte door, FirstCard fc) {
             GoFirstCard firstcard = new GoFirstCard();
 
-            firstcard.start_time = fc.start_time;
-            firstcard.end_time = fc.end_time;
-            firstcard.active_mode = fc.active_mode;
-            firstcard.inactive_mode = fc.inactive_mode;
+            firstcard.start_time = fc.startTime;
+            firstcard.end_time = fc.endTime;
+            firstcard.active_mode = fc.activeMode;
+            firstcard.inactive_mode = fc.inactiveMode;
             firstcard.monday = fc.monday ? (byte)1 : (byte)0;
             firstcard.tuesday = fc.tuesday ? (byte)1 : (byte)0;
             firstcard.wednesday = fc.wednesday ? (byte)1 : (byte)0;
@@ -1683,10 +1683,10 @@ namespace uhppoted
 
 
     public class FirstCard {
-        public string start_time;
-        public string end_time;
-        public byte active_mode;
-        public byte inactive_mode;
+        public string startTime;
+        public string endTime;
+        public byte activeMode;
+        public byte inactiveMode;
         public bool monday;
         public bool tuesday;
         public bool wednesday;
@@ -1695,13 +1695,13 @@ namespace uhppoted
         public bool saturday;
         public bool sunday;
 
-        public FirstCard(string start_time, string end_time, 
-                         byte active_mode, byte inactive_mode, 
+        public FirstCard(string startTime, string endTime, 
+                         byte activeMode, byte inactiveMode, 
                          bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday) {
-            this.start_time = start_time;
-            this.end_time = end_time;
-            this.active_mode = active_mode;
-            this.inactive_mode = inactive_mode;
+            this.start_time = startTime;
+            this.end_time = endTime;
+            this.active_mode = activeMode;
+            this.inactive_mode = inactiveMode;
     
             this.monday = monday;
             this.tuesday = tuesday;

@@ -952,8 +952,8 @@ class UhppotedDLLCLI
 
         string startDate = tokens[0].Trim();
         string endDate = tokens[1].Trim();
-        uint activeMode = 1;
-        uint inactiveMode = 4;
+        byte activeMode = 1;
+        byte inactiveMode = 4;
         string weekdays = tokens[4].Trim(" []".ToCharArray());
 
         bool monday = false;
@@ -1010,8 +1010,8 @@ class UhppotedDLLCLI
 
         WriteLine(Format("set-firstcard ({0})", controller));
         WriteLine(Format("   door                 {0}", door));
-        WriteLine(Format("   enabled from         {0}", firstcard.startDate));
-        WriteLine(Format("           until        {0}", firstcard.endDate));
+        WriteLine(Format("   enabled from         {0}", firstcard.startTime));
+        WriteLine(Format("           until        {0}", firstcard.endTime));
         WriteLine(Format("   active mode          {0}", firstcard.activeMode));
         WriteLine(Format("   inactive mode        {0}", firstcard.inactiveMode));
         WriteLine(Format("   enabled on Monday    {0}", firstcard.monday));
