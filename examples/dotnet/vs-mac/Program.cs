@@ -214,6 +214,10 @@ class UhppotedDLLCLI
                     "Set a controller anti-passback mode.",
                     SetAntiPassback),
 
+        new command("set-firstcard",
+                    "Sets the first-card configuration for a controller managed door.",
+                    SetFirstCard),
+
         new command("restore-default-parameters",
                     "Resets a controller to the manufacturer default configuration.",
                     RestoreDefaultParameters),
@@ -932,6 +936,91 @@ class UhppotedDLLCLI
 
         WriteLine(Format("set-antipassback ({0})", controller));
         WriteLine(Format("   anti-passback {0}", antipassback));
+    }
+
+    static void SetFirstCard(Uhppoted u, string[] args)
+    {
+        uint controller = ParseArgs(args, "--controller", CONTROLLER_ID);
+        byte door = ParseArgs(args, "--door", DOOR);
+        string arg = ParseArgs(args, "--firstcard", "08:30,16:45,normally open, firstcard only, [Mon,Tue,Fri]");
+
+        string[] tokens = arg.Split(new[] { ',' }, 5);
+        if (tokens.Length < 5)
+        {
+            throw new ArgumentException("Invalid --firstcard format. Expected: start,end,active,inactive,[days]");
+        }
+
+        string startDate = tokens[0].Trim();
+        string endDate = tokens[1].Trim();
+        uint activeMode = 1;
+        uint inactiveMode = 4;
+        string weekdays = tokens[4].Trim(" []".ToCharArray());
+
+        bool monday = false;
+        bool tuesday = false;
+        bool wednesday = false;
+        bool thursday = false;
+        bool friday = false;
+        bool saturday = false;
+        bool sunday = false;
+
+        switch (tokens[2].Trim())
+        {
+            case "normally open": activeMode = 1; break;
+            case "normally closed": activeMode = 2; break;
+            case "controlled": activeMode = 3; break;
+            default: throw new ArgumentException(Format("Unknown door control mode {0}", tokens[2]));
+        }
+
+        switch (tokens[3].Trim())
+        {
+            case "normally open": inactiveMode = 1; break;
+            case "normally closed": inactiveMode = 2; break;
+            case "controlled": inactiveMode = 3; break;
+            case "firstcard only": inactiveMode = 4; break;
+            default: throw new ArgumentException(Format("Unknown door control mode {0}", tokens[3]));
+        }
+
+        Regex re = new Regex(@"(Mon|Tue|Wed|Thu|Fri|Sat|Sun)*", RegexOptions.ECMAScript);
+        MatchCollection matches = re.Matches(weekdays);
+
+        foreach (Match match in matches)
+        {
+            if (match.Groups[1].Success)
+            {
+                string weekday = match.Groups[1].Value;
+                switch (weekday)
+                {
+                    case "Mon": monday = true; break;
+                    case "Tue": tuesday = true; break;
+                    case "Wed": wednesday = true; break;
+                    case "Thu": thursday = true; break;
+                    case "Fri": friday = true; break;
+                    case "Sat": saturday = true; break;
+                    case "Sun": sunday = true; break;
+                }
+            }
+        }
+
+        uhppoted.FirstCard firstcard = new uhppoted.FirstCard(startDate, endDate,
+                                                              activeMode, inactiveMode,
+                                                              monday, tuesday, wednesday, thursday, friday, saturday, sunday);
+
+        u.SetFirstCard(controller, firstcard);
+
+        WriteLine(Format("set-firstcard ({0})", controller));
+        WriteLine(Format("   door                 {0}", door));
+        WriteLine(Format("   enabled from         {0}", firstcard.startDate));
+        WriteLine(Format("           until        {0}", firstcard.endDate));
+        WriteLine(Format("   active mode          {0}", firstcard.activeMode));
+        WriteLine(Format("   inactive mode        {0}", firstcard.inactiveMode));
+        WriteLine(Format("   enabled on Monday    {0}", firstcard.monday));
+        WriteLine(Format("              Tuesday   {0}", firstcard.tuesday));
+        WriteLine(Format("              Wednesday {0}", firstcard.wednesday));
+        WriteLine(Format("              Thursday  {0}", firstcard.thursday));
+        WriteLine(Format("              Friday    {0}", firstcard.friday));
+        WriteLine(Format("              Saturday  {0}", firstcard.saturday));
+        WriteLine(Format("              Sunday    {0}", firstcard.sunday));
     }
 
     static void RestoreDefaultParameters(Uhppoted u, string[] args)

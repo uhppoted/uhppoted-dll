@@ -70,6 +70,7 @@ public class Tests {
         new test("set-door-passcodes", SetDoorPasscodes),
         new test("get-antipassback", GetAntiPassback),
         new test("set-antipassback", SetAntiPassback),
+        new test("set-firstcard", SetFirstCard),
         new test("restore-default-parameters", RestoreDefaultParameters),
         new test("lookup", Internationalisation),
         new test("errors", Errors),
@@ -539,6 +540,18 @@ public class Tests {
         result[] resultset = {};
 
         return evaluate("set-antipassback", resultset);
+    }
+
+    static bool SetFirstCard(Uhppoted u) {
+        FirstCard firstcard = new FirstCard("08:30", "16:45",
+                                            1, 4,
+                                            true, false, true, true, false, false, true);
+
+        u.SetFirstCard(DEVICE_ID, DOOR, firstcard);
+
+        result[] resultset = {};
+
+        return evaluate("set-firstcard", resultset);
     }
 
     static bool RestoreDefaultParameters(Uhppoted u) {

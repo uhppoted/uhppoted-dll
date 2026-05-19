@@ -1,6 +1,8 @@
 DLL = ..\..\..\lib
 CLI = PATH=$(DLL) && .\bin\Debug\net8.0\uhppoted-dll-cli
 CONTROLLER = 405419896
+CARD ?= 10058400
+FIRSTCARD ?= 08:30,16:45,normally open, firstcard only, [Mon,Tue,Fri]
 
 get-controllers:
 	$(CLI) get-controllers
@@ -58,7 +60,7 @@ get-event-index:
 
 set-event-index:
 	$(CLI) set-event-index --controller $(CONTROLLER) --index 37
- 
+
 get-event:
 	$(CLI) get-event --controller $(CONTROLLER) --index 37
 
@@ -101,8 +103,12 @@ get-antipassback:
 set-antipassback:
 	$(CLI) set-antipassback --controller $(CONTROLLER) --antipassback "(1,3):(2,4)"
 
+set-firstcard:
+	$(CMD) set-firstcard --controller $(CONTROLLER) --door $(DOOR) --firstcard "$(FIRSTCARD)"
+
 restore-default-parameters:
 	$(CLI) restore-default-parameters --controller $(CONTROLLER)
 
 listen:
 	$(CLI) listen
+

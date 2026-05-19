@@ -810,6 +810,35 @@ public class Uhppoted : IDisposable {
         }
     }
 
+    public void SetFirstCard(uint deviceID, byte door, FirstCard fc) {
+        GoFirstCard firstcard = new GoFirstCard();
+
+        firstcard.start_time = fc.start_time;
+        firstcard.end_time = fc.end_time;
+        firstcard.active_mode = fc.active_mode;
+        firstcard.inactive_mode = fc.inactive_mode;
+        firstcard.monday = fc.monday ? (byte)1 : (byte)0;
+        firstcard.tuesday = fc.tuesday ? (byte)1 : (byte)0;
+        firstcard.wednesday = fc.wednesday ? (byte)1 : (byte)0;
+        firstcard.thursday = fc.thursday ? (byte)1 : (byte)0;
+        firstcard.friday = fc.friday ? (byte)1 : (byte)0;
+        firstcard.saturday = fc.saturday ? (byte)1 : (byte)0;
+        firstcard.sunday = fc.sunday ? (byte)1 : (byte)0;
+
+        GoError err = new GoError();
+
+        err.len = 256;
+        err.message = Marshal.AllocHGlobal(256);
+
+        try {
+            if (SetFirstCard(ref this.u, deviceID, door, ref firstcard, ref err) != 0) {
+                raise(err);
+            }
+        } finally {
+            Marshal.FreeHGlobal(err.message);
+        }
+    }
+
     public void RestoreDefaultParameters(uint controller) {
         GoError err = new GoError();
 
@@ -990,6 +1019,9 @@ public class Uhppoted : IDisposable {
     private static extern int SetAntiPassback(ref UHPPOTE u, uint controller, byte antipassback, ref GoError err);
 
     [DllImport(DLL)]
+    private static extern int SetFirstCard(ref UHPPOTE u, uint deviceID, byte door, ref GoFirstCard task, ref GoError err);
+
+    [DllImport(DLL)]
     private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, ref GoError err);
 
     [DllImport(DLL)]
@@ -1104,6 +1136,21 @@ public class Uhppoted : IDisposable {
         public byte sunday;
         public string at;
         public byte cards;
+    }
+
+
+    struct GoFirstCard {
+        public string start_time;
+        public string end_time;
+        public byte active_mode;
+        public byte inactive_mode;
+        public byte monday;
+        public byte tuesday;
+        public byte wednesday;
+        public byte thursday;
+        public byte friday;
+        public byte saturday;
+        public byte sunday;
     }
 
 #pragma warning disable 649 // assigned in DLL
@@ -1334,8 +1381,11 @@ public class Task {
     public string at;
     public byte cards;
 
-    public Task(byte task, byte door, string from, string to, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday,
-                bool saturday, bool sunday, string at, byte cards) {
+    public Task(byte task, 
+                byte door,
+                string from, string to, 
+                bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
+                string at, byte cards) {
         this.task = task;
         this.door = door;
         this.from = from;
@@ -1354,6 +1404,36 @@ public class Task {
     }
 }
 
+public class FirstCard {
+    public string start_time;
+    public string end_time;
+    public byte active_mode;
+    public byte inactive_mode;
+    public bool monday;
+    public bool tuesday;
+    public bool wednesday;
+    public bool thursday;
+    public bool friday;
+    public bool saturday;
+    public bool sunday;
+
+    public FirstCard(string start_time, string end_time, 
+                     byte active_mode, byte inactive_mode, 
+                     bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday) {
+        this.start_time = start_time;
+        this.end_time = end_time;
+        this.active_mode = active_mode;
+        this.inactive_mode = inactive_mode;
+
+        this.monday = monday;
+        this.tuesday = tuesday;
+        this.wednesday = wednesday;
+        this.thursday = thursday;
+        this.friday = friday;
+        this.saturday = saturday;
+        this.sunday = sunday;
+    }
+}
 public class lookup {
     public const string LOOKUP_MODE = "door.mode";
     public const string LOOKUP_DIRECTION = "event.direction";

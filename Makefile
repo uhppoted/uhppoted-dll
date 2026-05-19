@@ -90,8 +90,8 @@ else
 endif	
 
 debug: build
-	make -C ./examples/python -f Makefile set-firstcard
-	make -C ./tests/python    -f Makefile set-firstcard
+	make -C ./examples/dotnet/vs-mac -f Makefile set-firstcard
+	make -C ./tests/dotnet/vs-mac    -f Makefile set-firstcard
 
 godoc:
 	godoc -http=:80	-index_interval=60s
@@ -111,9 +111,9 @@ cpp:
 	make -C ./examples/c++ -f Makefile build
 	make -C ./tests/c++    -f Makefile build
 
-dotnet-mono: 
-	make -C ./examples/dotnet/mono -f Makefile build
-	make -C ./tests/dotnet         -f Makefile build
+dotnet-mac: 
+	make -C ./examples/dotnet/vs-mac -f Makefile build
+	make -C ./tests/dotnet/vs-mac    -f Makefile build
 
 python: 
 	make -C ./examples/python -f Makefile build

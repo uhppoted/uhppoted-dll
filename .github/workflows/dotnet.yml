@@ -1,0 +1,43 @@
+name: dotnet
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    name: Build
+    strategy:
+      matrix:
+        version: ['8.x', '9.x', '10.x']
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v6
+      with:
+        go-version: '1.26'
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: ${{ matrix.version }}
+
+    - name: Check out code
+      uses: actions/checkout@v6
+
+    - name: Install fantomas
+      run: |
+        dotnet tool install fantomas
+
+    - name: Build DLL
+      run: |
+        make build
+
+    - name: debug
+      run: |
+        ls -la lib
