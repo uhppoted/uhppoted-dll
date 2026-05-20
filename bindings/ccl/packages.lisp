@@ -38,6 +38,7 @@
            uhppoted-set-door-passcodes
            uhppoted-get-antipassback
            uhppoted-set-antipassback
+           uhppoted-set-firstcard
            uhppoted-restore-default-parameters
            uhppoted-listen-events
            uhppoted-error
@@ -118,6 +119,19 @@
            task-sunday
            task-at
            task-cards
+
+           make-firstcard
+           firstcard-start-time
+           firstcard-end-time
+           firstcard-active-mode
+           firstcard-inactive-mode
+           firstcard-monday
+           firstcard-tuesday
+           firstcard-wednesday
+           firstcard-thursday
+           firstcard-friday
+           firstcard-saturday
+           firstcard-sunday
 
            make-listen-event
            listen-event-timestamp

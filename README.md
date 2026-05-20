@@ -1,4 +1,5 @@
 ![build](https://github.com/uhppoted/uhppoted-dll/workflows/build/badge.svg)
+![.NET](https://github.com/uhppoted/uhppoted-dll/workflows/dotnet/badge.svg)
 
 # uhppoted-dll
 

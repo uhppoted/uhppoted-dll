@@ -141,6 +141,19 @@
                 at
                 cards)
 
+(defstruct firstcard firstcard
+                     start-time
+                     end-time
+                     active-mode
+                     inactive-mode
+                     monday
+                     tuesday
+                     wednesday
+                     thursday
+                     friday
+                     saturday
+                     sunday)
+
 (defstruct listen-event timestamp
                         index
                         event-type
@@ -245,7 +258,20 @@
                    (:saturday  :unsigned-byte)
                    (:sunday    :unsigned-byte)
                    (:at        :address)
-                   (:cards     :unsigned-byte)))
+                   ))
+
+(def-foreign-type nil
+  (:struct :GoFirstCard (:start-time    :address)
+                        (:end-time      :address)
+                        (:active-mode   :unsigned-byte)
+                        (:inactive-mode :unsigned-byte)
+                        (:monday        :unsigned-byte)
+                        (:tuesday       :unsigned-byte)
+                        (:wednesday     :unsigned-byte)
+                        (:thursday      :unsigned-byte)
+                        (:friday        :unsigned-byte)
+                        (:saturday      :unsigned-byte)
+                        (:sunday        :unsigned-byte)))
 
 (def-foreign-type nil
   (:struct :GoListenEvent (:controller :unsigned-fullword) 
@@ -1052,6 +1078,36 @@
                                                      :signed-long))
         (error 'uhppoted-error :message (%get-cstring errmsgp)))
       t)
+    (dispose-heap-ivector errmsg))))
+
+
+(defun uhppoted-set-firstcard (uhppote device-id door firstcard) "Sets the first-card configuration for a door"
+  (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
+  (unwind-protect
+    (with-cstrs ((start-time (firstcard-start-time firstcard))
+                 (end-time   (firstcard-end-time   firstcard)))
+    (rletz ((fc (:struct :GoFirstCard) :start-time      start-time
+                                       :end-time        end-time
+                                       :active-mode   (firstcard-active-mode   firstcard)
+                                       :inactive-mode (firstcard-inactive-mode firstcard)
+                                       :monday    (if (firstcard-monday        firstcard) 1 0)
+                                       :tuesday   (if (firstcard-tuesday       firstcard) 1 0)
+                                       :wednesday (if (firstcard-wednesday     firstcard) 1 0)
+                                       :thursday  (if (firstcard-thursday      firstcard) 1 0)
+                                       :friday    (if (firstcard-friday        firstcard) 1 0)
+                                       :saturday  (if (firstcard-saturday      firstcard) 1 0)
+                                       :sunday    (if (firstcard-sunday        firstcard) 1 0)
+                                  )
+            (err (:struct :GoError) :len     errlen
+                                    :message errmsgp))
+      (unless (eq 0 (external-call "SetFirstCard" :address       uhppote 
+                                                  :unsigned-long device-id 
+                                                  :unsigned-byte door
+                                                  :address       fc
+                                                  :address       err
+                                                  :signed-long))
+        (error 'uhppoted-error :message (%get-cstring errmsgp)))
+       t))
     (dispose-heap-ivector errmsg))))
 
 

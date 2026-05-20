@@ -38,6 +38,7 @@
         '("set-door-passcodes"         examples:set-door-passcodes         "Sets the supervisor passcodes for keypad only access to a door.")
         '("get-antipassback"           examples:get-antipassback           "Retrieves the anti-passback mode from a controller.")
         '("set-antipassback"           examples:set-antipassback           "Sets the anti-passback mode for a controller.")
+        '("set-firstcard"              examples:set-firstcard              "Sets the first-card configuration for a controller managed door.")
         '("restore-default-parameters" examples:restore-default-parameters "Resets a controller to the manufacturer default configuration.")
         '("listen"                     examples:listen-events              "Listens for controller events.")
 ))

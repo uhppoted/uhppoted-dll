@@ -5,7 +5,8 @@
       - [x] C
       - [x] C++
       - [x] Python
-      - [ ] .NET
+      - [x] .NET
+         - [ ] tests
       - [ ] CCL
       - [ ] documentation
       - [x] CHANGELOG

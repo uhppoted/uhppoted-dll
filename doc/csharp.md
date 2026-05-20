@@ -456,6 +456,18 @@ antipassback  controller door anti-passback mode
 Throws a UhppotedException if the call failed.
 ```
 
+### `Uhppoted::SetFirstCard`
+```
+public void SetFirstCard(uint ID, byte door, FirstCard firstcard)
+
+ID         controller serial number 
+door       Door ID [1..4]
+firstcard  FirstCard class initialised with the first-card configuration for the door.
+
+Throws a UhppotedException if the call failed.
+```
+
+
 ### `Uhppoted::RestoreDefaultParameters`
 ```
 public void RestoreDefaultParameters(uint controller)
@@ -608,6 +620,24 @@ public class Task {
     public bool sunday;
     public string at;
     public byte cards;
+}
+```
+
+### FirstCard
+Container class for the first-card configuration information.
+```
+public class FirstCard {
+    public string starTime;
+    public string endTime;
+    public byte activeMode;
+    public byte inactiveMode;
+    public bool monday;
+    public bool tuesday;
+    public bool wednesday;
+    public bool thursday;
+    public bool friday;
+    public bool saturday;
+    public bool sunday;
 }
 ```
 

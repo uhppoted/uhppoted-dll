@@ -42,7 +42,3 @@ jobs:
       run: |
         cd examples/dotnet/vs-mac
         dotnet build
-
-    - name: debug
-      run: |
-        ls -la lib

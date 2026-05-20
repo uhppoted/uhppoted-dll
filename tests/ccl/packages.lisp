@@ -38,6 +38,7 @@
            set-door-passcodes
            get-antipassback
            set-antipassback
+           set-firstcard
            restore-default-parameters
            listen-events
            internationalisation

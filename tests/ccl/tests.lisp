@@ -319,6 +319,22 @@
   (evaluate "set-antipassback" '()))
 
 
+(defun set-firstcard () "" 
+  (let ((firstcard (make-firstcard :start-time    "08:30"
+                                   :end-time      "16:45"
+                                   :active-mode   1
+                                   :inactive-mode 4
+                                   :monday        t
+                                   :tuesday       nil
+                                   :wednesday     t
+                                   :thursday      t
+                                   :friday        nil
+                                   :saturday      nil
+                                   :sunday        t)))
+    (exec #'(lambda (u) (uhppoted-set-firstcard u TEST-DEVICE-ID DOOR firstcard)))
+    (evaluate "set-firstcard" '())))
+
+
 (defun restore-default-parameters() "" 
   (exec #'(lambda (u) (uhppoted-restore-default-parameters u TEST-DEVICE-ID)))
   (evaluate "restore-default-parameters" '()))

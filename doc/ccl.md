@@ -473,6 +473,18 @@ antipassback  controller antipassback mode
 Raises a `uhppoted-error` condition if the call failed.
 ```
 
+### `set-firstcard`
+```
+(defun uhppoted-set-firstcard (uhppote device-id door task) ...)
+
+device-id  controller serial number 
+door       door ID [1..4]
+firstcard  `firstcard` struct initialised with the first-card configuration for the door.
+
+Raises a `uhppoted-error` condition if the call failed.
+```
+
+
 ### `restore-default-parameters`
 ```
 (defun uhppoted-restore-default-parameters (uhppote device-id) ...)
@@ -600,6 +612,23 @@ Container class for the task information required for `add_task`.
                 sunday
                 at
                 cards)
+```
+
+### firstcard
+Container class for the first-card configuration information required for `set-first-card`.
+```
+(defstruct firstcard firstcard
+                     start-time
+                     end-time
+                     active-mode
+                     inactive-mode
+                     monday
+                     tuesday
+                     wednesday
+                     thursday
+                     friday
+                     saturday
+                     sunday)
 ```
 
 ### listen-event

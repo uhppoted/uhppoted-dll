@@ -1,0 +1,47 @@
+name: ccl
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v6
+      with:
+        go-version: '1.26'
+
+    - name: Install Homebrew
+      run: |
+        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
+        echo "/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
+
+    # - name: Set up CLL
+    #   uses: actions/setup-dotnet@v5
+    #   with:
+    #     dotnet-version: ${{ matrix.version }}
+
+    - name: Check out code
+      uses: actions/checkout@v6
+
+    - name: Build DLL
+      run: |
+        make build
+
+    # - name: Build CCL
+    #   run: |
+    #     cd examples/ccl
+    #     dotnet build
+
+    - name: debug
+      run: |
+        brew --version
