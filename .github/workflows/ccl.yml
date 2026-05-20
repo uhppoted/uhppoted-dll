@@ -40,3 +40,7 @@ jobs:
     - name: Build and run CCL tests
       run: |
         make -C ./tests/ccl -f Makefile tests
+
+    - name: debug
+      run: |
+        make -C ./tests/ccl -f Makefile set-firstcard
