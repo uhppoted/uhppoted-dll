@@ -258,7 +258,7 @@
                    (:saturday  :unsigned-byte)
                    (:sunday    :unsigned-byte)
                    (:at        :address)
-                   ))
+                   (:cards     :unsigned-byte)))
 
 (def-foreign-type nil
   (:struct :GoFirstCard (:start-time    :address)

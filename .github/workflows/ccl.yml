@@ -19,16 +19,12 @@ jobs:
       with:
         go-version: '1.26'
 
-    - name: Install Homebrew
+    - name: Set up Clozure Common Lisp
       run: |
-        NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
-        echo "/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
-
-    - name: Set up CCL
-      run: |
-        brew install clozure-cl
-        ccl --version
+        mkdir -p /opt/ccl
+        wget -c https://github.com/Clozure/ccl/releases/download/v1.12.1/ccl-1.12.1-linuxx86.tar.gz -O - | tar xvz -C /opt
+        ln -s /opt/ccl/lx86cl64 /usr/local/bin/ccl64
+        sudo apt-get install rlwrap
 
     - name: Check out code
       uses: actions/checkout@v6
@@ -37,7 +33,7 @@ jobs:
       run: |
         make build
 
-    - name: Build CCL bindings
+    - name: Build CCL examples
       run: |
         make -C ./examples/ccl -f Makefile build
 
