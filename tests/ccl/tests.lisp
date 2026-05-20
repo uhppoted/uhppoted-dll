@@ -331,7 +331,7 @@
                                    :friday        nil
                                    :saturday      nil
                                    :sunday        t)))
-    (exec #'(lambda (u) (uhppoted-set-firstcard u TEST-DEVICE-ID DOOR firstcard)))
+    (exec #'(lambda (u) (uhppoted-set-firstcard u TEST-DEVICE-ID TEST-DOOR firstcard)))
     (evaluate "set-firstcard" '())))
 
 
