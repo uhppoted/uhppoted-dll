@@ -2,10 +2,10 @@ name: ccl
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
 
 jobs:
 
@@ -25,10 +25,10 @@ jobs:
         echo "/home/linuxbrew/.linuxbrew/bin" >> $GITHUB_PATH
         echo "/home/linuxbrew/.linuxbrew/sbin" >> $GITHUB_PATH
 
-    # - name: Set up CLL
-    #   uses: actions/setup-dotnet@v5
-    #   with:
-    #     dotnet-version: ${{ matrix.version }}
+    - name: Set up CCL
+      run: |
+        brew install clozure-cl
+        ccl --version
 
     - name: Check out code
       uses: actions/checkout@v6
@@ -37,11 +37,7 @@ jobs:
       run: |
         make build
 
-    # - name: Build CCL
-    #   run: |
-    #     cd examples/ccl
-    #     dotnet build
-
-    - name: debug
+    - name: Build CCL bindings
       run: |
-        brew --version
+        make -C ./examples/ccl -f Makefile build
+
