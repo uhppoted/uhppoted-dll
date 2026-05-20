@@ -40,6 +40,7 @@
         '("set-door-passcodes"         tests:set-door-passcodes)
         '("get-antipassback"           tests:get-antipassback)
         '("set-antipassback"           tests:set-antipassback)
+        '("set-firstcard"              tests:set-firstcard)
         '("restore-default-parameters" tests:restore-default-parameters)
         '("lookup"                     tests:internationalisation)
         '("errors"                     tests:errors)
