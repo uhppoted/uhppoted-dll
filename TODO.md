@@ -7,8 +7,8 @@
       - [x] Python
       - [x] .NET
          - [ ] tests
-      - [ ] CCL
-      - [ ] documentation
+      - [x] CCL
+      - [x] documentation
       - [x] CHANGELOG
       - [x] README
 
