@@ -141,8 +141,7 @@
                 at
                 cards)
 
-(defstruct firstcard firstcard
-                     start-time
+(defstruct firstcard start-time
                      end-time
                      active-mode
                      inactive-mode

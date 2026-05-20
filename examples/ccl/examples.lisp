@@ -347,7 +347,8 @@
                                      :sunday        t))
          (ok (exec #'(lambda (u) (uhppoted-set-firstcard u device-id door firstcard)))))
     (when ok
-      (display "set-firstcard" device-id door (as-fields firstcard)))))
+      (display "set-firstcard" device-id (list "door" door
+                                               (as-fields firstcard))))))
 
 
 (defun restore-default-parameters (args) "" 
