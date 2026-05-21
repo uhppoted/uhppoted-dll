@@ -75,13 +75,14 @@ build-all: build test lint
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags debug -o $(LIB)/debug/$(DLL) ./go/...
 	env GOWORK=off go build -trimpath -buildmode=c-shared -tags tests -o $(LIB)/tests/$(DLL) ./go/...
 
-	make -C ./tests/c              -f Makefile tests
-	make -C ./tests/c++            -f Makefile tests
-	make -C ./tests/dotnet         -f Makefile tests
-	make -C ./tests/python         -f Makefile tests
-	make -C ./examples/c           -f Makefile build
-	make -C ./examples/c++         -f Makefile build
-	make -C ./examples/python      -f Makefile build
+	make -C ./tests/c                -f Makefile tests
+	make -C ./tests/c++              -f Makefile tests
+	make -C ./tests/dotnet           -f Makefile tests
+	make -C ./tests/python           -f Makefile tests
+	make -C ./examples/c             -f Makefile build
+	make -C ./examples/c++           -f Makefile build
+	make -C ./examples/python        -f Makefile build
+	make -C ./examples/dotnet/csharp -f Makefile build
 ifeq ($(shell uname),Darwin)
 	@echo "Skipping CCL on macOS"
 else
@@ -90,8 +91,8 @@ else
 endif	
 
 debug: build
-	make -C ./examples/dotnet/vs-mac -f Makefile set-firstcard
-	make -C ./tests/dotnet/vs-mac    -f Makefile set-firstcard
+	make -C ./examples/dotnet/csharp -f Makefile set-firstcard
+	make -C ./tests/dotnet           -f Makefile set-firstcard
 
 godoc:
 	godoc -http=:80	-index_interval=60s
@@ -111,9 +112,9 @@ cpp:
 	make -C ./examples/c++ -f Makefile build
 	make -C ./tests/c++    -f Makefile build
 
-dotnet-mac: 
-	make -C ./examples/dotnet/vs-mac -f Makefile build
-	make -C ./tests/dotnet/vs-mac    -f Makefile build
+dotnet: 
+	make -C ./examples/dotnet/csharp -f Makefile build
+	make -C ./tests/dotnet           -f Makefile build
 
 python: 
 	make -C ./examples/python -f Makefile build

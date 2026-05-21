@@ -1,11 +1,8 @@
 CMD=GODEBUG=cgocheck=2  && dotnet run --no-build
 
 format:
-	clang-format -i *.cs
-
-format-dotnet:
+# 	clang-format -i *.cs
 	dotnet format --include *.cs --folder
-	dotnet format --include $(BINDINGS)/*.cs --folder
 
 build: format
 	dotnet build

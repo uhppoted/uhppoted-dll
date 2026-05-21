@@ -40,7 +40,7 @@ jobs:
 
     - name: Build .NET examples
       run: |
-        cd examples/dotnet/vs-mac
+        cd examples/dotnet/csharp
         dotnet build
 
     - name: Build .NET integration tests

@@ -9,18 +9,21 @@ using static System.String;
 
 using uhppoted;
 
-public class test {
+public class test
+{
     public string command;
     public Func<Uhppoted, bool> fn;
 
-    public test(string command, Func<Uhppoted, bool> fn) {
+    public test(string command, Func<Uhppoted, bool> fn)
+    {
         this.command = command;
         this.fn = fn;
     }
 }
 
 // Sadly, mono is only C#7 compatible. Positional records would make this a whole lot less clunky
-public class Tests {
+public class Tests
+{
     const uint DEVICE_ID = 405419896;
     const uint DEVICE_ID2 = 303986753;
     const uint INVALID_DEVICE_ID = 987654321;
@@ -78,25 +81,31 @@ public class Tests {
         new test("listen", Listen),
     };
 
-    public static void Main(string[] args) {
+    public static void Main(string[] args)
+    {
         string cmd = "";
-        if (args.Length > 0) {
+        if (args.Length > 0)
+        {
             cmd = args[0];
         }
 
-        try {
+        try
+        {
             Uhppoted u = new Uhppoted("0.0.0.0", "255.255.255.255", "0.0.0.0:60001", 2500, controllers, true);
 
             // ... usage
-            if (cmd == "help") {
+            if (cmd == "help")
+            {
                 WriteLine();
                 usage();
                 return;
             }
 
             // ... all/default
-            if (cmd == "" || cmd == "all") {
-                if (!All(u)) {
+            if (cmd == "" || cmd == "all")
+            {
+                if (!All(u))
+                {
                     Environment.Exit(-1);
                 }
 
@@ -105,8 +114,10 @@ public class Tests {
 
             // ... named test
             test t = Array.Find(tests, v => v.command == cmd);
-            if (t != null) {
-                if (!t.fn(u)) {
+            if (t != null)
+            {
+                if (!t.fn(u))
+                {
                     Environment.Exit(-1);
                 }
 
@@ -121,23 +132,28 @@ public class Tests {
             usage();
             Environment.Exit(-1);
 
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             WriteLine(String.Format("  *** ERROR: {0}", e.Message));
             Environment.Exit(-1);
         }
     }
 
-    static bool All(Uhppoted u) {
+    static bool All(Uhppoted u)
+    {
         bool ok = true;
 
-        foreach (var t in tests) {
+        foreach (var t in tests)
+        {
             ok = t.fn(u) ? ok : false;
         }
 
         return ok;
     }
 
-    static bool GetControllers(Uhppoted u) {
+    static bool GetControllers(Uhppoted u)
+    {
         uint[] controllers = u.GetDevices();
 
         result[] resultset = {
@@ -150,7 +166,8 @@ public class Tests {
         return evaluate("get-controllers", resultset);
     }
 
-    static bool GetController(Uhppoted u) {
+    static bool GetController(Uhppoted u)
+    {
         Device controller = u.GetDevice(DEVICE_ID);
 
         result[] resultset = {
@@ -166,15 +183,17 @@ public class Tests {
         return evaluate("get-controller", resultset);
     }
 
-    static bool SetAddress(Uhppoted u) {
+    static bool SetAddress(Uhppoted u)
+    {
         u.SetAddress(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-address", resultset);
     }
 
-    static bool GetStatus(Uhppoted u) {
+    static bool GetStatus(Uhppoted u)
+    {
         Status status = u.GetStatus(DEVICE_ID);
 
         result[] resultset = {
@@ -206,7 +225,8 @@ public class Tests {
         return evaluate("get-status", resultset);
     }
 
-    static bool GetStatusNoEvent(Uhppoted u) {
+    static bool GetStatusNoEvent(Uhppoted u)
+    {
         Status status = u.GetStatus(DEVICE_ID2);
 
         result[] resultset = {
@@ -238,7 +258,8 @@ public class Tests {
         return evaluate("get-status-no-event", resultset);
     }
 
-    static bool GetTime(Uhppoted u) {
+    static bool GetTime(Uhppoted u)
+    {
         string datetime = u.GetTime(DEVICE_ID);
 
         result[] resultset = {
@@ -248,15 +269,17 @@ public class Tests {
         return evaluate("get-time", resultset);
     }
 
-    static bool SetTime(Uhppoted u) {
+    static bool SetTime(Uhppoted u)
+    {
         u.SetTime(DEVICE_ID, "2022-03-23 12:24:17");
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-time", resultset);
     }
 
-    static bool GetListener(Uhppoted u) {
+    static bool GetListener(Uhppoted u)
+    {
         string listener = u.GetListener(DEVICE_ID);
         byte interval = u.GetListenerInterval(DEVICE_ID);
 
@@ -268,15 +291,17 @@ public class Tests {
         return evaluate("get-listener", resultset);
     }
 
-    static bool SetListener(Uhppoted u) {
+    static bool SetListener(Uhppoted u)
+    {
         u.SetListener(DEVICE_ID, "192.168.1.100:60001", 15);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-listener", resultset);
     }
 
-    static bool GetDoorControl(Uhppoted u) {
+    static bool GetDoorControl(Uhppoted u)
+    {
         DoorControl control = u.GetDoorControl(DEVICE_ID, DOOR);
 
         result[] resultset = {
@@ -287,23 +312,26 @@ public class Tests {
         return evaluate("get-door-control", resultset);
     }
 
-    static bool SetDoorControl(Uhppoted u) {
+    static bool SetDoorControl(Uhppoted u)
+    {
         u.SetDoorControl(DEVICE_ID, DOOR, DoorMode.NormallyClosed, 6);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-door-control", resultset);
     }
 
-    static bool OpenDoor(Uhppoted u) {
+    static bool OpenDoor(Uhppoted u)
+    {
         u.OpenDoor(DEVICE_ID, DOOR);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("open-door", resultset);
     }
 
-    static bool GetCards(Uhppoted u) {
+    static bool GetCards(Uhppoted u)
+    {
         uint cards = u.GetCards(DEVICE_ID);
 
         result[] resultset = {
@@ -313,7 +341,8 @@ public class Tests {
         return evaluate("get-cards", resultset);
     }
 
-    static bool GetCard(Uhppoted u) {
+    static bool GetCard(Uhppoted u)
+    {
         Card card = u.GetCard(DEVICE_ID, CARD_NUMBER);
 
         result[] resultset = {
@@ -330,7 +359,8 @@ public class Tests {
         return evaluate("get-card", resultset);
     }
 
-    static bool GetCardByIndex(Uhppoted u) {
+    static bool GetCardByIndex(Uhppoted u)
+    {
         Card card = u.GetCardByIndex(DEVICE_ID, CARD_INDEX);
 
         result[] resultset = {
@@ -347,33 +377,37 @@ public class Tests {
         return evaluate("get-card-by-index", resultset);
     }
 
-    static bool PutCard(Uhppoted u) {
+    static bool PutCard(Uhppoted u)
+    {
         byte[] doors = { 0, 1, 31, 75 };
 
         u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors, 7531);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("put-card", resultset);
     }
 
-    static bool DeleteCard(Uhppoted u) {
+    static bool DeleteCard(Uhppoted u)
+    {
         u.DeleteCard(DEVICE_ID, CARD_NUMBER);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("delete-card", resultset);
     }
 
-    static bool DeleteCards(Uhppoted u) {
+    static bool DeleteCards(Uhppoted u)
+    {
         u.DeleteCards(DEVICE_ID);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("delete-cards", resultset);
     }
 
-    static bool GetEventIndex(Uhppoted u) {
+    static bool GetEventIndex(Uhppoted u)
+    {
         uint index = u.GetEventIndex(DEVICE_ID);
 
         result[] resultset = {
@@ -383,15 +417,17 @@ public class Tests {
         return evaluate("get-event-index", resultset);
     }
 
-    static bool SetEventIndex(Uhppoted u) {
+    static bool SetEventIndex(Uhppoted u)
+    {
         u.SetEventIndex(DEVICE_ID, EVENT_INDEX);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-event-index", resultset);
     }
 
-    static bool GetEvent(Uhppoted u) {
+    static bool GetEvent(Uhppoted u)
+    {
         Event evt = u.GetEvent(DEVICE_ID, EVENT_INDEX);
 
         result[] resultset = {
@@ -408,15 +444,17 @@ public class Tests {
         return evaluate("get-event", resultset);
     }
 
-    static bool RecordSpecialEvents(Uhppoted u) {
+    static bool RecordSpecialEvents(Uhppoted u)
+    {
         u.RecordSpecialEvents(DEVICE_ID, true);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("record-special-events", resultset);
     }
 
-    static bool GetTimeProfile(Uhppoted u) {
+    static bool GetTimeProfile(Uhppoted u)
+    {
         TimeProfile profile = u.GetTimeProfile(DEVICE_ID, PROFILE_ID);
 
         result[] resultset = {
@@ -442,7 +480,8 @@ public class Tests {
         return evaluate("get-time-profile", resultset);
     }
 
-    static bool SetTimeProfile(Uhppoted u) {
+    static bool SetTimeProfile(Uhppoted u)
+    {
         TimeProfile profile = new TimeProfile(PROFILE_ID, 71, "2022-02-01", "2022-06-30",
                                               true, false, true, true, false, false, true,
                                               "08:30", "11:30",
@@ -451,20 +490,22 @@ public class Tests {
 
         u.SetTimeProfile(DEVICE_ID, profile);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-time-profile", resultset);
     }
 
-    static bool ClearTimeProfiles(Uhppoted u) {
+    static bool ClearTimeProfiles(Uhppoted u)
+    {
         u.ClearTimeProfiles(DEVICE_ID);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("clear-time-profiles", resultset);
     }
 
-    static bool AddTask(Uhppoted u) {
+    static bool AddTask(Uhppoted u)
+    {
         uhppoted.Task task = new uhppoted.Task(4, 3, "2022-02-01", "2022-06-30",
                                                true, false, true, true, false, false, true,
                                                "09:45",
@@ -472,36 +513,40 @@ public class Tests {
 
         u.AddTask(DEVICE_ID, task);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("add-task", resultset);
     }
 
-    static bool RefreshTaskList(Uhppoted u) {
+    static bool RefreshTaskList(Uhppoted u)
+    {
         u.RefreshTaskList(DEVICE_ID);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("refresh-tasklist", resultset);
     }
 
-    static bool ClearTaskList(Uhppoted u) {
+    static bool ClearTaskList(Uhppoted u)
+    {
         u.ClearTaskList(DEVICE_ID);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("clear-tasklist", resultset);
     }
 
-    static bool SetPCControl(Uhppoted u) {
+    static bool SetPCControl(Uhppoted u)
+    {
         u.SetPCControl(DEVICE_ID, true);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-pc-control", resultset);
     }
 
-    static bool GetAntiPassback(Uhppoted u) {
+    static bool GetAntiPassback(Uhppoted u)
+    {
         byte antipassback = u.GetAntiPassback(DEVICE_ID);
 
         result[] resultset = {
@@ -511,59 +556,66 @@ public class Tests {
         return evaluate("get-antipassback", resultset);
     }
 
-    static bool SetInterlock(Uhppoted u) {
+    static bool SetInterlock(Uhppoted u)
+    {
         u.SetInterlock(DEVICE_ID, 4);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-interlock", resultset);
     }
 
-    static bool ActivateKeypads(Uhppoted u) {
+    static bool ActivateKeypads(Uhppoted u)
+    {
         u.ActivateKeypads(DEVICE_ID, true, true, false, true);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("activate-keypads", resultset);
     }
 
-    static bool SetDoorPasscodes(Uhppoted u) {
+    static bool SetDoorPasscodes(Uhppoted u)
+    {
         u.SetDoorPasscodes(DEVICE_ID, DOOR, 12345, 999999, 0, 54321);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-door-passcodes", resultset);
     }
 
-    static bool SetAntiPassback(Uhppoted u) {
+    static bool SetAntiPassback(Uhppoted u)
+    {
         u.SetAntiPassback(DEVICE_ID, 2);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-antipassback", resultset);
     }
 
-    static bool SetFirstCard(Uhppoted u) {
+    static bool SetFirstCard(Uhppoted u)
+    {
         FirstCard firstcard = new FirstCard("08:30", "16:45",
                                             1, 4,
                                             true, false, true, true, false, false, true);
 
         u.SetFirstCard(DEVICE_ID, DOOR, firstcard);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("set-firstcard", resultset);
     }
 
-    static bool RestoreDefaultParameters(Uhppoted u) {
+    static bool RestoreDefaultParameters(Uhppoted u)
+    {
         u.RestoreDefaultParameters(DEVICE_ID);
 
-        result[] resultset = {};
+        result[] resultset = { };
 
         return evaluate("restore-default-parameters", resultset);
     }
 
-    static bool Listen(Uhppoted u) {
+    static bool Listen(Uhppoted u)
+    {
         // var testEvent = new ListenEvent();
         // var stopEvent = new ManualResetEvent(false);
         // var thread = new Thread(() => listen(u, stopEvent, ref testEvent));
@@ -603,8 +655,10 @@ public class Tests {
         return true;
     }
 
-    static void listen(Uhppoted u, ManualResetEvent done, ref ListenEvent testEvent) {
-        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) => {
+    static void listen(Uhppoted u, ManualResetEvent done, ref ListenEvent testEvent)
+    {
+        Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) =>
+        {
             GCHandle handle = (GCHandle)userdata;
             ListenEvent evt = handle.Target as ListenEvent;
 
@@ -621,7 +675,8 @@ public class Tests {
             handle.Free();
         };
 
-        Uhppoted.OnError onerror = (string err) => {
+        Uhppoted.OnError onerror = (string err) =>
+        {
             Console.WriteLine("ERROR {0}", err);
         };
 
@@ -633,11 +688,13 @@ public class Tests {
         u.ListenEvents(onevent, onerror, ref listening, ref stop, (IntPtr)handle);
 
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && !cbool(listening); count++) {
+        for (int count = 0; count < 5 && !cbool(listening); count++)
+        {
             Thread.Sleep(delay);
         }
 
-        if (!cbool(listening)) {
+        if (!cbool(listening))
+        {
             WriteLine("ERROR {0}", "failed to start event listener");
             return;
         }
@@ -646,22 +703,26 @@ public class Tests {
 
         stop = 1;
         Thread.Sleep(delay);
-        for (int count = 0; count < 5 && cbool(listening); count++) {
+        for (int count = 0; count < 5 && cbool(listening); count++)
+        {
             Thread.Sleep(delay);
         }
 
-        if (cbool(listening)) {
+        if (cbool(listening))
+        {
             WriteLine("ERROR {0}", "failed to stop event listener");
         }
 
         handle.Free();
     }
 
-    static bool cbool(byte v) {
+    static bool cbool(byte v)
+    {
         return v == 1;
     }
 
-    static bool Internationalisation(Uhppoted u) {
+    static bool Internationalisation(Uhppoted u)
+    {
         string normally_open = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyOpen, "");
         string normally_closed = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyClosed, "");
         string controlled = lookup.find(lookup.LOOKUP_MODE, DoorMode.Controlled, "");
@@ -760,14 +821,18 @@ public class Tests {
         return evaluate("lookup", resultset);
     }
 
-    static bool Errors(Uhppoted u) {
+    static bool Errors(Uhppoted u)
+    {
         Dictionary<string, bool> failed = new Dictionary<string, bool> {
             { "get-controller", false },
         };
 
-        try {
+        try
+        {
             u.GetDevice(INVALID_DEVICE_ID);
-        } catch (Exception) {
+        }
+        catch (Exception)
+        {
             failed["get-controller"] = true;
         }
 
@@ -778,8 +843,9 @@ public class Tests {
         return evaluate("errors", resultset);
     }
 
-    static bool Structs(Uhppoted u) {
-        Controller[] controllers = {};
+    static bool Structs(Uhppoted u)
+    {
+        Controller[] controllers = { };
         Uhppoted u1 = new Uhppoted("0.0.0.1", "255.255.255.254", "0.0.0.0:60002", 2501, controllers, true);
         Uhppoted u2 = new Uhppoted("0.0.0.2", "255.255.255.253", "0.0.0.0:60003", 2502, controllers, false);
 
@@ -789,69 +855,81 @@ public class Tests {
         return passed("structs");
     }
 
-    static bool evaluate(string tag, result[] resultset) {
+    static bool evaluate(string tag, result[] resultset)
+    {
         bool ok = true;
 
-        foreach (var r in resultset) {
-            switch (r) {
-            case uint32Result v:
-                if (v.expected != v.value) {
-                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
-                    ok = false;
-                }
-                break;
+        foreach (var r in resultset)
+        {
+            switch (r)
+            {
+                case uint32Result v:
+                    if (v.expected != v.value)
+                    {
+                        WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                        ok = false;
+                    }
+                    break;
 
-            case uint8Result v:
-                if (v.expected != v.value) {
-                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
-                    ok = false;
-                }
-                break;
+                case uint8Result v:
+                    if (v.expected != v.value)
+                    {
+                        WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                        ok = false;
+                    }
+                    break;
 
-            case boolResult v:
-                if (v.expected != v.value) {
-                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
-                    ok = false;
-                }
-                break;
+                case boolResult v:
+                    if (v.expected != v.value)
+                    {
+                        WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                        ok = false;
+                    }
+                    break;
 
-            case stringResult v:
-                if (v.expected != v.value) {
-                    WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
-                    ok = false;
-                }
-                break;
+                case stringResult v:
+                    if (v.expected != v.value)
+                    {
+                        WriteLine(Format("{0, -26} incorrect {1} (expected:{2}, got:{3})", tag, v.field, v.expected, v.value));
+                        ok = false;
+                    }
+                    break;
 
-            default:
-                throw new Exception(Format("unsupported type {0}", r));
+                default:
+                    throw new Exception(Format("unsupported type {0}", r));
             }
         }
 
-        if (!ok) {
+        if (!ok)
+        {
             return failed(tag);
         }
 
         return passed(tag);
     }
 
-    static bool passed(string tag) {
+    static bool passed(string tag)
+    {
         WriteLine(Format("{0, -26} {1}", tag, "ok"));
 
         return true;
     }
 
-    static bool failed(string tag) {
+    static bool failed(string tag)
+    {
         WriteLine(Format("{0, -26} {1}", tag, "failed"));
 
         return false;
     }
 
-    static void usage() {
+    static void usage()
+    {
         WriteLine("   Usage: test <command>");
         WriteLine();
         WriteLine("   Supported commands:");
 
-        foreach (var t in tests) {
+        foreach (var t in tests)
+        {
             WriteLine(Format("      {0}", t.command));
         }
 
@@ -863,50 +941,58 @@ public class Tests {
 
 // *** Utility classes for test evaluation ***
 
-public class result {}
+public class result { }
 
-public class uint32Result : result {
+public class uint32Result : result
+{
     public string field { get; }
     public uint expected { get; }
     public uint value { get; }
 
-    public uint32Result(string field, uint expected, uint value) {
+    public uint32Result(string field, uint expected, uint value)
+    {
         this.field = field;
         this.expected = expected;
         this.value = value;
     }
 }
 
-public class uint8Result : result {
+public class uint8Result : result
+{
     public string field { get; }
     public byte expected { get; }
     public byte value { get; }
 
-    public uint8Result(string field, byte expected, byte value) {
+    public uint8Result(string field, byte expected, byte value)
+    {
         this.field = field;
         this.expected = expected;
         this.value = value;
     }
 }
 
-public class boolResult : result {
+public class boolResult : result
+{
     public string field { get; }
     public bool expected { get; }
     public bool value { get; }
 
-    public boolResult(string field, bool expected, bool value) {
+    public boolResult(string field, bool expected, bool value)
+    {
         this.field = field;
         this.expected = expected;
         this.value = value;
     }
 }
 
-public class stringResult : result {
+public class stringResult : result
+{
     public string field { get; }
     public string expected { get; }
     public string value { get; }
 
-    public stringResult(string field, string expected, string value) {
+    public stringResult(string field, string expected, string value)
+    {
         this.field = field;
         this.expected = expected;
         this.value = value;
