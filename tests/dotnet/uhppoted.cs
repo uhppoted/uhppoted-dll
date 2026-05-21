@@ -6,7 +6,7 @@ using System.Text;
 namespace uhppoted {
 
 public class Uhppoted : IDisposable {
-    private const string DLL = "libuhppoted.dylib";
+    private const string DLL = "uhppoted";
     private UHPPOTE u = new UHPPOTE();
 
     public Uhppoted() {}
