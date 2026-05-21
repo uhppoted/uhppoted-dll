@@ -38,7 +38,13 @@ jobs:
       run: |
         make build
 
-    - name: Build .NET
+    - name: Build .NET examples
       run: |
         cd examples/dotnet/vs-mac
         dotnet build
+
+    - name: Build .NET integration tests
+      run: |
+        cd tests/dotnet
+        dotnet build
+        CMD=GODEBUG=cgocheck=2  && dotnet run --no-build

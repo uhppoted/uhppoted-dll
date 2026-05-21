@@ -42,6 +42,8 @@ jobs:
 
     - name: Set up .NET
       uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x'
 
     - name: Checkout uhppoted-dll
       run: git clone https://github.com/uhppoted/uhppoted-dll.git ../uhppoted-dll
