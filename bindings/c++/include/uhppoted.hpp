@@ -181,16 +181,10 @@ class uhppoted {
     UHPPOTE *u;
 };
 
-// Ref. https://www.boost.org/community/error_handling.html
-class uhppoted_exception : public virtual std::exception {
+class uhppoted_exception : public std::runtime_error {
   public:
     uhppoted_exception(char *);
     uhppoted_exception(const char *, int N);
     uhppoted_exception(const error &);
     virtual ~uhppoted_exception();
-
-    virtual const char *what() const noexcept;
-
-  private:
-    std::string message;
 };

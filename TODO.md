@@ -1,18 +1,17 @@
 # TODO
 
-- [ ] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
+- [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
       - [x] API
       - [x] C
       - [x] C++
       - [x] Python
       - [x] .NET
-         - [ ] tests
       - [x] CCL
       - [x] documentation
       - [x] CHANGELOG
       - [x] README
 
-- [ ] github build warning:
+- [x] github build warning:
 ```
 errors.cpp:32:33: warning: catching polymorphic type ‘class uhppoted_exception’ by value [-Wcatch-value=]
    32 |     } catch (uhppoted_exception e) {

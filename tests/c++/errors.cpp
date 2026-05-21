@@ -29,7 +29,7 @@ bool errGetController(uhppoted &u) {
     try {
         u.get_device(INVALID_DEVICE_ID);
         return false;
-    } catch (uhppoted_exception e) {
+    } catch (uhppoted_exception &e) {
         return true;
     }
 }

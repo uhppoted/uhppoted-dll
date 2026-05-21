@@ -63,18 +63,13 @@ const char *EventReasonRemoteOpenDoor = "remote open door";
 const char *EventReasonRemoteOpenDoorUSBReader = "remote open door (USB reader)";
 const char *EventReasonUnknown = "unknown";
 
-uhppoted_exception::uhppoted_exception(char *err) {
-    message = std::string(err);
-    free(err);
-}
+uhppoted_exception::uhppoted_exception(char *err) : std::runtime_error(err ? err : "unknown error") { free(err); }
 
-uhppoted_exception::uhppoted_exception(const char *err, int N) { message = std::string(err, N); }
+uhppoted_exception::uhppoted_exception(const char *err, int N) : std::runtime_error(std::string(err, N)) {}
 
-uhppoted_exception::uhppoted_exception(const error &err) { message = std::string(err.message, err.len); }
+uhppoted_exception::uhppoted_exception(const error &err) : std::runtime_error(std::string(err.message, err.len)) {}
 
 uhppoted_exception::~uhppoted_exception() {}
-
-const char *uhppoted_exception::what() const noexcept { return message.c_str(); }
 
 uhppoted::uhppoted() { u = nullptr; }
 
