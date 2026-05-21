@@ -40,6 +40,9 @@ jobs:
         ln -s /opt/ccl/lx86cl64 /usr/local/bin/ccl64
         sudo apt-get install rlwrap
 
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v5
+
     - name: Checkout uhppoted-dll
       run: git clone https://github.com/uhppoted/uhppoted-dll.git ../uhppoted-dll
   

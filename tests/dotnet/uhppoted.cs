@@ -6,7 +6,7 @@ using System.Text;
 namespace uhppoted {
 
 public class Uhppoted : IDisposable {
-    private const string DLL = "uhppoted.dll";
+    private const string DLL = "libuhppoted.dylib";
     private UHPPOTE u = new UHPPOTE();
 
     public Uhppoted() {}
@@ -61,7 +61,7 @@ public class Uhppoted : IDisposable {
         IntPtr p = this.u.devices;
 
         if (p != IntPtr.Zero) {
-            udevices devices = (udevices)Marshal.PtrToStructure(p, typeof(udevices));
+            udevices devices = (udevices)Marshal.PtrToStructure(p, typeof(udevices))!;
             IntPtr q = devices.devices;
 
             Marshal.FreeHGlobal(q);
@@ -87,7 +87,6 @@ public class Uhppoted : IDisposable {
                 if (GetDevices(ref this.u, slice, ref count, ref err) != 0) {
                     raise(err);
                 }
-
             } while (N < count);
 
             uint[] list = new uint[count];
@@ -140,7 +139,8 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public void SetAddress(uint deviceID, string address, string subnet, string gateway) {
+    public void SetAddress(uint deviceID, string address, string subnet,
+                           string gateway) {
         GoError err = new GoError();
 
         err.len = 256;
@@ -156,13 +156,12 @@ public class Uhppoted : IDisposable {
     }
 
     public Status GetStatus(uint deviceID) {
+        GoStatus status = new GoStatus();
+        GoEvent _evt = new GoEvent();
         GoError err = new GoError();
 
         err.len = 256;
         err.message = Marshal.AllocHGlobal(256);
-
-        GoStatus status = new GoStatus();
-        GoEvent _evt = new GoEvent();
 
         _evt.timestamp = Marshal.AllocHGlobal(20);
 
@@ -181,15 +180,27 @@ public class Uhppoted : IDisposable {
             string sysdatetime = Marshal.PtrToStringAnsi(status.sysdatetime)!;
             byte[] doors = new byte[4];
             byte[] buttons = new byte[4];
+            Event e = new Event("", 0, 0, false, 0, 0, 0, 0);
 
             Marshal.Copy(status.doors, doors, 0, 4);
             Marshal.Copy(status.buttons, buttons, 0, 4);
 
-            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
-            string timestamp = Marshal.PtrToStringAnsi(evt.timestamp)!;
-            Event e = new Event(timestamp, evt.index, evt.eventType, evt.granted != 0, evt.door, evt.direction, evt.card, evt.reason);
+            if (status.evt != IntPtr.Zero) {
+                GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent))!;
+                string timestamp = Marshal.PtrToStringAnsi(evt.timestamp)!;
 
-            return new Status(status.ID, sysdatetime,
+                e = new Event(timestamp,
+                              evt.index,
+                              evt.eventType,
+                              evt.granted != 0,
+                              evt.door,
+                              evt.direction,
+                              evt.card,
+                              evt.reason);
+            }
+
+            return new Status(status.ID,
+                              sysdatetime,
                               new bool[] {
                                   doors[0] == 1,
                                   doors[1] == 1,
@@ -202,17 +213,17 @@ public class Uhppoted : IDisposable {
                                   buttons[2] == 1,
                                   buttons[3] == 1,
                               },
-                              status.relays, status.inputs, status.syserror, status.info, status.seqno, e);
-
+                              status.relays,
+                              status.inputs,
+                              status.syserror,
+                              status.info,
+                              status.seqno,
+                              e);
         } finally {
-            GoEvent evt = (GoEvent)Marshal.PtrToStructure(status.evt, typeof(GoEvent));
-
             Marshal.FreeHGlobal(status.sysdatetime);
             Marshal.FreeHGlobal(status.doors);
             Marshal.FreeHGlobal(status.buttons);
-            Marshal.FreeHGlobal(evt.timestamp);
             Marshal.FreeHGlobal(status.evt);
-
             Marshal.FreeHGlobal(err.message);
         }
     }
@@ -528,7 +539,14 @@ public class Uhppoted : IDisposable {
 
             string timestamp = Marshal.PtrToStringAnsi(evt.timestamp)!;
 
-            return new Event(timestamp, evt.index, evt.eventType, evt.granted == 1, evt.door, evt.direction, evt.card, evt.reason);
+            return new Event(timestamp,
+                             evt.index,
+                             evt.eventType,
+                             evt.granted == 1,
+                             evt.door,
+                             evt.direction,
+                             evt.card,
+                             evt.reason);
         } finally {
             Marshal.FreeHGlobal(evt.timestamp);
             Marshal.FreeHGlobal(err.message);
@@ -552,7 +570,6 @@ public class Uhppoted : IDisposable {
 
     public TimeProfile GetTimeProfile(uint deviceID, byte profileID) {
         GoTimeProfile profile = new GoTimeProfile();
-        GoError err = new GoError();
 
         profile.from = Marshal.AllocHGlobal(11);
         profile.to = Marshal.AllocHGlobal(11);
@@ -563,6 +580,8 @@ public class Uhppoted : IDisposable {
         profile.segment3start = Marshal.AllocHGlobal(6);
         profile.segment3end = Marshal.AllocHGlobal(6);
 
+        GoError err = new GoError();
+
         err.len = 256;
         err.message = Marshal.AllocHGlobal(256);
 
@@ -571,18 +590,29 @@ public class Uhppoted : IDisposable {
                 raise(err);
             }
 
-            string from = Marshal.PtrToStringAnsi(profile.from);
-            string to = Marshal.PtrToStringAnsi(profile.to);
-            string segment1start = Marshal.PtrToStringAnsi(profile.segment1start);
-            string segment1end = Marshal.PtrToStringAnsi(profile.segment1end);
-            string segment2start = Marshal.PtrToStringAnsi(profile.segment2start);
-            string segment2end = Marshal.PtrToStringAnsi(profile.segment2end);
-            string segment3start = Marshal.PtrToStringAnsi(profile.segment3start);
-            string segment3end = Marshal.PtrToStringAnsi(profile.segment3end);
+            string from = Marshal.PtrToStringAnsi(profile.from)!;
+            string to = Marshal.PtrToStringAnsi(profile.to)!;
+            string segment1start = Marshal.PtrToStringAnsi(profile.segment1start)!;
+            string segment1end = Marshal.PtrToStringAnsi(profile.segment1end)!;
+            string segment2start = Marshal.PtrToStringAnsi(profile.segment2start)!;
+            string segment2end = Marshal.PtrToStringAnsi(profile.segment2end)!;
+            string segment3start = Marshal.PtrToStringAnsi(profile.segment3start)!;
+            string segment3end = Marshal.PtrToStringAnsi(profile.segment3end)!;
 
-            return new TimeProfile(profile.ID, profile.linked, from, to, profile.monday != 0, profile.tuesday != 0, profile.wednesday != 0,
-                                   profile.thursday != 0, profile.friday != 0, profile.saturday != 0, profile.sunday != 0, segment1start,
-                                   segment1end, segment2start, segment2end, segment3start, segment3end);
+            return new TimeProfile(profile.ID,
+                                   profile.linked,
+                                   from,
+                                   to,
+                                   profile.monday != 0,
+                                   profile.tuesday != 0,
+                                   profile.wednesday != 0,
+                                   profile.thursday != 0,
+                                   profile.friday != 0,
+                                   profile.saturday != 0,
+                                   profile.sunday != 0,
+                                   segment1start, segment1end,
+                                   segment2start, segment2end,
+                                   segment3start, segment3end);
         } finally {
             Marshal.FreeHGlobal(profile.from);
             Marshal.FreeHGlobal(profile.to);
@@ -777,7 +807,7 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public byte GetAntiPassback(uint controller) {
+    public byte GetAntiPassback(uint deviceID) {
         byte antipassback = 0;
         GoError err = new GoError();
 
@@ -785,7 +815,7 @@ public class Uhppoted : IDisposable {
         err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (GetAntiPassback(ref this.u, controller, ref antipassback, ref err) != 0) {
+            if (GetAntiPassback(ref this.u, deviceID, ref antipassback, ref err) != 0) {
                 raise(err);
             }
 
@@ -795,14 +825,14 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public void SetAntiPassback(uint controller, byte antipassback) {
+    public void SetAntiPassback(uint deviceID, byte antipassback) {
         GoError err = new GoError();
 
         err.len = 256;
         err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (SetAntiPassback(ref this.u, controller, antipassback, ref err) != 0) {
+            if (SetAntiPassback(ref this.u, deviceID, antipassback, ref err) != 0) {
                 raise(err);
             }
         } finally {
@@ -811,12 +841,12 @@ public class Uhppoted : IDisposable {
     }
 
     public void SetFirstCard(uint deviceID, byte door, FirstCard firstcard) {
-        GoFirstCard firstcard = new GoFirstCard();
+        GoFirstCard fc = new GoFirstCard();
 
-        fc.start_time = firstcard.start_time;
-        fc.end_time = firstcard.end_time;
-        fc.active_mode = firstcard.active_mode;
-        fc.inactive_mode = firstcard.inactive_mode;
+        fc.start_time = firstcard.startTime;
+        fc.end_time = firstcard.endTime;
+        fc.active_mode = firstcard.activeMode;
+        fc.inactive_mode = firstcard.inactiveMode;
         fc.monday = firstcard.monday ? (byte)1 : (byte)0;
         fc.tuesday = firstcard.tuesday ? (byte)1 : (byte)0;
         fc.wednesday = firstcard.wednesday ? (byte)1 : (byte)0;
@@ -831,7 +861,7 @@ public class Uhppoted : IDisposable {
         err.message = Marshal.AllocHGlobal(256);
 
         try {
-            if (SetFirstCard(ref this.u, deviceID, door, ref firstcard, ref err) != 0) {
+            if (SetFirstCard(ref this.u, deviceID, door, ref fc, ref err) != 0) {
                 raise(err);
             }
         } finally {
@@ -857,21 +887,33 @@ public class Uhppoted : IDisposable {
     public delegate void OnEvent(ListenEvent e, IntPtr userdata);
     public delegate void OnError(string err);
 
-    delegate void OnListenEvent(GoListenEvent e, IntPtr userdata);
-    delegate void OnListenError(string err);
+    delegate void OnListenEvent([In] GoListenEvent e, IntPtr userdata);
+    delegate void OnListenError([In][MarshalAs(UnmanagedType.LPUTF8Str)] string err);
 
     public void ListenEvents(OnEvent on_event, OnError on_error, ref byte listening, ref byte stop, IntPtr userdata) {
-        OnListenEvent onevent = (GoListenEvent e, IntPtr userdata) => {
-            on_event(new ListenEvent(e.controller, e.timestamp, e.index, e.eventType, e.granted == 1 ? true : false, e.door, e.direction,
-                                     e.card, e.reason),
+        OnListenEvent onevent = ([In] GoListenEvent e, IntPtr userdata) =>
+        {
+            on_event(new ListenEvent(
+                         e.controller,
+                         e.timestamp,
+                         e.index,
+                         e.eventType,
+                         e.granted == 1 ? true : false,
+                         e.door,
+                         e.direction,
+                         e.card,
+                         e.reason),
                      userdata);
         };
 
-        OnListenError onerror = (string err) => { on_error(err); };
+        OnListenError onerror = ([In][MarshalAs(UnmanagedType.LPUTF8Str)] string err) =>
+        {
+            on_error(err);
+        };
 
-        int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror, userdata);
+        int err = Listen(ref this.u, onevent, ref listening, ref stop, onerror, IntPtr.Zero);
         if (err != 0) {
-            throw new UhppotedException("error listening for events");
+            throw new UhppotedException("error starting event listener");
         }
     }
 
@@ -880,7 +922,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException("unknown error");
         }
 
-        string msg = Marshal.PtrToStringAnsi(errmsg);
+        string? msg = Marshal.PtrToStringAnsi(errmsg);
         if (msg == null) {
             throw new UhppotedException("unknown error");
         }
@@ -893,7 +935,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException("unknown error");
         }
 
-        string msg = Marshal.PtrToStringAnsi(errmsg, N);
+        string? msg = Marshal.PtrToStringAnsi(errmsg, N);
         if (msg == null) {
             throw new UhppotedException("unknown error");
         }
@@ -906,7 +948,7 @@ public class Uhppoted : IDisposable {
             throw new UhppotedException("unknown error");
         }
 
-        string msg = Marshal.PtrToStringAnsi(err.message, err.len);
+        string? msg = Marshal.PtrToStringAnsi(err.message, err.len);
         if (msg == null) {
             throw new UhppotedException("unknown error");
         }
@@ -916,129 +958,128 @@ public class Uhppoted : IDisposable {
 
     // Go FFI
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetDevices(ref UHPPOTE u, uint[] list, ref int N, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetDevice(ref UHPPOTE u, uint deviceID, ref GoDevice device, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int SetAddress(ref UHPPOTE u, uint deviceID, string address, string subnet, string gateway, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetStatus(ref UHPPOTE u, uint deviceID, ref GoStatus status, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetTime(ref UHPPOTE u, uint deviceID, IntPtr datetime, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int SetTime(ref UHPPOTE u, uint deviceID, string datetime, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetListener(ref UHPPOTE u, uint deviceID, IntPtr listener, ref byte interval, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int SetListener(ref UHPPOTE u, uint deviceID, string listener, byte interval, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetDoorControl(ref UHPPOTE u, uint deviceID, byte door, ref GoDoorControl control, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int SetDoorControl(ref UHPPOTE u, uint deviceID, byte door, byte mode, byte delay, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int OpenDoor(ref UHPPOTE u, uint deviceID, byte door, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetCards(ref UHPPOTE u, uint deviceID, ref uint N, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetCard(ref UHPPOTE u, uint deviceID, uint cardNumber, ref GoCard card, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetCardByIndex(ref UHPPOTE u, uint deviceID, uint index, ref GoCard card, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN,
-                                      ref GoError err);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int DeleteCards(ref UHPPOTE u, uint deviceID, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetEventIndex(ref UHPPOTE u, uint deviceID, ref uint index, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int SetEventIndex(ref UHPPOTE u, uint deviceID, uint index, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetEvent(ref UHPPOTE u, uint deviceID, uint index, ref GoEvent evt, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int RecordSpecialEvents(ref UHPPOTE u, uint deviceID, bool enabled, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int GetTimeProfile(ref UHPPOTE u, uint deviceID, byte profileID, ref GoTimeProfile profile, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int SetTimeProfile(ref UHPPOTE u, uint deviceID, ref GoTimeProfile profile, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int ClearTimeProfiles(ref UHPPOTE u, uint deviceID, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int AddTask(ref UHPPOTE u, uint deviceID, ref GoTask task, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int RefreshTaskList(ref UHPPOTE u, uint deviceID, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int ClearTaskList(ref UHPPOTE u, uint deviceID, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int SetPCControl(ref UHPPOTE u, uint controller, bool enabled, ref GoError err);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int SetPCControl(ref UHPPOTE u, uint deviceID, bool enabled, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int SetInterlock(ref UHPPOTE u, uint controller, byte interlock, ref GoError err);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int SetInterlock(ref UHPPOTE u, uint deviceID, byte interlock, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int ActivateKeypads(ref UHPPOTE u, uint controller, bool reader1, bool reader2, bool reader3, bool reader4,
-                                              ref GoError err);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int ActivateKeypads(ref UHPPOTE u, uint deviceID, bool reader1, bool reader2, bool reader3, bool reader4, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int SetDoorPasscodes(ref UHPPOTE u, uint controller, byte door, uint passcode1, uint passcode2, uint passcode3,
-                                               uint passcode4, ref GoError err);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int SetDoorPasscodes(ref UHPPOTE u, uint deviceID, byte door, uint passcode1, uint passcode2, uint passcode3, uint passcode4, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int GetAntiPassback(ref UHPPOTE u, uint deviceID, ref byte antipassback, ref GoError err);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int GetAntiPassback(ref UHPPOTE u, uint deviceID, ref byte AntiPassback, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int SetAntiPassback(ref UHPPOTE u, uint controller, byte antipassback, ref GoError err);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int SetAntiPassback(ref UHPPOTE u, uint deviceID, byte antipassback, ref GoError err);
 
     [DllImport(DLL)]
     private static extern int SetFirstCard(ref UHPPOTE u, uint deviceID, byte door, ref GoFirstCard task, ref GoError err);
 
-    [DllImport(DLL)]
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
     private static extern int RestoreDefaultParameters(ref UHPPOTE u, uint controller, ref GoError err);
 
-    [DllImport(DLL)]
-    private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte listening, ref byte stop, OnListenError errx,
-                                     IntPtr userdata);
+    [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+    private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx, IntPtr userdata);
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct udevice {
         public uint ID;
         public string address;
         public string transport;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct udevices {
         public uint N;
         public IntPtr devices; // array of udevice *
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct UHPPOTE {
         public string bind;
         public string broadcast;
@@ -1055,6 +1096,7 @@ public class Uhppoted : IDisposable {
         public IntPtr message; // array of char
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoDevice {
         public uint ID;
         public IntPtr address;
@@ -1065,6 +1107,7 @@ public class Uhppoted : IDisposable {
         public IntPtr date;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoEvent {
         public IntPtr timestamp;
         public uint index;
@@ -1076,6 +1119,7 @@ public class Uhppoted : IDisposable {
         public byte reason;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoStatus {
         public uint ID;
         public IntPtr sysdatetime;
@@ -1089,11 +1133,13 @@ public class Uhppoted : IDisposable {
         public IntPtr evt;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoDoorControl {
         public byte control;
         public byte delay;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoCard {
         public uint cardNumber;
         public IntPtr from;
@@ -1102,6 +1148,7 @@ public class Uhppoted : IDisposable {
         public uint PIN;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoTimeProfile {
         public byte ID;
         public byte linked;
@@ -1122,6 +1169,7 @@ public class Uhppoted : IDisposable {
         public IntPtr segment3end;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoTask {
         public byte task;
         public byte door;
@@ -1138,6 +1186,7 @@ public class Uhppoted : IDisposable {
         public byte cards;
     }
 
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoFirstCard {
         public string start_time;
         public string end_time;
@@ -1153,8 +1202,10 @@ public class Uhppoted : IDisposable {
     }
 
 #pragma warning disable 649 // assigned in DLL
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
     struct GoListenEvent {
         public uint controller;
+        [MarshalAs(UnmanagedType.LPUTF8Str)]
         public string timestamp;
         public uint index;
         public byte eventType;
@@ -1219,7 +1270,8 @@ public class Event {
     public uint card;
     public byte reason;
 
-    public Event(string timestamp, uint index, byte eventType, bool granted, byte door, byte direction, uint card, byte reason) {
+    public Event(string timestamp, uint index, byte eventType, bool granted,
+                 byte door, byte direction, uint card, byte reason) {
         this.timestamp = timestamp;
         this.index = index;
         this.eventType = eventType;
@@ -1242,19 +1294,14 @@ public class ListenEvent {
     public uint card;
     public byte reason;
 
-    public ListenEvent() {
-        this.controller = 0;
-        this.timestamp = "";
-        this.index = 0;
-        this.eventType = 0;
-        this.granted = false;
-        this.door = 0;
-        this.direction = 0;
-        this.card = 0;
-        this.reason = 0;
-    }
-
-    public ListenEvent(uint controller, string timestamp, uint index, byte eventType, bool granted, byte door, byte direction, uint card,
+    public ListenEvent(uint controller,
+                       string timestamp,
+                       uint index,
+                       byte eventType,
+                       bool granted,
+                       byte door,
+                       byte direction,
+                       uint card,
                        byte reason) {
         this.controller = controller;
         this.timestamp = timestamp;
@@ -1280,7 +1327,10 @@ public class Status {
     public uint seqno;
     public Event evt;
 
-    public Status(uint ID, string sysdatetime, bool[] doors, bool[] buttons, byte relays, byte inputs, byte syserror, byte info, uint seqno,
+    public Status(uint ID,
+                  string sysdatetime,
+                  bool[] doors, bool[] buttons, byte relays, byte inputs,
+                  byte syserror, byte info, uint seqno,
                   Event evt) {
         this.ID = ID;
         this.sysdatetime = sysdatetime;
@@ -1340,8 +1390,10 @@ public class TimeProfile {
     public string segment3start;
     public string segment3end;
 
-    public TimeProfile(byte ID, byte linked, string from, string to, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday,
-                       bool saturday, bool sunday, string segment1start, string segment1end, string segment2start, string segment2end,
+    public TimeProfile(byte ID, byte linked, string from, string to,
+                       bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
+                       string segment1start, string segment1end,
+                       string segment2start, string segment2end,
                        string segment3start, string segment3end) {
         this.ID = ID;
         this.linked = linked;
@@ -1380,8 +1432,10 @@ public class Task {
     public string at;
     public byte cards;
 
-    public Task(byte task, byte door, string from, string to, bool monday, bool tuesday, bool wednesday, bool thursday, bool friday,
-                bool saturday, bool sunday, string at, byte cards) {
+    public Task(byte task, byte door, string from, string to,
+                bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday,
+                string at,
+                byte cards) {
         this.task = task;
         this.door = door;
         this.from = from;
@@ -1413,12 +1467,13 @@ public class FirstCard {
     public bool saturday;
     public bool sunday;
 
-    public FirstCard(string startTime, string endTime, byte activeMode, byte inactiveMode, bool monday, bool tuesday, bool wednesday,
-                     bool thursday, bool friday, bool saturday, bool sunday) {
+    public FirstCard(string startTime, string endTime,
+                     byte activeMode, byte inactiveMode,
+                     bool monday, bool tuesday, bool wednesday, bool thursday, bool friday, bool saturday, bool sunday) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.activeMode = activeMode;
-        this.inactiveMode = inactiveM\ode;
+        this.inactiveMode = inactiveMode;
 
         this.monday = monday;
         this.tuesday = tuesday;
@@ -1559,8 +1614,8 @@ public class lookup {
     };
 
     public static string find(string category, uint code, string locale) {
-        Dictionary<uint, string> dictionary;
-        string s;
+        Dictionary<uint, string>? dictionary;
+        string? s;
 
         if (dictionaries.TryGetValue(category, out dictionary)) {
             if (dictionary.TryGetValue(code, out s)) {
@@ -1573,4 +1628,5 @@ public class lookup {
         return "?";
     }
 }
+
 }

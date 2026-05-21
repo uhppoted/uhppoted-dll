@@ -1,34 +1,18 @@
-LIB=../../lib/tests
-BINDINGS=../../bindings/dotnet
-GO=GODEBUG=cgocheck=2 
-
-ifeq ($(OS),Windows_NT)
-	DLL=set PATH=$(LIB)
-else
-    UNAME = $(shell uname -s)
-    ifeq ($(UNAME),Darwin)
-        DLL=export DYLD_LIBRARY_PATH=$(LIB)
-    else 
-        DLL=export LD_LIBRARY_PATH=$(LIB)
-    endif
-endif
-
-CMD=$(GO) && $(DLL) && mono ./tests.exe
+CMD=GODEBUG=cgocheck=2  && dotnet run --no-build
 
 format:
 	clang-format -i *.cs
-	clang-format -i $(BINDINGS)/*.cs
 
 format-dotnet:
 	dotnet format --include *.cs --folder
 	dotnet format --include $(BINDINGS)/*.cs --folder
 
 build: format
-	csc $(BINDINGS)/uhppoted.cs $(BINDINGS)/lookup.cs tests.cs
+	dotnet build
 
 debug: format
 	cd ../.. && make build
-	csc $(BINDINGS)/uhppoted.cs $(BINDINGS)/lookup.cs tests.cs
+	dotnet build
 	$(CMD) structs
 
 usage: build
