@@ -8,6 +8,9 @@
 ### Updated
 1. Updated to Go v1.26.
 2. Updated to _modern_ Go with `go fix`.
+3. Fixed C++ exception implementation.
+4. Migrated .NET tests from _mono_ to _dotnet_.
+5. Unified .NET/vs-mac and .NET/vs-win CLI examples.
 
 
 ## [0.9.0](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.9.0) - 2026-01-27
