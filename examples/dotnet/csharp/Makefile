@@ -5,10 +5,10 @@ CARD ?= 10058400
 FIRSTCARD ?= 08:30,16:45,normally open,firstcard only,[Mon,Tue,Fri]
 
 format: $(SRC)
-	dotnet format uhppoted-dll-cli.csproj --include *.cs --folder
+	dotnet format uhppoted-dll-cli.sln --include *.cs --folder
 
 build: format
-	dotnet build uhppoted-dll-cli.csproj
+	dotnet build uhppoted-dll-cli.sln
 
 get-controllers: build
 	$(CLI) get-controllers
