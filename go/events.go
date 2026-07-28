@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/uhppoted/uhppote-core/uhppote"
+	"codeberg.org/uhppoted/uhppoted-core/uhppote"
 )
 
 func getEventIndex(uu uhppote.IUHPPOTE, index *uint32, deviceID uint32) error {

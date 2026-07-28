@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uhppoted/uhppote-core/uhppote"
+	"codeberg.org/uhppoted/uhppoted-core/uhppote"
 )
 
 func addTask(uu uhppote.IUHPPOTE, deviceID uint32, task *C.struct_Task) error {

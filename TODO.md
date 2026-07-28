@@ -1,24 +1,10 @@
 # TODO
 
-- [x] 'first card' API (cf. https://github.com/uhppoted/uhppoted/issues/82)
-      - [x] API
-      - [x] C
-      - [x] C++
-      - [x] Python
-      - [x] .NET
-      - [x] CCL
-      - [x] documentation
-      - [x] CHANGELOG
-      - [x] README
-
+- [x] 'first card' API (cf. https://codeberg.org/uhppoted/uhppoted/issues/2)
 - [x] github build warning:
-```
-errors.cpp:32:33: warning: catching polymorphic type ‘class uhppoted_exception’ by value [-Wcatch-value=]
-   32 |     } catch (uhppoted_exception e) {
-      |                                 ^
-```
 
-## TODO
+
+## To Be Done
 
 - (?) [llgo](https://github.com/goplus/llgo)
 - [ ] C++: rework to use unique_ptr

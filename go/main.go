@@ -142,8 +142,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/uhppoted/uhppote-core/types"
-	"github.com/uhppoted/uhppote-core/uhppote"
+	"codeberg.org/uhppoted/uhppoted-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/uhppote"
 )
 
 var DEBUG bool

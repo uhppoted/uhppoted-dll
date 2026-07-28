@@ -4,14 +4,14 @@
 
 # uhppoted-dll
 
-Shared library (DLL) for `uhppote-core` with bindings and examples for:
+Shared library (DLL) for `uhppoted-core` with bindings and examples for:
 
-- [C](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/csharp.md)
-- [VB.NET](https://github.com/uhppoted/uhppoted-dll/tree/main/examples/dotnet/VB.NET) (contributed by [@threeeye](https://github.com/threeeye))
-- [Python](https://github.com/uhppoted/uhppoted-dll/tree/blob/doc/python.md)
-- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/ccl.md)
+- [C](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C++](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C#](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/csharp.md)
+- [VB.NET](https://codeberg.org/uhppoted/uhppoted-dll/tree/main/examples/dotnet/VB.NET) (contributed by [@threeeye](https://github.com/threeeye))
+- [Python](https://codeberg.org/uhppoted/uhppoted-dll/tree/blob/doc/python.md)
+- [Clozure Common Lisp](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/ccl.md)
 
 3rd party bindings:
 - [Rust](https://github.com/wouterdebie/uhppote-rs)
@@ -45,14 +45,14 @@ Requirements:
 The DLL/shared lib/dylib has to be built from source:
 
 ```
-git clone https://github.com/uhppoted/uhppoted-dll.git
+git clone https://codeberg.org/uhppoted/uhppoted-dll.git
 cd uhppoted-dll
 make build
 ```
 
 If you prefer to build manually:
 ```
-   git clone https://github.com/uhppoted/uhppoted-dll.git
+   git clone https://codeberg.org/uhppoted/uhppoted-dll.git
    cd uhppoted-dll
    go build -trimpath -buildmode=c-shared -o <lib> go/devices.go go/cards.go go/events.go go/time_profiles.go go/tasks.go go/main.go 
 ```
@@ -66,11 +66,11 @@ Copy the generated DLL (Windows), shared lib (Linux) or dylib (MacOS) to the lib
 - (OR) to the same folder as the project executable.
 
 The usage for the language specfic bindings are described in their own documents:
-- [C](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/C.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/csharp.md)
-- [Python](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/python.md))
-- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/blob/main/doc/ccl.md))
+- [C](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C++](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/C.md)
+- [C#](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/csharp.md)
+- [Python](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/python.md))
+- [Clozure Common Lisp](https://codeberg.org/uhppoted/uhppoted-dll/blob/main/doc/ccl.md))
 
 
 ### `debug` lib
@@ -87,19 +87,14 @@ returns a fixed response.
 
 #### Dependencies
 
-| *Dependency*                                             | *Description*                                          |
-| -------------------------------------------------------- | ------------------------------------------------------ |
-| [uhppote-core](https://github.com/uhppoted/uhppote-core) | Device level API implementation                        |
-| [uhppoted-lib](https://github.com/uhppoted/uhppoted-lib) | Library of commonalised functionality                  |
-|                                                          |                                                        |
 
 ## Documentation
 
-- [C](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C.md)
-- [C++](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/C++.md)
-- [C#](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/csharp.md)
-- [Python](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/python.md)
-- [Clozure Common Lisp](https://github.com/uhppoted/uhppoted-dll/tree/main/doc/ccl.md)
+- [C](https://codeberg.org/uhppoted/uhppoted-dll/tree/main/doc/C.md)
+- [C++](https://codeberg.org/uhppoted/uhppoted-dll/tree/main/doc/C++.md)
+- [C#](https://codeberg.org/uhppoted/uhppoted-dll/tree/main/doc/csharp.md)
+- [Python](https://codeberg.org/uhppoted/uhppoted-dll/tree/main/doc/python.md)
+- [Clozure Common Lisp](https://codeberg.org/uhppoted/uhppoted-dll/tree/main/doc/ccl.md)
 
 ## API
 
@@ -379,7 +374,7 @@ application.
 
 ## Contributions
 
-1. [VB.NET](https://github.com/uhppoted/uhppoted-dll/tree/main/examples/dotnet/VB.NET) GUI example application authored by
+1. [VB.NET](https://codeberg.org/uhppoted/uhppoted-dll/tree/main/examples/dotnet/VB.NET) GUI example application authored by
    [@threeeye](https://github.com/threeeye).
 
 

@@ -10,8 +10,8 @@ import (
 	"time"
 	"unsafe"
 
-	"github.com/uhppoted/uhppote-core/types"
-	"github.com/uhppoted/uhppote-core/uhppote"
+	"codeberg.org/uhppoted/uhppoted-core/types"
+	"codeberg.org/uhppoted/uhppoted-core/uhppote"
 )
 
 func getDevices(uu uhppote.IUHPPOTE, N *C.int, list *C.uint) error {
@@ -44,7 +44,7 @@ func getDevice(uu uhppote.IUHPPOTE, device *C.struct_Device, deviceID uint32) er
 		return fmt.Errorf("invalid argument (device) - expected valid pointer to Device struct")
 	}
 
-	// Ref. https://github.com/uhppoted/uhppoted-dll/issues/2
+	// Ref. https://codeberg.org/uhppoted/uhppoted-dll/issues/2
 	switch deviceID {
 	case 0xffffffff: // TEST HACK: returns an error if uu.debug is false
 		v := unpack(uu, "debug")

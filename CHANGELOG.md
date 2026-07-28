@@ -11,6 +11,7 @@
 3. Fixed C++ exception implementation.
 4. Migrated .NET tests from _mono_ to _dotnet_.
 5. Unified .NET/vs-mac and .NET/vs-win CLI examples.
+6. Migrated from _github.com/uhppoted-dll_ to _codeberg.org/uhppoted/uhppoted-dll_.
 
 
 ## [0.9.0](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.9.0) - 2026-01-27

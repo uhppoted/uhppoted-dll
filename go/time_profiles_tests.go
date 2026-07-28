@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/uhppoted/uhppote-core/uhppote"
+	"codeberg.org/uhppoted/uhppoted-core/uhppote"
 )
 
 func getTimeProfile(uu uhppote.IUHPPOTE, profile *C.struct_TimeProfile, deviceID uint32, profileID uint8) error {

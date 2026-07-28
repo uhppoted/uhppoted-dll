@@ -2,8 +2,8 @@
 
 The CCL bindings comprise two files:
 
-- [uhppoted.lisp](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/ccl/uhppoted.lisp)
-- [packages.lisp](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/ccl/packages.lisp)
+- [uhppoted.lisp](https://codeberg.org/uhppoted/uhppoted-dll/blob/master/bindings/ccl/uhppoted.lisp)
+- [packages.lisp](https://codeberg.org/uhppoted/uhppoted-dll/blob/master/bindings/ccl/packages.lisp)
  
 Copy these to wherever makes it sense in your project. 
 
@@ -14,7 +14,7 @@ The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be place
 
 or in the same folder as the executable.
 
-Examples illustrating the use of the CCL API can be found in the [examples/ccl](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/ccl) folder.
+Examples illustrating the use of the CCL API can be found in the [examples/ccl](https://codeberg.org/uhppoted/uhppoted-dll/tree/master/examples/ccl) folder.
 
 ## API
 

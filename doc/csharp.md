@@ -1,6 +1,6 @@
 # C\#: Usage and Notes
 
-The C\# bindings comprise a single file [uhppoted.cs](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/csharp/uhppoted.cs) - copy this to wherever makes it sense in your project. 
+The C\# bindings comprise a single file [uhppoted.cs](https://codeberg.org/uhppoted/uhppoted-dll/blob/master/bindings/csharp/uhppoted.cs) - copy this to wherever makes it sense in your project. 
 
 The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for 
 the platform:
@@ -10,7 +10,7 @@ the platform:
 
 or in the same folder as the executable.
 
-Examples illustrating the use of the C\# API can be found in the [examples/csharp](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/csharp) folder.
+Examples illustrating the use of the C\# API can be found in the [examples/csharp](https://codeberg.org/uhppoted/uhppoted-dll/tree/master/examples/csharp) folder.
 
 ## API
 

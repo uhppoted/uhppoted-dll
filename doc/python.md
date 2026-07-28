@@ -1,6 +1,6 @@
 # Python: Usage and Notes
 
-The Python bindings comprise a single file [uhppoted.py](https://github.com/uhppoted/uhppoted-dll/blob/master/bindings/python/uhppoted.py) - copy this to wherever makes it sense in your project. 
+The Python bindings comprise a single file [uhppoted.py](https://codeberg.org/uhppoted/uhppoted-dll/blob/master/bindings/python/uhppoted.py) - copy this to wherever makes it sense in your project. 
 
 The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be placed in either the library search path for the platform:
 - LD_LIBRARY (Linux)
@@ -9,7 +9,7 @@ The generated DLL (Windows), shared lib (Linux) or dylib (MacOS) should be place
 
 or in the same folder as the executable.
 
-Examples illustrating the use of the Python API can be found in the [examples/python](https://github.com/uhppoted/uhppoted-dll/tree/master/examples/python) folder.
+Examples illustrating the use of the Python API can be found in the [examples/python](https://codeberg.org/uhppoted/uhppoted-dll/tree/master/examples/python) folder.
 
 ## API
 

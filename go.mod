@@ -1,5 +1,5 @@
-module github.com/uhppoted/uhppoted-dll
+module codeberg.org/uhppoted/uhppoted-dll
 
 go 1.26
 
-require github.com/uhppoted/uhppote-core v0.9.1-0.20260427190340-f12943c7cd8f
+require codeberg.org/uhppoted/uhppoted-core v0.0.0-20260723154335-7d132936dee1
