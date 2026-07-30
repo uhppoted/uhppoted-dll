@@ -1,5 +1,6 @@
 # TODO
 
+- [x] Migrate to codeberg.org (cf. https://codeberg.org/uhppoted/uhppoted/issues/1)
 - [x] 'first card' API (cf. https://codeberg.org/uhppoted/uhppoted/issues/2)
 - [x] github build warning:
 
