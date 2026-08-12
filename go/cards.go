@@ -50,6 +50,13 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 	doors[2] = C.uchar(c.Doors[3])
 	doors[3] = C.uchar(c.Doors[4])
 
+	firstcard := unsafe.Slice(card.firstcard, 4)
+
+	firstcard[0] = cbool(c.FirstCard.Door1)
+	firstcard[1] = cbool(c.FirstCard.Door2)
+	firstcard[2] = cbool(c.FirstCard.Door3)
+	firstcard[3] = cbool(c.FirstCard.Door4)
+
 	return nil
 }
 
@@ -77,10 +84,17 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	doors[2] = C.uchar(c.Doors[3])
 	doors[3] = C.uchar(c.Doors[4])
 
+	firstcard := unsafe.Slice(card.firstcard, 4)
+
+	firstcard[0] = cbool(c.FirstCard.Door1)
+	firstcard[1] = cbool(c.FirstCard.Door2)
+	firstcard[2] = cbool(c.FirstCard.Door3)
+	firstcard[3] = cbool(c.FirstCard.Door4)
+
 	return nil
 }
 
-func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) error {
+func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32, firstcard *uint8) error {
 	_from, err := types.ParseDate(C.GoString(from))
 	if err != nil {
 		return fmt.Errorf("invalid 'from' date (%v)", err)
@@ -100,6 +114,7 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 	}
 
 	_doors := C.GoBytes(unsafe.Pointer(doors), 4)
+	_firstcard := C.GoBytes(unsafe.Pointer(firstcard), 4)
 
 	card := types.Card{
 		CardNumber: cardNumber,
@@ -112,6 +127,12 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 			4: _doors[3],
 		},
 		PIN: types.PIN(PIN),
+		FirstCard: types.FirstCardPrivileges{
+			Door1: _firstcard[0] != 0,
+			Door2: _firstcard[1] != 0,
+			Door3: _firstcard[2] != 0,
+			Door4: _firstcard[3] != 0,
+		},
 	}
 
 	ok, err := uu.PutCard(deviceID, card)

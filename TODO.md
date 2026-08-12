@@ -2,7 +2,11 @@
 
 - [x] Migrate to codeberg.org (cf. https://codeberg.org/uhppoted/uhppoted/issues/1)
 - [x] 'first card' API (cf. https://codeberg.org/uhppoted/uhppoted/issues/2)
-- [x] github build warning:
+- [x] github build warning
+- [ ] add first-card privilege to `get-card` and `put-card` (cf. https://codeberg.org/uhppoted/uhppoted/issues/3)
+    - [x] API
+    - [x] C
+    - [ ] C++
 
 
 ## To Be Done

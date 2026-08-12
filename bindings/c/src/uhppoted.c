@@ -492,11 +492,13 @@ int get_card(uint32_t id, uint32_t card_number, card *c) {
     char from[11] = "";
     char to[11] = "";
     uint8_t doors[4] = {0, 0, 0, 0};
+    uint8_t firstcard[4] = {0, 0, 0, 0};
 
     struct Card card = {
         .from = from,
         .to = to,
         .doors = doors,
+        .firstcard = firstcard,
     };
 
     char errmsg[256] = "";
@@ -512,13 +514,20 @@ int get_card(uint32_t id, uint32_t card_number, card *c) {
     }
 
     c->card_number = card.card_number;
+    c->PIN = card.PIN;
+
     snprintf(c->from, sizeof(c->from), "%s", card.from);
     snprintf(c->to, sizeof(c->to), "%s", card.to);
+
     c->doors[0] = card.doors[0];
     c->doors[1] = card.doors[1];
     c->doors[2] = card.doors[2];
     c->doors[3] = card.doors[3];
-    c->PIN = card.PIN;
+
+    c->firstcard[0] = card.firstcard[0] != 0;
+    c->firstcard[1] = card.firstcard[1] != 0;
+    c->firstcard[2] = card.firstcard[2] != 0;
+    c->firstcard[3] = card.firstcard[3] != 0;
 
     return 0;
 }
@@ -527,11 +536,13 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
     char from[11] = "";
     char to[11] = "";
     uint8_t doors[4] = {0, 0, 0, 0};
+    uint8_t firstcard[4] = {0, 0, 0, 0};
 
     struct Card card = {
         .from = from,
         .to = to,
         .doors = doors,
+        .firstcard = firstcard,
     };
 
     char errmsg[256] = "";
@@ -547,18 +558,26 @@ int get_card_by_index(uint32_t id, uint32_t index, card *c) {
     }
 
     c->card_number = card.card_number;
+    c->PIN = card.PIN;
+
     snprintf(c->from, sizeof(c->from), "%s", card.from);
     snprintf(c->to, sizeof(c->to), "%s", card.to);
+
     c->doors[0] = card.doors[0];
     c->doors[1] = card.doors[1];
     c->doors[2] = card.doors[2];
     c->doors[3] = card.doors[3];
-    c->PIN = card.PIN;
+
+    c->firstcard[0] = card.firstcard[0] != 0;
+    c->firstcard[1] = card.firstcard[1] != 0;
+    c->firstcard[2] = card.firstcard[2] != 0;
+    c->firstcard[3] = card.firstcard[3] != 0;
 
     return 0;
 }
 
-int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4], const uint32_t PIN) {
+int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to, const uint8_t doors[4], const uint32_t PIN,
+             const bool firstcard[4]) {
     char errmsg[256] = "";
 
     error err = {
@@ -566,7 +585,9 @@ int put_card(uint32_t id, uint32_t card_number, const char *from, const char *to
         .message = errmsg,
     };
 
-    if (PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors, PIN, &err) != 0) {
+    uint8_t _firstcard[4] = {firstcard[0] ? 1 : 0, firstcard[1] ? 1 : 0, firstcard[2] ? 1 : 0, firstcard[3] ? 1 : 0};
+
+    if (PutCard(u, id, card_number, (char *)from, (char *)to, (uint8_t *)doors, PIN, (uint8_t *)_firstcard, &err) != 0) {
         set_error(err.message, err.len);
         return -1;
     }

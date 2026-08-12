@@ -80,6 +80,7 @@ typedef struct Card {
     const char *to;        // expects at least char[11]
 	uint8_t *doors;        // uint_8[4]
     uint32_t PIN;
+	uint8_t *firstcard;    // uint_8[4]
 } Card;
 
 typedef struct TimeProfile {
@@ -301,9 +302,9 @@ func GetCardByIndex(u *C.struct_UHPPOTE, deviceID uint32, index uint32, card *C.
 }
 
 //export PutCard
-func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.cchar_t, doors *uint8, PIN uint32, err *C.error) C.int {
+func PutCard(u *C.struct_UHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.cchar_t, doors *uint8, PIN uint32, firstcard *uint8, err *C.error) C.int {
 	f := func(uu uhppote.IUHPPOTE) error {
-		return putCard(uu, deviceID, cardNumber, from, to, doors, PIN)
+		return putCard(uu, deviceID, cardNumber, from, to, doors, PIN, firstcard)
 	}
 
 	return exec(u, f, err)

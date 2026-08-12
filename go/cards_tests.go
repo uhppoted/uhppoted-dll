@@ -51,6 +51,13 @@ func getCard(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, cardNumb
 	doors[2] = 31
 	doors[3] = 75
 
+	firstcard := unsafe.Slice(card.firstcard, 4)
+
+	firstcard[0] = cbool(true)
+	firstcard[1] = cbool(true)
+	firstcard[2] = cbool(false)
+	firstcard[3] = cbool(true)
+
 	return nil
 }
 
@@ -79,10 +86,17 @@ func getCardByIndex(uu uhppote.IUHPPOTE, card *C.struct_Card, deviceID uint32, i
 	doors[2] = 31
 	doors[3] = 75
 
+	firstcard := unsafe.Slice(card.firstcard, 4)
+
+	firstcard[0] = cbool(true)
+	firstcard[1] = cbool(false)
+	firstcard[2] = cbool(true)
+	firstcard[3] = cbool(true)
+
 	return nil
 }
 
-func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32) error {
+func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *C.char, doors *uint8, PIN uint32, firstcard *uint8) error {
 	if deviceID != 405419896 {
 		return fmt.Errorf("Incorrect device ID (%v)", deviceID)
 	}
@@ -116,6 +130,13 @@ func putCard(uu uhppote.IUHPPOTE, deviceID uint32, cardNumber uint32, from, to *
 
 	if PIN != 7531 {
 		return fmt.Errorf("Incorrect card PIN (%v)", PIN)
+	}
+
+	_firstcard := C.GoBytes(unsafe.Pointer(firstcard), 4)
+	for i := 0; i < 4; i++ {
+		if (_firstcard[i] != 0) != []bool{true, true, false, true}[i] {
+			return fmt.Errorf("Incorrect firstcard[%v] (%v)", i+1, _firstcard[i])
+		}
 	}
 
 	return nil

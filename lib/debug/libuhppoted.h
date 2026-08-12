@@ -102,6 +102,7 @@ typedef struct Card {
     const char *to;        // expects at least char[11]
 	uint8_t *doors;        // uint_8[4]
     uint32_t PIN;
+	uint8_t *firstcard;    // uint_8[4]
 } Card;
 
 typedef struct TimeProfile {
@@ -231,7 +232,7 @@ extern int OpenDoor(struct UHPPOTE* u, GoUint32 deviceID, GoUint8 door, error* e
 extern int GetCards(struct UHPPOTE* u, GoUint32 deviceID, int* N, error* err);
 extern int GetCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, struct Card* card, error* err);
 extern int GetCardByIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 index, struct Card* card, error* err);
-extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* from, cchar_t* to, GoUint8* doors, GoUint32 PIN, error* err);
+extern int PutCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, cchar_t* from, cchar_t* to, GoUint8* doors, GoUint32 PIN, GoUint8* firstcard, error* err);
 extern int DeleteCard(struct UHPPOTE* u, GoUint32 deviceID, GoUint32 cardNumber, error* err);
 extern int DeleteCards(struct UHPPOTE* u, GoUint32 deviceID, error* err);
 extern int GetEventIndex(struct UHPPOTE* u, GoUint32 deviceID, GoUint32* index, error* err);

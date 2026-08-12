@@ -64,6 +64,7 @@ typedef struct card {
     std::string to;
     uint8_t doors[4];
     uint32_t PIN;
+    bool firstcard[4];
 } card;
 
 typedef struct time_profile {

@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -39,17 +40,23 @@ int getCard(int argc, char **argv) {
         return -1;
     }
 
+    // clang-format off
     field fields[] = {
-        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
-        {.field = "card number", .type = "uint32", .value.uint32 = card.card_number},
-        {.field = "     from", .type = "string", .value.string = card.from},
-        {.field = "     to", .type = "string", .value.string = card.to},
-        {.field = "     door[1]", .type = "uint8", .value.uint8 = card.doors[0]},
-        {.field = "     door[2]", .type = "uint8", .value.uint8 = card.doors[1]},
-        {.field = "     door[3]", .type = "uint8", .value.uint8 = card.doors[2]},
-        {.field = "     door[4]", .type = "uint8", .value.uint8 = card.doors[3]},
-        {.field = "     PIN", .type = "uint32", .value.uint32 = card.PIN},
+        {.field = "ID",                .type = "uint32", .value.uint32 = deviceID},
+        {.field = "card number",       .type = "uint32", .value.uint32 = card.card_number},
+        {.field = "     from",         .type = "string", .value.string = card.from},
+        {.field = "     to",           .type = "string", .value.string = card.to},
+        {.field = "     door[1]",      .type = "uint8",  .value.uint8 = card.doors[0]},
+        {.field = "     door[2]",      .type = "uint8",  .value.uint8 = card.doors[1]},
+        {.field = "     door[3]",      .type = "uint8",  .value.uint8 = card.doors[2]},
+        {.field = "     door[4]",      .type = "uint8",  .value.uint8 = card.doors[3]},
+        {.field = "     firstcard[1]", .type = "bool",   .value.boolean = card.firstcard[0]},
+        {.field = "     firstcard[2]", .type = "bool",   .value.boolean = card.firstcard[1]},
+        {.field = "     firstcard[3]", .type = "bool",   .value.boolean = card.firstcard[2]},
+        {.field = "     firstcard[4]", .type = "bool",   .value.boolean = card.firstcard[3]},
+        {.field = "     PIN",          .type = "uint32", .value.uint32 = card.PIN},
     };
+    // clang-format on
 
     display("get-card", sizeof(fields) / sizeof(field), fields);
 
@@ -67,18 +74,24 @@ int getCardByIndex(int argc, char **argv) {
         return -1;
     }
 
+    // clang-format off
     field fields[] = {
-        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
-        {.field = "index", .type = "uint32", .value.uint32 = index},
-        {.field = "card number", .type = "uint32", .value.uint32 = card.card_number},
-        {.field = "     from", .type = "string", .value.string = card.from},
-        {.field = "     to", .type = "string", .value.string = card.to},
-        {.field = "     door[1]", .type = "uint8", .value.uint8 = card.doors[0]},
-        {.field = "     door[2]", .type = "uint8", .value.uint8 = card.doors[1]},
-        {.field = "     door[3]", .type = "uint8", .value.uint8 = card.doors[2]},
-        {.field = "     door[4]", .type = "uint8", .value.uint8 = card.doors[3]},
-        {.field = "     PIN", .type = "uint32", .value.uint32 = card.PIN},
+        {.field = "ID",                .type = "uint32", .value.uint32  = deviceID},
+        {.field = "index",             .type = "uint32", .value.uint32  = index},
+        {.field = "card number",       .type = "uint32", .value.uint32  = card.card_number},
+        {.field = "     from",         .type = "string", .value.string  = card.from},
+        {.field = "     to",           .type = "string", .value.string  = card.to},
+        {.field = "     door[1]",      .type = "uint8",  .value.uint8   = card.doors[0]},
+        {.field = "     door[2]",      .type = "uint8",  .value.uint8   = card.doors[1]},
+        {.field = "     door[3]",      .type = "uint8",  .value.uint8   = card.doors[2]},
+        {.field = "     door[4]",      .type = "uint8",  .value.uint8   = card.doors[3]},
+        {.field = "     firstcard[1]", .type = "bool",   .value.boolean = card.firstcard[0]},
+        {.field = "     firstcard[2]", .type = "bool",   .value.boolean = card.firstcard[1]},
+        {.field = "     firstcard[3]", .type = "bool",   .value.boolean = card.firstcard[2]},
+        {.field = "     firstcard[4]", .type = "bool",   .value.boolean = card.firstcard[3]},
+        {.field = "     PIN",          .type = "uint32", .value.uint32  = card.PIN},
     };
+    // clang-format on
 
     display("get-card-by-index", sizeof(fields) / sizeof(field), fields);
 
@@ -93,23 +106,30 @@ int putCard(int argc, char **argv) {
     char *to = "2022-12-31";
     uint8_t doors[4] = {0, 1, 31, 75};
     uint32_t PIN = 7531;
+    bool firstcard[4] = {true, true, false, true};
 
-    if (put_card(deviceID, card_number, from, to, doors, PIN) < 0) {
+    if (put_card(deviceID, card_number, from, to, doors, PIN, firstcard) < 0) {
         printf("ERROR %s\n", errmsg());
         return -1;
     }
 
+    // clang-format off
     field fields[] = {
-        {.field = "ID", .type = "uint32", .value.uint32 = deviceID},
-        {.field = "card number", .type = "uint32", .value.uint32 = card_number},
-        {.field = "     from", .type = "string", .value.string = from},
-        {.field = "     to", .type = "string", .value.string = to},
-        {.field = "     door[1]", .type = "uint8", .value.uint8 = doors[0]},
-        {.field = "     door[2]", .type = "uint8", .value.uint8 = doors[1]},
-        {.field = "     door[3]", .type = "uint8", .value.uint8 = doors[2]},
-        {.field = "     door[4]", .type = "uint8", .value.uint8 = doors[3]},
-        {.field = "     PIN", .type = "uint32", .value.uint32 = PIN},
+        {.field = "ID",                .type = "uint32", .value.uint32 = deviceID},
+        {.field = "card number",       .type = "uint32", .value.uint32 = card_number},
+        {.field = "     from",         .type = "string", .value.string = from},
+        {.field = "     to",           .type = "string", .value.string = to},
+        {.field = "     door[1]",      .type = "uint8",  .value.uint8 = doors[0]},
+        {.field = "     door[2]",      .type = "uint8",  .value.uint8 = doors[1]},
+        {.field = "     door[3]",      .type = "uint8",  .value.uint8 = doors[2]},
+        {.field = "     door[4]",      .type = "uint8",  .value.uint8 = doors[3]},
+        {.field = "     firstcard[1]", .type = "bool",   .value.boolean = firstcard[0]},
+        {.field = "     firstcard[2]", .type = "bool",   .value.boolean = firstcard[1]},
+        {.field = "     firstcard[3]", .type = "bool",   .value.boolean = firstcard[2]},
+        {.field = "     firstcard[4]", .type = "bool",   .value.boolean = firstcard[3]},
+        {.field = "     PIN",          .type = "uint32", .value.uint32 = PIN},
     };
+    // clang-format on
 
     display("put-card", sizeof(fields) / sizeof(field), fields);
 

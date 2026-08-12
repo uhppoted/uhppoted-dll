@@ -37,14 +37,18 @@ bool getCard() {
 
     // clang-format off
     const result resultset[] = {
-        { .field = "card number",      .type = "uint32", .value.uint32.expected = 8165538,      .value.uint32.value = card.card_number },
-        { .field = "card 'from' date", .type = "string", .value.string.expected = "2022-01-01", .value.string.value = card.from },
-        { .field = "card 'to' date",   .type = "string", .value.string.expected = "2022-12-31", .value.string.value = card.to },
-        { .field = "card doors[1]",    .type = "uint8",  .value.uint8.expected = 0,             .value.uint8.value = card.doors[0] },
-        { .field = "card doors[2]",    .type = "uint8",  .value.uint8.expected = 1,             .value.uint8.value = card.doors[1] },
-        { .field = "card doors[3]",    .type = "uint8",  .value.uint8.expected = 31,            .value.uint8.value = card.doors[2] },
-        { .field = "card doors[4]",    .type = "uint8",  .value.uint8.expected = 75,            .value.uint8.value = card.doors[3] },
-        { .field = "card PIN",         .type = "uint32", .value.uint32.expected = 7531,         .value.uint32.value = card.PIN },
+        { .field = "card number",       .type = "uint32",  .value.uint32.expected = 8165538,      .value.uint32.value = card.card_number },
+        { .field = "card 'from' date",  .type = "string",  .value.string.expected = "2022-01-01", .value.string.value = card.from },
+        { .field = "card 'to' date",    .type = "string",  .value.string.expected = "2022-12-31", .value.string.value = card.to },
+        { .field = "card doors[1]",     .type = "uint8",   .value.uint8.expected = 0,             .value.uint8.value = card.doors[0] },
+        { .field = "card doors[2]",     .type = "uint8",   .value.uint8.expected = 1,             .value.uint8.value = card.doors[1] },
+        { .field = "card doors[3]",     .type = "uint8",   .value.uint8.expected = 31,            .value.uint8.value = card.doors[2] },
+        { .field = "card doors[4]",     .type = "uint8",   .value.uint8.expected = 75,            .value.uint8.value = card.doors[3] },
+        { .field = "card PIN",          .type = "uint32",  .value.uint32.expected = 7531,         .value.uint32.value = card.PIN },
+        { .field = "card firstcard[1]", .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = card.firstcard[0]},
+        { .field = "card firstcard[2]", .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = card.firstcard[1]},
+        { .field = "card firstcard[3]", .type = "boolean", .value.boolean.expected = false,       .value.boolean.value = card.firstcard[2]},
+        { .field = "card firstcard[4]", .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = card.firstcard[3]},
     };
     // clang-format on
 
@@ -62,14 +66,18 @@ bool getCardByIndex() {
 
     // clang-format off
     const result resultset[] = {
-        { .field = "card number",      .type = "uint32", .value.uint32.expected = 8165538,      .value.uint32.value = card.card_number },
-        { .field = "card 'from' date", .type = "string", .value.string.expected = "2022-01-01", .value.string.value = card.from },
-        { .field = "card 'to' date",   .type = "string", .value.string.expected = "2022-12-31", .value.string.value = card.to },
-        { .field = "card doors[1]",    .type = "uint8",  .value.uint8.expected = 0,             .value.uint8.value = card.doors[0] },
-        { .field = "card doors[2]",    .type = "uint8",  .value.uint8.expected = 1,             .value.uint8.value = card.doors[1] },
-        { .field = "card doors[3]",    .type = "uint8",  .value.uint8.expected = 31,            .value.uint8.value = card.doors[2] },
-        { .field = "card doors[4]",    .type = "uint8",  .value.uint8.expected = 75,            .value.uint8.value = card.doors[3] },
-        { .field = "card PIN",         .type = "uint32", .value.uint32.expected = 7531,         .value.uint32.value = card.PIN },
+        { .field = "card number",       .type = "uint32",  .value.uint32.expected = 8165538,      .value.uint32.value = card.card_number },
+        { .field = "card 'from' date",  .type = "string",  .value.string.expected = "2022-01-01", .value.string.value = card.from },
+        { .field = "card 'to' date",    .type = "string",  .value.string.expected = "2022-12-31", .value.string.value = card.to },
+        { .field = "card doors[1]",     .type = "uint8",   .value.uint8.expected = 0,             .value.uint8.value = card.doors[0] },
+        { .field = "card doors[2]",     .type = "uint8",   .value.uint8.expected = 1,             .value.uint8.value = card.doors[1] },
+        { .field = "card doors[3]",     .type = "uint8",   .value.uint8.expected = 31,            .value.uint8.value = card.doors[2] },
+        { .field = "card doors[4]",     .type = "uint8",   .value.uint8.expected = 75,            .value.uint8.value = card.doors[3] },
+        { .field = "card PIN",          .type = "uint32",  .value.uint32.expected = 7531,         .value.uint32.value = card.PIN },
+        { .field = "card firstcard[1]", .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = card.firstcard[0]},
+        { .field = "card firstcard[2]", .type = "boolean", .value.boolean.expected = false,       .value.boolean.value = card.firstcard[1]},
+        { .field = "card firstcard[3]", .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = card.firstcard[2]},
+        { .field = "card firstcard[4]", .type = "boolean", .value.boolean.expected = true,        .value.boolean.value = card.firstcard[3]},
     };
     // clang-format on
 
@@ -79,8 +87,9 @@ bool getCardByIndex() {
 bool putCard() {
     const char *tag = "put-card";
     uint8_t doors[4] = {0, 1, 31, 75};
+    bool firstcard[4] = {true, true, false, true};
 
-    if (put_card(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", (uint8_t *)doors, 7531) < 0) {
+    if (put_card(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", (uint8_t *)doors, 7531, firstcard) < 0) {
         printf("ERROR %s\n", errmsg());
         return false;
     }
