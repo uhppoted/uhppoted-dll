@@ -144,7 +144,7 @@ class uhppoted {
     int get_cards(uint32_t id);
     card get_card(uint32_t id, uint32_t card_number);
     card get_card_by_index(uint32_t id, uint32_t index);
-    void put_card(uint32_t id, uint32_t card_number, std::string from, std::string to, uint8_t doors[4], uint32_t PIN);
+    void put_card(uint32_t id, uint32_t card_number, std::string from, std::string to, uint8_t doors[4], uint32_t PIN, bool firstcard[4]);
     void delete_card(uint32_t id, uint32_t card_number);
     void delete_cards(uint32_t id);
 

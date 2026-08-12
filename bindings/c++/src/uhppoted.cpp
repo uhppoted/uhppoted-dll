@@ -436,10 +436,13 @@ card uhppoted::get_card(uint32_t id, uint32_t card_number) {
     char from[11] = "";
     char to[11] = "";
     vector<uint8_t> doors(4);
+    vector<uint8_t> firstcard(4);
+
     Card card = {
         .from = from,
         .to = to,
         .doors = doors.data(),
+        .firstcard = firstcard.data(),
     };
 
     char errmsg[256] = "";
@@ -458,10 +461,17 @@ card uhppoted::get_card(uint32_t id, uint32_t card_number) {
     c.card_number = card.card_number;
     c.from = card.from;
     c.to = card.to;
+
     c.doors[0] = card.doors[0];
     c.doors[1] = card.doors[1];
     c.doors[2] = card.doors[2];
     c.doors[3] = card.doors[3];
+
+    c.firstcard[0] = card.firstcard[0] != 0;
+    c.firstcard[1] = card.firstcard[1] != 0;
+    c.firstcard[2] = card.firstcard[2] != 0;
+    c.firstcard[3] = card.firstcard[3] != 0;
+
     c.PIN = card.PIN;
 
     return c;
@@ -471,10 +481,13 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
     char from[11] = "";
     char to[11] = "";
     vector<uint8_t> doors(4);
+    vector<uint8_t> firstcard(4);
+
     Card card = {
         .from = from,
         .to = to,
         .doors = doors.data(),
+        .firstcard = firstcard.data(),
     };
 
     char errmsg[256] = "";
@@ -493,16 +506,23 @@ card uhppoted::get_card_by_index(uint32_t id, uint32_t index) {
     c.card_number = card.card_number;
     c.from = card.from;
     c.to = card.to;
+
     c.doors[0] = card.doors[0];
     c.doors[1] = card.doors[1];
     c.doors[2] = card.doors[2];
     c.doors[3] = card.doors[3];
+
+    c.firstcard[0] = card.firstcard[0] != 0;
+    c.firstcard[1] = card.firstcard[1] != 0;
+    c.firstcard[2] = card.firstcard[2] != 0;
+    c.firstcard[3] = card.firstcard[3] != 0;
+
     c.PIN = card.PIN;
 
     return c;
 }
 
-void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string to, uint8_t doors[4], uint32_t PIN) {
+void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string to, uint8_t doors[4], uint32_t PIN, bool firstcard[4]) {
     char errmsg[256] = "";
 
     error err = {
@@ -510,7 +530,14 @@ void uhppoted::put_card(uint32_t id, uint32_t card_number, string from, string t
         .message = errmsg,
     };
 
-    if (PutCard(u, id, card_number, (char *)from.c_str(), (char *)to.c_str(), (uint8_t *)doors, PIN, &err) != 0) {
+    uint8_t _firstcard[4] = {
+        firstcard[0] ? (uint8_t)1 : (uint8_t)0,
+        firstcard[1] ? (uint8_t)1 : (uint8_t)0,
+        firstcard[2] ? (uint8_t)1 : (uint8_t)0,
+        firstcard[3] ? (uint8_t)1 : (uint8_t)0,
+    };
+
+    if (PutCard(u, id, card_number, (char *)from.c_str(), (char *)to.c_str(), (uint8_t *)doors, PIN, (uint8_t *)_firstcard, &err) != 0) {
         throw uhppoted_exception(err);
     }
 }

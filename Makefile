@@ -95,12 +95,12 @@ else
 endif	
 
 debug: build
-# 	make -C ./examples/c -f Makefile get-card
-# 	make -C ./examples/c -f Makefile get-card-by-index
-# 	make -C ./examples/c -f Makefile put-card
-	make -C ./tests/c    -f Makefile get-card
-	make -C ./tests/c    -f Makefile get-card-by-index
-	make -C ./tests/c    -f Makefile put-card
+	make -C ./examples/c++ -f Makefile get-card
+	make -C ./examples/c++ -f Makefile get-card-by-index
+	make -C ./examples/c++ -f Makefile put-card
+	make -C ./tests/c++    -f Makefile get-card
+	make -C ./tests/c++    -f Makefile get-card-by-index
+	make -C ./tests/c++    -f Makefile put-card
 
 godoc:
 	godoc -http=:80	-index_interval=60s
