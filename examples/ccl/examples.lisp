@@ -149,13 +149,15 @@
          (to          "2022-12-31")
          (doors       (make-array 4 :initial-contents '(0 1 31 75)))
          (PIN         7531)
-         (ok          (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors PIN)))))
+         (firstcard   (make-array 4 :initial-contents '(T nil T T)))
+         (ok          (exec #'(lambda (u) (uhppoted-put-card u device-id card-number from to doors PIN firstcard)))))
     (when ok)
-      (display "put-card" device-id (list "card"  card-number
-                                          "from"  from
-                                          "to"    to
-                                          "doors" (format nil "~{~a ~}" (coerce doors 'list))
-                                          "PIN"   PIN))))
+      (display "put-card" device-id (list "card"      card-number
+                                          "from"      from
+                                          "to"        to
+                                          "doors"     (format nil "~{~a ~}" (coerce doors 'list))
+                                          "PIN"       PIN
+                                          "firstcard" (format nil "~{~a ~}" (coerce firstcard 'list))))))
 
 
 (defun delete-card (args) "" 

@@ -4,6 +4,7 @@
 
 ### Added
 1. `set-firstcard` API bindings, examples and tests.
+2. Added _firstcard_ field to `get-card`, `get-card-by-index` and `put-card` APIs.
 
 ### Updated
 1. Updated to Go v1.26.

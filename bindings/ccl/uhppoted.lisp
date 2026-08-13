@@ -107,7 +107,8 @@
                 from
                 to
                 doors
-                PIN)
+                PIN
+                firstcard)
 
 (defstruct time-profile ID
                         linked
@@ -223,7 +224,8 @@
                    (:from        :address)
                    (:to          :address)
                    (:doors       :address)
-                   (:PIN         :unsigned-fullword)))
+                   (:PIN         :unsigned-fullword)
+                   (:firstcard   :address)))
 
 (def-foreign-type nil
   (:struct :GoTimeProfile (:ID            :unsigned-byte)
@@ -628,17 +630,19 @@
   (multiple-value-bind (from   fromp)          (make-heap-ivector 11  '(unsigned-byte 8))
   (multiple-value-bind (to     top)            (make-heap-ivector 11  '(unsigned-byte 8))
   (unwind-protect
-    (%stack-block ((doors   4))
-    (rletz ((card (:struct :GoCard) :from  fromp
-                                    :to    top
-                                    :doors doors)
-            (err (:struct :GoError) :len     errlen
-                                    :message errmsgp))
-      (unless (eq 0 (external-call "GetCard" :address uhppote 
+    (%stack-block ((doors     4)
+                   (firstcard 4))
+    (rletz ((card (:struct :GoCard) :from      fromp
+                                    :to        top
+                                    :doors     doors
+                                    :firstcard firstcard)
+            (err (:struct :GoError) :len       errlen
+                                    :message   errmsgp))
+      (unless (eq 0 (external-call "GetCard" :address       uhppote 
                                              :unsigned-long device-id 
                                              :unsigned-long card-number
-                                             :address card
-                                             :address err
+                                             :address       card
+                                             :address       err
                                              :signed-long))
         (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
@@ -648,7 +652,11 @@
                                     (%get-unsigned-byte doors 1)
                                     (%get-unsigned-byte doors 2)
                                     (%get-unsigned-byte doors 3))
-                 :PIN         (pref card :GoCard.PIN))))
+                 :PIN         (pref card :GoCard.PIN)
+                 :firstcard   (list (if (equal 0 (%get-unsigned-byte firstcard 0)) nil T)
+                                    (if (equal 0 (%get-unsigned-byte firstcard 1)) nil T)
+                                    (if (equal 0 (%get-unsigned-byte firstcard 2)) nil T)
+                                    (if (equal 0 (%get-unsigned-byte firstcard 3)) nil T)))))
   (dispose-heap-ivector from)
   (dispose-heap-ivector to)
   (dispose-heap-ivector errmsg))))))
@@ -659,17 +667,19 @@
   (multiple-value-bind (from   fromp)          (make-heap-ivector 11  '(unsigned-byte 8))
   (multiple-value-bind (to     top)            (make-heap-ivector 11  '(unsigned-byte 8))
   (unwind-protect
-    (%stack-block ((doors   4))
-    (rletz ((card (:struct :GoCard) :from  fromp
-                                    :to    top
-                                    :doors doors)
-            (err (:struct :GoError) :len     errlen
-                                    :message errmsgp))
-      (unless (eq 0 (external-call "GetCardByIndex" :address uhppote 
+    (%stack-block ((doors     4)
+                   (firstcard 4))
+    (rletz ((card (:struct :GoCard) :from      fromp
+                                    :to        top
+                                    :doors     doors
+                                    :firstcard firstcard)
+            (err (:struct :GoError) :len       errlen
+                                    :message   errmsgp))
+      (unless (eq 0 (external-call "GetCardByIndex" :address       uhppote 
                                                     :unsigned-long device-id 
                                                     :unsigned-long index
-                                                    :address card
-                                                    :address err
+                                                    :address       card
+                                                    :address       err
                                                     :signed-long))
         (error 'uhppoted-error :message (%get-cstring errmsgp)))
       (make-card :card-number (%get-unsigned-long (pref card :GoCard.card-number))
@@ -679,35 +689,48 @@
                                     (%get-unsigned-byte doors 1)
                                     (%get-unsigned-byte doors 2)
                                     (%get-unsigned-byte doors 3))
-                 :PIN         (pref card :GoCard.PIN))))
+                 :PIN         (pref card :GoCard.PIN)
+                 :firstcard   (list (if (equal 0 (%get-unsigned-byte firstcard 0)) nil T)
+                                    (if (equal 0 (%get-unsigned-byte firstcard 1)) nil T)
+                                    (if (equal 0 (%get-unsigned-byte firstcard 2)) nil T)
+                                    (if (equal 0 (%get-unsigned-byte firstcard 3)) nil T)))))
   (dispose-heap-ivector from)
   (dispose-heap-ivector to)
   (dispose-heap-ivector errmsg))))))
 
 
-(defun uhppoted-put-card (uhppote device-id card-number from to doors PIN) "Adds or updates the card detail stored on a controller"
+(defun uhppoted-put-card (uhppote device-id card-number from to doors PIN firstcard) "Adds or updates the card detail stored on a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
     (with-cstrs ((from_ from)
                  (to_   to))
-    (multiple-value-bind (doors_ pdoors) (make-heap-ivector 4 '(unsigned-byte 8))
+    (multiple-value-bind (doors_     pdoors)     (make-heap-ivector 4 '(unsigned-byte 8))
+                         (firstcard_ pfirstcard) (make-heap-ivector 4 '(unsigned-byte 8))
       (unwind-protect
-        (rletz ((err (:struct :GoError) :len     errlen
+        (rletz ((err (:struct :GoError) :len     errlen 
                                         :message errmsgp))
           (setf (paref pdoors (:* :unsigned-byte) 0) (aref doors 0))
           (setf (paref pdoors (:* :unsigned-byte) 1) (aref doors 1))
           (setf (paref pdoors (:* :unsigned-byte) 2) (aref doors 2))
           (setf (paref pdoors (:* :unsigned-byte) 3) (aref doors 3))
-          (unless (eq 0 (external-call "PutCard" :address uhppote 
+
+          (setf (paref pfirstcard (:* :unsigned-byte) 0) (if (aref firstcard 0) 1 0))
+          (setf (paref pfirstcard (:* :unsigned-byte) 1) (if (aref firstcard 1) 1 0))
+          (setf (paref pfirstcard (:* :unsigned-byte) 2) (if (aref firstcard 2) 1 0))
+          (setf (paref pfirstcard (:* :unsigned-byte) 3) (if (aref firstcard 3) 1 0))
+
+          (unless (eq 0 (external-call "PutCard" :address       uhppote 
                                                  :unsigned-long device-id 
                                                  :unsigned-long card-number
                                                  :address       from_  
                                                  :address       to_
                                                  :address       pdoors
                                                  :unsigned-long PIN
-                                                 :address err
+                                                 :address       pfirstcard
+                                                 :address       err
                                                  :signed-long))
             (error 'uhppoted-error :message (%get-cstring errmsgp)))
           t))
+    (dispose-heap-ivector firstcard_)
     (dispose-heap-ivector doors_)
     (dispose-heap-ivector errmsg)))))
 

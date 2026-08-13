@@ -166,9 +166,11 @@
                     (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))
                     (make-result :field "card PIN"         :expected 7531         :value (card-PIN   card))))))
 
+
 (defun put-card () "" 
-  (let ((doors (make-array 4 :initial-contents '(0 1 31 75))))
-    (exec #'(lambda (u) (uhppoted-put-card u TEST-DEVICE-ID TEST-CARD-NUMBER "2022-01-01" "2022-12-31" doors TEST-PIN)))
+  (let ((doors     (make-array 4 :initial-contents '(0 1 31 75)))
+        (firstcard (make-array 4 :initial-contents '(T T nil T))))
+    (exec #'(lambda (u) (uhppoted-put-card u TEST-DEVICE-ID TEST-CARD-NUMBER "2022-01-01" "2022-12-31" doors TEST-PIN firstcard)))
     (evaluate "put-card" '())))
 
 

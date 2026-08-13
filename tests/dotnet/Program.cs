@@ -114,7 +114,7 @@ public class Tests
 
             // ... named test
             Test? t = Array.Find(tests, v => v.command == cmd);
-            if (t != null)
+            if (t is not null)
             {
                 if (!t.fn(u))
                 {
@@ -671,7 +671,7 @@ public class Tests
             GCHandle handle = (GCHandle)userdata;
             ListenEvent? evt = handle.Target as ListenEvent;
 
-            if (evt != null)
+            if (evt is not null)
             {
                 evt.controller = e.controller;
                 evt.timestamp = e.timestamp;
