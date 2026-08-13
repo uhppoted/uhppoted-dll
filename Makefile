@@ -95,12 +95,12 @@ else
 endif	
 
 debug: build
-	make -C ./examples/dotnet/csharp -f Makefile get-card
-	make -C ./examples/dotnet/csharp -f Makefile get-card-by-index
-	make -C ./examples/dotnet/csharp -f Makefile put-card
-	make -C ./tests/dotnet    -f Makefile get-card
-	make -C ./tests/dotnet    -f Makefile get-card-by-index
-	make -C ./tests/dotnet    -f Makefile put-card
+	make -C ./examples/python -f Makefile get-card
+	make -C ./examples/python -f Makefile get-card-by-index
+	make -C ./examples/python -f Makefile put-card
+	make -C ./tests/python    -f Makefile get-card
+	make -C ./tests/python    -f Makefile get-card-by-index
+	make -C ./tests/python    -f Makefile put-card
 
 godoc:
 	godoc -http=:80	-index_interval=60s

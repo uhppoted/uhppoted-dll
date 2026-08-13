@@ -8,7 +8,7 @@
     - [x] C
     - [x] C++
     - [x] dotnet
-    - [ ] python
+    - [x] python
     - [ ] CCL
 
 

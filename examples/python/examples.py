@@ -280,14 +280,17 @@ def parse_args():
     # ... get-card
     get_card = parsers['get-card']
     get_card.add_argument('--controller', type=int, help='controller serial number, e.g. 405419896')
+    get_card.add_argument('--card', type=int, help='card number, e.g. 10058400')
 
     # ... get-card-by-index
     get_card_by_index = parsers['get-card-by-index']
     get_card_by_index.add_argument('--controller', type=int, help='controller serial number, e.g. 405419896')
+    get_card_by_index.add_argument('--card-index', type=int, help='card record number, e.g. 271')
 
     # ... put-card
     put_card = parsers['put-card']
     put_card.add_argument('--controller', type=int, help='controller serial number, e.g. 405419896')
+    put_card.add_argument('--card', type=int, help='card number, e.g. 10058400')
 
     # ... delete-card
     delete_card = parsers['delete-card']
@@ -642,6 +645,10 @@ def get_card(u, args):
         ('     door[3]', card.doors[2]),
         ('     door[4]', card.doors[3]),
         ('     PIN', card.PIN),
+        ('     firstcard[1]', card.firstcard[0]),
+        ('     firstcard[2]', card.firstcard[1]),
+        ('     firstcard[3]', card.firstcard[2]),
+        ('     firstcard[4]', card.firstcard[3]),
     ])
 
 
@@ -662,6 +669,10 @@ def get_card_by_index(u, args):
         ('     door[3]', card.doors[2]),
         ('     door[4]', card.doors[3]),
         ('     PIN', card.PIN),
+        ('     firstcard[1]', card.firstcard[0]),
+        ('     firstcard[2]', card.firstcard[1]),
+        ('     firstcard[3]', card.firstcard[2]),
+        ('     firstcard[4]', card.firstcard[3]),
     ])
 
 
@@ -672,8 +683,9 @@ def put_card(u, args):
     end = '2023-12-31'
     doors = [0, 1, 31, 75]
     PIN = 7531
+    firstcard = [False, True, True, True]
 
-    card = u.put_card(device_id, card_number, start, end, doors, PIN)
+    card = u.put_card(device_id, card_number, start, end, doors, PIN, firstcard)
 
     display('put-card', [
         ('ID', device_id),
@@ -685,6 +697,10 @@ def put_card(u, args):
         ('     door[3]', doors[2]),
         ('     door[4]', doors[3]),
         ('     PIN', PIN),
+        ('     firstcard[1]', firstcard[0]),
+        ('     firstcard[2]', firstcard[1]),
+        ('     firstcard[3]', firstcard[2]),
+        ('     firstcard[4]', firstcard[3]),
     ])
 
 

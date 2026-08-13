@@ -147,6 +147,7 @@ class Card:
     end: str
     doors: list[int]
     PIN: int
+    firstcard: list[bool]
 
 
 @dataclass
@@ -392,7 +393,11 @@ class Uhppote:
         for i in range(4):
             doors[i] = card.doors[i]
 
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors, card.PIN)
+        firstcard = [False, False, False, False]
+        for i in range(4):
+            firstcard[i] = card.firstcard[i] != 0
+
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors, card.PIN, firstcard)
 
     def get_card_by_index(self, deviceID, index):
         card = GoCard()
@@ -405,19 +410,37 @@ class Uhppote:
         for i in range(4):
             doors[i] = card.doors[i]
 
-        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors, card.PIN)
+        firstcard = [False, False, False, False]
+        for i in range(4):
+            firstcard[i] = card.firstcard[i] != 0
 
-    def put_card(self, deviceID, cardNumber, start, end, doors, PIN):
+        return Card(card.cardNumber, card.start.decode('utf-8'), card.end.decode('utf-8'), doors, card.PIN, firstcard)
+
+    def put_card(self, deviceID, cardNumber, start, end, doors, PIN, firstcard):
         _doors = (c_ubyte * 4)(*[0] * 4)
         _doors[0] = doors[0]
         _doors[1] = doors[1]
         _doors[2] = doors[2]
         _doors[3] = doors[3]
 
+        _firstcard = (c_ubyte * 4)(*[0] * 4)
+
+        if firstcard[0]:
+            _firstcard[0] = 1
+
+        if firstcard[1]:
+            _firstcard[1] = 1
+
+        if firstcard[2]:
+            _firstcard[2] = 1
+
+        if firstcard[3]:
+            _firstcard[3] = 1
+
         err = GoError()
 
         if self.ffi.PutCard(self._uhppote, deviceID, cardNumber, c_char_p(bytes(start, 'utf-8')), c_char_p(bytes(end, 'utf-8')), _doors,
-                            PIN, byref(err)) != 0:
+                            PIN, _firstcard, byref(err)) != 0:
             raise Exception(f"{err.message.decode('utf-8')}")
 
     def delete_card(self, deviceID, cardNumber):
@@ -872,7 +895,7 @@ def libfunctions():
         'GetCards':                 (lib.GetCards,                 [POINTER(GoUHPPOTE), c_ulong, POINTER(c_int), POINTER(GoError)]),
         'GetCard':                  (lib.GetCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoCard), POINTER(GoError)]),
         'GetCardByIndex':           (lib.GetCardByIndex,           [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoCard), POINTER(GoError)]),
-        'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong, POINTER(GoError)]),
+        'PutCard':                  (lib.PutCard,                  [POINTER(GoUHPPOTE), c_ulong, c_ulong, c_char_p, c_char_p, POINTER(c_ubyte), c_ulong, POINTER(c_ubyte), POINTER(GoError)]),
         'DeleteCard':               (lib.DeleteCard,               [POINTER(GoUHPPOTE), c_ulong, c_ulong, POINTER(GoError)]),
         'DeleteCards':              (lib.DeleteCards,              [POINTER(GoUHPPOTE), c_ulong, POINTER(GoError)]),
         'GetEventIndex':            (lib.GetEventIndex,            [POINTER(GoUHPPOTE), c_ulong, POINTER(c_ulong), POINTER(GoError)]),
@@ -1017,6 +1040,7 @@ class GoCard(Structure):
         ('end', c_char_p),
         ('doors', POINTER(c_ubyte)),  # uint8_t[4]
         ('PIN', c_uint32),
+        ('firstcard', POINTER(c_ubyte)),  # uint8_t[4]
     ]
 
     def __init__(self):
@@ -1026,6 +1050,7 @@ class GoCard(Structure):
         self.end = c_char_p(bytes(' ' * 11, 'utf-8'))
         self.doors = (c_ubyte * 4)(*[0] * 4)
         self.PIN = 0
+        self.firstcard = (c_ubyte * 4)(*[0] * 4)
 
 
 class GoTimeProfile(Structure):

@@ -72,13 +72,13 @@ get-cards: build
 	$(GO) && $(DLL) && $(CMD) get-cards
 
 get-card: build
-	$(GO) && $(DLL) && $(CMD) get-card
+	$(GO) && $(DLL) && $(CMD) get-card --controller 405419896 --card 10058400
 
 get-card-by-index: build
-	$(GO) && $(DLL) && $(CMD) get-card-by-index
+	$(GO) && $(DLL) && $(CMD) get-card-by-index --controller 405419896 --card-index 3
 
 put-card: build
-	$(GO) && $(DLL) && $(CMD) put-card
+	$(GO) && $(DLL) && $(CMD) put-card --controller 405419896 --card 10058400
 
 delete-card: build
 	$(GO) && $(DLL) && $(CMD) delete-card
