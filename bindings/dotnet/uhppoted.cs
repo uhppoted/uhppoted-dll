@@ -379,6 +379,7 @@ public class Uhppoted : IDisposable {
         card.from = Marshal.AllocHGlobal(11);
         card.to = Marshal.AllocHGlobal(11);
         card.doors = Marshal.AllocHGlobal(4);
+        card.firstcard = Marshal.AllocHGlobal(4);
 
         err.len = 256;
         err.message = Marshal.AllocHGlobal(256);
@@ -391,14 +392,22 @@ public class Uhppoted : IDisposable {
             string from = Marshal.PtrToStringAnsi(card.from)!;
             string to = Marshal.PtrToStringAnsi(card.to)!;
             byte[] doors = new byte[4];
+            byte[] firstcard = new byte[4];
 
             Marshal.Copy(card.doors, doors, 0, 4);
+            Marshal.Copy(card.firstcard, firstcard, 0, 4);
 
-            return new Card(card.cardNumber, from, to, doors, card.PIN);
+            firstcard[0] = card.firstcard[0] != 0;
+            firstcard[1] = card.firstcard[1] != 0;
+            firstcard[2] = card.firstcard[2] != 0;
+            firstcard[3] = card.firstcard[3] != 0;
+
+            return new Card(card.cardNumber, from, to, doors, card.PIN, firstcard);
         } finally {
             Marshal.FreeHGlobal(card.from);
             Marshal.FreeHGlobal(card.to);
             Marshal.FreeHGlobal(card.doors);
+            Marshal.FreeHGlobal(card.firstcard);
             Marshal.FreeHGlobal(err.message);
         }
     }
@@ -422,10 +431,12 @@ public class Uhppoted : IDisposable {
             string from = Marshal.PtrToStringAnsi(card.from)!;
             string to = Marshal.PtrToStringAnsi(card.to)!;
             byte[] doors = new byte[4];
+            byte[] firstcard = new byte[4];
 
             Marshal.Copy(card.doors, doors, 0, 4);
+            Marshal.Copy(card.firstcard, firstcard, 0, 4);
 
-            return new Card(card.cardNumber, from, to, doors, card.PIN);
+            return new Card(card.cardNumber, from, to, doors, card.PIN, firstcard);
         } finally {
             Marshal.FreeHGlobal(card.from);
             Marshal.FreeHGlobal(card.to);
@@ -434,17 +445,29 @@ public class Uhppoted : IDisposable {
         }
     }
 
-    public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN) {
+    public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, bool[] firstcard)
+    {
         GoError err = new GoError();
 
         err.len = 256;
         err.message = Marshal.AllocHGlobal(256);
 
-        try {
-            if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, ref err) != 0) {
+        try
+        {
+            byte[] _firstcard = [0, 0, 0, 0];
+
+            _firstcard[0] = firstcard[0] ? (byte)1 : (byte)0;
+            _firstcard[1] = firstcard[1] ? (byte)1 : (byte)0;
+            _firstcard[2] = firstcard[2] ? (byte)1 : (byte)0;
+            _firstcard[3] = firstcard[3] ? (byte)1 : (byte)0;
+
+            if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, _firstcard, ref err) != 0)
+            {
                 raise(err);
             }
-        } finally {
+        }
+        finally
+        {
             Marshal.FreeHGlobal(err.message);
         }
     }
@@ -1100,6 +1123,7 @@ public class Uhppoted : IDisposable {
         public IntPtr to;
         public IntPtr doors;
         public uint PIN;
+        public IntPtr firstcard;
     }
 
     struct GoTimeProfile {
@@ -1311,13 +1335,31 @@ public class Card {
     public string to;
     public byte[] doors;
     public uint PIN;
+    public bool[] firstcard;
 
-    public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN) {
+    public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN, bool[] firstcard)
+    {
         this.cardNumber = cardNumber;
         this.from = from;
         this.to = to;
         this.doors = doors;
         this.PIN = PIN;
+        this.firstcard = firstcard;
+    }
+
+    public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN, byte[] firstcard)
+    {
+        this.cardNumber = cardNumber;
+        this.from = from;
+        this.to = to;
+        this.doors = doors;
+        this.PIN = PIN;
+        this.firstcard = [
+            firstcard[0] != 0,
+            firstcard[1] != 0,
+            firstcard[2] != 0,
+            firstcard[3] != 0,
+        ];
     }
 }
 

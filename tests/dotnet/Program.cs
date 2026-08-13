@@ -9,12 +9,12 @@ using static System.String;
 
 using uhppoted;
 
-public class test
+public class Test
 {
     public string command;
     public Func<Uhppoted, bool> fn;
 
-    public test(string command, Func<Uhppoted, bool> fn)
+    public Test(string command, Func<Uhppoted, bool> fn)
     {
         this.command = command;
         this.fn = fn;
@@ -38,47 +38,47 @@ public class Tests
         new Controller(303986753, "192.168.1.100")
     };
 
-    static test[] tests = {
-        new test("get-controllers", GetControllers),
-        new test("get-controller", GetController),
-        new test("set-address", SetAddress),
-        new test("get-status", GetStatus),
-        new test("get-status-no-event", GetStatusNoEvent),
-        new test("get-time", GetTime),
-        new test("set-time", SetTime),
-        new test("get-listener", GetListener),
-        new test("set-listener", SetListener),
-        new test("get-door-control", GetDoorControl),
-        new test("set-door-control", SetDoorControl),
-        new test("open-door", OpenDoor),
-        new test("get-cards", GetCards),
-        new test("get-card", GetCard),
-        new test("get-card-by-index", GetCardByIndex),
-        new test("put-card", PutCard),
-        new test("delete-card", DeleteCard),
-        new test("delete-cards", DeleteCards),
-        new test("get-event-index", GetEventIndex),
-        new test("set-event-index", SetEventIndex),
-        new test("get-event", GetEvent),
-        new test("record-special-events", RecordSpecialEvents),
-        new test("get-time-profile", GetTimeProfile),
-        new test("set-time-profile", SetTimeProfile),
-        new test("clear-time-profiles", ClearTimeProfiles),
-        new test("add-task", AddTask),
-        new test("refresh-tasklist", RefreshTaskList),
-        new test("clear-tasklist", ClearTaskList),
-        new test("set-pc-control", SetPCControl),
-        new test("set-interlock", SetInterlock),
-        new test("activate-keypads", ActivateKeypads),
-        new test("set-door-passcodes", SetDoorPasscodes),
-        new test("get-antipassback", GetAntiPassback),
-        new test("set-antipassback", SetAntiPassback),
-        new test("set-firstcard", SetFirstCard),
-        new test("restore-default-parameters", RestoreDefaultParameters),
-        new test("lookup", Internationalisation),
-        new test("errors", Errors),
-        new test("structs", Structs),
-        new test("listen", Listen),
+    static Test[] tests = {
+        new Test("get-controllers", GetControllers),
+        new Test("get-controller", GetController),
+        new Test("set-address", SetAddress),
+        new Test("get-status", GetStatus),
+        new Test("get-status-no-event", GetStatusNoEvent),
+        new Test("get-time", GetTime),
+        new Test("set-time", SetTime),
+        new Test("get-listener", GetListener),
+        new Test("set-listener", SetListener),
+        new Test("get-door-control", GetDoorControl),
+        new Test("set-door-control", SetDoorControl),
+        new Test("open-door", OpenDoor),
+        new Test("get-cards", GetCards),
+        new Test("get-card", GetCard),
+        new Test("get-card-by-index", GetCardByIndex),
+        new Test("put-card", PutCard),
+        new Test("delete-card", DeleteCard),
+        new Test("delete-cards", DeleteCards),
+        new Test("get-event-index", GetEventIndex),
+        new Test("set-event-index", SetEventIndex),
+        new Test("get-event", GetEvent),
+        new Test("record-special-events", RecordSpecialEvents),
+        new Test("get-time-profile", GetTimeProfile),
+        new Test("set-time-profile", SetTimeProfile),
+        new Test("clear-time-profiles", ClearTimeProfiles),
+        new Test("add-task", AddTask),
+        new Test("refresh-tasklist", RefreshTaskList),
+        new Test("clear-tasklist", ClearTaskList),
+        new Test("set-pc-control", SetPCControl),
+        new Test("set-interlock", SetInterlock),
+        new Test("activate-keypads", ActivateKeypads),
+        new Test("set-door-passcodes", SetDoorPasscodes),
+        new Test("get-antipassback", GetAntiPassback),
+        new Test("set-antipassback", SetAntiPassback),
+        new Test("set-firstcard", SetFirstCard),
+        new Test("restore-default-parameters", RestoreDefaultParameters),
+        new Test("lookup", Internationalisation),
+        new Test("errors", Errors),
+        new Test("structs", Structs),
+        new Test("listen", Listen),
     };
 
     public static void Main(string[] args)
@@ -113,7 +113,7 @@ public class Tests
             }
 
             // ... named test
-            test t = Array.Find(tests, v => v.command == cmd);
+            Test? t = Array.Find(tests, v => v.command == cmd);
             if (t != null)
             {
                 if (!t.fn(u))
@@ -156,21 +156,21 @@ public class Tests
     {
         uint[] controllers = u.GetDevices();
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("controllers count", 3, (uint)controllers.Length),
             new uint32Result("controllers[0]", 201020304, controllers[0]),
             new uint32Result("controllers[1]", 303986753, controllers[1]),
             new uint32Result("controllers[2]", 405419896, controllers[2]),
         };
 
-        return evaluate("get-controllers", resultset);
+        return Evaluate("get-controllers", resultset);
     }
 
     static bool GetController(Uhppoted u)
     {
         Device controller = u.GetDevice(DEVICE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("controller ID", 405419896, controller.ID),
             new stringResult("IP address", "192.168.1.101", controller.address),
             new stringResult("subnet mask", "255.255.255.0", controller.subnet),
@@ -180,23 +180,23 @@ public class Tests
             new stringResult("date", "2018-11-05", controller.date),
         };
 
-        return evaluate("get-controller", resultset);
+        return Evaluate("get-controller", resultset);
     }
 
     static bool SetAddress(Uhppoted u)
     {
         u.SetAddress(DEVICE_ID, "192.168.1.125", "255.255.254.0", "192.168.1.0");
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-address", resultset);
+        return Evaluate("set-address", resultset);
     }
 
     static bool GetStatus(Uhppoted u)
     {
         Status status = u.GetStatus(DEVICE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("device ID", 405419896, status.ID),
             new stringResult("system date/time", "2022-03-19 15:48:32", status.sysdatetime),
             new boolResult("doors[1]", true, status.doors[0]),
@@ -222,14 +222,14 @@ public class Tests
             new uint8Result("event reason", 21, status.evt.reason),
         };
 
-        return evaluate("get-status", resultset);
+        return Evaluate("get-status", resultset);
     }
 
     static bool GetStatusNoEvent(Uhppoted u)
     {
         Status status = u.GetStatus(DEVICE_ID2);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("device ID", 303986753, status.ID),
             new stringResult("system date/time", "2022-03-19 15:48:32", status.sysdatetime),
             new boolResult("doors[1]", true, status.doors[0]),
@@ -255,27 +255,27 @@ public class Tests
             new uint8Result("event reason", 0, status.evt.reason),
         };
 
-        return evaluate("get-status-no-event", resultset);
+        return Evaluate("get-status-no-event", resultset);
     }
 
     static bool GetTime(Uhppoted u)
     {
         string datetime = u.GetTime(DEVICE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new stringResult("date/time", "2022-01-02 12:34:56", datetime),
         };
 
-        return evaluate("get-time", resultset);
+        return Evaluate("get-time", resultset);
     }
 
     static bool SetTime(Uhppoted u)
     {
         u.SetTime(DEVICE_ID, "2022-03-23 12:24:17");
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-time", resultset);
+        return Evaluate("set-time", resultset);
     }
 
     static bool GetListener(Uhppoted u)
@@ -283,69 +283,69 @@ public class Tests
         string listener = u.GetListener(DEVICE_ID);
         byte interval = u.GetListenerInterval(DEVICE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new stringResult("event listener address", "192.168.1.100:60001", listener),
             new uint8Result("event listener interval", 15, interval),
         };
 
-        return evaluate("get-listener", resultset);
+        return Evaluate("get-listener", resultset);
     }
 
     static bool SetListener(Uhppoted u)
     {
         u.SetListener(DEVICE_ID, "192.168.1.100:60001", 15);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-listener", resultset);
+        return Evaluate("set-listener", resultset);
     }
 
     static bool GetDoorControl(Uhppoted u)
     {
         DoorControl control = u.GetDoorControl(DEVICE_ID, DOOR);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint8Result("door control mode", DoorMode.Controlled, control.mode),
             new uint8Result("door open delay", 7, control.delay),
         };
 
-        return evaluate("get-door-control", resultset);
+        return Evaluate("get-door-control", resultset);
     }
 
     static bool SetDoorControl(Uhppoted u)
     {
         u.SetDoorControl(DEVICE_ID, DOOR, DoorMode.NormallyClosed, 6);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-door-control", resultset);
+        return Evaluate("set-door-control", resultset);
     }
 
     static bool OpenDoor(Uhppoted u)
     {
         u.OpenDoor(DEVICE_ID, DOOR);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("open-door", resultset);
+        return Evaluate("open-door", resultset);
     }
 
     static bool GetCards(Uhppoted u)
     {
         uint cards = u.GetCards(DEVICE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("card count", 39, cards),
         };
 
-        return evaluate("get-cards", resultset);
+        return Evaluate("get-cards", resultset);
     }
 
     static bool GetCard(Uhppoted u)
     {
         Card card = u.GetCard(DEVICE_ID, CARD_NUMBER);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("card number", 8165538, card.cardNumber),
             new stringResult("'from' date", "2022-01-01", card.from),
             new stringResult("'to' date", "2022-12-31", card.to),
@@ -354,16 +354,20 @@ public class Tests
             new uint8Result("doors[3]", 31, card.doors[2]),
             new uint8Result("doors[4]", 75, card.doors[3]),
             new uint32Result("card PIN", 7531, card.PIN),
+            new boolResult("firstcard[1]", true, card.firstcard[0]),
+            new boolResult("firstcard[2]", true, card.firstcard[1]),
+            new boolResult("firstcard[3]", false, card.firstcard[2]),
+            new boolResult("firstcard[4]", true, card.firstcard[3]),
         };
 
-        return evaluate("get-card", resultset);
+        return Evaluate("get-card", resultset);
     }
 
     static bool GetCardByIndex(Uhppoted u)
     {
         Card card = u.GetCardByIndex(DEVICE_ID, CARD_INDEX);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("card number", 8165538, card.cardNumber),
             new stringResult("'from' date", "2022-01-01", card.from),
             new stringResult("'to' date", "2022-12-31", card.to),
@@ -372,65 +376,70 @@ public class Tests
             new uint8Result("doors[3]", 31, card.doors[2]),
             new uint8Result("doors[4]", 75, card.doors[3]),
             new uint32Result("card PIN", 7531, card.PIN),
+            new boolResult("firstcard[1]", true, card.firstcard[0]),
+            new boolResult("firstcard[2]", false, card.firstcard[1]),
+            new boolResult("firstcard[3]", true, card.firstcard[2]),
+            new boolResult("firstcard[4]", true, card.firstcard[3]),
         };
 
-        return evaluate("get-card-by-index", resultset);
+        return Evaluate("get-card-by-index", resultset);
     }
 
     static bool PutCard(Uhppoted u)
     {
         byte[] doors = { 0, 1, 31, 75 };
+        bool[] firstcard = { true, true, false, true };
 
-        u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors, 7531);
+        u.PutCard(DEVICE_ID, CARD_NUMBER, "2022-01-01", "2022-12-31", doors, 7531, firstcard);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("put-card", resultset);
+        return Evaluate("put-card", resultset);
     }
 
     static bool DeleteCard(Uhppoted u)
     {
         u.DeleteCard(DEVICE_ID, CARD_NUMBER);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("delete-card", resultset);
+        return Evaluate("delete-card", resultset);
     }
 
     static bool DeleteCards(Uhppoted u)
     {
         u.DeleteCards(DEVICE_ID);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("delete-cards", resultset);
+        return Evaluate("delete-cards", resultset);
     }
 
     static bool GetEventIndex(Uhppoted u)
     {
         uint index = u.GetEventIndex(DEVICE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("index", 47, index),
         };
 
-        return evaluate("get-event-index", resultset);
+        return Evaluate("get-event-index", resultset);
     }
 
     static bool SetEventIndex(Uhppoted u)
     {
         u.SetEventIndex(DEVICE_ID, EVENT_INDEX);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-event-index", resultset);
+        return Evaluate("set-event-index", resultset);
     }
 
     static bool GetEvent(Uhppoted u)
     {
         Event evt = u.GetEvent(DEVICE_ID, EVENT_INDEX);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint32Result("event index", 51, evt.index),
             new stringResult("event timestamp", "2022-04-15 12:29:15", evt.timestamp),
             new uint8Result("event type", 6, evt.eventType),
@@ -441,23 +450,23 @@ public class Tests
             new uint8Result("event reason", 21, evt.reason),
         };
 
-        return evaluate("get-event", resultset);
+        return Evaluate("get-event", resultset);
     }
 
     static bool RecordSpecialEvents(Uhppoted u)
     {
         u.RecordSpecialEvents(DEVICE_ID, true);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("record-special-events", resultset);
+        return Evaluate("record-special-events", resultset);
     }
 
     static bool GetTimeProfile(Uhppoted u)
     {
         TimeProfile profile = u.GetTimeProfile(DEVICE_ID, PROFILE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint8Result("profile ID", 49, profile.ID),
             new uint8Result("linked profile ID", 71, profile.linked),
             new stringResult("profile 'from' date", "2022-02-01", profile.from),
@@ -477,7 +486,7 @@ public class Tests
             new stringResult("profile segment 3 end", "18:00", profile.segment3end),
         };
 
-        return evaluate("get-time-profile", resultset);
+        return Evaluate("get-time-profile", resultset);
     }
 
     static bool SetTimeProfile(Uhppoted u)
@@ -490,18 +499,18 @@ public class Tests
 
         u.SetTimeProfile(DEVICE_ID, profile);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-time-profile", resultset);
+        return Evaluate("set-time-profile", resultset);
     }
 
     static bool ClearTimeProfiles(Uhppoted u)
     {
         u.ClearTimeProfiles(DEVICE_ID);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("clear-time-profiles", resultset);
+        return Evaluate("clear-time-profiles", resultset);
     }
 
     static bool AddTask(Uhppoted u)
@@ -513,83 +522,83 @@ public class Tests
 
         u.AddTask(DEVICE_ID, task);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("add-task", resultset);
+        return Evaluate("add-task", resultset);
     }
 
     static bool RefreshTaskList(Uhppoted u)
     {
         u.RefreshTaskList(DEVICE_ID);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("refresh-tasklist", resultset);
+        return Evaluate("refresh-tasklist", resultset);
     }
 
     static bool ClearTaskList(Uhppoted u)
     {
         u.ClearTaskList(DEVICE_ID);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("clear-tasklist", resultset);
+        return Evaluate("clear-tasklist", resultset);
     }
 
     static bool SetPCControl(Uhppoted u)
     {
         u.SetPCControl(DEVICE_ID, true);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-pc-control", resultset);
+        return Evaluate("set-pc-control", resultset);
     }
 
     static bool GetAntiPassback(Uhppoted u)
     {
         byte antipassback = u.GetAntiPassback(DEVICE_ID);
 
-        result[] resultset = {
+        Result[] resultset = {
             new uint8Result("antipassback", 2, antipassback),
         };
 
-        return evaluate("get-antipassback", resultset);
+        return Evaluate("get-antipassback", resultset);
     }
 
     static bool SetInterlock(Uhppoted u)
     {
         u.SetInterlock(DEVICE_ID, 4);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-interlock", resultset);
+        return Evaluate("set-interlock", resultset);
     }
 
     static bool ActivateKeypads(Uhppoted u)
     {
         u.ActivateKeypads(DEVICE_ID, true, true, false, true);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("activate-keypads", resultset);
+        return Evaluate("activate-keypads", resultset);
     }
 
     static bool SetDoorPasscodes(Uhppoted u)
     {
         u.SetDoorPasscodes(DEVICE_ID, DOOR, 12345, 999999, 0, 54321);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-door-passcodes", resultset);
+        return Evaluate("set-door-passcodes", resultset);
     }
 
     static bool SetAntiPassback(Uhppoted u)
     {
         u.SetAntiPassback(DEVICE_ID, 2);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-antipassback", resultset);
+        return Evaluate("set-antipassback", resultset);
     }
 
     static bool SetFirstCard(Uhppoted u)
@@ -600,18 +609,18 @@ public class Tests
 
         u.SetFirstCard(DEVICE_ID, DOOR, firstcard);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("set-firstcard", resultset);
+        return Evaluate("set-firstcard", resultset);
     }
 
     static bool RestoreDefaultParameters(Uhppoted u)
     {
         u.RestoreDefaultParameters(DEVICE_ID);
 
-        result[] resultset = { };
+        Result[] resultset = { };
 
-        return evaluate("restore-default-parameters", resultset);
+        return Evaluate("restore-default-parameters", resultset);
     }
 
     static bool Listen(Uhppoted u)
@@ -638,7 +647,7 @@ public class Tests
         // exit.IsBackground = false;
         // exit.Start();
         //
-        // result[] resultset = {
+        // Result[] resultset = {
         //     new uint32Result("event controller", 405419896, testEvent.controller),
         //     new uint32Result("event index", 17, testEvent.index),
         //     new stringResult("event timestamp", "2024-07-05 12:36:45", testEvent.timestamp),
@@ -650,7 +659,7 @@ public class Tests
         //     new uint8Result("event reason", 21, testEvent.reason),
         // };
         //
-        // return evaluate("listen", resultset);
+        // return Evaluate("listen", resultset);
 
         return true;
     }
@@ -660,17 +669,20 @@ public class Tests
         Uhppoted.OnEvent onevent = (ListenEvent e, IntPtr userdata) =>
         {
             GCHandle handle = (GCHandle)userdata;
-            ListenEvent evt = handle.Target as ListenEvent;
+            ListenEvent? evt = handle.Target as ListenEvent;
 
-            evt.controller = e.controller;
-            evt.timestamp = e.timestamp;
-            evt.index = e.index;
-            evt.eventType = e.eventType;
-            evt.granted = e.granted;
-            evt.door = e.door;
-            evt.direction = e.direction;
-            evt.card = e.card;
-            evt.reason = e.reason;
+            if (evt != null)
+            {
+                evt.controller = e.controller;
+                evt.timestamp = e.timestamp;
+                evt.index = e.index;
+                evt.eventType = e.eventType;
+                evt.granted = e.granted;
+                evt.door = e.door;
+                evt.direction = e.direction;
+                evt.card = e.card;
+                evt.reason = e.reason;
+            }
 
             handle.Free();
         };
@@ -723,55 +735,55 @@ public class Tests
 
     static bool Internationalisation(Uhppoted u)
     {
-        string normally_open = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyOpen, "");
-        string normally_closed = lookup.find(lookup.LOOKUP_MODE, DoorMode.NormallyClosed, "");
-        string controlled = lookup.find(lookup.LOOKUP_MODE, DoorMode.Controlled, "");
+        string normally_open = Lookup.find(Lookup.LOOKUP_MODE, DoorMode.NormallyOpen, "");
+        string normally_closed = Lookup.find(Lookup.LOOKUP_MODE, DoorMode.NormallyClosed, "");
+        string controlled = Lookup.find(Lookup.LOOKUP_MODE, DoorMode.Controlled, "");
 
-        string direction_in = lookup.find(lookup.LOOKUP_DIRECTION, Direction.In, "");
-        string direction_out = lookup.find(lookup.LOOKUP_DIRECTION, Direction.Out, "");
+        string direction_in = Lookup.find(Lookup.LOOKUP_DIRECTION, Direction.In, "");
+        string direction_out = Lookup.find(Lookup.LOOKUP_DIRECTION, Direction.Out, "");
 
-        string event_type_none = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.None, "");
-        string event_type_swipe = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Swipe, "");
-        string event_type_door = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Door, "");
-        string event_type_alarm = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Alarm, "");
-        string event_type_overwritten = lookup.find(lookup.LOOKUP_EVENT_TYPE, EventType.Overwritten, "");
+        string event_type_none = Lookup.find(Lookup.LOOKUP_EVENT_TYPE, EventType.None, "");
+        string event_type_swipe = Lookup.find(Lookup.LOOKUP_EVENT_TYPE, EventType.Swipe, "");
+        string event_type_door = Lookup.find(Lookup.LOOKUP_EVENT_TYPE, EventType.Door, "");
+        string event_type_alarm = Lookup.find(Lookup.LOOKUP_EVENT_TYPE, EventType.Alarm, "");
+        string event_type_overwritten = Lookup.find(Lookup.LOOKUP_EVENT_TYPE, EventType.Overwritten, "");
 
-        string none = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.None, "");
-        string swipe = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Swipe, "");
-        string swipe_open = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.SwipeOpen, "");
-        string swipe_close = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.SwipeClose, "");
-        string denied = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Denied, "");
-        string no_access_rights = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.NoAccessRights, "");
-        string incorrect_password = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.IncorrectPassword, "");
-        string anti_passback = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.AntiPassback, "");
-        string more_cards = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.MoreCards, "");
-        string first_card_open = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.FirstCardOpen, "");
-        string door_is_normally_closed = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorIsNormallyClosed, "");
-        string interlock = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Interlock, "");
-        string not_in_allowed_time_period = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.NotInAllowedTimePeriod, "");
-        string invalid_timezone = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.InvalidTimezone, "");
-        string access_denied = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.AccessDenied, "");
-        string push_button_ok = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonOk, "");
-        string door_opened = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpened, "");
-        string door_closed = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorClosed, "");
-        string door_opened_supervisor_password = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpenedSupervisorPassword, "");
-        string controller_power_on = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ControllerPowerOn, "");
-        string controller_reset = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ControllerReset, "");
-        string pushbutton_invalid_door_locked = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidDoorLocked, "");
-        string pushbutton_invalid_offline = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidOffline, "");
-        string pushbutton_invalid_interlock = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidInterlock, "");
-        string pushbutton_invalid_threat = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidThreat, "");
-        string door_open_too_long = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpenTooLong, "");
-        string forced_open = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ForcedOpen, "");
-        string fire = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Fire, "");
-        string forced_closed = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.ForcedClosed, "");
-        string theft_prevention = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.TheftPrevention, "");
-        string zone24x7 = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Zone24x7, "");
-        string emergency = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.Emergency, "");
-        string remote_open_door = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.RemoteOpenDoor, "");
-        string remote_open_door_usb_reader = lookup.find(lookup.LOOKUP_EVENT_REASON, EventReason.RemoteOpenDoorUSBReader, "");
+        string none = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.None, "");
+        string swipe = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.Swipe, "");
+        string swipe_open = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.SwipeOpen, "");
+        string swipe_close = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.SwipeClose, "");
+        string denied = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.Denied, "");
+        string no_access_rights = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.NoAccessRights, "");
+        string incorrect_password = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.IncorrectPassword, "");
+        string anti_passback = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.AntiPassback, "");
+        string more_cards = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.MoreCards, "");
+        string first_card_open = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.FirstCardOpen, "");
+        string door_is_normally_closed = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.DoorIsNormallyClosed, "");
+        string interlock = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.Interlock, "");
+        string not_in_allowed_time_period = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.NotInAllowedTimePeriod, "");
+        string invalid_timezone = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.InvalidTimezone, "");
+        string access_denied = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.AccessDenied, "");
+        string push_button_ok = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonOk, "");
+        string door_opened = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpened, "");
+        string door_closed = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.DoorClosed, "");
+        string door_opened_supervisor_password = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpenedSupervisorPassword, "");
+        string controller_power_on = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.ControllerPowerOn, "");
+        string controller_reset = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.ControllerReset, "");
+        string pushbutton_invalid_door_locked = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidDoorLocked, "");
+        string pushbutton_invalid_offline = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidOffline, "");
+        string pushbutton_invalid_interlock = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidInterlock, "");
+        string pushbutton_invalid_threat = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.PushbuttonInvalidThreat, "");
+        string door_open_too_long = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.DoorOpenTooLong, "");
+        string forced_open = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.ForcedOpen, "");
+        string fire = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.Fire, "");
+        string forced_closed = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.ForcedClosed, "");
+        string theft_prevention = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.TheftPrevention, "");
+        string zone24x7 = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.Zone24x7, "");
+        string emergency = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.Emergency, "");
+        string remote_open_door = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.RemoteOpenDoor, "");
+        string remote_open_door_usb_reader = Lookup.find(Lookup.LOOKUP_EVENT_REASON, EventReason.RemoteOpenDoorUSBReader, "");
 
-        result[] resultset = {
+        Result[] resultset = {
             new stringResult("normally open", "normally open", normally_open),
             new stringResult("normally closed", "normally closed", normally_closed),
             new stringResult("controlled", "controlled", controlled),
@@ -818,7 +830,7 @@ public class Tests
             new stringResult("remote_open_door_usb_reader", "remote open door (USB reader)", remote_open_door_usb_reader),
         };
 
-        return evaluate("lookup", resultset);
+        return Evaluate("lookup", resultset);
     }
 
     static bool Errors(Uhppoted u)
@@ -836,11 +848,11 @@ public class Tests
             failed["get-controller"] = true;
         }
 
-        result[] resultset = {
+        Result[] resultset = {
             new boolResult("get-controller", true, failed["get-controller"]),
         };
 
-        return evaluate("errors", resultset);
+        return Evaluate("errors", resultset);
     }
 
     static bool Structs(Uhppoted u)
@@ -855,7 +867,7 @@ public class Tests
         return passed("structs");
     }
 
-    static bool evaluate(string tag, result[] resultset)
+    static bool Evaluate(string tag, Result[] resultset)
     {
         bool ok = true;
 
@@ -941,9 +953,9 @@ public class Tests
 
 // *** Utility classes for test evaluation ***
 
-public class result { }
+public class Result { }
 
-public class uint32Result : result
+public class uint32Result : Result
 {
     public string field { get; }
     public uint expected { get; }
@@ -957,7 +969,7 @@ public class uint32Result : result
     }
 }
 
-public class uint8Result : result
+public class uint8Result : Result
 {
     public string field { get; }
     public byte expected { get; }
@@ -971,7 +983,7 @@ public class uint8Result : result
     }
 }
 
-public class boolResult : result
+public class boolResult : Result
 {
     public string field { get; }
     public bool expected { get; }
@@ -985,7 +997,7 @@ public class boolResult : result
     }
 }
 
-public class stringResult : result
+public class stringResult : Result
 {
     public string field { get; }
     public string expected { get; }

@@ -441,14 +441,18 @@ class UhppotedDLLCLI
         Card card = u.GetCard(controller, cardNumber);
 
         WriteLine(Format("get-card ({0})", controller));
-        WriteLine(Format("   card number {0}", card.cardNumber));
-        WriteLine(Format("   from        {0}", card.from));
-        WriteLine(Format("   to          {0}", card.to));
-        WriteLine(Format("   door[1]     {0}", card.doors[0]));
-        WriteLine(Format("   door[2]     {0}", card.doors[1]));
-        WriteLine(Format("   door[3]     {0}", card.doors[2]));
-        WriteLine(Format("   door[4]     {0}", card.doors[3]));
-        WriteLine(Format("   PIN         {0}", card.PIN));
+        WriteLine(Format("   card number  {0}", card.cardNumber));
+        WriteLine(Format("   from         {0}", card.from));
+        WriteLine(Format("   to           {0}", card.to));
+        WriteLine(Format("   door[1]      {0}", card.doors[0]));
+        WriteLine(Format("   door[2]      {0}", card.doors[1]));
+        WriteLine(Format("   door[3]      {0}", card.doors[2]));
+        WriteLine(Format("   door[4]      {0}", card.doors[3]));
+        WriteLine(Format("   firstcard[1] {0}", card.firstcard[0]));
+        WriteLine(Format("   firstcard[2] {0}", card.firstcard[1]));
+        WriteLine(Format("   firstcard[3] {0}", card.firstcard[2]));
+        WriteLine(Format("   firstcard[4] {0}", card.firstcard[3]));
+        WriteLine(Format("   PIN          {0}", card.PIN));
     }
 
     static void GetCardByIndex(Uhppoted u, string[] args)
@@ -466,6 +470,10 @@ class UhppotedDLLCLI
         WriteLine(Format("   door[2]     {0}", card.doors[1]));
         WriteLine(Format("   door[3]     {0}", card.doors[2]));
         WriteLine(Format("   door[4]     {0}", card.doors[3]));
+        WriteLine(Format("   firstcard[1] {0}", card.firstcard[0]));
+        WriteLine(Format("   firstcard[2] {0}", card.firstcard[1]));
+        WriteLine(Format("   firstcard[3] {0}", card.firstcard[2]));
+        WriteLine(Format("   firstcard[4] {0}", card.firstcard[3]));
         WriteLine(Format("   PIN         {0}", card.PIN));
     }
 
@@ -477,44 +485,70 @@ class UhppotedDLLCLI
         string end = ParseArgs(args, "--end", CARD_TO);
         uint PIN = ParseArgs(args, "--PIN", CARD_PIN);
         byte[] doors = { 0, 0, 0, 0 };
+        bool[] firstcard = { false, false, false, false };
 
-        Regex re = new Regex(@"([1-4])(:([0-9]{1,3}))?", RegexOptions.ECMAScript);
-        string v = ParseArgs(args, "--doors", "");
-        MatchCollection matches = re.Matches(v);
-
-        foreach (Match match in matches)
+        // ... doors
         {
-            if (match.Groups[1].Success)
-            {
-                int door = Convert.ToInt16(match.Groups[1].Value);
-                int ix = door - 1;
+            Regex re = new Regex(@"([1-4])(:([0-9]{1,3}))?", RegexOptions.ECMAScript);
+            string v = ParseArgs(args, "--doors", "");
+            MatchCollection matches = re.Matches(v);
 
-                if (match.Groups[3].Success)
+            foreach (Match match in matches)
+            {
+                if (match.Groups[1].Success)
                 {
-                    byte profile = Convert.ToByte(match.Groups[3].Value);
-                    if (profile > 1 && profile < 255)
+                    int door = Convert.ToInt16(match.Groups[1].Value);
+                    int ix = door - 1;
+
+                    if (match.Groups[3].Success)
                     {
-                        doors[ix] = profile;
+                        byte profile = Convert.ToByte(match.Groups[3].Value);
+                        if (profile > 1 && profile < 255)
+                        {
+                            doors[ix] = profile;
+                        }
                     }
-                }
-                else
-                {
-                    doors[ix] = 1;
+                    else
+                    {
+                        doors[ix] = 1;
+                    }
                 }
             }
         }
 
-        u.PutCard(controller, cardNumber, start, end, doors, PIN);
+        // ... first-card
+        {
+            Regex re = new Regex(@"([1-4])", RegexOptions.ECMAScript);
+            string v = ParseArgs(args, "--firstcard", "");
+            MatchCollection matches = re.Matches(v);
+
+            foreach (Match match in matches)
+            {
+                if (match.Groups[1].Success)
+                {
+                    int door = Convert.ToInt16(match.Groups[1].Value);
+                    int ix = door - 1;
+
+                    firstcard[ix] = true;
+                }
+            }
+        }
+
+        u.PutCard(controller, cardNumber, start, end, doors, PIN, firstcard);
 
         WriteLine(Format("put-card ({0})", controller));
-        WriteLine(Format("   card number {0}", cardNumber));
-        WriteLine(Format("   start date  {0}", start));
-        WriteLine(Format("   end date    {0}", end));
-        WriteLine(Format("   door[1]     {0}", doors[0]));
-        WriteLine(Format("   door[2]     {0}", doors[1]));
-        WriteLine(Format("   door[3]     {0}", doors[2]));
-        WriteLine(Format("   door[4]     {0}", doors[3]));
-        WriteLine(Format("   PIN         {0}", PIN));
+        WriteLine(Format("   card number  {0}", cardNumber));
+        WriteLine(Format("   start date   {0}", start));
+        WriteLine(Format("   end date     {0}", end));
+        WriteLine(Format("   door[1]      {0}", doors[0]));
+        WriteLine(Format("   door[2]      {0}", doors[1]));
+        WriteLine(Format("   door[3]      {0}", doors[2]));
+        WriteLine(Format("   door[4]      {0}", doors[3]));
+        WriteLine(Format("   firstcard[1] {0}", firstcard[0]));
+        WriteLine(Format("   firstcard[2] {0}", firstcard[1]));
+        WriteLine(Format("   firstcard[3] {0}", firstcard[2]));
+        WriteLine(Format("   firstcard[4] {0}", firstcard[3]));
+        WriteLine(Format("   PIN          {0}", PIN));
     }
 
     static void DeleteCard(Uhppoted u, string[] args)

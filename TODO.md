@@ -7,7 +7,7 @@
     - [x] API
     - [x] C
     - [x] C++
-    - [ ] dotnet
+    - [x] dotnet
     - [ ] python
     - [ ] CCL
 

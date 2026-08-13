@@ -23,7 +23,7 @@ namespace uhppoted
             this.u.debug = debug;
 
             uint N = (uint)controllers.Length;
-            udevice[] list = new udevice[N];
+            UDevice[] list = new UDevice[N];
 
             for (int ix = 0; ix < controllers.Length; ix++)
             {
@@ -34,18 +34,18 @@ namespace uhppoted
                 list[ix].transport = c.transport;
             }
 
-            int sz = Marshal.SizeOf(typeof(udevice));
+            int sz = Marshal.SizeOf(typeof(UDevice));
             IntPtr p = Marshal.AllocHGlobal((int)N * sz);
 
             for (int ix = 0; ix < list.Length; ix++)
             {
-                udevice d = list[ix];
+                UDevice d = list[ix];
                 IntPtr q = p + ix * sz;
 
                 Marshal.StructureToPtr(d, q, false);
             }
 
-            udevices devices = new udevices();
+            UDevices devices = new UDevices();
             devices.N = N;
             devices.devices = p;
 
@@ -69,7 +69,7 @@ namespace uhppoted
 
             if (p != IntPtr.Zero)
             {
-                udevices devices = (udevices)Marshal.PtrToStructure(p, typeof(udevices))!;
+                UDevices devices = (UDevices)Marshal.PtrToStructure(p, typeof(UDevices))!;
                 IntPtr q = devices.devices;
 
                 Marshal.FreeHGlobal(q);
@@ -466,6 +466,7 @@ namespace uhppoted
             card.from = Marshal.AllocHGlobal(11);
             card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
+            card.firstcard = Marshal.AllocHGlobal(4);
 
             err.len = 256;
             err.message = Marshal.AllocHGlobal(256);
@@ -480,16 +481,19 @@ namespace uhppoted
                 string from = Marshal.PtrToStringAnsi(card.from)!;
                 string to = Marshal.PtrToStringAnsi(card.to)!;
                 byte[] doors = new byte[4];
+                byte[] firstcard = new byte[4];
 
                 Marshal.Copy(card.doors, doors, 0, 4);
+                Marshal.Copy(card.firstcard, firstcard, 0, 4);
 
-                return new Card(card.cardNumber, from, to, doors, card.PIN);
+                return new Card(card.cardNumber, from, to, doors, card.PIN, firstcard);
             }
             finally
             {
                 Marshal.FreeHGlobal(card.from);
                 Marshal.FreeHGlobal(card.to);
                 Marshal.FreeHGlobal(card.doors);
+                Marshal.FreeHGlobal(card.firstcard);
                 Marshal.FreeHGlobal(err.message);
             }
         }
@@ -502,6 +506,7 @@ namespace uhppoted
             card.from = Marshal.AllocHGlobal(11);
             card.to = Marshal.AllocHGlobal(11);
             card.doors = Marshal.AllocHGlobal(4);
+            card.firstcard = Marshal.AllocHGlobal(4);
 
             err.len = 256;
             err.message = Marshal.AllocHGlobal(256);
@@ -516,21 +521,24 @@ namespace uhppoted
                 string from = Marshal.PtrToStringAnsi(card.from)!;
                 string to = Marshal.PtrToStringAnsi(card.to)!;
                 byte[] doors = new byte[4];
+                byte[] firstcard = new byte[4];
 
                 Marshal.Copy(card.doors, doors, 0, 4);
+                Marshal.Copy(card.firstcard, firstcard, 0, 4);
 
-                return new Card(card.cardNumber, from, to, doors, card.PIN);
+                return new Card(card.cardNumber, from, to, doors, card.PIN, firstcard);
             }
             finally
             {
                 Marshal.FreeHGlobal(card.from);
                 Marshal.FreeHGlobal(card.to);
                 Marshal.FreeHGlobal(card.doors);
+                Marshal.FreeHGlobal(card.firstcard);
                 Marshal.FreeHGlobal(err.message);
             }
         }
 
-        public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN)
+        public void PutCard(uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, bool[] firstcard)
         {
             GoError err = new GoError();
 
@@ -539,7 +547,14 @@ namespace uhppoted
 
             try
             {
-                if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, ref err) != 0)
+                byte[] _firstcard = [0, 0, 0, 0];
+
+                _firstcard[0] = firstcard[0] ? (byte)1 : (byte)0;
+                _firstcard[1] = firstcard[1] ? (byte)1 : (byte)0;
+                _firstcard[2] = firstcard[2] ? (byte)1 : (byte)0;
+                _firstcard[3] = firstcard[3] ? (byte)1 : (byte)0;
+
+                if (PutCard(ref this.u, deviceID, cardNumber, from, to, doors, PIN, _firstcard, ref err) != 0)
                 {
                     raise(err);
                 }
@@ -1202,7 +1217,7 @@ namespace uhppoted
         private static extern int GetCardByIndex(ref UHPPOTE u, uint deviceID, uint index, ref GoCard card, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, ref GoError err);
+        private static extern int PutCard(ref UHPPOTE u, uint deviceID, uint cardNumber, string from, string to, byte[] doors, uint PIN, byte[] firstcard, ref GoError err);
 
         [DllImport(DLL, CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         private static extern int DeleteCard(ref UHPPOTE u, uint deviceID, uint cardNumber, ref GoError err);
@@ -1268,7 +1283,7 @@ namespace uhppoted
         private static extern int Listen(ref UHPPOTE u, OnListenEvent handler, ref byte running, ref byte stop, OnListenError errx, IntPtr userdata);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        struct udevice
+        struct UDevice
         {
             public uint ID;
             public string address;
@@ -1276,10 +1291,10 @@ namespace uhppoted
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        struct udevices
+        struct UDevices
         {
             public uint N;
-            public IntPtr devices; // array of udevice *
+            public IntPtr devices; // array of UDevice *
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1289,7 +1304,7 @@ namespace uhppoted
             public string broadcast;
             public string listen;
             public int timeout;    // seconds, defaults to 5 if <= 0
-            public IntPtr devices; // udevices * (optional list of non-local controller
+            public IntPtr devices; // UDevices * (optional list of non-local controller
                                    // ID + address pairs)
             public bool debug;
         }
@@ -1356,6 +1371,7 @@ namespace uhppoted
             public IntPtr to;
             public IntPtr doors;
             public uint PIN;
+            public IntPtr firstcard;
         }
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
@@ -1590,14 +1606,31 @@ namespace uhppoted
         public string to;
         public byte[] doors;
         public uint PIN;
+        public bool[] firstcard;
 
-        public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN)
+        public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN, bool[] firstcard)
         {
             this.cardNumber = cardNumber;
             this.from = from;
             this.to = to;
             this.doors = doors;
             this.PIN = PIN;
+            this.firstcard = firstcard;
+        }
+
+        public Card(uint cardNumber, string from, string to, byte[] doors, uint PIN, byte[] firstcard)
+        {
+            this.cardNumber = cardNumber;
+            this.from = from;
+            this.to = to;
+            this.doors = doors;
+            this.PIN = PIN;
+            this.firstcard = [
+                firstcard[0] != 0,
+                firstcard[1] != 0,
+                firstcard[2] != 0,
+                firstcard[3] != 0,
+            ];
         }
     }
 
@@ -1721,7 +1754,7 @@ namespace uhppoted
         }
     }
 
-    public class lookup
+    public class Lookup
     {
         public const string LOOKUP_MODE = "door.mode";
         public const string LOOKUP_DIRECTION = "event.direction";

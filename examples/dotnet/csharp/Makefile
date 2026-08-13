@@ -53,7 +53,7 @@ get-card-by-index: build
 	$(CLI) get-card-by-index --controller $(CONTROLLER) --index 3
 
 put-card: build
-	$(CLI) put-card --controller $(CONTROLLER) --card 10058400 --start 2023-01-01 --end 2023-12-31 --doors 1,2,4 --PIN 7531
+	$(CLI) put-card --controller $(CONTROLLER) --card 10058400 --start 2023-01-01 --end 2023-12-31 --doors 1,2,4 --PIN 7531 --firstcard 1,3
 
 delete-card: build
 	$(CLI) delete-card --controller $(CONTROLLER) --card 10058400
