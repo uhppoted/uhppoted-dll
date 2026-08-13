@@ -260,7 +260,8 @@ void uhppoted::put_card(uint32_t id,
                         std::string from, 
                         std::string to, 
                         uint8_t doors[4],
-                        uint32_t PIN);
+                        uint32_t PIN,
+                        bool firstcard[4]);
 
 id           controller serial number 
 card_number  card number
@@ -268,6 +269,7 @@ from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
 PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
+firstcard    4 boolean array with first-card permissions
 
 Throws a uhppoted_exception if the call failed. The error message can be retrieved using the 
 uhppoted_exception::what() method.
@@ -626,6 +628,7 @@ typedef struct card {
     std::string to;
     uint8_t doors[4];
     uint32_t PIN;
+    bool firstcard[4];
 } card;
 ```
 

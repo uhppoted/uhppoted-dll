@@ -248,6 +248,7 @@ from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
 PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
+firstcard    4 bool array with firstcard permissions
 
 Throws a UhppotedException if the call failed.
 ```
@@ -575,6 +576,7 @@ public class Card {
     public string to;
     public byte[] doors;
     public uint PIN;
+    public bool[] firstcard;
 }
 ```
 

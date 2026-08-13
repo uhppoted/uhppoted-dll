@@ -264,6 +264,7 @@ from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
 PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
+firstcard    4 bool array with first-card permissions
 
 Raises a `uhppoted-error` condition if the call failed.
 ```
@@ -570,7 +571,8 @@ Container class for card information retrieved by `get_card` and `get_card_by_in
                 from
                 to
                 doors
-                PIN)
+                PIN
+                firstcard)
 ```
 
 ### `TimeProfile`

@@ -276,6 +276,7 @@ from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
 PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
+firstcard    4 bool array with firstcard permissions
 
 Returns:
 - 0  if the call succeeded. 
@@ -649,6 +650,7 @@ typedef struct card {
     char to[11];
     uint8_t doors[4];
     uint32_t PIN;
+    bool firstcard[4];
 } card;
 ```
 

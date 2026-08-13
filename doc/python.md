@@ -243,6 +243,7 @@ from         card valid from date, inclusive (YYYY-MM-dd)
 to           card valid until, inclusive (YYYY-MM-dd)
 doors        4 byte array with card permissions
 PIN          reader keypad PIN ([0..999999], 0 for 'no PIN')
+firstcard    4 bool array with firstcard permissions
 
 Raises an Exception if the call failed.
 ```
@@ -580,6 +581,7 @@ class Card:
     end: str
     doors: list[int]
     PIN: uint
+    firstcard: list[bool]
 ```
 
 ### `TimeProfile`
