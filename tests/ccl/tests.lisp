@@ -151,22 +151,22 @@
   (let ((card (exec #'(lambda (u) (uhppoted-get-card u TEST-DEVICE-ID TEST-CARD-NUMBER)))))
     (evaluate "get-card" 
               (list (make-result :field "card number"      :expected 8165538      :value (card-card-number card))
-                    (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from card))
-                    (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to card))
-                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))
-                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN card))
-                    (make-result :field "card first-card"  :expected '(T T nil T) :value (card-doors card))))))
+                    (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from        card))
+                    (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to          card))
+                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors       card))
+                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN         card))
+                    (make-result :field "card first-card"  :expected '(T T nil T) :value (card-firstcard   card))))))
 
 
 (defun get-card-by-index () "" 
   (let ((card (exec #'(lambda (u) (uhppoted-get-card-by-index u TEST-DEVICE-ID TEST-CARD-INDEX)))))
     (evaluate "get-card-by-index" 
               (list (make-result :field "card number"      :expected 8165538      :value (card-card-number card))
-                    (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from  card))
-                    (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to    card))
-                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))
-                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN   card))
-                    (make-result :field "card first-card"  :expected '(T nil T T) :value (card-doors card))))))
+                    (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from        card))
+                    (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to          card))
+                    (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors       card))
+                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN         card))
+                    (make-result :field "card first-card"  :expected '(T nil T T) :value (card-firstcard   card))))))
 
 
 (defun put-card () "" 
