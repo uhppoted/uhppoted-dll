@@ -698,13 +698,12 @@
   (dispose-heap-ivector to)
   (dispose-heap-ivector errmsg))))))
 
-
 (defun uhppoted-put-card (uhppote device-id card-number from to doors PIN firstcard) "Adds or updates the card detail stored on a controller"
   (multiple-value-bind (errmsg errmsgp errlen) (make-heap-ivector 256 '(unsigned-byte 8))
     (with-cstrs ((from_ from)
                  (to_   to))
     (multiple-value-bind (doors_     pdoors)     (make-heap-ivector 4 '(unsigned-byte 8))
-                         (firstcard_ pfirstcard) (make-heap-ivector 4 '(unsigned-byte 8))
+    (multiple-value-bind (firstcard_ pfirstcard) (make-heap-ivector 4 '(unsigned-byte 8))
       (unwind-protect
         (rletz ((err (:struct :GoError) :len     errlen 
                                         :message errmsgp))
@@ -732,7 +731,7 @@
           t))
     (dispose-heap-ivector firstcard_)
     (dispose-heap-ivector doors_)
-    (dispose-heap-ivector errmsg)))))
+    (dispose-heap-ivector errmsg))))))
 
 
 (defun uhppoted-delete-card (uhppote device-id card-number) "Deletes a card from a controller"

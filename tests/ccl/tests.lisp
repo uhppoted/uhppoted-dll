@@ -154,7 +154,8 @@
                     (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from card))
                     (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to card))
                     (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))
-                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN card))))))
+                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN card))
+                    (make-result :field "card first-card"  :expected '(T T nil T) :value (card-doors card))))))
 
 
 (defun get-card-by-index () "" 
@@ -164,7 +165,8 @@
                     (make-result :field "card 'from' date" :expected "2022-01-01" :value (card-from  card))
                     (make-result :field "card 'to' date"   :expected "2022-12-31" :value (card-to    card))
                     (make-result :field "card doors"       :expected '(0 1 31 75) :value (card-doors card))
-                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN   card))))))
+                    (make-result :field "card PIN"         :expected 7531         :value (card-PIN   card))
+                    (make-result :field "card first-card"  :expected '(T nil T T) :value (card-doors card))))))
 
 
 (defun put-card () "" 
