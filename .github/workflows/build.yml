@@ -45,11 +45,8 @@ jobs:
       with:
         dotnet-version: '10.0.x'
 
-    - name: Checkout uhppoted-dll to parent folder
-      # run: git clone https://github.com/deteppohu/uhppoted-dll.git ../uhppoted-dll
-      uses: actions/checkout@v7
-      with:
-        path: '..'
+    # - name: Checkout uhppoted-dll to parent folder
+    #   run: git clone https://codeberg.org/uhppoted/uhppoted-dll.git ../uhppoted-dll
   
     - name: Checkout uhppoted-dll to workspace
       uses: actions/checkout@v7
