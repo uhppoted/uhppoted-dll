@@ -45,11 +45,14 @@ jobs:
       with:
         dotnet-version: '10.0.x'
 
-    - name: Checkout uhppoted-dll
-      run: git clone https://github.com/uhppoted/uhppoted-dll.git ../uhppoted-dll
+    - name: Checkout uhppoted-dll to parent folder
+      # run: git clone https://github.com/deteppohu/uhppoted-dll.git ../uhppoted-dll
+      uses: actions/checkout@v7
+      with:
+        path: '..'
   
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v6
+    - name: Checkout uhppoted-dll to workspace
+      uses: actions/checkout@v7
 
     - name: Create (dummy) .venv virtual environment
       run: |

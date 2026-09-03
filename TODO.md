@@ -4,12 +4,7 @@
 - [x] 'first card' API (cf. https://codeberg.org/uhppoted/uhppoted/issues/2)
 - [x] github build warning
 - [x] add first-card privilege to `get-card` and `put-card` (cf. https://codeberg.org/uhppoted/uhppoted/issues/3)
-    - [x] API
-    - [x] C
-    - [x] C++
-    - [x] dotnet
-    - [x] python
-    - [x] CCL
+
 
 ## To Be Done
 

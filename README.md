@@ -1,6 +1,7 @@
-![build](https://github.com/uhppoted/uhppoted-dll/workflows/build/badge.svg)
-![.NET](https://github.com/uhppoted/uhppoted-dll/workflows/dotnet/badge.svg)
-![CCL](https://github.com/uhppoted/uhppoted-dll/workflows/ccl/badge.svg)
+![build](https://img.shields.io/badge/dynamic/json?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json&query=$.build.status&label=build&color=$.build.colour)
+![.NET](https://img.shields.io/badge/dynamic/json?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json&query=$.dotnet.status&label=.NET&color=$.dotnet.colour)
+![CCL](https://img.shields.io/badge/dynamic/json?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json&query=$.ccl.status&label=CCL&color=$.ccl.colour)
+
 
 # uhppoted-dll
 
@@ -26,11 +27,11 @@ Supported operating systems:
 
 The releases do not include binaries - cross-compiling a DLL/shared-lib is not simple because
 the _cgo_ compiler links in a platfrom specific version of _glibc_. Building the DLL/shared-lib 
-is straightforward (see below) and only requires that _go_ and _cgo_ are installed on the system.
+is straightforward (see below) and only requires _go_ and _cgo_ to be installed.
 
 ### Current Release
 
-**[v0.9.0](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.9.0) - 2026-01-27**
+**[v0.9.0](https://codeberg.org/uhppoted/uhppoted-dll/releases/tag/v0.9.0) - 2026-01-27**
 1. Updated to Go 1.25.
 2. Removed support for _mono_.
 
