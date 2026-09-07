@@ -1,6 +1,6 @@
-![build](https://img.shields.io/badge/dynamic/json?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json&query=$.build.status&label=build&color=brightgreen)
-![.NET](https://img.shields.io/badge/dynamic/json?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json&query=$.dotnet.status&label=.NET&color=brightgreen)
-![CCL](https://img.shields.io/badge/dynamic/json?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json&query=$.ccl.status&label=CCL&color=brightgreen)
+![build](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json)
+![.NET](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/twystd/776a0d0a0d7ff1ca9a16749477381351/raw/uhppoted-dll-dotnet.json)
+![CCL](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/twystd/776a0d0a0d7ff1ca9a16749477381351/raw/uhppoted-dll-ccl.json)
 
 
 # uhppoted-dll
