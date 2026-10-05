@@ -7,7 +7,7 @@
 2. Added _firstcard_ field to `get-card`, `get-card-by-index` and `put-card` APIs.
 
 ### Updated
-1. Updated to Go v1.26.
+1. Updated to Go v1.27.
 2. Updated to _modern_ Go with `go fix`.
 3. Fixed C++ exception implementation.
 4. Migrated .NET tests from _mono_ to _dotnet_.
