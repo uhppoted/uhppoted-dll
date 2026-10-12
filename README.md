@@ -31,9 +31,15 @@ is straightforward (see below) and only requires _go_ and _cgo_ to be installed.
 
 ### Current Release
 
-**[v0.9.0](https://codeberg.org/uhppoted/uhppoted-dll/releases/tag/v0.9.0) - 2026-01-27**
-1. Updated to Go 1.25.
-2. Removed support for _mono_.
+## [0.9.1](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.9.1) - 2026-10-12
+
+1. Migrated from _github_ to _codeberg_.
+2. Updated to Go v1.27.
+3. Added `set-firstcard` API bindings, examples and tests.
+4. Added _firstcard_ field to `get-card`, `get-card-by-index` and `put-card` APIs.
+5. Fixed C++ exception implementation.
+6. Migrated .NET tests from _mono_ to _dotnet_.
+7. Unified .NET/vs-mac and .NET/vs-win CLI examples.
 
 
 ## Installation

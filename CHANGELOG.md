@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## [0.9.1](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.9.1) - 2026-10-12
 
 ### Added
 1. `set-firstcard` API bindings, examples and tests.
