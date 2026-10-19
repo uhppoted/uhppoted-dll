@@ -1,6 +1,6 @@
-![build](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/twystd/2609d9356470acaf904386ce4a74f54e/raw/uhppoted-dll.json)
-![.NET](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/twystd/776a0d0a0d7ff1ca9a16749477381351/raw/uhppoted-dll-dotnet.json)
-![CCL](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/twystd/776a0d0a0d7ff1ca9a16749477381351/raw/uhppoted-dll-ccl.json)
+![build](https://github.com/uhppoted/uhppoted-dll/workflows/build/badge.svg)
+![.NET](https://github.com/uhppoted/uhppoted-dll/workflows/dotnet/badge.svg)
+![CCL](https://github.com/uhppoted/uhppoted-dll/workflows/ccld/badge.svg)
 
 
 # uhppoted-dll
@@ -31,7 +31,7 @@ is straightforward (see below) and only requires _go_ and _cgo_ to be installed.
 
 ### Current Release
 
-## [0.9.1](https://github.com/uhppoted/uhppoted-dll/releases/tag/v0.9.1) - 2026-10-12
+## [0.9.1](https://codeberg.org/uhppoted/uhppoted-dll/releases/tag/v0.9.1) - 2026-10-12
 
 1. Migrated from _github_ to _codeberg_.
 2. Updated to Go v1.27.
